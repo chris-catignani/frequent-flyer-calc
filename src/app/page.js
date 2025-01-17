@@ -23,6 +23,9 @@ export default function Home() {
         <div>
           Status Credits: {segment.calculation.statusCredits}
         </div>
+        <div>
+          {segment.calculation.rule} rule - {segment.calculation.notes}
+        </div>
       </div>
     )
   }

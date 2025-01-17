@@ -1,5 +1,31 @@
 import { QantasEarnings } from "@/models/qantasEarnings"
-import { DistanceRule } from "./rules"
+import { DistanceRule, GeographicalRule } from "./rules"
+
+export const buildDallasRule = () => {
+  const ruleConfig = {
+    origin: {
+      cities: new Set(['dfw'])
+    },
+    destination: {
+      region: {
+        usaNycBos: {
+          discountEconomy: new QantasEarnings(500, 20),
+          economy: new QantasEarnings(750, 25),
+          flexibleEconomy: new QantasEarnings(1500, 40),
+          business: new QantasEarnings(1875, 80)
+        },
+        usaWestCoast: {
+          discountEconomy: new QantasEarnings(625, 25),
+          economy: new QantasEarnings(1250, 35),
+          flexibleEconomy: new QantasEarnings(2500, 50),
+          business: new QantasEarnings(3125, 100)
+        }
+      }
+    }
+  }
+
+  return new GeographicalRule('dallas', ruleConfig)
+}
 
 export const buildPartnerFallbackRule = () => {
   const distanceBands = [

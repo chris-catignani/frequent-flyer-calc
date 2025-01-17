@@ -1,4 +1,5 @@
 import { calcDistance } from '@/utils/airports'
+import { isInRegion } from './regions'
 
 /**
  * All rules should implement these methods
@@ -16,11 +17,11 @@ class Rule {
     return this.buildCalculationReturn('', '', 0, 0)
   }
 
-  buildCalculationReturn(fareClass, calculationNotes, qantasPoints, statusCredits) {
+  buildCalculationReturn(fareClass, notes, qantasPoints, statusCredits) {
     return {
       rule: this.name,
       fareClass,
-      calculationNotes,
+      notes,
       qantasPoints,
       statusCredits,
     }
@@ -60,6 +61,71 @@ export class DistanceRule extends Rule {
       `Distance band ${distanceBand.minDistance} - ${distanceBand.maxDistance}`,
       distanceBand.earnings[fareClass].qantasPoints,
       distanceBand.earnings[fareClass].statusCredits
+    )
+  }
+}
+
+/**
+ * Rule for Geographical pairings. Can be setup in a few ways:
+ * ...
+ */
+export class GeographicalRule extends Rule {
+  constructor(name, ruleConfig) {
+    super(name)
+    this.ruleConfig = ruleConfig
+  }
+
+  _getOrigin(segment) {
+    if (this.ruleConfig.origin.cities) {
+      if (this.ruleConfig.origin.cities.has(segment.fromAirport)) {
+        return {type: 'city', value: segment.fromAirport}
+      } else if (this.ruleConfig.origin.cities.has(segment.toAirport)) {
+        return {type: 'city', value: segment.toAirport}
+      }
+    }
+
+    return null
+  }
+
+  _getDestination(segment) {
+    if (this.ruleConfig.destination.region) {
+      for (let region of Object.keys(this.ruleConfig.destination.region)) {
+        if (isInRegion(segment.fromAirport, region)) {
+          return {type: 'region', value: region}
+        } else if (isInRegion(segment.toAirport, region)) {
+          return {type: 'region', value: region}
+        }
+      }
+    }
+
+    return null
+  }
+
+  applies(segment, fareClass) {
+    const origin = this._getOrigin(segment)
+    if (!origin) {
+      return false
+    }
+
+    const destination = this._getDestination(segment)
+    if (!destination) {
+      return false
+    }
+
+    return true
+  }
+
+  calculate(segment, fareClass) {
+    const origin = this._getOrigin(segment)
+    const destination = this._getDestination(segment)
+
+    const earnings = this.ruleConfig.destination[destination.type][destination.value]
+
+    return this.buildCalculationReturn(
+      fareClass,
+      `${origin.type} ${origin.value} to ${destination.type} ${destination.value}`,
+      earnings[fareClass].qantasPoints,
+      earnings[fareClass].statusCredits
     )
   }
 }
