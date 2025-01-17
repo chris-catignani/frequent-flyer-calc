@@ -7,7 +7,7 @@ export const getPartnerEarnCategory = (segment) => {
  */
 const buildFareBuckets = (qantasString) => {
   // remove all '*', replace whitespace with single space, split on that single space
-  const fareBuckets = qantasString.replace(/\*/gm, '').replace(/\s+/gm, ' ').toLowerCase().split(' ')
+  const fareBuckets = qantasString.trim().replace(/\*/gm, '').replace(/\s+/gm, ' ').toLowerCase().split(' ')
   const fareClasses = ['discountEconomy', 'economy', 'flexibleEconomy', 'premiumEconomy', 'business', 'first']
   const retval = {}
 
