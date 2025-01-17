@@ -2,6 +2,27 @@ export const getPartnerEarnCategory = (segment) => {
   return partnerEarnCategories[segment.airline].fareBuckets[segment.fareClass]
 }
 
+/**
+ * Taking the copy/paste fare buckets from the Qantas website and parse them.
+ */
+const buildFareBuckets = (qantasString) => {
+  // remove all '*', replace whitespace with single space, split on that single space
+  const fareBuckets = qantasString.replace(/\*/gm, '').replace(/\s+/gm, ' ').toLowerCase().split(' ')
+  const fareClasses = ['discountEconomy', 'economy', 'flexibleEconomy', 'premiumEconomy', 'business', 'first']
+  const retval = {}
+
+  fareClasses.forEach((fareClass, index) => {
+    if (fareBuckets[index] === '-') {
+      return
+    }
+
+    // iterate over each single fareClass character, putting that character and fare category into the map
+    fareBuckets[index].split('').forEach(fareBucket => retval[fareBucket] = fareClass);
+  })
+
+  return retval
+}
+
 const partnerEarnCategories = {
   'aa': {
     'statusMultipliers': {
@@ -11,99 +32,16 @@ const partnerEarnCategories = {
       'platinum': 1.00,
       'platinum one': 1.00
     },
-    'fareBuckets': {
-      'n': 'discountEconomy',
-      'o': 'discountEconomy',
-      'q': 'discountEconomy',
-
-      'g': 'economy',
-      'k': 'economy',
-      'l': 'economy',
-      'm': 'economy',
-      's': 'economy',
-      'v': 'economy',
-
-      'h': 'flexibleEconomy',
-      'y': 'flexibleEconomy',
-
-      'c': 'business',
-      'd': 'business',
-      'i': 'business',
-      'j': 'business',
-      'r': 'business'
-    }
+    'fareBuckets': buildFareBuckets('NOQ 	GKLMSV	HY	PW 	CDIJR	AF '),
   },
   'ba': {
-    'fareBuckets': {
-      'g': 'discountEconomy',
-      'k': 'discountEconomy',
-      'l': 'discountEconomy',
-      'm': 'discountEconomy',
-      'n': 'discountEconomy',
-      'o': 'discountEconomy',
-      'q': 'discountEconomy',
-      's': 'discountEconomy',
-      'v': 'discountEconomy',
-
-      'b': 'flexibleEconomy',
-      'e': 'flexibleEconomy',
-      'h': 'flexibleEconomy',
-      't': 'flexibleEconomy',
-      'w': 'flexibleEconomy',
-      'y': 'flexibleEconomy',
-
-      'c': 'business',
-      'd': 'business',
-      'i': 'business',
-      'j': 'business',
-      'r': 'business'
-    }
+    'fareBuckets': buildFareBuckets('GKLMNOQSV	-	BEHTWY	-	CDIRJ	AF')
   },
   'ay': {
-    'fareBuckets': {
-      'a': 'discountEconomy',
-      'z': 'discountEconomy',
-
-      'g': 'economy',
-      'l': 'economy',
-      'm': 'economy',
-      'n': 'economy',
-      'o': 'economy',
-      'q': 'economy',
-      's': 'economy',
-      'v': 'economy',
-
-      'b': 'flexibleEconomy',
-      'h': 'flexibleEconomy',
-      'k': 'flexibleEconomy',
-      'y': 'flexibleEconomy',
-
-      'c': 'business',
-      'd': 'business',
-      'i': 'business',
-      'j': 'business',
-      'r': 'business'
-    }
+    'fareBuckets': buildFareBuckets('AZ	GLMNOQSV	BHKY	EPTW	CDIJR	-')
   },
-  'qatar': {
-    'fareBuckets': {
-      'k': 'discountEconomy',
-      'l': 'discountEconomy',
-      'm': 'discountEconomy',
-      'v': 'discountEconomy',
-
-      'b': 'economy',
-      'h': 'economy',
-
-      'y': 'flexibleEconomy',
-
-      'c': 'business',
-      'd': 'business',
-      'i': 'business',
-      'j': 'business',
-      'p': 'business',
-      'r': 'business'
-    }
+  'qr': {
+    'fareBuckets': buildFareBuckets('KLMV	BH 	Y	-	CDIJP*R	AF')
   },
   'ul': { // TODO additional rules apply for sri lanka
     'fareBuckets': {
@@ -152,22 +90,6 @@ const partnerEarnCategories = {
     }
   },
   'cx': {
-    'fareBuckets': {
-      'm': 'discountEconomy',
-      'l': 'discountEconomy',
-
-      'b': 'economy',
-      'h': 'economy',
-      'k': 'economy',
-
-      'y': 'flexibleEconomy',
-      'e': 'flexibleEconomy',
-
-      'c': 'business',
-      'd': 'business',
-      'i': 'business',
-      'j': 'business',
-      'p': 'business'
-    }
+    'fareBuckets': buildFareBuckets('ML	BHK	YE	RW	CDIJP	AF')
   }
 }
