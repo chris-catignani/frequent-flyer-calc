@@ -1,5 +1,32 @@
 import { QantasEarnings } from "@/models/qantasEarnings"
-import { DistanceRule, GeographicalRule } from "./rules"
+import { DistanceRule, GeographicalRule, IntraUsaRule } from "./rules"
+
+export const buildUsaShorthaulRule = () => {
+  const distanceBands = [
+    {
+      minDistance: 0,
+      maxDistance: 400,
+      earnings:  {
+        discountEconomy: new QantasEarnings(100, 10),
+        economy: new QantasEarnings(125, 10),
+        flexibleEconomy: new QantasEarnings(250, 20),
+        business: new QantasEarnings(400, 40)
+      }
+    },
+    {
+      minDistance: 400,
+      maxDistance: 750,
+      earnings:  {
+        discountEconomy: new QantasEarnings(150, 10),
+        economy: new QantasEarnings(300, 10),
+        flexibleEconomy: new QantasEarnings(600, 20),
+        business: new QantasEarnings(750, 40)
+      }
+    },
+  ]
+
+  return new IntraUsaRule('Intra-USA Short Haul', distanceBands)
+}
 
 export const buildUsaEastCoastUsaWestCoastRule = () => {
   const ruleConfig = {
@@ -151,5 +178,5 @@ export const buildPartnerFallbackRule = () => {
     }
   ]
 
-  return new DistanceRule('partner fallback', distanceBands)
+  return new DistanceRule('All other flights', distanceBands)
 }

@@ -1,4 +1,4 @@
-import { calcDistance } from '@/utils/airports'
+import { calcDistance, getAirport } from '@/utils/airports'
 import { isInRegion } from './regions'
 
 /**
@@ -25,6 +25,28 @@ class Rule {
       qantasPoints,
       statusCredits,
     }
+  }
+}
+
+export class IntraUsaRule extends Rule {
+  constructor(name, distanceBands) {
+    super(name)
+    this.distanceRule = new DistanceRule(name, distanceBands)
+  }
+
+  applies(segment, fareClass) {
+    const fromAirport = getAirport(segment.fromAirport)
+    const toAirport = getAirport(segment.toAirport)
+
+    if (fromAirport.country !== "United States" || toAirport.country !== "United States") {
+      return false
+    }
+
+    return this.distanceRule.applies(segment, fareClass)
+  }
+
+  calculate(segment, fareClass) {
+    return this.distanceRule.calculate(segment, fareClass)
   }
 }
 

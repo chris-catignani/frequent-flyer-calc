@@ -1,12 +1,12 @@
 import { getPartnerEarnCategory } from "./earnCategories"
-import { buildDallasRule, buildPartnerFallbackRule, buildUsaEastCoastUsaWestCoastRule } from "./qantasrules"
+import { buildDallasRule, buildPartnerFallbackRule, buildUsaEastCoastUsaWestCoastRule, buildUsaShorthaulRule } from "./qantasrules"
 
 const _rules = [
   // _western_europe_rule,
   // _northern_europe_rule,
   // _southeast_europe_rule,
   // _dubai_doha_rule,
-  // _usa_short_haul_rule,
+  buildUsaShorthaulRule(),
   buildUsaEastCoastUsaWestCoastRule(),
   buildDallasRule(),
   buildPartnerFallbackRule()
