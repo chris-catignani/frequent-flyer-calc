@@ -1,6 +1,26 @@
 import { QantasEarnings } from "@/models/qantasEarnings"
 import { DistanceRule, GeographicalRule } from "./rules"
 
+export const buildUsaEastCoastUsaWestCoastRule = () => {
+  const ruleConfig = {
+    origin: {
+      region: new Set(['usaEastCoast'])
+    },
+    destination: {
+      region: {
+        usaWestCoast: {
+          discountEconomy: new QantasEarnings(625, 25),
+          economy: new QantasEarnings(1250, 35),
+          flexibleEconomy: new QantasEarnings(2500, 50),
+          business: new QantasEarnings(3125, 100)
+        }
+      }
+    }
+  }
+
+  return new GeographicalRule('USA East Coast / Canada', ruleConfig)
+}
+
 export const buildDallasRule = () => {
   const ruleConfig = {
     origin: {
@@ -24,7 +44,7 @@ export const buildDallasRule = () => {
     }
   }
 
-  return new GeographicalRule('dallas', ruleConfig)
+  return new GeographicalRule('Dallas', ruleConfig)
 }
 
 export const buildPartnerFallbackRule = () => {

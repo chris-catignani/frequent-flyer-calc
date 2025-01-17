@@ -84,6 +84,16 @@ export class GeographicalRule extends Rule {
       }
     }
 
+    if (this.ruleConfig.origin.region) {
+      for (let region of this.ruleConfig.origin.region.values()) {
+        if (isInRegion(segment.fromAirport, region)) {
+          return {type: 'region', value: region}
+        } else if (isInRegion(segment.toAirport, region)) {
+          return {type: 'region', value: region}
+        }
+      }
+    }
+
     return null
   }
 
