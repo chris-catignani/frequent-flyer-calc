@@ -9,18 +9,18 @@ class Rule {
     this.name = name
   }
 
-  applies(segment, fareClass) {
+  applies(segment, fareEarnCategory) {
     return false
   }
 
-  calculate(segment, fareClass) {
+  calculate(segment, fareEarnCategory) {
     return this.buildCalculationReturn('', '', 0, 0)
   }
 
-  buildCalculationReturn(fareClass, notes, qantasPoints, statusCredits) {
+  buildCalculationReturn(fareEarnCategory, notes, qantasPoints, statusCredits) {
     return {
       rule: this.name,
-      fareClass,
+      fareEarnCategory,
       notes,
       qantasPoints,
       statusCredits,
@@ -34,7 +34,7 @@ export class IntraUsaRule extends Rule {
     this.distanceRule = new DistanceRule(name, distanceBands)
   }
 
-  applies(segment, fareClass) {
+  applies(segment, fareEarnCategory) {
     const fromAirport = getAirport(segment.fromAirport)
     const toAirport = getAirport(segment.toAirport)
 
@@ -42,11 +42,11 @@ export class IntraUsaRule extends Rule {
       return false
     }
 
-    return this.distanceRule.applies(segment, fareClass)
+    return this.distanceRule.applies(segment, fareEarnCategory)
   }
 
-  calculate(segment, fareClass) {
-    return this.distanceRule.calculate(segment, fareClass)
+  calculate(segment, fareEarnCategory) {
+    return this.distanceRule.calculate(segment, fareEarnCategory)
   }
 }
 
@@ -65,12 +65,12 @@ export class DistanceRule extends Rule {
     })
   }
 
-  applies(segment, fareClass) {
+  applies(segment, fareEarnCategory) {
     const distance = calcDistance(segment.fromAirport, segment.toAirport)
     return this._getDistanceBand(distance) != null
   }
 
-  calculate(segment, fareClass) {
+  calculate(segment, fareEarnCategory) {
     const distance = calcDistance(segment.fromAirport, segment.toAirport)
 
     const distanceBand = this._getDistanceBand(distance)
@@ -79,10 +79,10 @@ export class DistanceRule extends Rule {
     }
 
     return this.buildCalculationReturn(
-      fareClass,
+      fareEarnCategory,
       `Distance calculated to ${distance} miles, using band ${distanceBand.minDistance} - ${distanceBand.maxDistance}`,
-      distanceBand.earnings[fareClass].qantasPoints,
-      distanceBand.earnings[fareClass].statusCredits
+      distanceBand.earnings[fareEarnCategory].qantasPoints,
+      distanceBand.earnings[fareEarnCategory].statusCredits
     )
   }
 }
@@ -133,7 +133,7 @@ export class GeographicalRule extends Rule {
     return null
   }
 
-  applies(segment, fareClass) {
+  applies(segment, fareEarnCategory) {
     const origin = this._getOrigin(segment)
     if (!origin) {
       return false
@@ -147,17 +147,17 @@ export class GeographicalRule extends Rule {
     return true
   }
 
-  calculate(segment, fareClass) {
+  calculate(segment, fareEarnCategory) {
     const origin = this._getOrigin(segment)
     const destination = this._getDestination(segment)
 
     const earnings = this.ruleConfig.destination[destination.type][destination.value]
 
     return this.buildCalculationReturn(
-      fareClass,
+      fareEarnCategory,
       `${origin.value} ${origin.type} to ${destination.value} ${destination.type}`,
-      earnings[fareClass].qantasPoints,
-      earnings[fareClass].statusCredits
+      earnings[fareEarnCategory].qantasPoints,
+      earnings[fareEarnCategory].statusCredits
     )
   }
 }

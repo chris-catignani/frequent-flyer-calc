@@ -14,17 +14,23 @@ export default function Home() {
     setCalculationOutput(calculate(segments))
   }
 
-  const SegmentResult = ({segment}) => {
+  const SegmentResult = ({segmentResult}) => {
     return (
       <div>
         <div>
-          Qantas Points: {segment.calculation.qantasPoints}
+          {segmentResult.segment.fromAirport} - {segmentResult.segment.toAirport}
         </div>
         <div>
-          Status Credits: {segment.calculation.statusCredits}
+          {segmentResult.segment.airline} {segmentResult.segment.fareClass} class maps to {segmentResult.calculation.fareEarnCategory}
         </div>
         <div>
-          {segment.calculation.rule} rule - {segment.calculation.notes}
+          Qantas Points: {segmentResult.calculation.qantasPoints}
+        </div>
+        <div>
+          Status Credits: {segmentResult.calculation.statusCredits}
+        </div>
+        <div>
+          {segmentResult.calculation.rule} rule - {segmentResult.calculation.notes}
         </div>
       </div>
     )
@@ -35,10 +41,10 @@ export default function Home() {
       return <></>
     }
 
-    const segments = calculatedData.segments.map(segment => {
+    const segmentResults = calculatedData.segmentResults.map(segmentResult => {
       return (
-        <li key={segment.segment.toString()}>
-          <SegmentResult segment={segment} />
+        <li key={segmentResult.segment.toString()}>
+          <SegmentResult segmentResult={segmentResult} />
         </li>
       )
     })
@@ -53,7 +59,7 @@ export default function Home() {
         </div>
         <div>
           <ul>
-            {segments}
+            {segmentResults}
           </ul>
         </div>
       </div>

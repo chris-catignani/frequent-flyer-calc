@@ -14,7 +14,7 @@ const _rules = [
 
 export const calculate = (segments, eliteStatus) => {
   const retval = {
-    segments: [],
+    segmentResults: [],
     statusCredits: 0,
     qantasPoints: 0
   }
@@ -40,7 +40,7 @@ export const calculate = (segments, eliteStatus) => {
     //   )
     // }
 
-    retval.segments.push({
+    retval.segmentResults.push({
       rule: rule.name,
       segment,
       calculation
