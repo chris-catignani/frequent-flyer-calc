@@ -80,7 +80,7 @@ export class DistanceRule extends Rule {
 
     return this.buildCalculationReturn(
       fareClass,
-      `Distance band ${distanceBand.minDistance} - ${distanceBand.maxDistance}`,
+      `Distance calculated to ${distance} miles, using band ${distanceBand.minDistance} - ${distanceBand.maxDistance}`,
       distanceBand.earnings[fareClass].qantasPoints,
       distanceBand.earnings[fareClass].statusCredits
     )
@@ -155,7 +155,7 @@ export class GeographicalRule extends Rule {
 
     return this.buildCalculationReturn(
       fareClass,
-      `${origin.type} ${origin.value} to ${destination.type} ${destination.value}`,
+      `${origin.value} ${origin.type} to ${destination.value} ${destination.type}`,
       earnings[fareClass].qantasPoints,
       earnings[fareClass].statusCredits
     )
