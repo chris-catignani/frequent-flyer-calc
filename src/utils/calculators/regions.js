@@ -63,5 +63,15 @@ const regions = {
   northernAfrica: getIatasForCountries('Burkino Faso, Algeria, Benin, Cape Verde, Central African Republic, Chad, Congo (Democratic Republic of), Djibouti, Egypt, Equatorial Guinea, Eritrea, Ethiopia, Gambia, Ghana, Guinea, Guinea Bissau. Ivory Coast, Kenya, Liberia, Libya, Mali, Morocco, Niger, Nigeria, Republic of Cameroon, Sao Tome Principe, Senegal, Seychelles, Sierra Leone, Somalia, South Sudan, Sudan, Togo, Tunisia, Uganda'),
   usaEastCoast: new Set([...getIatasForCities('Boston, Charlotte, Chicago, Miami, New York, Orlando, Toronto, Washington DC'), 'ewr']),
   usaWestCoast: getIatasForCities('Las Vegas, Los Angeles, Phoenix, San Francisco, Seattle, Vancouver'),
-  usaNycBos: new Set([...getIatasForCities('Boston'), 'jfk', 'lga', 'ewr'])
+  usaNycBos: new Set([...getIatasForCities('Boston'), 'jfk', 'lga', 'ewr']),
+
+  // qantas doesn't define these for whatever reason
+  middleEast: new Set(['doh', 'dxb', 'auh', 'jed', 'med']),
+  southeastAustralia: new Set(['syd', 'mel']),
 }
+
+regions['europe'] = new Set([
+  ...regions.westernEurope,
+  ...regions.northernEurope,
+  ...regions.southeastEurope
+])

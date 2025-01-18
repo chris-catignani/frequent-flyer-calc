@@ -1,4 +1,5 @@
 import { getAirport } from "../airports"
+import { isInRegion } from "./regions"
 
 export const getPartnerEarnCategory = (segment) => {
   for(let rule of partnerEarnCategories[segment.airline].fareBuckets.rules) {
@@ -11,7 +12,6 @@ export const getPartnerEarnCategory = (segment) => {
     }
 
     return rule.categories[segment.fareClass]
-
   }
 }
 
@@ -31,6 +31,17 @@ const isApplicableRule = (segment, rule) => {
     if (rule.destination.country) {
       destinationApplies = rule.destination.country.has(destinationAirport.country.toLowerCase())
     }
+
+    if (!destinationApplies && rule.destination.region) {
+      for (let region of rule.destination.region) {
+        if (isInRegion(destinationAirport.iata.toLowerCase(), region)) {
+          destinationApplies = true
+          break
+        }
+      }
+    }
+
+    // console.log(originAirport.iata, destinationAirport.iata, originApplies, destinationApplies, rule)
 
     return originApplies && destinationApplies
   }
@@ -84,7 +95,52 @@ const buildJapanAirlinesFareBuckets = (qantasString) => {
       },
       {
         all: true,
-        categoreis: buildFareBuckets(qantasString)
+        categories: buildFareBuckets(qantasString)
+      }
+    ]
+  }
+}
+
+const buildMalaysiaAirlinesFareBuckets = (longHaulQantasString, allOtherQantasString) => {
+  return {
+    rules: [
+      {
+        origin: { country: new Set(['australia', 'new zealand']) },
+        destination: {
+          country: new Set(['malaysia', 'united kingdom']),
+          region: new Set(['europe'])
+        },
+        categories: buildFareBuckets(longHaulQantasString)
+      },
+      {
+        origin: { country: new Set(['malaysia']) },
+        destination: {
+          country: new Set(['united kingdom']),
+          region: new Set(['europe', 'middleEast'])
+        },
+        categories: buildFareBuckets(longHaulQantasString)
+      },
+      {
+        all: true,
+        categories: buildFareBuckets(allOtherQantasString)
+      }
+    ]
+  }
+}
+
+const buildSriLankairlinesFareBuckets = (longHaulQantasString, allOtherQantasString) => {
+  return {
+    rules: [
+      {
+        origin: { country: new Set(['sri lanka', 'malaysia']) },
+        destination: {
+          region: new Set(['europe', 'southeastAustralia'])
+        },
+        categories: buildFareBuckets(longHaulQantasString)
+      },
+      {
+        all: true,
+        categories: buildFareBuckets(allOtherQantasString)
       }
     ]
   }
@@ -134,50 +190,10 @@ const partnerEarnCategories = {
   'nu': {
     'fareBuckets': buildJapanAirlinesFareBuckets('GNOQZ^	HKLMSV	BY	EWPR	CDIJX	AF')
   },
-  'mh': { // TODO additional rules apply for malaysia
-    'fareBuckets': {
-      'k': 'discountEconomy',
-      'l': 'discountEconomy',
-      'm': 'discountEconomy',
-      'v': 'discountEconomy',
-
-      'b': 'economy',
-      'h': 'economy',
-
-      'i': 'flexibleEconomy',
-      'y': 'flexibleEconomy',
-      'z': 'flexibleEconomy',
-
-      'c': 'business',
-      'd': 'business',
-      'j': 'business'
-    }
+  'mh': {
+    'fareBuckets':buildMalaysiaAirlinesFareBuckets('BHKLMVY	-	ACDFIJZ~	-	-	-', 'KLMV	BH	IYZ	-	CDJ	AF'),
   },
-  'ul': { // TODO additional rules apply for sri lanka
-    'fareBuckets': {
-      'g': 'discountEconomy',
-      'l': 'discountEconomy',
-      'n': 'discountEconomy',
-      'o': 'discountEconomy',
-      'q': 'discountEconomy',
-      'r': 'discountEconomy',
-      's': 'discountEconomy',
-      'v': 'discountEconomy',
-
-      'e': 'economy',
-      'k': 'economy',
-      'm': 'economy',
-      'w': 'economy',
-
-      'b': 'flexibleEconomy',
-      'h': 'flexibleEconomy',
-      'p': 'flexibleEconomy',
-      'y': 'flexibleEconomy',
-
-      'c': 'business',
-      'd': 'business',
-      'i': 'business',
-      'j': 'business'
-    }
+  'ul': {
+    'fareBuckets': buildSriLankairlinesFareBuckets('EGKLMNOQRSW	BHP	Y	-	CDIJ	-', 'GLNOQRSV	EKMW	BHPY	-	CDIJ	-')
   }
 }
