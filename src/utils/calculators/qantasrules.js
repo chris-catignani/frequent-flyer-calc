@@ -17,6 +17,98 @@ const buildEarningRates = (qantasPointsString, qantasCreditsString) => {
   return retval
 }
 
+export const buildSydMelBneGoldCoastRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['sydney', 'melbourne', 'brisbane', 'coolangatta'])
+    },
+    destination: {
+      city: {
+        dallas: buildEarningRates('4,900	7,350	9,800	9,800	14,700	19,600', '50	70	100	100	200	300'),
+        santiago: buildEarningRates('1,750	3,500	7,000	7,700	8,750	10,500', '30	30	60	60	120	180'),
+        'hong kong': buildEarningRates('1,100	2,250	4,500	4,950	5,600	6,750', '15	15	30	30	60	90'),
+        'doha': buildEarningRates('1,850	3,700	7,400	7,400	7,400	9,250', '20	20	40	40	80	120'),
+        'dubai': buildEarningRates('1,850	3,700	7,400	8,140	9,250	11,100', '0 0 0 0 0 0'),
+        'singapore': buildEarningRates('1,000	2,000	4,000	4,400	5,000	6,000', '15	15	30	30	60	90')
+      },
+      country: {
+        malaysia: buildEarningRates('1,000	2,000	4,000	4,400	5,000	6,000', '15	15	30	30	60	90'),
+        thailand: buildEarningRates('1,100	2,250	4,500	4,950	5,600	6,750', '15	15	30	30	60	90'),
+        japan: buildEarningRates('1,200	2,400	4,800	5,300	6,000	7,200', '15	15	30	30	60	90'),
+        china: buildEarningRates('1,225	2,450	4,900	5,400	6,125	7,350', '15	15	30	30	60	90'),
+        'sri lanka': buildEarningRates('1,100	2,250	4,500	4,950	5,600	6,750', '15	15	30	30	60	90'),
+        'new zealand': buildEarningRates('375	750	1,500	1,650	1,875	2,250', '10	10	20	20	40	60'),
+        'papua new guinea': buildEarningRates('375	750	1,500	1,650	1,875	2,250', '10	10	20	20	40	60'),
+        fiji: buildEarningRates('450	900	1,800	1,980	2,250	2,700', '10	10	20	20	40	60')
+      },
+      region: {
+        usaEastCoast: buildEarningRates('6,200	9,300	12,400	12,400	18,600	24,800', '70	95	140	140	280	420'),
+        usaWestCoast: buildEarningRates('4,500	6,750	9,000	9,000	13,500	18,000', '45	60	90	90	180	270'),
+        westernEurope: buildEarningRates('2,625	5,250	10,500	11,500	13,125	15,750', '35	35	70	70	140	210')
+      }
+    }
+  }
+
+  return new GeographicalRule('Syndey, Melbourne, Brisbane, Gold Coast', ruleConfig)
+}
+
+export const buildPerthRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['perth'])
+    },
+    destination: {
+      city: {
+        'hong kong': buildEarningRates('950	1,875	3,750	4,125	4,700	5,650', '30	30	60	60	120	180'),
+        'doha': buildEarningRates('1,450	2,900	5,800	5,800	5,800	7,250', '30	30	60	60	120	180'),
+        'dubai': buildEarningRates('1,400	2,800	5,600	6,160	7,000	8,400', '0 0 0 0 0 0'),
+        'singapore': buildEarningRates('625	1,250	2,500	2,750	3,200	3,750', '25	25	50	50	100	150')
+      },
+      country: {
+        malaysia: buildEarningRates('625	1,250	2,500	2,750	3,200	3,750', '25	25	50	50	100	150')
+      }
+    }
+  }
+
+  return new GeographicalRule('Perth', ruleConfig)
+}
+
+export const buildAdelaideRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['adelaide'])
+    },
+    destination: {
+      city: {
+        'hong kong': buildEarningRates('1,100	2,150	4,300	4,750	5,400	6,500', '25	25	50	50	100	150'),
+        'doha': buildEarningRates('1,750	3,500	7,000	7,000	7,000	8,750', '20	20	45	45	90	135'),
+        'dubai': buildEarningRates('1,725	3,450	6,900	7,590	8,625	10,350', '0 0 0 0 0 0')
+      },
+      country: {
+        malaysia: buildEarningRates('850	1,750	3,500	3,800	4,400	5,250', '25	25	50	50	100	150')
+      }
+    }
+  }
+
+  return new GeographicalRule('Adelaide', ruleConfig)
+}
+
+
+export const buildCairnsRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['cairns'])
+    },
+    destination: {
+      city: {
+        'hong kong': buildEarningRates('850	1,700	3,400	3,740	4,250	5,100', '15	15	25	25	50	100')
+      }
+    }
+  }
+
+  return new GeographicalRule('Cairns', ruleConfig)
+}
+
 export const buildWesternEuropeRule = () => {
   const ruleConfig = {
     origin: {
@@ -79,6 +171,21 @@ export const buildSoutheastEuropeRule = () => {
   }
 
   return new GeographicalRule('Southeast Europe', ruleConfig)
+}
+
+export const buildTelAvivRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['tel-aviv'])
+    },
+    destination: {
+      city: {
+        'hong kong': buildEarningRates('1,200	2,400	4,800	5,250	6,000	7,200', '15	15	30	30	60	90')
+      }
+    }
+  }
+
+  return new GeographicalRule('Tel Aviv', ruleConfig)
 }
 
 export const buildDubaiDohaRule = () => {
