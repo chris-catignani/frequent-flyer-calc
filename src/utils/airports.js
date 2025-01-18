@@ -19,6 +19,15 @@ export const getAirport = (iata) => {
   return standardizeAirport(airport)
 }
 
+export const getAirportsForCity = (city) => {
+  return airports.filter((airport) => {
+    return (
+      airport.city.toLowerCase() === city.toLowerCase() &&
+      airport.iata // some airports don't have IATA codes, skip them
+    )
+  }).map(airport => standardizeAirport(airport))
+}
+
 export const getAirportsForCountry = (country) => {
   return airports.filter((airport) => {
     return (
