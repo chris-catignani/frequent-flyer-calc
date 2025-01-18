@@ -1,10 +1,10 @@
 import { getPartnerEarnCategory } from "./earnCategories"
-import { buildDallasRule, buildDubaiDohaRule, buildNewZealandRule, buildPartnerFallbackRule, buildUsaEastCoastUsaWestCoastRule, buildUsaShorthaulRule } from "./qantasrules"
+import { buildDallasRule, buildDubaiDohaRule, buildNewZealandRule, buildNorthernEuropeRule, buildPartnerFallbackRule, buildSoutheastEuropeRule, buildUsaEastCoastUsaWestCoastRule, buildUsaShorthaulRule, buildWesternEuropeRule } from "./qantasrules"
 
 const _rules = [
-  // _western_europe_rule,
-  // _northern_europe_rule,
-  // _southeast_europe_rule,
+  buildWesternEuropeRule(),
+  buildNorthernEuropeRule(),
+  buildSoutheastEuropeRule(),
   buildDubaiDohaRule(),
   buildUsaShorthaulRule(),
   buildUsaEastCoastUsaWestCoastRule(),

@@ -102,10 +102,10 @@ export class GeographicalRule extends Rule {
       const fromAirport = getAirport(segment.fromAirport)
       const toAirport = getAirport(segment.toAirport)
 
-      if (this.ruleConfig.origin.city.has(fromAirport.city)) {
-        return {type: 'city', value: fromAirport.city}
-      } else if (this.ruleConfig.origin.city.has(toAirport.city)) {
-        return {type: 'city', value: toAirport.city}
+      if (this.ruleConfig.origin.city.has(fromAirport.city.toLowerCase())) {
+        return {type: 'city', value: fromAirport.city.toLowerCase()}
+      } else if (this.ruleConfig.origin.city.has(toAirport.city.toLowerCase())) {
+        return {type: 'city', value: toAirport.city.toLowerCase()}
       }
     }
 
@@ -113,10 +113,10 @@ export class GeographicalRule extends Rule {
       const fromAirport = getAirport(segment.fromAirport)
       const toAirport = getAirport(segment.toAirport)
 
-      if(this.ruleConfig.origin.country.has(fromAirport.country)) {
-        return {type: 'country', value: fromAirport.country}
-      } else if(this.ruleConfig.origin.country.has(toAirport.country)) {
-        return {type: 'country', value: toAirport.country}
+      if(this.ruleConfig.origin.country.has(fromAirport.country.toLowerCase())) {
+        return {type: 'country', value: fromAirport.country.toLowerCase()}
+      } else if(this.ruleConfig.origin.country.has(toAirport.country.toLowerCase())) {
+        return {type: 'country', value: toAirport.country.toLowerCase()}
       }
     }
 
@@ -138,10 +138,10 @@ export class GeographicalRule extends Rule {
       const fromAirport = getAirport(segment.fromAirport)
       const toAirport = getAirport(segment.toAirport)
 
-      if (fromAirport.city in this.ruleConfig.destination.city) {
-        return {type: 'city', value: fromAirport.city}
-      } else if (toAirport.city in this.ruleConfig.destination.city) {
-        return {type: 'city', value: toAirport.city}
+      if (fromAirport.city.toLowerCase() in this.ruleConfig.destination.city) {
+        return {type: 'city', value: fromAirport.city.toLowerCase()}
+      } else if (toAirport.city.toLowerCase() in this.ruleConfig.destination.city) {
+        return {type: 'city', value: toAirport.city.toLowerCase()}
       }
     }
 
@@ -149,10 +149,10 @@ export class GeographicalRule extends Rule {
       const fromAirport = getAirport(segment.fromAirport)
       const toAirport = getAirport(segment.toAirport)
 
-      if(fromAirport.country in this.ruleConfig.destination.country) {
-        return {type: 'country', value: fromAirport.country}
-      } else if(toAirport.country in this.ruleConfig.destination.country) {
-        return {type: 'country', value: toAirport.country}
+      if(fromAirport.country.toLowerCase() in this.ruleConfig.destination.country) {
+        return {type: 'country', value: fromAirport.country.toLowerCase()}
+      } else if(toAirport.country.toLowerCase() in this.ruleConfig.destination.country) {
+        return {type: 'country', value: toAirport.country.toLowerCase()}
       }
     }
 
