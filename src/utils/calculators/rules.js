@@ -134,13 +134,14 @@ export class GeographicalRule extends Rule {
   }
 
   _getDestination(segment) {
-    if (this.ruleConfig.destination.region) {
-      for (let region of Object.keys(this.ruleConfig.destination.region)) {
-        if (isInRegion(segment.fromAirport, region)) {
-          return {type: 'region', value: region}
-        } else if (isInRegion(segment.toAirport, region)) {
-          return {type: 'region', value: region}
-        }
+    if (this.ruleConfig.destination.city) {
+      const fromAirport = getAirport(segment.fromAirport)
+      const toAirport = getAirport(segment.toAirport)
+
+      if (fromAirport.city in this.ruleConfig.destination.city) {
+        return {type: 'city', value: fromAirport.city}
+      } else if (toAirport.city in this.ruleConfig.destination.city) {
+        return {type: 'city', value: toAirport.city}
       }
     }
 
@@ -152,6 +153,16 @@ export class GeographicalRule extends Rule {
         return {type: 'country', value: fromAirport.country}
       } else if(toAirport.country in this.ruleConfig.destination.country) {
         return {type: 'country', value: toAirport.country}
+      }
+    }
+
+    if (this.ruleConfig.destination.region) {
+      for (let region of Object.keys(this.ruleConfig.destination.region)) {
+        if (isInRegion(segment.fromAirport, region)) {
+          return {type: 'region', value: region}
+        } else if (isInRegion(segment.toAirport, region)) {
+          return {type: 'region', value: region}
+        }
       }
     }
 
