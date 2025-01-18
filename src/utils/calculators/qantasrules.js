@@ -17,6 +17,25 @@ const buildEarningRates = (qantasPointsString, qantasCreditsString) => {
   return retval
 }
 
+export const buildDubaiDohaRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['Dubai', 'Doha'])
+    },
+    destination: {
+      region: {
+        southeastAsia: buildEarningRates('850	1,700	3,400	3,750	4,250	5,100', '25	25	50	50	100	150'),
+        northernAfrica: buildEarningRates('850	1,700	3,400	3,750	4,250	5,100', '25	25	50	50	100	150')
+      },
+      country: {
+        'New Zealand': buildEarningRates('1,875	3,750	7,500	8,250	9,400	11,250', '20	20	40	40	80	120')
+      }
+    }
+  }
+
+  return new GeographicalRule('Dubai and Doha', ruleConfig)
+}
+
 export const buildUsaShorthaulRule = () => {
   const distanceBands = [
     {
@@ -52,7 +71,7 @@ export const buildUsaEastCoastUsaWestCoastRule = () => {
 export const buildDallasRule = () => {
   const ruleConfig = {
     origin: {
-      cities: new Set(['dfw'])
+      city: new Set(['Dallas'])
     },
     destination: {
       region: {
@@ -63,6 +82,26 @@ export const buildDallasRule = () => {
   }
 
   return new GeographicalRule('Dallas', ruleConfig)
+}
+
+export const buildNewZealandRule = () => {
+  const ruleConfig = {
+    origin: {
+      country: new Set(['New Zealand'])
+    },
+    destination: {
+      city: {
+        'Santiago': buildEarningRates('1,375	2,750	5,500	6,050	6,875	8,250', '20	20	40	40	80	120'),
+        'Los Angeles': buildEarningRates('4,000	6,000	8,000	8,250	12,000	16,000', '40	55	80	80	160	240'),
+        'Dallas': buildEarningRates('4,250	6,375	8,500	8,500	12,750	17,000', '45	60	85	85	170	250'),
+      },
+      region: {
+        usaEastCoast: buildEarningRates('5,200	7,925	10,650	10,650	16,100	21,550', '50	70	100	100	200	300')
+      }
+    }
+  }
+
+  return new GeographicalRule('New Zealand', ruleConfig)
 }
 
 export const buildPartnerFallbackRule = () => {

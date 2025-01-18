@@ -1,8 +1,31 @@
 import { airports } from "@nwpr/airport-codes";
 import GreatCircle from "great-circle";
 
+const airportFixes = {
+  city: {
+    'Dallas-Fort Worth': 'Dallas'
+  }
+}
+
+const standardizeAirport = (airport) => {
+  if (airport.city in airportFixes.city) {
+    airport.city = airportFixes.city[airport.city]
+  }
+  return airport
+}
+
 export const getAirport = (iata) => {
-  return airports.find((airport) => airport.iata === iata.toUpperCase())
+  const airport = airports.find((airport) => airport.iata === iata.toUpperCase())
+  return standardizeAirport(airport)
+}
+
+export const getAirportsForCountry = (country) => {
+  return airports.filter((airport) => {
+    return (
+      airport.country.toLowerCase() === country.toLowerCase() &&
+      airport.iata // some airports don't have IATA codes, skip them
+    )
+  }).map(airport => standardizeAirport(airport))
 }
 
 export const calcDistance = (iata1, iata2) => {

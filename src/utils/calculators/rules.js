@@ -98,11 +98,25 @@ export class GeographicalRule extends Rule {
   }
 
   _getOrigin(segment) {
-    if (this.ruleConfig.origin.cities) {
-      if (this.ruleConfig.origin.cities.has(segment.fromAirport)) {
-        return {type: 'city', value: segment.fromAirport}
-      } else if (this.ruleConfig.origin.cities.has(segment.toAirport)) {
-        return {type: 'city', value: segment.toAirport}
+    if (this.ruleConfig.origin.city) {
+      const fromAirport = getAirport(segment.fromAirport)
+      const toAirport = getAirport(segment.toAirport)
+
+      if (this.ruleConfig.origin.city.has(fromAirport.city)) {
+        return {type: 'city', value: fromAirport.city}
+      } else if (this.ruleConfig.origin.city.has(toAirport.city)) {
+        return {type: 'city', value: toAirport.city}
+      }
+    }
+
+    if (this.ruleConfig.origin.country) {
+      const fromAirport = getAirport(segment.fromAirport)
+      const toAirport = getAirport(segment.toAirport)
+
+      if(this.ruleConfig.origin.country.has(fromAirport.country)) {
+        return {type: 'country', value: fromAirport.country}
+      } else if(this.ruleConfig.origin.country.has(toAirport.country)) {
+        return {type: 'country', value: toAirport.country}
       }
     }
 
@@ -130,20 +144,35 @@ export class GeographicalRule extends Rule {
       }
     }
 
+    if (this.ruleConfig.destination.country) {
+      const fromAirport = getAirport(segment.fromAirport)
+      const toAirport = getAirport(segment.toAirport)
+
+      if(fromAirport.country in this.ruleConfig.destination.country) {
+        return {type: 'country', value: fromAirport.country}
+      } else if(toAirport.country in this.ruleConfig.destination.country) {
+        return {type: 'country', value: toAirport.country}
+      }
+    }
+
     return null
   }
 
   applies(segment, fareEarnCategory) {
+    console.log(this.name)
     const origin = this._getOrigin(segment)
+    console.log({origin})
     if (!origin) {
       return false
     }
 
     const destination = this._getDestination(segment)
+    console.log({destination})
     if (!destination) {
       return false
     }
 
+    console.log('match')
     return true
   }
 
