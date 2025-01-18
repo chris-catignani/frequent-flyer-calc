@@ -97,34 +97,26 @@ export class GeographicalRule extends Rule {
     this.ruleConfig = ruleConfig
   }
 
-  _getOrigin(segment) {
+  _getOrigin(iata) {
     if (this.ruleConfig.origin.city) {
-      const fromAirport = getAirport(segment.fromAirport)
-      const toAirport = getAirport(segment.toAirport)
+      const airport = getAirport(iata)
 
-      if (this.ruleConfig.origin.city.has(fromAirport.city.toLowerCase())) {
-        return {type: 'city', value: fromAirport.city.toLowerCase()}
-      } else if (this.ruleConfig.origin.city.has(toAirport.city.toLowerCase())) {
-        return {type: 'city', value: toAirport.city.toLowerCase()}
+      if (this.ruleConfig.origin.city.has(airport.city.toLowerCase())) {
+        return {type: 'city', value: airport.city.toLowerCase()}
       }
     }
 
     if (this.ruleConfig.origin.country) {
-      const fromAirport = getAirport(segment.fromAirport)
-      const toAirport = getAirport(segment.toAirport)
+      const airport = getAirport(iata)
 
-      if(this.ruleConfig.origin.country.has(fromAirport.country.toLowerCase())) {
-        return {type: 'country', value: fromAirport.country.toLowerCase()}
-      } else if(this.ruleConfig.origin.country.has(toAirport.country.toLowerCase())) {
-        return {type: 'country', value: toAirport.country.toLowerCase()}
+      if(this.ruleConfig.origin.country.has(airport.country.toLowerCase())) {
+        return {type: 'country', value: airport.country.toLowerCase()}
       }
     }
 
     if (this.ruleConfig.origin.region) {
       for (let region of this.ruleConfig.origin.region.values()) {
-        if (isInRegion(segment.fromAirport, region)) {
-          return {type: 'region', value: region}
-        } else if (isInRegion(segment.toAirport, region)) {
+        if (isInRegion(iata, region)) {
           return {type: 'region', value: region}
         }
       }
@@ -133,34 +125,26 @@ export class GeographicalRule extends Rule {
     return null
   }
 
-  _getDestination(segment) {
+  _getDestination(iata) {
     if (this.ruleConfig.destination.city) {
-      const fromAirport = getAirport(segment.fromAirport)
-      const toAirport = getAirport(segment.toAirport)
+      const airport = getAirport(iata)
 
-      if (fromAirport.city.toLowerCase() in this.ruleConfig.destination.city) {
-        return {type: 'city', value: fromAirport.city.toLowerCase()}
-      } else if (toAirport.city.toLowerCase() in this.ruleConfig.destination.city) {
-        return {type: 'city', value: toAirport.city.toLowerCase()}
+      if (airport.city.toLowerCase() in this.ruleConfig.destination.city) {
+        return {type: 'city', value: airport.city.toLowerCase()}
       }
     }
 
     if (this.ruleConfig.destination.country) {
-      const fromAirport = getAirport(segment.fromAirport)
-      const toAirport = getAirport(segment.toAirport)
+      const airport = getAirport(iata)
 
-      if(fromAirport.country.toLowerCase() in this.ruleConfig.destination.country) {
-        return {type: 'country', value: fromAirport.country.toLowerCase()}
-      } else if(toAirport.country.toLowerCase() in this.ruleConfig.destination.country) {
-        return {type: 'country', value: toAirport.country.toLowerCase()}
+      if(airport.country.toLowerCase() in this.ruleConfig.destination.country) {
+        return {type: 'country', value: airport.country.toLowerCase()}
       }
     }
 
     if (this.ruleConfig.destination.region) {
       for (let region of Object.keys(this.ruleConfig.destination.region)) {
-        if (isInRegion(segment.fromAirport, region)) {
-          return {type: 'region', value: region}
-        } else if (isInRegion(segment.toAirport, region)) {
+        if (isInRegion(iata, region)) {
           return {type: 'region', value: region}
         }
       }
@@ -170,26 +154,25 @@ export class GeographicalRule extends Rule {
   }
 
   applies(segment, fareEarnCategory) {
-    console.log(this.name)
-    const origin = this._getOrigin(segment)
-    console.log({origin})
-    if (!origin) {
-      return false
+    if (this._getOrigin(segment.fromAirport) && this._getDestination(segment.toAirport)) {
+      return true
     }
 
-    const destination = this._getDestination(segment)
-    console.log({destination})
-    if (!destination) {
-      return false
+    if (this._getOrigin(segment.toAirport) && this._getDestination(segment.fromAirport)) {
+      return true
     }
 
-    console.log('match')
-    return true
+    return false
   }
 
   calculate(segment, fareEarnCategory) {
-    const origin = this._getOrigin(segment)
-    const destination = this._getDestination(segment)
+    let origin = this._getOrigin(segment.fromAirport)
+    let destination = this._getDestination(segment.toAirport)
+
+    if (!origin || !destination) {
+      origin = this._getOrigin(segment.toAirport)
+      destination = this._getDestination(segment.fromAirport)
+    }
 
     const earnings = this.ruleConfig.destination[destination.type][destination.value]
 
