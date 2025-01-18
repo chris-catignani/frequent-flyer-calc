@@ -1,5 +1,24 @@
 import { QantasEarnings } from "@/models/qantasEarnings"
-import { DistanceRule, GeographicalRule, IntraUsaRule } from "./rules"
+import { DistanceRule, GeographicalRule, IntraCountryRule } from "../rules"
+
+export const getPartnerRules = () => {
+  return [
+    buildSydMelBneGoldCoastRule(),
+    buildPerthRule(),
+    buildAdelaideRule(),
+    buildCairnsRule(),
+    buildWesternEuropeRule(),
+    buildNorthernEuropeRule(),
+    buildSoutheastEuropeRule(),
+    buildTelAvivRule(),
+    buildDubaiDohaRule(),
+    buildUsaShorthaulRule(),
+    buildUsaEastCoastUsaWestCoastRule(),
+    buildDallasRule(),
+    buildNewZealandRule(),
+    buildPartnerFallbackRule()
+  ]
+}
 
 const buildEarningRates = (qantasPointsString, qantasCreditsString) => {
   const pointsPerFareclass = qantasPointsString.trim().replace(/\,/gm, '').replace(/\s+/gm, ' ').split(' ')
@@ -17,7 +36,7 @@ const buildEarningRates = (qantasPointsString, qantasCreditsString) => {
   return retval
 }
 
-export const buildSydMelBneGoldCoastRule = () => {
+const buildSydMelBneGoldCoastRule = () => {
   const ruleConfig = {
     origin: {
       city: new Set(['sydney', 'melbourne', 'brisbane', 'coolangatta'])
@@ -52,7 +71,7 @@ export const buildSydMelBneGoldCoastRule = () => {
   return new GeographicalRule('Syndey, Melbourne, Brisbane, Gold Coast', ruleConfig)
 }
 
-export const buildPerthRule = () => {
+const buildPerthRule = () => {
   const ruleConfig = {
     origin: {
       city: new Set(['perth'])
@@ -73,7 +92,7 @@ export const buildPerthRule = () => {
   return new GeographicalRule('Perth', ruleConfig)
 }
 
-export const buildAdelaideRule = () => {
+const buildAdelaideRule = () => {
   const ruleConfig = {
     origin: {
       city: new Set(['adelaide'])
@@ -94,7 +113,7 @@ export const buildAdelaideRule = () => {
 }
 
 
-export const buildCairnsRule = () => {
+const buildCairnsRule = () => {
   const ruleConfig = {
     origin: {
       city: new Set(['cairns'])
@@ -109,7 +128,7 @@ export const buildCairnsRule = () => {
   return new GeographicalRule('Cairns', ruleConfig)
 }
 
-export const buildWesternEuropeRule = () => {
+const buildWesternEuropeRule = () => {
   const ruleConfig = {
     origin: {
       region: new Set(['westernEurope'])
@@ -134,7 +153,7 @@ export const buildWesternEuropeRule = () => {
   return new GeographicalRule('Western Europe', ruleConfig)
 }
 
-export const buildNorthernEuropeRule = () => {
+const buildNorthernEuropeRule = () => {
   const ruleConfig = {
     origin: {
       region: new Set(['northernEurope'])
@@ -157,7 +176,7 @@ export const buildNorthernEuropeRule = () => {
   return new GeographicalRule('Northern Europe', ruleConfig)
 }
 
-export const buildSoutheastEuropeRule = () => {
+const buildSoutheastEuropeRule = () => {
   const ruleConfig = {
     origin: {
       region: new Set(['southeastEurope'])
@@ -173,7 +192,7 @@ export const buildSoutheastEuropeRule = () => {
   return new GeographicalRule('Southeast Europe', ruleConfig)
 }
 
-export const buildTelAvivRule = () => {
+const buildTelAvivRule = () => {
   const ruleConfig = {
     origin: {
       city: new Set(['tel-aviv'])
@@ -188,7 +207,7 @@ export const buildTelAvivRule = () => {
   return new GeographicalRule('Tel Aviv', ruleConfig)
 }
 
-export const buildDubaiDohaRule = () => {
+const buildDubaiDohaRule = () => {
   const ruleConfig = {
     origin: {
       city: new Set(['dubai', 'doha'])
@@ -207,7 +226,7 @@ export const buildDubaiDohaRule = () => {
   return new GeographicalRule('Dubai and Doha', ruleConfig)
 }
 
-export const buildUsaShorthaulRule = () => {
+const buildUsaShorthaulRule = () => {
   const distanceBands = [
     {
       minDistance: 0,
@@ -221,10 +240,10 @@ export const buildUsaShorthaulRule = () => {
     },
   ]
 
-  return new IntraUsaRule('Intra-USA Short Haul', distanceBands)
+  return new IntraCountryRule('Intra-USA Short Haul', 'United States', distanceBands)
 }
 
-export const buildUsaEastCoastUsaWestCoastRule = () => {
+const buildUsaEastCoastUsaWestCoastRule = () => {
   const ruleConfig = {
     origin: {
       region: new Set(['usaEastCoast'])
@@ -239,7 +258,7 @@ export const buildUsaEastCoastUsaWestCoastRule = () => {
   return new GeographicalRule('USA East Coast / Canada', ruleConfig)
 }
 
-export const buildDallasRule = () => {
+const buildDallasRule = () => {
   const ruleConfig = {
     origin: {
       city: new Set(['dallas'])
@@ -255,7 +274,7 @@ export const buildDallasRule = () => {
   return new GeographicalRule('Dallas', ruleConfig)
 }
 
-export const buildNewZealandRule = () => {
+const buildNewZealandRule = () => {
   const ruleConfig = {
     origin: {
       country: new Set(['new zealand'])
@@ -275,7 +294,7 @@ export const buildNewZealandRule = () => {
   return new GeographicalRule('New Zealand', ruleConfig)
 }
 
-export const buildPartnerFallbackRule = () => {
+const buildPartnerFallbackRule = () => {
   const distanceBands = [
     {
       minDistance: 0,

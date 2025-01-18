@@ -1,22 +1,7 @@
-import { getPartnerEarnCategory } from "./earnCategories"
-import { buildAdelaideRule, buildCairnsRule, buildDallasRule, buildDubaiDohaRule, buildNewZealandRule, buildNorthernEuropeRule, buildPartnerFallbackRule, buildPerthRule, buildSoutheastEuropeRule, buildSydMelBneGoldCoastRule, buildTelAvivRule, buildUsaEastCoastUsaWestCoastRule, buildUsaShorthaulRule, buildWesternEuropeRule } from "./qantasrules"
+import { getPartnerEarnCategory } from "./partner/partnerEarnCategories"
+import { getPartnerRules } from "./partner/partnerRules"
 
-const _rules = [
-  buildSydMelBneGoldCoastRule(),
-  buildPerthRule(),
-  buildAdelaideRule(),
-  buildCairnsRule(),
-  buildWesternEuropeRule(),
-  buildNorthernEuropeRule(),
-  buildSoutheastEuropeRule(),
-  buildTelAvivRule(),
-  buildDubaiDohaRule(),
-  buildUsaShorthaulRule(),
-  buildUsaEastCoastUsaWestCoastRule(),
-  buildDallasRule(),
-  buildNewZealandRule(),
-  buildPartnerFallbackRule()
-]
+const partnerRules = getPartnerRules()
 
 export const calculate = (segments, eliteStatus) => {
   const retval = {
@@ -26,7 +11,7 @@ export const calculate = (segments, eliteStatus) => {
   }
 
   for (let segment of segments) {
-    const rule = _rules.find( (rule) => {
+    const rule = partnerRules.find( (rule) => {
       return rule.applies(segment)
     })
 

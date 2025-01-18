@@ -28,9 +28,10 @@ class Rule {
   }
 }
 
-export class IntraUsaRule extends Rule {
-  constructor(name, distanceBands) {
+export class IntraCountryRule extends Rule {
+  constructor(name, country, distanceBands) {
     super(name)
+    this.country = country
     this.distanceRule = new DistanceRule(name, distanceBands)
   }
 
@@ -38,7 +39,7 @@ export class IntraUsaRule extends Rule {
     const fromAirport = getAirport(segment.fromAirport)
     const toAirport = getAirport(segment.toAirport)
 
-    if (fromAirport.country !== "United States" || toAirport.country !== "United States") {
+    if (fromAirport.country !== this.country || toAirport.country !== this.country) {
       return false
     }
 

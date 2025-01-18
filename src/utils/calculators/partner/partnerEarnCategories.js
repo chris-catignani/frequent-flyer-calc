@@ -1,5 +1,5 @@
-import { getAirport } from "../airports"
-import { isInRegion } from "./regions"
+import { getAirport } from "../../airports"
+import { isInRegion } from "../regions"
 
 export const getPartnerEarnCategory = (segment) => {
   for(let rule of partnerEarnCategories[segment.airline].fareBuckets.rules) {
