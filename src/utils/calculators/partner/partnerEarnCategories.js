@@ -2,6 +2,10 @@ import { getAirport } from "../../airports"
 import { isInRegion } from "../regions"
 
 export const getPartnerEarnCategory = (segment) => {
+  if(!partnerEarnCategories[segment.airline]) {
+    throw new Error(`No airline configured for ${segment.airline}`)
+  }
+
   for(let rule of partnerEarnCategories[segment.airline].fareBuckets.rules) {
     if (!isApplicableRule(segment, rule)) {
       continue
@@ -9,6 +13,10 @@ export const getPartnerEarnCategory = (segment) => {
 
     if (rule.notSupported) {
       throw new Error(rule.notSupported.reason)
+    }
+
+    if (!rule.categories[segment.fareClass]) {
+      throw new Error(`Airline ${segment.airline} is not configured for fare class ${segment.fareClass}`)
     }
 
     return rule.categories[segment.fareClass]
