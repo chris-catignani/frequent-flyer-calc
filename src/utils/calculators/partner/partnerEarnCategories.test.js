@@ -94,7 +94,7 @@ describe('getPartnerEarnCategory', () => {
   describe('Japan Airlines special cases', () => {
     test('intra-Japan flights fail', () => {
       const segment = Segment.fromString(`jl i hnd cts`)
-      expect(() => getPartnerEarnCategory(segment)).toThrow()
+      expect(() => getPartnerEarnCategory(segment)).toThrow('Intra Japan flights on JAL are not yet supported')
     })
 
     test('non intra-Japan flights succeed', () => {
@@ -188,12 +188,12 @@ describe('getPartnerEarnCategory', () => {
   describe('Edge cases', () => {
     test('invalid airline code', () => {
       const segment = Segment.fromString(`xx i hnd cts`)
-      expect(() => getPartnerEarnCategory(segment)).toThrow()
+      expect(() => getPartnerEarnCategory(segment)).toThrow('No airline configured for xx')
     })
 
     test('invalid fare code', () => {
       const segment = Segment.fromString(`aa x hnd cts`)
-      expect(() => getPartnerEarnCategory(segment)).toThrow()
+      expect(() => getPartnerEarnCategory(segment)).toThrow('Airline aa is not configured for fare class x')
     })
   })
 })
