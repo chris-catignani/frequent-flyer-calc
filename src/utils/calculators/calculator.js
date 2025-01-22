@@ -1,7 +1,11 @@
 import { getPartnerEarnCategory } from "./partner/partnerEarnCategories"
 import { getPartnerRules } from "./partner/partnerRules"
+import { getQantasEarnCategory } from "./qantas/qantasEarnCategories"
+import { getQantasRules } from "./qantas/qantasRules"
 
+// TODO make this a map of airline to rules?
 const partnerRules = getPartnerRules()
+const qantasRules = getQantasRules()
 
 export const calculate = (segments, eliteStatus) => {
   const retval = {
@@ -11,11 +15,7 @@ export const calculate = (segments, eliteStatus) => {
   }
 
   for (let segment of segments) {
-    const fareEarnCategory = getPartnerEarnCategory(segment)
-
-    const rule = partnerRules.find( (rule) => {
-      return rule.applies(segment, fareEarnCategory)
-    })
+    const {fareEarnCategory, rule} = getEarnCategoryAndRules(segment)
 
     if(!rule) {
       throw new Error(`Could not find a rule to calculate earnings for segment: ${segment}`)
@@ -41,4 +41,25 @@ export const calculate = (segments, eliteStatus) => {
   }
 
   return retval
+}
+
+// TODO clean this up
+const getEarnCategoryAndRules = (segment) => {
+  if(segment.airline === 'qf') {
+    const fareEarnCategory = getQantasEarnCategory(segment)
+
+    const rule = qantasRules.find( (rule) => {
+      return rule.applies(segment, fareEarnCategory)
+    })
+
+    return {fareEarnCategory, rule}
+  } else {
+    const fareEarnCategory = getPartnerEarnCategory(segment)
+
+    const rule = partnerRules.find( (rule) => {
+      return rule.applies(segment, fareEarnCategory)
+    })
+
+    return {fareEarnCategory, rule}
+  }
 }

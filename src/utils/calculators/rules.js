@@ -1,5 +1,6 @@
 import { calcDistance, getAirport } from '@/utils/airports'
 import { isInRegion } from './regions'
+import { QantasEarnings } from '@/models/qantasEarnings'
 
 /**
  * All rules should implement these methods
@@ -194,4 +195,19 @@ _getOriginAndDestination(segment) {
       earnings[fareEarnCategory].statusCredits
     )
   }
+}
+
+export const buildEarningRates = (qantasPointsString, qantasCreditsString, fareClasses) => {
+  const pointsPerFareclass = qantasPointsString.trim().replace(/\,/gm, '').replace(/\s+/gm, ' ').split(' ')
+  const creditsPerFareclass = qantasCreditsString.trim().replace(/\s+/gm, ' ').split(' ')
+  const retval = {}
+
+  fareClasses.forEach((fareClass, index) => {
+    retval[fareClass] = new QantasEarnings(
+      parseInt(pointsPerFareclass[index]),
+      parseInt(creditsPerFareclass[index])
+    )
+  })
+
+  return retval
 }
