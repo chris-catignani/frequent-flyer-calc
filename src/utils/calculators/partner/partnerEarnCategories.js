@@ -1,94 +1,9 @@
-import { getAirport } from "../../airports"
-import { isInRegion } from "../regions"
+import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from "../earnCategories"
+
+const _partnerfareClasses = ['discountEconomy', 'economy', 'flexibleEconomy', 'premiumEconomy', 'business', 'first']
 
 export const getPartnerEarnCategory = (segment) => {
-  if(!partnerEarnCategories[segment.airline]) {
-    throw new Error(`No airline configured for ${segment.airline}`)
-  }
-
-  for(let rule of partnerEarnCategories[segment.airline].fareBuckets.rules) {
-    if (!isApplicableRule(segment, rule)) {
-      continue
-    }
-
-    if (rule.notSupported) {
-      throw new Error(rule.notSupported.reason)
-    }
-
-    if (!rule.categories[segment.fareClass]) {
-      throw new Error(`Airline ${segment.airline} is not configured for fare class ${segment.fareClass}`)
-    }
-
-    return rule.categories[segment.fareClass]
-  }
-}
-
-const isApplicableRule = (segment, rule) => {
-  const check = (originAirport, destinationAirport, rule) => {
-    if (rule.all) {
-      return true
-    }
-
-    let originApplies = false
-    let destinationApplies = false
-
-    if (rule.origin.country) {
-      originApplies = rule.origin.country.has(originAirport.country.toLowerCase())
-    }
-
-    if (rule.destination.country) {
-      destinationApplies = rule.destination.country.has(destinationAirport.country.toLowerCase())
-    }
-
-    if (!destinationApplies && rule.destination.region) {
-      for (let region of rule.destination.region) {
-        if (isInRegion(destinationAirport.iata.toLowerCase(), region)) {
-          destinationApplies = true
-          break
-        }
-      }
-    }
-
-    // console.log(originAirport.iata, destinationAirport.iata, originApplies, destinationApplies, rule)
-
-    return originApplies && destinationApplies
-  }
-
-  const originAirport = getAirport(segment.fromAirport)
-  const destinationAirport = getAirport(segment.toAirport)
-  return check(originAirport, destinationAirport, rule) || check(destinationAirport, originAirport, rule)
-}
-
-/**
- * Taking the copy/paste fare buckets from the Qantas website and parse them.
- */
-const buildFareBuckets = (qantasString) => {
-  // remove all '*', replace whitespace with single space, split on that single space
-  const fareBuckets = qantasString.trim().replace(/\*\~\^/gm, '').replace(/\s+/gm, ' ').toLowerCase().split(' ')
-  const fareClasses = ['discountEconomy', 'economy', 'flexibleEconomy', 'premiumEconomy', 'business', 'first']
-  const retval = {}
-
-  fareClasses.forEach((fareClass, index) => {
-    if (fareBuckets[index] === '-') {
-      return
-    }
-
-    // iterate over each single fareClass character, putting that character and fare category into the map
-    fareBuckets[index].split('').forEach(fareBucket => retval[fareBucket] = fareClass);
-  })
-
-  return retval
-}
-
-const buildSimpleFareBuckets = (qantasString) => {
-  return {
-    rules: [
-      {
-        all: true,
-        categories: buildFareBuckets(qantasString)
-      }
-    ]
-  }
+  return getEarnCategory(segment, partnerEarnCategories)
 }
 
 const buildJapanAirlinesFareBuckets = (qantasString) => {
@@ -103,7 +18,7 @@ const buildJapanAirlinesFareBuckets = (qantasString) => {
       },
       {
         all: true,
-        categories: buildFareBuckets(qantasString)
+        categories: buildFareBuckets(qantasString, _partnerfareClasses)
       }
     ]
   }
@@ -118,7 +33,7 @@ const buildMalaysiaAirlinesFareBuckets = (longHaulQantasString, allOtherQantasSt
           country: new Set(['malaysia', 'united kingdom']),
           region: new Set(['europe'])
         },
-        categories: buildFareBuckets(longHaulQantasString)
+        categories: buildFareBuckets(longHaulQantasString, _partnerfareClasses)
       },
       {
         origin: { country: new Set(['malaysia']) },
@@ -126,11 +41,11 @@ const buildMalaysiaAirlinesFareBuckets = (longHaulQantasString, allOtherQantasSt
           country: new Set(['united kingdom']),
           region: new Set(['europe', 'middleEast'])
         },
-        categories: buildFareBuckets(longHaulQantasString)
+        categories: buildFareBuckets(longHaulQantasString, _partnerfareClasses)
       },
       {
         all: true,
-        categories: buildFareBuckets(allOtherQantasString)
+        categories: buildFareBuckets(allOtherQantasString, _partnerfareClasses)
       }
     ]
   }
@@ -144,11 +59,11 @@ const buildSriLankairlinesFareBuckets = (longHaulQantasString, allOtherQantasStr
         destination: {
           region: new Set(['europe', 'southeastAustralia'])
         },
-        categories: buildFareBuckets(longHaulQantasString)
+        categories: buildFareBuckets(longHaulQantasString, _partnerfareClasses)
       },
       {
         all: true,
-        categories: buildFareBuckets(allOtherQantasString)
+        categories: buildFareBuckets(allOtherQantasString, _partnerfareClasses)
       }
     ]
   }
@@ -163,34 +78,34 @@ const partnerEarnCategories = {
       'platinum': 1.00,
       'platinum one': 1.00
     },
-    'fareBuckets': buildSimpleFareBuckets('NOQ 	GKLMSV	HY	PW 	CDIJR	AF ')
+    'fareBuckets': buildSimpleFareBuckets('NOQ 	GKLMSV	HY	PW 	CDIJR	AF ', _partnerfareClasses)
   },
   'as': {
-    'fareBuckets': buildSimpleFareBuckets('GOQX	KLMNSV	BHY	-	CDIJ~	AF')
+    'fareBuckets': buildSimpleFareBuckets('GOQX	KLMNSV	BHY	-	CDIJ~	AF', _partnerfareClasses)
   },
   'ba': {
-    'fareBuckets': buildSimpleFareBuckets('GKLMNOQSV	-	BEHTWY	-	CDIRJ	AF')
+    'fareBuckets': buildSimpleFareBuckets('GKLMNOQSV	-	BEHTWY	-	CDIRJ	AF', _partnerfareClasses)
   },
   'ay': {
-    'fareBuckets': buildSimpleFareBuckets('AZ	GLMNOQSV	BHKY	EPTW	CDIJR	-')
+    'fareBuckets': buildSimpleFareBuckets('AZ	GLMNOQSV	BHKY	EPTW	CDIJR	-', _partnerfareClasses)
   },
   'ib': {
-    'fareBuckets': buildSimpleFareBuckets('AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-')
+    'fareBuckets': buildSimpleFareBuckets('AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-', _partnerfareClasses)
   },
   'i2': {
-    'fareBuckets': buildSimpleFareBuckets('AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-')
+    'fareBuckets': buildSimpleFareBuckets('AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-', _partnerfareClasses)
   },
   'cx': {
-    'fareBuckets': buildSimpleFareBuckets('ML	BHK	YE	RW	CDIJP	AF')
+    'fareBuckets': buildSimpleFareBuckets('ML	BHK	YE	RW	CDIJP	AF', _partnerfareClasses)
   },
   'qr': {
-    'fareBuckets': buildSimpleFareBuckets('KLMV	BH 	Y	-	CDIJP*R	AF')
+    'fareBuckets': buildSimpleFareBuckets('KLMV	BH 	Y	-	CDIJP*R	AF', _partnerfareClasses)
   },
   'at': {
-    'fareBuckets':buildSimpleFareBuckets('NOQRSTW	HKLMV	BY	-	CDIJ	-')
+    'fareBuckets':buildSimpleFareBuckets('NOQRSTW	HKLMV	BY	-	CDIJ	-', _partnerfareClasses)
   },
   'rj': {
-    'fareBuckets': buildSimpleFareBuckets('VSNQOPW	KML	BYH	IZ*	CDJ	-')
+    'fareBuckets': buildSimpleFareBuckets('VSNQOPW	KML	BYH	IZ*	CDJ	-', _partnerfareClasses)
   },
   'jl': {
     'fareBuckets': buildJapanAirlinesFareBuckets('GNOQZ^	HKLMSV	BY	EWPR	CDIJX	AF')
