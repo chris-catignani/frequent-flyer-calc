@@ -197,7 +197,7 @@ _getOriginAndDestination(segment) {
   }
 }
 
-export const buildEarningRates = (qantasPointsString, qantasCreditsString, fareClasses) => {
+export const parseEarningRates = (qantasPointsString, qantasCreditsString, fareClasses) => {
   const pointsPerFareclass = qantasPointsString.trim().replace(/\,/gm, '').replace(/\s+/gm, ' ').split(' ')
   const creditsPerFareclass = qantasCreditsString.trim().replace(/\s+/gm, ' ').split(' ')
   const retval = {}
