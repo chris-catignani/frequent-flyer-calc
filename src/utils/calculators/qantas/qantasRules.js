@@ -1,4 +1,4 @@
-import { parseEarningRates, IntraCountryRule, GeographicalRule } from "../rules"
+import { parseEarningRates, IntraCountryRule, GeographicalRule, DistanceRule } from "../rules"
 import { QANTAS_FARE_CLASSES } from "./qantasEarnCategories"
 
 const _base_rule_url = 'https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html'
@@ -9,6 +9,12 @@ export const getQantasRules = () => {
     buildAdlBneGoldCoastSydMelRule(),
     buildDarwinPerthRule(),
     buildNewZealandRule(),
+    buildDallasRule(),
+    buildUsaEastCoastRule(),
+    buildDubaiRule(),
+    buildEuropeRule(),
+    buildTelAvivRule(),
+    buildFallbackRule(),
   ]
 }
 
@@ -111,4 +117,131 @@ const buildNewZealandRule = () => {
 
   const ruleUrl = _base_rule_url + '#between-new-zealand-and'
   return new GeographicalRule('New Zealand', ruleUrl, ruleConfig)
+}
+
+const buildDallasRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['dallas'])
+    },
+    destination: {
+      region: {
+        usaEastCoast: parseQantasEarningRates('1,300	1,950	2,600	2,600	3,250	3,600	3,900	4,200	4,500	5,200', '20	25	40	40	45	50	80	85	90	120'),
+        usaWestCoast: parseQantasEarningRates('1,700	2,550	3,400	3,400	4,250	4,600	5,100	5,525	5,950	6,800', '25	35	50	50	55	60	100	105	110	150')
+      }
+    }
+  }
+
+  const ruleUrl = _base_rule_url + '#between-dallas-and'
+  return new GeographicalRule('Dallas', ruleUrl, ruleConfig)
+}
+
+const buildUsaEastCoastRule = () => {
+  const ruleConfig = {
+    origin: {
+      region: new Set(['usaEastCoast'])
+    },
+    destination: {
+      region: {
+        usaWestCoast: parseQantasEarningRates('1,700	2,550	3,400	3,400	4,250	4,600	5,100	5,525	5,950	6,800', '25	35	50	50	55	60	100	105	110	150')
+      }
+    }
+  }
+
+  const ruleUrl = _base_rule_url + '#between-east-coast-usacanada-and'
+  return new GeographicalRule('East Coast USA/Canada', ruleUrl, ruleConfig)
+}
+
+const buildDubaiRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['dubai'])
+    },
+    destination: {
+      region: {
+        europe: parseQantasEarningRates('1,700	2,550	3,400	3,400	4,250	4,600	5,100	5,525	5,950	6,800', '25	35	50	50	55	60	100	105	110	150'),
+        northernAfrica: parseQantasEarningRates('1,700	2,550	3,400	3,400	4,250	4,600	5,100	5,525	5,950	6,800', '25	35	50	50	55	60	100	105	110	150'),
+        southeastAsia: parseQantasEarningRates('1,700	2,550	3,400	3,400	4,250	4,600	5,100	5,525	5,950	6,800', '25	35	50	50	55	60	100	105	110	150'),
+      }
+    }
+  }
+
+  const ruleUrl = _base_rule_url + '#between-dubai-and'
+  return new GeographicalRule('Dubai', ruleUrl, ruleConfig)
+}
+
+const buildEuropeRule = () => {
+  const ruleConfig = {
+    origin: {
+      region: new Set(['europe'])
+    },
+    destination: {
+      region: {
+        northeastAsia: parseQantasEarningRates('3,600	5,400	7,200	7,200	9,000	9,800	10,800	11,700	12,600	14,400', '40	55	80	80	85	90	160	165	175	240'),
+        southeastAsia: parseQantasEarningRates('3,600	5,400	7,200	7,200	9,000	9,800	10,800	11,700	12,600	14,400', '40	55	80	80	85	90	160	165	175	240'),
+      }
+    }
+  }
+
+  const ruleUrl = _base_rule_url + '#between-europe-and'
+  return new GeographicalRule('Europe', ruleUrl, ruleConfig)
+}
+
+const buildTelAvivRule = () => {
+  const ruleConfig = {
+    origin: {
+      city: new Set(['tel-aviv'])
+    },
+    destination: {
+      city: {
+        'hong kong': parseQantasEarningRates('3,500	5,500	7,500	7,500	9,000	10,000	12,000	13,000	14,000	16,000', '30	40	60	60	70	80	120	130	140	180')
+      }
+    }
+  }
+
+  const ruleUrl = _base_rule_url + '#between-tel-aviv-and'
+  return new GeographicalRule('Tel Aviv', ruleUrl, ruleConfig)
+}
+
+const buildFallbackRule = () => {
+  const distanceBands = [
+    {
+      minDistance: 0,
+      maxDistance: 750,
+      earnings: parseQantasEarningRates('300^	450^	650^	650^	750^	850^	900^	975^	1,050^	1,200^', '10	10	20	20	20	20	40	40	40	60')
+    },
+    {
+      minDistance: 751,
+      maxDistance: 1500,
+      earnings: parseQantasEarningRates('550^	850	1,100^	1,100^	1,350	1,500	1,650	1,800	1,950	2,200', '15	15	30	30	30	30	60	65	70	90')
+    },
+    {
+      minDistance: 1501,
+      maxDistance: 2500,
+      earnings: parseQantasEarningRates('1,100	1,650	2,200	2,200	2,750	3,050	3,300	3,575	3,850	4,400', '20	25	40	40	40	40	80	85	95	120')
+    },
+    {
+      minDistance: 2501,
+      maxDistance: 3500,
+      earnings: parseQantasEarningRates('1,600	2,400	3,200	3,200	4,000	4,400	4,800	5,200	5,600	6,400', '25	35	50	50	50	50	100	105	115	150')
+    },
+    {
+      minDistance: 3501,
+      maxDistance: 5000,
+      earnings: parseQantasEarningRates('2,450	3,700	4,900	4,900	6,150	6,750	7,350	7,975	8,600	9,800', '30	40	60	60	60	60	120	130	140	180')
+    },
+    {
+      minDistance: 5001,
+      maxDistance: 6500,
+      earnings: parseQantasEarningRates('2,900	4,350	5,800	5,800	7,250	8,000	8,700	9,425	10,150	11,600', '35	45	70	70	70	70	140	150	160	210')
+    },
+    {
+      minDistance: 6501,
+      maxDistance: 999999999,
+      earnings: parseQantasEarningRates('4,000	6,000	8,000	8,000	10,000	11,000	12,000	13,000	14,000	16,000', '40	55	80	80	80	80	160	170	180	240')
+    }
+  ]
+
+  const ruleUrl = _base_rule_url + '#all-other-flights'
+  return new DistanceRule('All other flights', ruleUrl, distanceBands)
 }
