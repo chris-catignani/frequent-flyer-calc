@@ -5,8 +5,9 @@ import { isInRegion } from './regions'
  * All rules should implement these methods
  */
 class Rule {
-  constructor(name) {
+  constructor(name, ruleUrl) {
     this.name = name
+    this.ruleUrl = ruleUrl
   }
 
   applies(segment, fareEarnCategory) {
@@ -20,6 +21,7 @@ class Rule {
   buildCalculationReturn(fareEarnCategory, notes, qantasPoints, statusCredits) {
     return {
       rule: this.name,
+      ruleUrl: this.ruleUrl,
       fareEarnCategory,
       notes,
       qantasPoints,
@@ -29,10 +31,10 @@ class Rule {
 }
 
 export class IntraCountryRule extends Rule {
-  constructor(name, country, distanceBands) {
-    super(name)
+  constructor(name, ruleUrl, country, distanceBands) {
+    super(name, ruleUrl)
     this.country = country
-    this.distanceRule = new DistanceRule(name, distanceBands)
+    this.distanceRule = new DistanceRule(name, ruleUrl, distanceBands)
   }
 
   applies(segment, fareEarnCategory) {
@@ -55,8 +57,8 @@ export class IntraCountryRule extends Rule {
  * Distance based rule
  */
 export class DistanceRule extends Rule {
-  constructor(name, distanceBands) {
-    super(name)
+  constructor(name, ruleUrl, distanceBands) {
+    super(name, ruleUrl)
     this.distanceBands = distanceBands
   }
 
@@ -98,8 +100,8 @@ export class DistanceRule extends Rule {
  * ...
  */
 export class GeographicalRule extends Rule {
-  constructor(name, ruleConfig) {
-    super(name)
+  constructor(name, ruleUrl, ruleConfig) {
+    super(name, ruleUrl)
     this.ruleConfig = ruleConfig
   }
 

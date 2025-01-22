@@ -20,6 +20,8 @@ export const getPartnerRules = () => {
   ]
 }
 
+const _base_rule_url = 'https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html'
+
 const buildEarningRates = (qantasPointsString, qantasCreditsString) => {
   const pointsPerFareclass = qantasPointsString.trim().replace(/\,/gm, '').replace(/\s+/gm, ' ').split(' ')
   const creditsPerFareclass = qantasCreditsString.trim().replace(/\s+/gm, ' ').split(' ')
@@ -68,7 +70,8 @@ const buildSydMelBneGoldCoastRule = () => {
     }
   }
 
-  return new GeographicalRule('Syndey, Melbourne, Brisbane, Gold Coast', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-syd-mel-bne-ool-and-'
+  return new GeographicalRule('Syndey, Melbourne, Brisbane, Gold Coast', ruleUrl, ruleConfig)
 }
 
 const buildPerthRule = () => {
@@ -89,7 +92,8 @@ const buildPerthRule = () => {
     }
   }
 
-  return new GeographicalRule('Perth', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-perth-and-'
+  return new GeographicalRule('Perth', ruleUrl, ruleConfig)
 }
 
 const buildAdelaideRule = () => {
@@ -109,7 +113,8 @@ const buildAdelaideRule = () => {
     }
   }
 
-  return new GeographicalRule('Adelaide', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-adelaide-and-'
+  return new GeographicalRule('Adelaide', ruleUrl, ruleConfig)
 }
 
 
@@ -125,7 +130,8 @@ const buildCairnsRule = () => {
     }
   }
 
-  return new GeographicalRule('Cairns', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-cairns-and-'
+  return new GeographicalRule('Cairns', ruleUrl, ruleConfig)
 }
 
 const buildWesternEuropeRule = () => {
@@ -150,7 +156,8 @@ const buildWesternEuropeRule = () => {
     }
   }
 
-  return new GeographicalRule('Western Europe', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-western-europe-and-'
+  return new GeographicalRule('Western Europe', ruleUrl, ruleConfig)
 }
 
 const buildNorthernEuropeRule = () => {
@@ -173,7 +180,8 @@ const buildNorthernEuropeRule = () => {
     }
   }
 
-  return new GeographicalRule('Northern Europe', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-northern-europe-and-'
+  return new GeographicalRule('Northern Europe', ruleUrl, ruleConfig)
 }
 
 const buildSoutheastEuropeRule = () => {
@@ -189,7 +197,8 @@ const buildSoutheastEuropeRule = () => {
     }
   }
 
-  return new GeographicalRule('Southeast Europe', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-southeast-europe-and-'
+  return new GeographicalRule('Southeast Europe', ruleUrl, ruleConfig)
 }
 
 const buildTelAvivRule = () => {
@@ -204,7 +213,8 @@ const buildTelAvivRule = () => {
     }
   }
 
-  return new GeographicalRule('Tel Aviv', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-tel-aviv-and'
+  return new GeographicalRule('Tel Aviv', ruleUrl, ruleConfig)
 }
 
 const buildDubaiDohaRule = () => {
@@ -223,7 +233,8 @@ const buildDubaiDohaRule = () => {
     }
   }
 
-  return new GeographicalRule('Dubai and Doha', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-dubai-doha-and-'
+  return new GeographicalRule('Dubai and Doha', ruleUrl, ruleConfig)
 }
 
 const buildUsaShorthaulRule = () => {
@@ -240,7 +251,8 @@ const buildUsaShorthaulRule = () => {
     },
   ]
 
-  return new IntraCountryRule('Intra-USA Short Haul', 'United States', distanceBands)
+  const ruleUrl = _base_rule_url + '#intra-usa-short-haul'
+  return new IntraCountryRule('Intra-USA Short Haul', ruleUrl, 'United States', distanceBands)
 }
 
 const buildUsaEastCoastUsaWestCoastRule = () => {
@@ -255,7 +267,8 @@ const buildUsaEastCoastUsaWestCoastRule = () => {
     }
   }
 
-  return new GeographicalRule('USA East Coast / Canada', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-east-coast-usa-canada-and-'
+  return new GeographicalRule('USA East Coast / Canada', ruleUrl, ruleConfig)
 }
 
 const buildDallasRule = () => {
@@ -271,7 +284,8 @@ const buildDallasRule = () => {
     }
   }
 
-  return new GeographicalRule('Dallas', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-dallas-and-'
+  return new GeographicalRule('Dallas', ruleUrl, ruleConfig)
 }
 
 const buildNewZealandRule = () => {
@@ -291,7 +305,8 @@ const buildNewZealandRule = () => {
     }
   }
 
-  return new GeographicalRule('New Zealand', ruleConfig)
+  const ruleUrl = _base_rule_url + '#between-new-zealand-and-'
+  return new GeographicalRule('New Zealand', ruleUrl, ruleConfig)
 }
 
 const buildPartnerFallbackRule = () => {
@@ -348,5 +363,6 @@ const buildPartnerFallbackRule = () => {
     }
   ]
 
-  return new DistanceRule('All other flights', distanceBands)
+  const ruleUrl = _base_rule_url + '#all-other-flights'
+  return new DistanceRule('All other flights', ruleUrl, distanceBands)
 }

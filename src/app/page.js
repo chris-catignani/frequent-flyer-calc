@@ -30,7 +30,7 @@ export default function Home() {
           Status Credits: {segmentResult.calculation.statusCredits}
         </div>
         <div>
-          {segmentResult.calculation.rule} rule - {segmentResult.calculation.notes}
+          <a href={segmentResult.calculation.ruleUrl} target="_blank">{segmentResult.calculation.rule} rule</a> - {segmentResult.calculation.notes}
         </div>
       </div>
     )
