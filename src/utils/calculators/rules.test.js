@@ -17,7 +17,7 @@ describe('rules', () => {
         earnings: { business: new QantasEarnings(200, 20) }
       },
     ]
-    const intraCountryRule = new IntraCountryRule('intra country rule', 'United States', distanceBands)
+    const intraCountryRule = new IntraCountryRule('intra country rule', 'https://google.com', 'United States', distanceBands)
     //TODO mock airports to specify distances?
     expect(true).toBe(true)
   })
@@ -35,7 +35,7 @@ describe('rules', () => {
         earnings: { business: new QantasEarnings(200, 20) }
       },
     ]
-    const distanceRule = new DistanceRule('intra country rule', distanceBands)
+    const distanceRule = new DistanceRule('intra country rule', 'https://google.com', distanceBands)
     //TODO mock airports to specify distances?
     expect(true).toBe(true)
   })
@@ -43,7 +43,7 @@ describe('rules', () => {
   describe('GeographicalRule', () => {
     describe('City to City', () => {
 
-      const geographicalRule = new GeographicalRule('geographical rule', {
+      const geographicalRule = new GeographicalRule('geographical rule', 'https://google.com', {
         origin: { city: new Set(['dallas', 'houston']) },
         destination: {
           city: {
@@ -92,7 +92,7 @@ describe('rules', () => {
 
     describe('Country to Country', () => {
 
-      const geographicalRule = new GeographicalRule('geographical rule', {
+      const geographicalRule = new GeographicalRule('geographical rule', 'https://google.com', {
         origin: { country: new Set(['united states', 'canada']) },
         destination: {
           country: {
@@ -141,7 +141,7 @@ describe('rules', () => {
 
     describe('Region to Region', () => {
 
-      const geographicalRule = new GeographicalRule('geographical rule', {
+      const geographicalRule = new GeographicalRule('geographical rule', 'https://google.com', {
         origin: { region: new Set(['usaEastCoast', 'northernEurope']) },
         destination: {
           region: {
