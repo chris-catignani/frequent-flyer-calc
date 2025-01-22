@@ -68,7 +68,12 @@ export class DistanceRule extends Rule {
 
   applies(segment, fareEarnCategory) {
     const distance = calcDistance(segment.fromAirport, segment.toAirport)
-    return this._getDistanceBand(distance) != null
+    const distanceBand = this._getDistanceBand(distance)
+    if(!distanceBand) {
+      return false
+    }
+
+    return fareEarnCategory in distanceBand.earnings
   }
 
   calculate(segment, fareEarnCategory) {
@@ -154,19 +159,7 @@ export class GeographicalRule extends Rule {
     return null
   }
 
-  applies(segment, fareEarnCategory) {
-    if (this._getOrigin(segment.fromAirport) && this._getDestination(segment.toAirport)) {
-      return true
-    }
-
-    if (this._getOrigin(segment.toAirport) && this._getDestination(segment.fromAirport)) {
-      return true
-    }
-
-    return false
-  }
-
-  calculate(segment, fareEarnCategory) {
+_getOriginAndDestination(segment) {
     let origin = this._getOrigin(segment.fromAirport)
     let destination = this._getDestination(segment.toAirport)
 
@@ -175,6 +168,21 @@ export class GeographicalRule extends Rule {
       destination = this._getDestination(segment.fromAirport)
     }
 
+    return {origin, destination}
+  }
+
+  applies(segment, fareEarnCategory) {
+    const {origin, destination} = this._getOriginAndDestination(segment)
+    if (!origin || !destination) {
+      return false
+    }
+
+    const earnings = this.ruleConfig.destination[destination.type][destination.value]
+    return fareEarnCategory in earnings
+  }
+
+  calculate(segment, fareEarnCategory) {
+    const {origin, destination} = this._getOriginAndDestination(segment)
     const earnings = this.ruleConfig.destination[destination.type][destination.value]
 
     return this.buildCalculationReturn(

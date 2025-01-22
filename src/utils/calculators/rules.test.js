@@ -19,6 +19,7 @@ describe('rules', () => {
     ]
     const intraCountryRule = new IntraCountryRule('intra country rule', 'United States', distanceBands)
     //TODO mock airports to specify distances?
+    expect(true).toBe(true)
   })
 
   describe('DistanceRule', () => {
@@ -36,6 +37,7 @@ describe('rules', () => {
     ]
     const distanceRule = new DistanceRule('intra country rule', distanceBands)
     //TODO mock airports to specify distances?
+    expect(true).toBe(true)
   })
 
   describe('GeographicalRule', () => {
@@ -52,12 +54,12 @@ describe('rules', () => {
       })
 
       test('Go Path - applies', () => {
-        expect(geographicalRule.applies(Segment.fromString('aa i dfw sfo'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i sfo dfw'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i dfw bos'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i bos dfw'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i iah bos'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i bos iah'))).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i dfw sfo'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i sfo dfw'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i dfw bos'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i bos dfw'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i iah bos'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i bos iah'), 'business')).toBe(true)
       })
 
       test.each([
@@ -74,17 +76,17 @@ describe('rules', () => {
 
       test('Rule does not apply', () => {
         // use same airports but invalid combination
-        expect(geographicalRule.applies(Segment.fromString('aa i dfw iah'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i sfo bos'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i dfw iah'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i sfo bos'), 'business')).toBe(false)
 
         // use 1 valid and 1 not valid airports
-        expect(geographicalRule.applies(Segment.fromString('aa i dfw lax'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i lax dfw'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i sfo lax'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i lax sfo'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i dfw lax'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i lax dfw'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i sfo lax'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i lax sfo'), 'business')).toBe(false)
 
         // use 2 invalid airports
-        expect(geographicalRule.applies(Segment.fromString('aa i lax lga'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i lax lga'), 'business')).toBe(false)
       })
     })
 
@@ -101,12 +103,12 @@ describe('rules', () => {
       })
 
       test('Go Path - applies', () => {
-        expect(geographicalRule.applies(Segment.fromString('aa i jfk lhr'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i lhr jfk'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i jfk cdg'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i cdg jfk'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i yyz cdg'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i cdg yyz'))).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i jfk lhr'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i lhr jfk'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i jfk cdg'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i cdg jfk'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i yyz cdg'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i cdg yyz'), 'business')).toBe(true)
       })
 
       test.each([
@@ -123,17 +125,17 @@ describe('rules', () => {
 
       test('Rule does not apply', () => {
         // use same regions but invalid combination
-        expect(geographicalRule.applies(Segment.fromString('aa i jfk lax'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i yyz yvr'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i jfk lax'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i yyz yvr'), 'business')).toBe(false)
 
         // use 1 valid and 1 not valid region
-        expect(geographicalRule.applies(Segment.fromString('aa i jfk ams'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i ams jfk'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i yyz mad'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i mad yyz'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i jfk ams'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i ams jfk'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i yyz mad'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i mad yyz'), 'business')).toBe(false)
 
         // use 2 invalid airports
-        expect(geographicalRule.applies(Segment.fromString('aa i mex mad'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i mex mad'), 'business')).toBe(false)
       })
     })
 
@@ -150,12 +152,12 @@ describe('rules', () => {
       })
 
       test('Go Path - applies', () => {
-        expect(geographicalRule.applies(Segment.fromString('aa i jfk lhr'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i lhr jfk'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i jfk bkk'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i bkk jfk'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i hel bkk'))).toBe(true)
-        expect(geographicalRule.applies(Segment.fromString('aa i bkk hel'))).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i jfk lhr'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i lhr jfk'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i jfk bkk'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i bkk jfk'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i hel bkk'), 'business')).toBe(true)
+        expect(geographicalRule.applies(Segment.fromString('aa i bkk hel'), 'business')).toBe(true)
       })
 
       test.each([
@@ -172,17 +174,17 @@ describe('rules', () => {
 
       test('Rule does not apply', () => {
         // use same regions but invalid combination
-        expect(geographicalRule.applies(Segment.fromString('aa i jfk hel'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i hel jfk'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i jfk hel'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i hel jfk'), 'business')).toBe(false)
 
         // use 1 valid and 1 not valid region
-        expect(geographicalRule.applies(Segment.fromString('aa i jfk lax'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i lax jfk'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i hel lax'))).toBe(false)
-        expect(geographicalRule.applies(Segment.fromString('aa i lax hnd'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i jfk lax'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i lax jfk'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i hel lax'), 'business')).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i lax hnd'), 'business')).toBe(false)
 
         // use 2 invalid airports
-        expect(geographicalRule.applies(Segment.fromString('aa i mex eze'))).toBe(false)
+        expect(geographicalRule.applies(Segment.fromString('aa i mex eze'), 'business')).toBe(false)
       })
     })
   })

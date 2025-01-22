@@ -11,15 +11,15 @@ export const calculate = (segments, eliteStatus) => {
   }
 
   for (let segment of segments) {
+    const fareEarnCategory = getPartnerEarnCategory(segment)
+
     const rule = partnerRules.find( (rule) => {
-      return rule.applies(segment)
+      return rule.applies(segment, fareEarnCategory)
     })
 
     if(!rule) {
       throw new Error(`Could not find a rule to calculate earnings for segment: ${segment}`)
     }
-
-    const fareEarnCategory = getPartnerEarnCategory(segment)
 
     const calculation = rule.calculate(segment, fareEarnCategory)
 

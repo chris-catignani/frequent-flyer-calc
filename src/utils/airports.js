@@ -8,7 +8,7 @@ const airportFixes = {
 }
 
 const standardizeAirport = (airport) => {
-  if (airport.city in airportFixes.city) {
+  if (airport && airport.city in airportFixes.city) {
     airport.city = airportFixes.city[airport.city]
   }
   return airport
