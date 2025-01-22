@@ -48,7 +48,9 @@ const getIatasForCities = (citiesString) => {
 
 // TODO check others here. Move this into airports js
 const countryNameOverrides = {
-  'Cocos Island': 'Cocos (Keeling) Islands'
+  'Cocos Island': 'Cocos (Keeling) Islands',
+  'Republic of Korea': 'South Korea',
+  'Macao': 'Macau',
 }
 
 const cityNameOverrides = {
@@ -57,6 +59,7 @@ const cityNameOverrides = {
 
 const regions = {
   southeastAsia: getIatasForCountries('Brunei, Bhutan, Cambodia, Cocos Island, Indonesia, Laos, Malaysia, Myanmar, Philippines, Singapore, Thailand, Timor Lest, Vietnam'),
+  northeastAsia: getIatasForCountries('China, Hong Kong, Japan, Macao, Mongolia, North Korea, Republic of Korea, Taiwan'),
   southeastEurope: getIatasForCountries('Greece, Turkey, Cyprus'),
   northernEurope: getIatasForCountries('Finland, Norway, Sweden'),
   westernEurope: getIatasForCountries('Austria, Belgium, Czech Republic, Germany, Denmark, Spain, France, United Kingdom, Ireland, Italy, Netherlands, Portugal, Switzerland'), 
@@ -68,6 +71,9 @@ const regions = {
   // qantas doesn't define these for whatever reason
   middleEast: new Set(['doh', 'dxb', 'auh', 'jed', 'med']),
   southeastAustralia: new Set(['syd', 'mel']),
+
+  // airports library doesn't have a concept of states
+  hawaii: new Set(['ito', 'hnl', 'ogg', 'koa', 'mkk', 'lny', 'lih']) // per wikipedia https://en.wikipedia.org/wiki/List_of_airports_in_Hawaii
 }
 
 regions['europe'] = new Set([
