@@ -71,13 +71,6 @@ const buildSriLankairlinesFareBuckets = (longHaulQantasString, allOtherQantasStr
 
 const partnerEarnCategories = {
   'aa': {
-    'statusMultipliers': {
-      'bronze': 0,
-      'silver': 0.50,
-      'gold': 0.75,
-      'platinum': 1.00,
-      'platinum one': 1.00
-    },
     'fareBuckets': buildSimpleFareBuckets('NOQ 	GKLMSV	HY	PW 	CDIJR	AF ', PARTNER_FARE_CLASSES)
   },
   'as': {

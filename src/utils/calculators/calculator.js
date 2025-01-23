@@ -1,11 +1,12 @@
 import { getPartnerEarnCategory } from "./partner/partnerEarnCategories"
 import { getPartnerRules } from "./partner/partnerRules"
 import { getQantasEarnCategory } from "./qantas/qantasEarnCategories"
-import { getQantasRules } from "./qantas/qantasRules"
+import { getQantasMinimumPoints, getQantasRules } from "./qantas/qantasRules"
 
 // TODO make this a map of airline to rules?
 const partnerRules = getPartnerRules() // this is a list
 const qantasRules = getQantasRules() // this is a map of airlineCode -> rules[]
+const qantasMinPoints = getQantasMinimumPoints()
 
 export const calculate = (segments, eliteStatus) => {
   const retval = {
@@ -16,7 +17,7 @@ export const calculate = (segments, eliteStatus) => {
 
   for (let segment of segments) {
     try {
-      const {fareEarnCategory, rule} = getEarnCategoryAndRules(segment)
+      const {fareEarnCategory, rule, minPoints} = getEarnCalculationRequirements(segment)
 
       if(!rule) {
         throw new Error(`Could not find a rule to calculate earnings for segment: ${segment}`)
@@ -31,20 +32,21 @@ export const calculate = (segments, eliteStatus) => {
       //     calculation.qantas_points * _qantas_partner_airlines[segment.airline].status_multipliers[status]
       //   )
       // }
+      
+      const qantasPoints = Math.max(calculation.qantasPoints, minPoints)
 
       retval.segmentResults.push({
         rule: rule.name,
         segment,
-        calculation
+        calculation,
+        minPoints,
       })
-      retval.qantasPoints += calculation.qantasPoints
+      retval.qantasPoints += qantasPoints
       retval.statusCredits += calculation.statusCredits
     } catch (err) {
       retval.segmentResults.push({
         error: err,
-        rule: 'none',
         segment,
-        calculation: 'none'
       })
     }
   }
@@ -53,7 +55,7 @@ export const calculate = (segments, eliteStatus) => {
 }
 
 // TODO clean this up
-const getEarnCategoryAndRules = (segment) => {
+const getEarnCalculationRequirements = (segment) => {
   if(segment.airline in qantasRules) {
     const fareEarnCategory = getQantasEarnCategory(segment)
 
@@ -61,7 +63,9 @@ const getEarnCategoryAndRules = (segment) => {
       return rule.applies(segment, fareEarnCategory)
     })
 
-    return {fareEarnCategory, rule}
+    const minPoints = qantasMinPoints[segment.airline][fareEarnCategory]
+
+    return {fareEarnCategory, rule, minPoints}
   } else {
     const fareEarnCategory = getPartnerEarnCategory(segment)
 

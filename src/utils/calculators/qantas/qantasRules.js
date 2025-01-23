@@ -28,6 +28,28 @@ export const getQantasRules = () => {
   }
 }
 
+export const getQantasMinimumPoints = () => {
+  const minPoints = {
+    'discountEconomy': 800,
+    'economy': 800,
+    'flexibleEconomy': 1200,
+    'discountPremiumEconomy': 1200,
+    'premiumEconomy': 1200,
+    'flexiblePremiumEconomy': 1200,
+    'discountBusiness':1400,
+    'business': 1400,
+    'flexibleBusiness': 1400,
+    'first': 1400,
+  }
+
+  return {
+    qf: minPoints,
+    '3k': minPoints,
+    gk: minPoints,
+    jq: minPoints,
+  }
+}
+
 const parseQantasEarningRates = (qantasPointsString, qantasCreditsString) => {
   return parseEarningRates(qantasPointsString, qantasCreditsString, QANTAS_FARE_CLASSES)
 }
