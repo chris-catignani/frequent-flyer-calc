@@ -86,9 +86,7 @@ export default function Home() {
           Calculate
         </button>
       </div>
-      <div>
-        <Results calculatedData={calculationOutput} />
-      </div>
+      <Results calculatedData={calculationOutput} />
     </div>
   );
 }
