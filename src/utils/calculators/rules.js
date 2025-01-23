@@ -65,7 +65,7 @@ export class DistanceRule extends Rule {
 
   _getDistanceBand(distance) {
     return this.distanceBands.find((distanceBand) => {
-      return distanceBand.minDistance < distance && distance <= distanceBand.maxDistance
+      return distanceBand.minDistance < distance && (!('maxDistance' in distanceBand) || distance <= distanceBand.maxDistance)
     })
   }
 
@@ -87,9 +87,13 @@ export class DistanceRule extends Rule {
       throw new Error("No applicable distance band to calculate with for rule: " + this.name)
     }
 
+    const notesForDistance = 'maxDistance' in distanceBand ?
+      `using band ${distanceBand.minDistance} - ${distanceBand.maxDistance}` :
+      `using band ${distanceBand.minDistance} and over`
+
     return this.buildCalculationReturn(
       fareEarnCategory,
-      `Distance calculated to ${distance} miles, using band ${distanceBand.minDistance} - ${distanceBand.maxDistance}`,
+      `Distance calculated to ${distance} miles, ${notesForDistance}`,
       distanceBand.earnings[fareEarnCategory].qantasPoints,
       distanceBand.earnings[fareEarnCategory].statusCredits
     )

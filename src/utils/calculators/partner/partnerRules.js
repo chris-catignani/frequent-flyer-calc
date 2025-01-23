@@ -346,7 +346,6 @@ const buildPartnerFallbackRule = () => {
     },
     {
       minDistance: 6500,
-      maxDistance: 9999999999,
       earnings: parsePartnerEarningRates('1,875	3,750	7,500	8,250	9,400	11,250', '40	40	80	80	160	240')
     }
   ]

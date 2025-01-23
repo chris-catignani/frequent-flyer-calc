@@ -62,7 +62,6 @@ const buildIntraAustraliaRule = () => {
     },
     {
       minDistance: 1501,
-      maxDistance: 99999999,
       earnings: parseQantasEarningRates('1,450	1,450	2,200	2,200	2,700	2,900	-	3,300	3,600	4,400', '20	20	40	40	40	40	-	80	95	120')
     },
   ]
@@ -263,7 +262,6 @@ const buildFallbackRule = () => {
     },
     {
       minDistance: 6501,
-      maxDistance: 999999999,
       earnings: parseQantasEarningRates('4,000	6,000	8,000	8,000	10,000	11,000	12,000	13,000	14,000	16,000', '40	55	80	80	80	80	160	170	180	240')
     }
   ]

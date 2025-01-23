@@ -17,7 +17,7 @@ describe('rules', () => {
         earnings: { business: new QantasEarnings(200, 20) }
       },
     ]
-    const intraCountryRule = new IntraCountryRule('intra country rule', 'https://google.com', 'United States', distanceBands)
+    const intraCountryRule = new IntraCountryRule('distance rule', 'https://google.com', 'United States', distanceBands)
     //TODO mock airports to specify distances?
     expect(true).toBe(true)
   })
@@ -35,9 +35,29 @@ describe('rules', () => {
         earnings: { business: new QantasEarnings(200, 20) }
       },
     ]
-    const distanceRule = new DistanceRule('intra country rule', 'https://google.com', distanceBands)
+    const distanceRule = new DistanceRule('distance rule', 'https://google.com', distanceBands)
     //TODO mock airports to specify distances?
     expect(true).toBe(true)
+
+    test('Handles no max distance specified', () => {
+      const distanceBands = [
+        {
+          minDistance: 0,
+          maxDistance: 100,
+          earnings: { business: new QantasEarnings(100, 10) }
+        },
+        {
+          minDistance: 100,
+          earnings: { business: new QantasEarnings(200, 20) }
+        }
+      ]
+      const distanceRule = new DistanceRule('distance rule', 'https://google.com', distanceBands)
+      expect(distanceRule.applies(Segment.fromString('aa i jfk lax'), 'business')).toBe(true)
+      expect(distanceRule.calculate(Segment.fromString('aa i jfk lax'), 'business')).toMatchObject({
+        qantasPoints: 200,
+        statusCredits: 20,
+      })
+    })
   })
 
   describe('GeographicalRule', () => {
