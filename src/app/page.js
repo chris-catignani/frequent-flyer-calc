@@ -20,18 +20,27 @@ export default function Home() {
         <div>
           {segmentResult.segment.fromAirport} - {segmentResult.segment.toAirport}
         </div>
-        <div>
-          {segmentResult.segment.airline} {segmentResult.segment.fareClass} class maps to {segmentResult.calculation.fareEarnCategory}
-        </div>
-        <div>
-          Qantas Points: {segmentResult.calculation.qantasPoints}
-        </div>
-        <div>
-          Status Credits: {segmentResult.calculation.statusCredits}
-        </div>
-        <div>
-          <a href={segmentResult.calculation.ruleUrl} target="_blank">{segmentResult.calculation.rule} rule</a> - {segmentResult.calculation.notes}
-        </div>
+        {!segmentResult.error &&
+          <div>
+            <div>
+              {segmentResult.segment.airline} {segmentResult.segment.fareClass} class maps to {segmentResult.calculation.fareEarnCategory}
+            </div>
+            <div>
+              Qantas Points: {segmentResult.calculation.qantasPoints}
+            </div>
+            <div>
+              Status Credits: {segmentResult.calculation.statusCredits}
+            </div>
+            <div>
+              <a href={segmentResult.calculation.ruleUrl} target="_blank">{segmentResult.calculation.rule} rule</a> - {segmentResult.calculation.notes}
+            </div>
+          </div>
+         }
+         {segmentResult.error &&
+          <div>
+            Error: {segmentResult.error.message}
+          </div>
+         }
       </div>
     )
   }
