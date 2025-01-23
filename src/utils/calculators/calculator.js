@@ -4,8 +4,8 @@ import { getQantasEarnCategory } from "./qantas/qantasEarnCategories"
 import { getQantasRules } from "./qantas/qantasRules"
 
 // TODO make this a map of airline to rules?
-const partnerRules = getPartnerRules()
-const qantasRules = getQantasRules()
+const partnerRules = getPartnerRules() // this is a list
+const qantasRules = getQantasRules() // this is a map of airlineCode -> rules[]
 
 export const calculate = (segments, eliteStatus) => {
   const retval = {
