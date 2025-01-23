@@ -204,8 +204,8 @@ export const parseEarningRates = (qantasPointsString, qantasCreditsString, fareC
 
   fareClasses.forEach((fareClass, index) => {
     retval[fareClass] = new QantasEarnings(
-      parseInt(pointsPerFareclass[index]),
-      parseInt(creditsPerFareclass[index])
+      parseInt(pointsPerFareclass[index]) || 0,
+      parseInt(creditsPerFareclass[index]) || 0
     )
   })
 

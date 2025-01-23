@@ -45,10 +45,10 @@ export const calculate = (segments, eliteStatus) => {
 
 // TODO clean this up
 const getEarnCategoryAndRules = (segment) => {
-  if(segment.airline === 'qf') {
+  if(segment.airline in qantasRules) {
     const fareEarnCategory = getQantasEarnCategory(segment)
 
-    const rule = qantasRules.find( (rule) => {
+    const rule = qantasRules[segment.airline].find( (rule) => {
       return rule.applies(segment, fareEarnCategory)
     })
 

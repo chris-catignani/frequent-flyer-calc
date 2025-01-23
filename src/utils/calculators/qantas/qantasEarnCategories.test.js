@@ -14,23 +14,31 @@ describe('getQantasEarnCategory', () => {
     ['q', 'discountEconomy'],
     ['s', 'discountEconomy'],
     ['v', 'discountEconomy'],
+    ['RedeDeal', 'discountEconomy'],
 
     ['b', 'flexibleEconomy'],
     ['h', 'flexibleEconomy'],
     ['k', 'flexibleEconomy'],
     ['y', 'flexibleEconomy'],
+    ['Flex', 'flexibleEconomy'],
 
     ['t', 'discountPremiumEconomy'],
+    ['DiscountPremiumEconomy', 'discountPremiumEconomy'],
 
     ['r', 'premiumEconomy'],
+    ['PremiumEconomySaver', 'premiumEconomy'],
 
     ['w', 'flexiblePremiumEconomy'],
+    ['PremiumEconomyFlex', 'flexiblePremiumEconomy'],
 
     ['d', 'business'],
     ['i', 'business'],
+    ['BusinessSale', 'business'],
+    ['BusinessSaver', 'business'],
 
     ['c', 'flexibleBusiness'],
-    ['j', 'flexibleBusiness']
+    ['j', 'flexibleBusiness'],
+    ['Business', 'flexibleBusiness']
   ])('recognizes the Qantas domestic %s fareclass is a %s categories', (fareClass, expectedCategory) => {
     const segment = Segment.fromString(`qf ${fareClass} syd mel`)
     expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
@@ -42,6 +50,7 @@ describe('getQantasEarnCategory', () => {
     ['n', 'discountEconomy'],
     ['o', 'discountEconomy'],
     ['q', 'discountEconomy'],
+    ['EconomySale', 'discountEconomy'],
 
     ['g', 'economy'],
     ['k', 'economy'],
@@ -49,28 +58,95 @@ describe('getQantasEarnCategory', () => {
     ['m', 'economy'],
     ['s', 'economy'],
     ['v', 'economy'],
+    ['EconomySaver', 'economy'],
 
     ['b', 'flexibleEconomy'],
     ['h', 'flexibleEconomy'],
     ['y', 'flexibleEconomy'],
+    ['EconomyFlex', 'flexibleEconomy'],
 
     ['t', 'discountPremiumEconomy'],
+    ['PremiumEconomySale', 'discountPremiumEconomy'],
 
     ['r', 'premiumEconomy'],
+    ['PremiumEconomySaver', 'premiumEconomy'],
 
     ['w', 'flexiblePremiumEconomy'],
+    ['PremiumEconomyFlex', 'flexiblePremiumEconomy'],
 
     ['i', 'discountBusiness'],
+    ['BusinessSale', 'discountBusiness'],
 
     ['d', 'business'],
+    ['BusinessSaver', 'business'],
 
     ['c', 'flexibleBusiness'],
     ['j', 'flexibleBusiness'],
+    ['BusinessFlex', 'flexibleBusiness'],
 
     ['a', 'first'],
-    ['f', 'first']
+    ['f', 'first'],
+    ['FirstSale', 'first'],
+    ['FirstSaver', 'first'],
+    ['FirstFlex', 'first']
   ])('recognizes the Qantas international %s fareclass is a %s categories', (fareClass, expectedCategory) => {
     const segment = Segment.fromString(`qf ${fareClass} syd lax`)
     expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
+  })
+
+  // Jetstar JQ
+  test.each([
+    ['Flex', 'economy'],
+    ['FlexPlus', 'economy'],
+
+    ['StarterMax', 'flexibleEconomy'],
+
+    ['BusinessMax', 'business'],
+  ])('recognizes the Jetstar JQ %s fareclass is a %s categories', (fareClass, expectedCategory) => {
+    const segment = Segment.fromString(`jq ${fareClass} syd lax`)
+    expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
+  })
+
+  // Jetstar 3k
+  test.each([
+    ['Flex', 'economy'],
+    ['FlexPlus', 'economy'],
+
+    ['StarterMax', 'flexibleEconomy'],
+
+    ['BusinessMax', 'business'],
+  ])('recognizes the Jetstar 3k %s fareclass is a %s categories', (fareClass, expectedCategory) => {
+    const segment = Segment.fromString(`3k ${fareClass} syd lax`)
+    expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
+  })
+
+  // Jetstar GK
+  test.each([
+    ['Flex', 'economy'],
+    ['FlexPlus', 'economy'],
+
+    ['StarterMax', 'flexibleEconomy'],
+
+    ['BusinessMax', 'business'],
+  ])('recognizes the Jetstar Gk %s fareclass is a %s categories', (fareClass, expectedCategory) => {
+    const segment = Segment.fromString(`gk ${fareClass} syd lax`)
+    expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
+  })
+
+  describe('Jetstar New Zealand special case', () => {
+    // Jetstar JQ
+    test.each([
+      ['EconomyStarterFare', 'discountEconomy'],
+      ['StarterFlexBizFare', 'discountEconomy'],
+
+      ['Flex', 'economy'],
+      ['FlexPlus', 'economy'],
+      ['StarterPlus', 'economy'],
+
+      ['StarterMax', 'flexibleEconomy'],
+    ])('recognizes the Jetstar JQ New Zealand %s fareclass is a %s categories', (fareClass, expectedCategory) => {
+      const segment = Segment.fromString(`jq ${fareClass} akl chc`)
+      expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
+    })
   })
 })

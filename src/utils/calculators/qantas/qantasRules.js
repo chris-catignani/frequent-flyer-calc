@@ -4,7 +4,7 @@ import { QANTAS_FARE_CLASSES } from "./qantasEarnCategories"
 const _base_rule_url = 'https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html'
 
 export const getQantasRules = () => {
-  return [
+  const standardRules = [
     buildIntraAustraliaRule(),
     buildAdlBneGoldCoastSydMelRule(),
     buildDarwinPerthRule(),
@@ -16,10 +16,36 @@ export const getQantasRules = () => {
     buildTelAvivRule(),
     buildFallbackRule(),
   ]
+
+  return {
+    qf: standardRules,
+    '3k': standardRules,
+    gk: standardRules,
+    jq: [
+      buildIntraNewZealandRule(),
+      ...standardRules
+    ]
+  }
 }
 
 const parseQantasEarningRates = (qantasPointsString, qantasCreditsString) => {
   return parseEarningRates(qantasPointsString, qantasCreditsString, QANTAS_FARE_CLASSES)
+}
+
+const buildIntraNewZealandRule = () => {
+  const ruleConfig = {
+    origin: {
+      country: new Set(['new zealand'])
+    },
+    destination: {
+      country: {
+        'new zealand': parseQantasEarningRates('300^	450^	600^	-	-	-	-	-	-	-', '-	10	20	-	-	-	-	-	-	-'),
+      }
+    }
+  }
+
+  const ruleUrl = _base_rule_url + '#domestic-australia-and-new-zealand'
+  return new GeographicalRule('Domestic New Zealand', ruleUrl, ruleConfig)
 }
 
 const buildIntraAustraliaRule = () => {

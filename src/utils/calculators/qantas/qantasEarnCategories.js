@@ -18,15 +18,70 @@ const buildQantasFareBuckets = (domesticQantasString, internationalQantasString)
       {
         origin: { country: new Set(['australia']) },
         destination: { country: new Set(['australia']) },
-        categories: buildFareBuckets(domesticQantasString, QANTAS_FARE_CLASSES),
+        categories: {
+          ...buildFareBuckets(domesticQantasString, QANTAS_FARE_CLASSES),
+          'RedeDeal': 'discountEconomy',
+          'Flex': 'flexibleEconomy',
+          'DiscountPremiumEconomy': 'discountPremiumEconomy',
+          'PremiumEconomySaver': 'premiumEconomy',
+          'PremiumEconomyFlex': 'flexiblePremiumEconomy',
+          'BusinessSale': 'business',
+          'BusinessSaver': 'business',
+          'Business': 'flexibleBusiness',
+        }
       },
       // international
       {
         all: true,
-        categories: buildFareBuckets(internationalQantasString, QANTAS_FARE_CLASSES)
+        categories: {
+          ...buildFareBuckets(internationalQantasString, QANTAS_FARE_CLASSES),
+          'EconomySale': 'discountEconomy',
+          'EconomySaver': 'economy',
+          'EconomyFlex': 'flexibleEconomy',
+          'PremiumEconomySale': 'discountPremiumEconomy',
+          'PremiumEconomySaver': 'premiumEconomy',
+          'PremiumEconomyFlex': 'flexiblePremiumEconomy',
+          'BusinessSale': 'discountBusiness',
+          'BusinessSaver': 'business',
+          'BusinessFlex': 'flexibleBusiness',
+          'FirstSale': 'first',
+          'FirstSaver': 'first',
+          'FirstFlex': 'first'
+        }
       }
     ]
   }
+}
+
+const buildJetstarFareBuckets = (iata) => {
+  const rules = []
+
+  if( iata === 'jq' ) {
+    rules.push({
+      origin: { country: new Set(['new zealand']) },
+      destination: { country: new Set(['new zealand']) },
+      categories: {
+        'EconomyStarterFare': 'discountEconomy',
+        'StarterFlexBizFare': 'discountEconomy',
+        'Flex': 'economy',
+        'FlexPlus': 'economy',
+        'StarterPlus': 'economy',
+        'StarterMax': 'flexibleEconomy'
+      }
+    })
+  }
+
+  rules.push({
+    all: true,
+    categories: {
+      'Flex': 'economy',
+      'FlexPlus': 'economy',
+      'StarterMax': 'flexibleEconomy',
+      'BusinessMax': 'business'
+    }
+  })
+
+  return { rules }
 }
 
 const earnCategories = {
@@ -41,4 +96,13 @@ const earnCategories = {
     // },
     'fareBuckets': buildQantasFareBuckets('EGLMNOQSV	-	BHKY	T	R	W	-	DI	CJ	-', 'ENOQ	GKLMSV	BHY	T	R	W	I	D	CJ	AF', QANTAS_FARE_CLASSES)
   },
+  'jq': {
+    'fareBuckets': buildJetstarFareBuckets('jq'),
+  },
+  '3k': {
+    'fareBuckets': buildJetstarFareBuckets('3k'),
+  },
+  'gk': {
+    'fareBuckets': buildJetstarFareBuckets('gk'),
+  }
 }
