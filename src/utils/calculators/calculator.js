@@ -73,6 +73,6 @@ const getEarnCalculationRequirements = (segment) => {
       return rule.applies(segment, fareEarnCategory)
     })
 
-    return {fareEarnCategory, rule}
+    return {fareEarnCategory, rule, minPoints: 0}
   }
 }
