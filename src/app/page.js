@@ -3,10 +3,11 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
+import { Box, Button, Container, Grid2, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
 
 export default function Home() {
 
-  const [routing, setRouting] = useState();
+  const [routing, setRouting] = useState('');
   const [calculationOutput, setCalculationOutput] = useState();
 
   const calculatePressed = () => {
@@ -14,35 +15,59 @@ export default function Home() {
     setCalculationOutput(calculate(segments))
   }
 
-  const SegmentResult = ({segmentResult}) => {
+  const SegmentTableHeader = () => {
     return (
-      <div>
-        <div>
-          {segmentResult.segment.fromAirport} - {segmentResult.segment.toAirport}
-        </div>
-        {!segmentResult.error &&
-          <div>
-            <div>
-              {segmentResult.segment.airline} {segmentResult.segment.fareClass} class maps to {segmentResult.calculation.fareEarnCategory}
-            </div>
-            <div>
-              Qantas Points: {segmentResult.calculation.qantasPoints}
-            </div>
-            <div>
-              Status Credits: {segmentResult.calculation.statusCredits}
-            </div>
-            <div>
-              <a href={segmentResult.calculation.ruleUrl} target="_blank">{segmentResult.calculation.rule} rule</a> - {segmentResult.calculation.notes}
-            </div>
-          </div>
-         }
-         {segmentResult.error &&
-          <div>
-            Error: {segmentResult.error.message}
-          </div>
-         }
-      </div>
-    )
+      <TableRow>
+        <TableCell>Segment Route</TableCell>
+        <TableCell align="right">Airline</TableCell>
+        <TableCell align="right">Qantas Points</TableCell>
+        <TableCell align="right">Status Credits</TableCell>
+        <TableCell align="right">Fare Class</TableCell>
+        <TableCell align="right">Earning Category</TableCell>
+        <TableCell align="right">Earning Rule</TableCell>
+        <TableCell align="right">Rule notes</TableCell>
+      </TableRow>
+    );
+  }
+
+  const SegmentTableRow = ({segmentResult}) => {
+    const {segment, calculation, error} = segmentResult
+
+    if (error) {
+      return (
+        <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+          <TableCell component="th" scope="row">
+            {segment.fromAirport} - {segment.toAirport}
+          </TableCell>
+          <TableCell align="right">{segment.airline}</TableCell>
+          <TableCell align="right">n/a</TableCell>
+          <TableCell align="right">n/a</TableCell>
+          <TableCell align="right">{segment.fareClass}</TableCell>
+          <TableCell align="right">n/a</TableCell>
+          <TableCell align="right">n/a</TableCell>
+          <TableCell align="right">{error.message}</TableCell>
+        </TableRow>
+      );
+    }
+
+    return (
+      <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+        <TableCell component="th" scope="row">
+          {segment.fromAirport} - {segment.toAirport}
+        </TableCell>
+        <TableCell align="right">{segment.airline}</TableCell>
+        <TableCell align="right">{calculation.qantasPoints}</TableCell>
+        <TableCell align="right">{calculation.statusCredits}</TableCell>
+        <TableCell align="right">{segment.fareClass}</TableCell>
+        <TableCell align="right">{calculation.fareEarnCategory}</TableCell>
+        <TableCell align="right">
+          <a href={calculation.ruleUrl} target="_blank">
+            {calculation.rule}
+          </a>
+        </TableCell>
+        <TableCell align="right">{calculation.notes}</TableCell>
+      </TableRow>
+    );
   }
 
   const Results = ({calculatedData}) => {
@@ -50,43 +75,50 @@ export default function Home() {
       return <></>
     }
 
-    const segmentResults = calculatedData.segmentResults.map(segmentResult => {
-      return (
-        <li key={segmentResult.segment.toString()}>
-          <SegmentResult segmentResult={segmentResult} />
-        </li>
-      )
-    })
-
     return (
-      <div>
-        <div>
-          Earned Qantas Points: {calculatedData.qantasPoints}
-        </div>
-        <div>
-          Earned Status Credits: {calculatedData.statusCredits}
-        </div>
-        <div>
-          <ul>
-            {segmentResults}
-          </ul>
-        </div>
-      </div>
-    )
+      <Grid2 container direction="column" justifyContent="center" alignItems="center">
+        <Box mt={2}>
+          <Typography variant="h4">Results:</Typography>
+          <Box>Qantas Points: {calculatedData.qantasPoints}</Box>
+          <Box>Status Credits: {calculatedData.statusCredits}</Box>
+        </Box>
+        <Box mt={5}>Calculation per segment:</Box>
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <SegmentTableHeader />
+            </TableHead>
+            <TableBody>
+              {calculatedData.segmentResults.map((segmentResult) => (
+                <SegmentTableRow
+                  key={segmentResult.segment.toString()}
+                  segmentResult={segmentResult}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid2>
+    );
   }
 
   return (
-    <div className="container max-w-screen-xl mx-auto px-4">
-      <div className="flex items-center justify-center">
-        <label>
-          Input routing:
-          <input name="routing" onChange={(event) => {setRouting(event.target.value)}}/>
-        </label>
-        <button onClick={calculatePressed}>
+    <Container>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <TextField
+          label="Routing"
+          value={routing}
+          onChange={(event) => { setRouting(event.target.value) }}
+        />
+        <Button variant="contained" onClick={calculatePressed}>
           Calculate
-        </button>
-      </div>
+        </Button>
+      </Box>
       <Results calculatedData={calculationOutput} />
-    </div>
+    </Container>
   );
 }
