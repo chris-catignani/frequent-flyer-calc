@@ -3,7 +3,7 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Box, Button, Container, Grid2, IconButton, Typography } from '@mui/material';
+import { Box, Button, Grid2, IconButton, Paper, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Remove } from '@mui/icons-material';
 import { Results } from '@/components/results';
@@ -34,19 +34,39 @@ export default function Home() {
   }
 
   const addSegmentPressed = () => {
-    setSegments([
-      ...segments,
-      new Segment('', '', '', '')
-    ])
+    setSegments([...segments, new Segment("", "", "", "")]);
+
+    // clear calculation output
+    setCalculationOutput(null);
   }
 
   const removeSegmentPressed = (segmentIdx) => {
-    const newSegments = [...segments]
+    const newSegments = [...segments];
     newSegments.splice(segmentIdx, 1);
-    setSegments(newSegments)
+    setSegments(newSegments);
+
+    // clear calculation output
+    setCalculationOutput(null);
   }
 
-  console.log(eliteStatus)
+  const RouteInputButton = ({ segments, segmentIdx }) => {
+    if (segments.length === 1) {
+      return (
+        <IconButton disabled sx={{ visibility: 'hidden' }}>
+          <Remove />
+        </IconButton>
+      );
+    } else {
+      return (
+        <IconButton
+          sx={{ mb: 2 }}
+          onClick={() => removeSegmentPressed(segmentIdx)}
+        >
+          <Remove />
+        </IconButton>
+      );
+    }
+  };
 
   return (
     <Grid2
@@ -64,7 +84,6 @@ export default function Home() {
         <Grid2
           container
           direction="row"
-          mb={3}
           sx={{
             justifyContent: "space-between",
             alignItems: "flex-end",
@@ -72,52 +91,55 @@ export default function Home() {
         >
           <Typography>Enter your itinerary segments below:</Typography>
           <Box></Box>
-          <EliteStatusInput eliteStatus={eliteStatus} onChange={(value) => setEliteStatus(value)}/>
+          <EliteStatusInput
+            eliteStatus={eliteStatus}
+            onChange={(value) => setEliteStatus(value)}
+          />
         </Grid2>
 
-        {segments.map((segment, segmentIdx) => {
-          return (
-            <Grid2 container key={segmentIdx}>
-              <RouteInput
-                segment={segment}
-                errors={inputErrors}
-                onChange={(segment) => {
-                  const newSegments = [...segments];
-                  newSegments[segmentIdx] = segment;
-                  setSegments(newSegments);
+        <Paper elevation={3}>
+          <Box mt={2} p={2}>
+            {segments.map((segment, segmentIdx) => {
+              return (
+                <Grid2 container key={segmentIdx}>
+                  <RouteInput
+                    segment={segment}
+                    errors={inputErrors}
+                    onChange={(segment) => {
+                      const newSegments = [...segments];
+                      newSegments[segmentIdx] = segment;
+                      setSegments(newSegments);
 
-                  // if input changes, ensure calculated data is voided
-                  setCalculationOutput(null);
-                }}
-              />
-              {segments.length > 1 && (
-                <IconButton
-                  sx={{ mb: 2 }}
-                  onClick={() => removeSegmentPressed(segmentIdx)}
-                >
-                  <Remove />
-                </IconButton>
-              )}
+                      // if input changes, ensure calculated data is voided
+                      setCalculationOutput(null);
+                    }}
+                  />
+                  <RouteInputButton
+                    segments={segments}
+                    segmentIdx={segmentIdx}
+                  />
+                </Grid2>
+              );
+            })}
+
+            <Grid2
+              container
+              direction="row"
+              sx={{
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Button variant="contained" onClick={addSegmentPressed}>
+                Add Segment
+              </Button>
+              <Button variant="contained" onClick={calculatePressed}>
+                Calculate
+              </Button>
+              <Box></Box>
             </Grid2>
-          );
-        })}
-
-        <Grid2
-          container
-          direction="row"
-          sx={{
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Button variant="contained" onClick={addSegmentPressed}>
-            Add Segment
-          </Button>
-          <Button variant="contained" onClick={calculatePressed}>
-            Calculate
-          </Button>
-          <Box></Box>
-        </Grid2>
+          </Box>
+        </Paper>
       </Box>
       <Results calculatedData={calculationOutput} />
     </Grid2>
