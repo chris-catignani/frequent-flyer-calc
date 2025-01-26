@@ -48,23 +48,14 @@ export default function Home() {
 
   return (
     <Container>
-      <Stack
+      <Grid2
+        container
         direction="column"
         justifyContent="center"
         alignItems="center"
         spacing={1}
       >
         {segments.map((segment, segmentIdx) => {
-          const iconToAdd =
-            segmentIdx === segments.length - 1 ? (
-              <IconButton sx={{mb: 2}} onClick={addSegmentPressed}>
-                <AddIcon />
-              </IconButton>
-            ) : (
-              <IconButton sx={{mb: 2}} onClick={() => removeSegmentPressed(segmentIdx)}>
-                <Remove />
-              </IconButton>
-            );
           return (
             <Grid2 container key={segmentIdx}>
               <RouteInput
@@ -79,14 +70,32 @@ export default function Home() {
                   setCalculationOutput(null);
                 }}
               />
-              {iconToAdd}
+              {segments.length > 1 && (
+                <IconButton
+                  sx={{ mb: 2 }}
+                  onClick={() => removeSegmentPressed(segmentIdx)}
+                >
+                  <Remove />
+                </IconButton>
+              )}
             </Grid2>
           );
         })}
-        <Button variant="contained" onClick={calculatePressed}>
-          Calculate
-        </Button>
-      </Stack>
+        <Grid2
+          container
+          direction="row"
+          sx={{
+            alignItems: "center",
+          }}
+        >
+          <Button variant="contained" onClick={addSegmentPressed}>
+            Add Segment
+          </Button>
+          <Button variant="contained" onClick={calculatePressed}>
+            Calculate
+          </Button>
+        </Grid2>
+      </Grid2>
       <Results calculatedData={calculationOutput} />
     </Container>
   );

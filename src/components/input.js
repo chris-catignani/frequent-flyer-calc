@@ -4,7 +4,7 @@ import { Autocomplete, TextField, Grid2 } from "@mui/material";
 
 export const RouteInput = ({segment, errors, onChange}) => {
   return (
-    <Grid2 container justifyContent="center" alignItems="center">
+    <Grid2 container justifyContent="center" alignItems="center" spacing={1}>
       <AirlineInput
         value={segment.airline}
         error={errors && !segment.airline}
