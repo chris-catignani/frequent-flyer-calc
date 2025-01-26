@@ -3,9 +3,8 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Button, Container, Grid2, IconButton, Stack } from '@mui/material';
+import { Box, Button, Container, Grid2, IconButton, Typography } from '@mui/material';
 import { RouteInput } from '@/components/input';
-import AddIcon from '@mui/icons-material/Add';
 import { Remove } from '@mui/icons-material';
 import { Results } from '@/components/results';
 
@@ -47,14 +46,19 @@ export default function Home() {
   }
 
   return (
-    <Container>
-      <Grid2
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        spacing={1}
-      >
+    <Grid2
+      container
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+      spacing={1}
+    >
+      <Typography variant="h4">
+        Qantas Points and Status Credit Calculator
+      </Typography>
+
+      <Box mt={3}>
+        <Typography mb={1}>Enter your itinerary segments below:</Typography>
         {segments.map((segment, segmentIdx) => {
           return (
             <Grid2 container key={segmentIdx}>
@@ -81,10 +85,12 @@ export default function Home() {
             </Grid2>
           );
         })}
+
         <Grid2
           container
           direction="row"
           sx={{
+            justifyContent: "space-between",
             alignItems: "center",
           }}
         >
@@ -94,9 +100,10 @@ export default function Home() {
           <Button variant="contained" onClick={calculatePressed}>
             Calculate
           </Button>
+          <Box></Box>
         </Grid2>
-      </Grid2>
+      </Box>
       <Results calculatedData={calculationOutput} />
-    </Container>
+    </Grid2>
   );
 }
