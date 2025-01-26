@@ -4,13 +4,14 @@ import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
 import { Box, Button, Container, Grid2, IconButton, Typography } from '@mui/material';
-import { RouteInput } from '@/components/input';
+import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Remove } from '@mui/icons-material';
 import { Results } from '@/components/results';
 
 export default function Home() {
 
   const [inputErrors, setInputErrors] = useState(false)
+  const [eliteStatus, setEliteStatus] = useState('Bronze')
   const [segments, setSegments] = useState([new Segment('', '', '', '')])
   const [calculationOutput, setCalculationOutput] = useState();
 
@@ -28,7 +29,7 @@ export default function Home() {
       setInputErrors(true)
     } else {
       setInputErrors(false)
-      setCalculationOutput(calculate(segments));
+      setCalculationOutput(calculate(segments, eliteStatus));
     }
   }
 
@@ -45,6 +46,8 @@ export default function Home() {
     setSegments(newSegments)
   }
 
+  console.log(eliteStatus)
+
   return (
     <Grid2
       container
@@ -58,7 +61,20 @@ export default function Home() {
       </Typography>
 
       <Box mt={3}>
-        <Typography mb={1}>Enter your itinerary segments below:</Typography>
+        <Grid2
+          container
+          direction="row"
+          mb={3}
+          sx={{
+            justifyContent: "space-between",
+            alignItems: "flex-end",
+          }}
+        >
+          <Typography>Enter your itinerary segments below:</Typography>
+          <Box></Box>
+          <EliteStatusInput eliteStatus={eliteStatus} onChange={(value) => setEliteStatus(value)}/>
+        </Grid2>
+
         {segments.map((segment, segmentIdx) => {
           return (
             <Grid2 container key={segmentIdx}>

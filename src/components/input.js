@@ -2,6 +2,21 @@ import { AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANT
 import { getAirport } from "@/utils/airports";
 import { Autocomplete, TextField, Grid2 } from "@mui/material";
 
+export const EliteStatusInput = ({ eliteStatus, onChange }) => {
+  return (
+    <Autocomplete
+      disablePortal
+      disableClearable
+      value={eliteStatus}
+      options={["Bronze", "Silver", "Gold", "Platinum", "Platinum One"]}
+      sx={{ width: 175 }}
+      size="small"
+      onChange={(_, value) => onChange(value)}
+      renderInput={(params) => <TextField {...params} label="Elite Status" />}
+    />
+  );
+};
+
 export const RouteInput = ({segment, errors, onChange}) => {
   return (
     <Grid2 container justifyContent="center" alignItems="center" spacing={1}>
@@ -64,6 +79,7 @@ const AirlineInput = ({ value, error, onChange }) => {
   return (
     <Autocomplete
       disablePortal
+      disableClearable
       options={airlines}
       getOptionLabel={(airline) => airline.airlineLabel || ""}
       value={airlines.find((airline) => airline.iata === value) || ""}
@@ -73,8 +89,9 @@ const AirlineInput = ({ value, error, onChange }) => {
         <TextField
           {...params}
           error={error}
-          helperText={error ? 'Required' : ' '}
-          label="Airline" />
+          helperText={error ? "Required" : " "}
+          label="Airline"
+        />
       )}
     />
   );
@@ -122,6 +139,7 @@ const FareClassInput = ({ segment, error, onChange }) => {
     return (
       <Autocomplete
         disablePortal
+        disableClearable
         options={options}
         getOptionLabel={(option) => option.display || ""}
         value={options.find((option) => option.data === segment.fareClass) || ''}
