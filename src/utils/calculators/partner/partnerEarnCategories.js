@@ -1,4 +1,4 @@
-import { WEBSITE_PARTNER_EARN_CATEGORIES } from "@/models/constants"
+import { WEBSITE_EARN_CATEGORIES } from "@/models/constants"
 import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from "../earnCategories"
 
 export const PARTNER_FARE_CLASSES = ['discountEconomy', 'economy', 'flexibleEconomy', 'premiumEconomy', 'business', 'first']
@@ -73,82 +73,82 @@ const buildSriLankairlinesFareBuckets = (longHaulQantasString, allOtherQantasStr
 const partnerEarnCategories = {
   aa: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.aa,
+      WEBSITE_EARN_CATEGORIES.aa,
       PARTNER_FARE_CLASSES
     ),
   },
   as: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.as,
+      WEBSITE_EARN_CATEGORIES.as,
       PARTNER_FARE_CLASSES
     ),
   },
   ba: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.ba,
+      WEBSITE_EARN_CATEGORIES.ba,
       PARTNER_FARE_CLASSES
     ),
   },
   ay: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.ay,
+      WEBSITE_EARN_CATEGORIES.ay,
       PARTNER_FARE_CLASSES
     ),
   },
   ib: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.ib,
+      WEBSITE_EARN_CATEGORIES.ib,
       PARTNER_FARE_CLASSES
     ),
   },
   i2: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.i2,
+      WEBSITE_EARN_CATEGORIES.i2,
       PARTNER_FARE_CLASSES
     ),
   },
   cx: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.cx,
+      WEBSITE_EARN_CATEGORIES.cx,
       PARTNER_FARE_CLASSES
     ),
   },
   qr: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.qr,
+      WEBSITE_EARN_CATEGORIES.qr,
       PARTNER_FARE_CLASSES
     ),
   },
   at: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.at,
+      WEBSITE_EARN_CATEGORIES.at,
       PARTNER_FARE_CLASSES
     ),
   },
   rj: {
     fareBuckets: buildSimpleFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.rj,
+      WEBSITE_EARN_CATEGORIES.rj,
       PARTNER_FARE_CLASSES
     ),
   },
   jl: {
     fareBuckets: buildJapanAirlinesFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.jl
+      WEBSITE_EARN_CATEGORIES.jl
     ),
   },
   nu: {
     fareBuckets: buildJapanAirlinesFareBuckets(
-      WEBSITE_PARTNER_EARN_CATEGORIES.nu
+      WEBSITE_EARN_CATEGORIES.nu
     ),
   },
   mh: {
     fareBuckets: buildMalaysiaAirlinesFareBuckets(
-      ...WEBSITE_PARTNER_EARN_CATEGORIES.mh
+      ...WEBSITE_EARN_CATEGORIES.mh
     ),
   },
   ul: {
     fareBuckets: buildSriLankairlinesFareBuckets(
-      ...WEBSITE_PARTNER_EARN_CATEGORIES.ul
+      ...WEBSITE_EARN_CATEGORIES.ul
     ),
   },
 };

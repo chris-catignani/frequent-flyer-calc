@@ -20,7 +20,7 @@ export const AIRLINES = {
   ul: "Malaysian Airlines"
 }
 
-export const WEBSITE_PARTNER_EARN_CATEGORIES = {
+export const WEBSITE_EARN_CATEGORIES = {
   as: "GOQX	KLMNSV	BHY	-	CDIJ~	AF",
   aa: "NOQ 	GKLMSV	HY	PW 	CDIJR	AF ",
   ba: "GKLMNOQSV	-	BEHTWY	-	CDIRJ	AF",
@@ -35,10 +35,8 @@ export const WEBSITE_PARTNER_EARN_CATEGORIES = {
   at: "NOQRSTW	HKLMV	BY	-	CDIJ	-",
   rj: "VSNQOPW	KML	BYH	IZ*	CDJ	-",
   ul: ["EGKLMNOQRSW	BHP	Y	-	CDIJ	-", "GLNOQRSV	EKMW	BHPY	-	CDIJ	-"],
-};
 
-export const WEBSITE_QANTAS_EARN_CATEGORIES = {
-
+  qf: ["EGLMNOQSV	-	BHKY	T	R	W	-	DI	CJ	-", "ENOQ	GKLMSV	BHY	T	R	W	I	D	CJ	AF"],
 };
 
 export const QANTAS_DOMESTIC_FARE_CLASSES = {

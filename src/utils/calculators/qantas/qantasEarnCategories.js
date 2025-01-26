@@ -1,4 +1,4 @@
-import { QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_INTL_FARE_CLASSES } from "@/models/constants"
+import { QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants"
 import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from "../earnCategories"
 
 export const QANTAS_FARE_CLASSES = [
@@ -69,15 +69,7 @@ const buildJetstarFareBuckets = (iata) => {
 
 const earnCategories = {
   'qf': {
-    // TODO statusMultipliers
-    // 'statusMultipliers': {
-    //   'bronze': 0,
-    //   'silver': 0.50,
-    //   'gold': 0.75,
-    //   'platinum': 1.00,
-    //   'platinum one': 1.00
-    // },
-    'fareBuckets': buildQantasFareBuckets('EGLMNOQSV	-	BHKY	T	R	W	-	DI	CJ	-', 'ENOQ	GKLMSV	BHY	T	R	W	I	D	CJ	AF', QANTAS_FARE_CLASSES)
+    'fareBuckets': buildQantasFareBuckets(...WEBSITE_EARN_CATEGORIES.qf, QANTAS_FARE_CLASSES)
   },
   'jq': {
     'fareBuckets': buildJetstarFareBuckets('jq'),

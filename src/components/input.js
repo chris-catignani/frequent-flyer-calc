@@ -1,7 +1,6 @@
-import { AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_INTL_FARE_CLASSES } from "@/models/constants";
+import { AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
 import { getAirport } from "@/utils/airports";
-
-const { Autocomplete, TextField, Grid2 } = require("@mui/material");
+import { Autocomplete, TextField, Grid2 } from "@mui/material";
 
 export const RouteInput = ({segment, onChange}) => {
   return (
@@ -93,16 +92,18 @@ const FareClassInput = ({ segment, onChange }) => {
     if(fromAirport && toAirport) {
       if (fromAirport.country === "Australia" && toAirport.country === "Australia") {
         fareClassOptions = Object.keys(QANTAS_DOMESTIC_FARE_CLASSES);
+        fareClassOptions.push(...WEBSITE_EARN_CATEGORIES.qf[0].replace(/\W/g, '').split('').map(letter => letter.toLowerCase()))
       } else {
         fareClassOptions = Object.keys(QANTAS_INTL_FARE_CLASSES);
+        fareClassOptions.push(...WEBSITE_EARN_CATEGORIES.qf[1].replace(/\W/g, '').split('').map(letter => letter.toLowerCase()))
       }
     }
 
     const options = fareClassOptions.map(fareClass => {
       return {
-        display: QANTAS_FARE_CLASS_DISPLAY[fareClass],
+        display: QANTAS_FARE_CLASS_DISPLAY[fareClass] || fareClass,
         data: fareClass,
-        id: fareClass
+        id: fareClass,
       };
     })
 
@@ -113,6 +114,7 @@ const FareClassInput = ({ segment, onChange }) => {
         getOptionLabel={(option) => option.display || ""}
         value={options.find((option) => option.data === segment.fareClass) || ''}
         onChange={(_, value) => onChange(value?.data)}
+        groupBy={(option) => option.display.length === 1 ? "Booking Class" : "Fare Type"}
         sx={{ width: 250 }}
         renderInput={(params) => <TextField {...params} label="Fare Class" />}
       />
