@@ -1,3 +1,4 @@
+import { AIRLINES, EARN_CATEGORY_DISPLAY, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
 import { TableRow, TableCell, Grid2, Box, Typography, TableContainer, Table, TableHead, TableBody } from "@mui/material";
 
 export const Results = ({ calculatedData }) => {
@@ -15,8 +16,8 @@ export const Results = ({ calculatedData }) => {
     >
       <Box>
         <Typography variant="h4">Results:</Typography>
-        <Box>Qantas Points: {calculatedData.qantasPoints}</Box>
-        <Box>Status Credits: {calculatedData.statusCredits}</Box>
+        <Box>Qantas Points: {calculatedData.qantasPoints?.toLocaleString()}</Box>
+        <Box>Status Credits: {calculatedData.statusCredits?.toLocaleString()}</Box>
       </Box>
       <Box mt={5}>Calculation per segment:</Box>
       <TableContainer>
@@ -50,6 +51,16 @@ const SegmentTableHeader = () => {
   );
 };
 
+const getFareClassDisplay = (fareClass) => {
+  if (fareClass.length === 1) {
+    return fareClass;
+  } else if (fareClass in QANTAS_FARE_CLASS_DISPLAY) {
+    return QANTAS_FARE_CLASS_DISPLAY[fareClass];
+  } else {
+    return fareClass;
+  }
+}
+
 const SegmentTableRow = ({ segmentResult }) => {
   const { segment, calculation, error } = segmentResult;
 
@@ -59,7 +70,7 @@ const SegmentTableRow = ({ segmentResult }) => {
         <TableCell component="th" scope="row">
           {segment.fromAirport} - {segment.toAirport}
         </TableCell>
-        <TableCell align="right">{segment.airline}</TableCell>
+        <TableCell align="right">{AIRLINES[segment.airline]}</TableCell>
         <TableCell align="right">n/a</TableCell>
         <TableCell align="right">n/a</TableCell>
         <TableCell align="right">{segment.fareClass}</TableCell>
@@ -75,11 +86,15 @@ const SegmentTableRow = ({ segmentResult }) => {
       <TableCell component="th" scope="row">
         {segment.fromAirport} - {segment.toAirport}
       </TableCell>
-      <TableCell align="right">{segment.airline}</TableCell>
-      <TableCell align="right">{calculation.qantasPoints}</TableCell>
-      <TableCell align="right">{calculation.statusCredits}</TableCell>
-      <TableCell align="right">{segment.fareClass}</TableCell>
-      <TableCell align="right">{calculation.fareEarnCategory}</TableCell>
+      <TableCell align="right">{AIRLINES[segment.airline]}</TableCell>
+      <TableCell align="right">{calculation.qantasPoints?.toLocaleString()}</TableCell>
+      <TableCell align="right">{calculation.statusCredits?.toLocaleString()}</TableCell>
+      <TableCell align="right">
+        {getFareClassDisplay(segment.fareClass)}
+      </TableCell>
+      <TableCell align="right">
+        {EARN_CATEGORY_DISPLAY[calculation.fareEarnCategory]}
+      </TableCell>
       <TableCell align="right">
         <a href={calculation.ruleUrl} target="_blank">
           {calculation.rule}

@@ -67,18 +67,10 @@ export default function Home() {
             </Grid2>
           );
         })}
-      </Stack>
-      <Grid2
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        mt={2}
-      >
         <Button variant="contained" onClick={calculatePressed}>
           Calculate
         </Button>
-      </Grid2>
+      </Stack>
       <Results calculatedData={calculationOutput} />
     </Container>
   );

@@ -85,3 +85,16 @@ export const QANTAS_FARE_CLASS_DISPLAY = {
   FirstSaver: "First Saver",
   FirstFlex: "First Flex",
 };
+
+export const EARN_CATEGORY_DISPLAY = {
+  discountEconomy: "Discount Economy",
+  economy: "Economy",
+  flexibleEconomy: "Flexible Economy",
+  discountPremiumEconomy: "Discount Premium Economy",
+  premiumEconomy: "Premium Economy",
+  flexiblePremiumEconomy: "Flexible Premium Economy",
+  discountBusiness: "Discount Business",
+  business: "Business",
+  flexibleBusiness: "Flexible Business",
+  first: "First",
+};
