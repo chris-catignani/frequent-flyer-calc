@@ -2,13 +2,14 @@ import { AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANT
 import { getAirport } from "@/utils/airports";
 import { Autocomplete, TextField, Grid2 } from "@mui/material";
 
-export const RouteInput = ({segment, onChange}) => {
+export const RouteInput = ({segment, errors, onChange}) => {
   return (
     <Grid2 container justifyContent="center" alignItems="center">
       <AirlineInput
         value={segment.airline}
+        error={errors && !segment.airline}
         onChange={(value) => {
-          const newSegment = segment.clone({airline: value})
+          const newSegment = segment.clone({ airline: value });
           if (shouldClearFareClass(segment, value)) {
             newSegment.fareClass = "";
           }
@@ -18,6 +19,7 @@ export const RouteInput = ({segment, onChange}) => {
       <AirportInput
         label={"From (e.g. syd)"}
         value={segment.fromAirport}
+        error={errors && !segment.fromAirport}
         onChange={(value) => {
           onChange(segment.clone({ fromAirport: value }));
         }}
@@ -25,12 +27,14 @@ export const RouteInput = ({segment, onChange}) => {
       <AirportInput
         label={"To (e.g. mel)"}
         value={segment.toAirport}
+        error={errors && !segment.toAirport}
         onChange={(value) => {
           onChange(segment.clone({ toAirport: value }));
         }}
       />
       <FareClassInput
         segment={segment}
+        error={errors && !segment.fareClass}
         onChange={(value) => {
           onChange(segment.clone({ fareClass: value }));
         }}
@@ -48,7 +52,7 @@ const shouldClearFareClass = ({segment, airline}) => {
   return qantasAirlines.includes(airline) !== qantasAirlines.includes(segment?.airline)
 }
 
-const AirlineInput = ({ value, onChange }) => {
+const AirlineInput = ({ value, error, onChange }) => {
   const airlines = Object.entries(AIRLINES).map(([iata, name]) => {
     return {
       airlineLabel: `${name} (${iata})`,
@@ -61,29 +65,37 @@ const AirlineInput = ({ value, onChange }) => {
     <Autocomplete
       disablePortal
       options={airlines}
-      getOptionLabel={(airline) => airline.airlineLabel || ''}
-      value={airlines.find((airline) => airline.iata === value) || ''}
+      getOptionLabel={(airline) => airline.airlineLabel || ""}
+      value={airlines.find((airline) => airline.iata === value) || ""}
       onChange={(_, value) => onChange(value?.iata)}
       sx={{ width: 250 }}
-      renderInput={(params) => <TextField {...params} label="Airline" />}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          error={error}
+          helperText={error ? 'Required' : ' '}
+          label="Airline" />
+      )}
     />
   );
 };
 
-const AirportInput = ({ label, value, onChange }) => {
+const AirportInput = ({ label, value, error, onChange }) => {
   return (
     <TextField
       label={label}
       value={value}
-      onChange={(event)=> {
-        onChange(event.target.value?.toLowerCase()?.trim())
+      error={error}
+      helperText={error ? "Required" : " "}
+      onChange={(event) => {
+        onChange(event.target.value?.toLowerCase()?.trim());
       }}
       sx={{ width: 150 }}
     />
   );
 };
 
-const FareClassInput = ({ segment, onChange }) => {
+const FareClassInput = ({ segment, error, onChange }) => {
   const fromAirport = getAirport(segment.fromAirport);
   const toAirport = getAirport(segment.toAirport);
 
@@ -116,7 +128,13 @@ const FareClassInput = ({ segment, onChange }) => {
         onChange={(_, value) => onChange(value?.data)}
         groupBy={(option) => option.display.length === 1 ? "Booking Class" : "Fare Type"}
         sx={{ width: 250 }}
-        renderInput={(params) => <TextField {...params} label="Fare Class" />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            error={error}
+            helperText={error ? 'Required' : ' '}
+            label="Fare Class" />
+        )}
       />
     );
   }
@@ -124,6 +142,8 @@ const FareClassInput = ({ segment, onChange }) => {
   return (
     <TextField
       value={segment.fareClass}
+      error={error}
+      helperText={error ? 'Required' : ' '}
       onChange={(event) => {
         onChange(event.target.value)
       }}

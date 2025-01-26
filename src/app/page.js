@@ -11,11 +11,26 @@ import { Results } from '@/components/results';
 
 export default function Home() {
 
+  const [inputErrors, setInputErrors] = useState(false)
   const [segments, setSegments] = useState([new Segment('', '', '', '')])
   const [calculationOutput, setCalculationOutput] = useState();
 
+  const validateInput = () => {
+    for (let segment of segments) {
+      if(!segment.airline || !segment.fromAirport || !segment.toAirport || !segment.fareClass) {
+        return false
+      }
+    }
+    return true
+  }
+
   const calculatePressed = () => {
-    setCalculationOutput(calculate(segments))
+    if (!validateInput()) {
+      setInputErrors(true)
+    } else {
+      setInputErrors(false)
+      setCalculationOutput(calculate(segments));
+    }
   }
 
   const addSegmentPressed = () => {
@@ -37,16 +52,16 @@ export default function Home() {
         direction="column"
         justifyContent="center"
         alignItems="center"
-        spacing={2}
+        spacing={1}
       >
         {segments.map((segment, segmentIdx) => {
           const iconToAdd =
             segmentIdx === segments.length - 1 ? (
-              <IconButton onClick={addSegmentPressed}>
+              <IconButton sx={{mb: 2}} onClick={addSegmentPressed}>
                 <AddIcon />
               </IconButton>
             ) : (
-              <IconButton onClick={() => removeSegmentPressed(segmentIdx)}>
+              <IconButton sx={{mb: 2}} onClick={() => removeSegmentPressed(segmentIdx)}>
                 <Remove />
               </IconButton>
             );
@@ -54,6 +69,7 @@ export default function Home() {
             <Grid2 container key={segmentIdx}>
               <RouteInput
                 segment={segment}
+                errors={inputErrors}
                 onChange={(segment) => {
                   const newSegments = [...segments];
                   newSegments[segmentIdx] = segment;
