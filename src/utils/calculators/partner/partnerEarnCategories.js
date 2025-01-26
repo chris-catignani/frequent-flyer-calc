@@ -1,3 +1,4 @@
+import { WEBSITE_PARTNER_EARN_CATEGORIES } from "@/models/constants"
 import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from "../earnCategories"
 
 export const PARTNER_FARE_CLASSES = ['discountEconomy', 'economy', 'flexibleEconomy', 'premiumEconomy', 'business', 'first']
@@ -70,46 +71,84 @@ const buildSriLankairlinesFareBuckets = (longHaulQantasString, allOtherQantasStr
 }
 
 const partnerEarnCategories = {
-  'aa': {
-    'fareBuckets': buildSimpleFareBuckets('NOQ 	GKLMSV	HY	PW 	CDIJR	AF ', PARTNER_FARE_CLASSES)
+  aa: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.aa,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'as': {
-    'fareBuckets': buildSimpleFareBuckets('GOQX	KLMNSV	BHY	-	CDIJ~	AF', PARTNER_FARE_CLASSES)
+  as: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.as,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'ba': {
-    'fareBuckets': buildSimpleFareBuckets('GKLMNOQSV	-	BEHTWY	-	CDIRJ	AF', PARTNER_FARE_CLASSES)
+  ba: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.ba,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'ay': {
-    'fareBuckets': buildSimpleFareBuckets('AZ	GLMNOQSV	BHKY	EPTW	CDIJR	-', PARTNER_FARE_CLASSES)
+  ay: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.ay,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'ib': {
-    'fareBuckets': buildSimpleFareBuckets('AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-', PARTNER_FARE_CLASSES)
+  ib: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.ib,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'i2': {
-    'fareBuckets': buildSimpleFareBuckets('AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-', PARTNER_FARE_CLASSES)
+  i2: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.i2,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'cx': {
-    'fareBuckets': buildSimpleFareBuckets('ML	BHK	YE	RW	CDIJP	AF', PARTNER_FARE_CLASSES)
+  cx: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.cx,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'qr': {
-    'fareBuckets': buildSimpleFareBuckets('KLMV	BH 	Y	-	CDIJP*R	AF', PARTNER_FARE_CLASSES)
+  qr: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.qr,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'at': {
-    'fareBuckets':buildSimpleFareBuckets('NOQRSTW	HKLMV	BY	-	CDIJ	-', PARTNER_FARE_CLASSES)
+  at: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.at,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'rj': {
-    'fareBuckets': buildSimpleFareBuckets('VSNQOPW	KML	BYH	IZ*	CDJ	-', PARTNER_FARE_CLASSES)
+  rj: {
+    fareBuckets: buildSimpleFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.rj,
+      PARTNER_FARE_CLASSES
+    ),
   },
-  'jl': {
-    'fareBuckets': buildJapanAirlinesFareBuckets('GNOQZ^	HKLMSV	BY	EWPR	CDIJX	AF')
+  jl: {
+    fareBuckets: buildJapanAirlinesFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.jl
+    ),
   },
-  'nu': {
-    'fareBuckets': buildJapanAirlinesFareBuckets('GNOQZ^	HKLMSV	BY	EWPR	CDIJX	AF')
+  nu: {
+    fareBuckets: buildJapanAirlinesFareBuckets(
+      WEBSITE_PARTNER_EARN_CATEGORIES.nu
+    ),
   },
-  'mh': {
-    'fareBuckets':buildMalaysiaAirlinesFareBuckets('BHKLMVY	-	ACDFIJZ~	-	-	-', 'KLMV	BH	IYZ	-	CDJ	AF'),
+  mh: {
+    fareBuckets: buildMalaysiaAirlinesFareBuckets(
+      ...WEBSITE_PARTNER_EARN_CATEGORIES.mh
+    ),
   },
-  'ul': {
-    'fareBuckets': buildSriLankairlinesFareBuckets('EGKLMNOQRSW	BHP	Y	-	CDIJ	-', 'GLNOQRSV	EKMW	BHPY	-	CDIJ	-')
-  }
-}
+  ul: {
+    fareBuckets: buildSriLankairlinesFareBuckets(
+      ...WEBSITE_PARTNER_EARN_CATEGORIES.ul
+    ),
+  },
+};

@@ -1,0 +1,132 @@
+import { AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_INTL_FARE_CLASSES } from "@/models/constants";
+import { getAirport } from "@/utils/airports";
+
+const { Autocomplete, TextField, Grid2 } = require("@mui/material");
+
+export const RouteInput = ({segment, onChange}) => {
+  return (
+    <Grid2 container justifyContent="center" alignItems="center">
+      <AirlineInput
+        value={segment.airline}
+        onChange={(value) => {
+          const newSegment = segment.clone({airline: value})
+          if (shouldClearFareClass(segment, value)) {
+            newSegment.fareClass = "";
+          }
+          onChange(newSegment);
+        }}
+      />
+      <AirportInput
+        label={"From (e.g. syd)"}
+        value={segment.fromAirport}
+        onChange={(value) => {
+          onChange(segment.clone({ fromAirport: value }));
+        }}
+      />
+      <AirportInput
+        label={"To (e.g. mel)"}
+        value={segment.toAirport}
+        onChange={(value) => {
+          onChange(segment.clone({ toAirport: value }));
+        }}
+      />
+      <FareClassInput
+        segment={segment}
+        onChange={(value) => {
+          onChange(segment.clone({ fareClass: value }));
+        }}
+      />
+    </Grid2>
+  );
+}
+
+const shouldClearFareClass = ({segment, airline}) => {
+  if (airline === segment?.airline) {
+    return false
+  }
+
+  const qantasAirlines = ['qf', 'jq', '3k', 'gk']
+  return qantasAirlines.includes(airline) !== qantasAirlines.includes(segment?.airline)
+}
+
+const AirlineInput = ({ value, onChange }) => {
+  const airlines = Object.entries(AIRLINES).map(([iata, name]) => {
+    return {
+      airlineLabel: `${name} (${iata})`,
+      iata,
+      id: iata,
+    };
+  });
+
+  return (
+    <Autocomplete
+      disablePortal
+      options={airlines}
+      getOptionLabel={(airline) => airline.airlineLabel || ''}
+      value={airlines.find((airline) => airline.iata === value) || ''}
+      onChange={(_, value) => onChange(value?.iata)}
+      sx={{ width: 250 }}
+      renderInput={(params) => <TextField {...params} label="Airline" />}
+    />
+  );
+};
+
+const AirportInput = ({ label, value, onChange }) => {
+  return (
+    <TextField
+      label={label}
+      value={value}
+      onChange={(event)=> {
+        onChange(event.target.value?.toLowerCase()?.trim())
+      }}
+      sx={{ width: 150 }}
+    />
+  );
+};
+
+const FareClassInput = ({ segment, onChange }) => {
+  const fromAirport = getAirport(segment.fromAirport);
+  const toAirport = getAirport(segment.toAirport);
+
+  let fareClassOptions = [];
+  if (segment.airline === "qf") {
+    if(fromAirport && toAirport) {
+      if (fromAirport.country === "Australia" && toAirport.country === "Australia") {
+        fareClassOptions = Object.keys(QANTAS_DOMESTIC_FARE_CLASSES);
+      } else {
+        fareClassOptions = Object.keys(QANTAS_INTL_FARE_CLASSES);
+      }
+    }
+
+    const options = fareClassOptions.map(fareClass => {
+      return {
+        display: QANTAS_FARE_CLASS_DISPLAY[fareClass],
+        data: fareClass,
+        id: fareClass
+      };
+    })
+
+    return (
+      <Autocomplete
+        disablePortal
+        options={options}
+        getOptionLabel={(option) => option.display || ""}
+        value={options.find((option) => option.data === segment.fareClass) || ''}
+        onChange={(_, value) => onChange(value?.data)}
+        sx={{ width: 250 }}
+        renderInput={(params) => <TextField {...params} label="Fare Class" />}
+      />
+    );
+  }
+
+  return (
+    <TextField
+      value={segment.fareClass}
+      onChange={(event) => {
+        onChange(event.target.value)
+      }}
+      label='Fare Class (e.g. "y" or "i")'
+      sx={{ width: 250 }}
+    />
+  );
+};

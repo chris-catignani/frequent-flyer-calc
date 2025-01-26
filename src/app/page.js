@@ -3,16 +3,31 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Box, Button, Container, Grid2, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { Autocomplete, Box, Button, Container, Grid2, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from '@mui/material';
+import { RouteInput } from '@/components/input';
+import AddIcon from '@mui/icons-material/Add';
+import { Remove } from '@mui/icons-material';
 
 export default function Home() {
 
-  const [routing, setRouting] = useState('');
+  const [segments, setSegments] = useState([new Segment('', '', '', '')])
   const [calculationOutput, setCalculationOutput] = useState();
 
   const calculatePressed = () => {
-    const segments = routing.split(",").map(routing => Segment.fromString(routing.trim()))
     setCalculationOutput(calculate(segments))
+  }
+
+  const addSegmentPressed = () => {
+    setSegments([
+      ...segments,
+      new Segment('', '', '', '')
+    ])
+  }
+
+  const removeSegmentPressed = (segmentIdx) => {
+    const newSegments = [...segments]
+    newSegments.splice(segmentIdx, 1);
+    setSegments(newSegments)
   }
 
   const SegmentTableHeader = () => {
@@ -76,7 +91,12 @@ export default function Home() {
     }
 
     return (
-      <Grid2 container direction="column" justifyContent="center" alignItems="center">
+      <Grid2
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+      >
         <Box mt={2}>
           <Typography variant="h4">Results:</Typography>
           <Box>Qantas Points: {calculatedData.qantasPoints}</Box>
@@ -89,12 +109,14 @@ export default function Home() {
               <SegmentTableHeader />
             </TableHead>
             <TableBody>
-              {calculatedData.segmentResults.map((segmentResult) => (
-                <SegmentTableRow
-                  key={segmentResult.segment.toString()}
-                  segmentResult={segmentResult}
-                />
-              ))}
+              {calculatedData.segmentResults.map(
+                (segmentResult, segmentIdx) => (
+                  <SegmentTableRow
+                    key={segmentIdx}
+                    segmentResult={segmentResult}
+                  />
+                )
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -104,20 +126,51 @@ export default function Home() {
 
   return (
     <Container>
-      <Box
-        display="flex"
+      <Stack
+        direction="column"
         justifyContent="center"
         alignItems="center"
       >
-        <TextField
-          label="Routing"
-          value={routing}
-          onChange={(event) => { setRouting(event.target.value) }}
-        />
+        {segments.map((segment, segmentIdx) => {
+          const iconToAdd =
+            segmentIdx === segments.length - 1 ? (
+              <IconButton onClick={addSegmentPressed}>
+                <AddIcon />
+              </IconButton>
+            ) : (
+              <IconButton onClick={() => removeSegmentPressed(segmentIdx)}>
+                <Remove />
+              </IconButton>
+            );
+          return (
+            <Grid2 container key={segmentIdx}>
+              <RouteInput
+                segment={segment}
+                onChange={(segment) => {
+                  const newSegments = [...segments];
+                  newSegments[segmentIdx] = segment;
+                  setSegments(newSegments);
+
+                  // if input changes, ensure calculated data is voided
+                  setCalculationOutput(null);
+                }}
+              />
+              {iconToAdd}
+            </Grid2>
+          );
+        })}
+      </Stack>
+      <Grid2
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        mt={5}
+      >
         <Button variant="contained" onClick={calculatePressed}>
           Calculate
         </Button>
-      </Box>
+      </Grid2>
       <Results calculatedData={calculationOutput} />
     </Container>
   );

@@ -1,3 +1,4 @@
+import { QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_INTL_FARE_CLASSES } from "@/models/constants"
 import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from "../earnCategories"
 
 export const QANTAS_FARE_CLASSES = [
@@ -16,41 +17,23 @@ const buildQantasFareBuckets = (domesticQantasString, internationalQantasString)
     rules: [
       // domestic
       {
-        origin: { country: new Set(['australia']) },
-        destination: { country: new Set(['australia']) },
+        origin: { country: new Set(["australia"]) },
+        destination: { country: new Set(["australia"]) },
         categories: {
           ...buildFareBuckets(domesticQantasString, QANTAS_FARE_CLASSES),
-          'RedeDeal': 'discountEconomy',
-          'Flex': 'flexibleEconomy',
-          'DiscountPremiumEconomy': 'discountPremiumEconomy',
-          'PremiumEconomySaver': 'premiumEconomy',
-          'PremiumEconomyFlex': 'flexiblePremiumEconomy',
-          'BusinessSale': 'business',
-          'BusinessSaver': 'business',
-          'Business': 'flexibleBusiness',
-        }
+          ...QANTAS_DOMESTIC_FARE_CLASSES,
+        },
       },
       // international
       {
         all: true,
         categories: {
           ...buildFareBuckets(internationalQantasString, QANTAS_FARE_CLASSES),
-          'EconomySale': 'discountEconomy',
-          'EconomySaver': 'economy',
-          'EconomyFlex': 'flexibleEconomy',
-          'PremiumEconomySale': 'discountPremiumEconomy',
-          'PremiumEconomySaver': 'premiumEconomy',
-          'PremiumEconomyFlex': 'flexiblePremiumEconomy',
-          'BusinessSale': 'discountBusiness',
-          'BusinessSaver': 'business',
-          'BusinessFlex': 'flexibleBusiness',
-          'FirstSale': 'first',
-          'FirstSaver': 'first',
-          'FirstFlex': 'first'
-        }
-      }
-    ]
-  }
+          ...QANTAS_INTL_FARE_CLASSES,
+        },
+      },
+    ],
+  };
 }
 
 const buildJetstarFareBuckets = (iata) => {
