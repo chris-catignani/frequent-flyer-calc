@@ -10,7 +10,7 @@ export const AIRLINES = {
   jl: "Japan Airlines",
   nu: "Japan Transocean Air",
   jq: "Jetstar Airlines",
-  "3k": "Jetsar Asia",
+  "3k": "Jetstar Asia",
   gk: "Jetstar Japan",
   mh: "Malaysia Airlines",
   qf: "Qantas",
@@ -19,6 +19,14 @@ export const AIRLINES = {
   rj: "Royal Jordanian",
   ul: "Malaysian Airlines"
 }
+
+export const QANTAS_GRP_AIRLINES = new Set([
+  'qf', 'jq', '3k', 'gk'
+])
+
+export const JETSTAR_AIRLINES = new Set([
+  'jq', '3k', 'gk'
+])
 
 export const WEBSITE_EARN_CATEGORIES = {
   as: "GOQX	KLMNSV	BHY	-	CDIJ~	AF",
@@ -82,6 +90,32 @@ export const QANTAS_FARE_CLASS_DISPLAY = {
   FirstSale: "First Sale",
   FirstSaver: "First Saver",
   FirstFlex: "First Flex",
+};
+
+export const JETSTAR_NEW_ZEALAND_FARE_CLASSES = {
+  EconomyStarterFare: "discountEconomy",
+  EconomyStarterFlexBiz: "discountEconomy",
+  Flex: "economy",
+  FlexPlus: "economy",
+  StarterPlus: "economy",
+  StarterMax: "flexibleEconomy",
+};
+
+export const JETSTAR_FARE_CLASSES = {
+  Flex: "economy",
+  FlexPlus: "economy",
+  StarterMax: "flexibleEconomy",
+  BusinessMax: "business",
+};
+
+export const JETSTAR_FARE_CLASS_DISPLAY = {
+  EconomyStarterFare: "Economy Starter Fare",
+  EconomyStarterFlexBiz: "Economy Starter FlexBiz Fare",
+  Flex: "Flex",
+  FlexPlus: "Flex Plus",
+  StarterPlus: "Starter Plus",
+  StarterMax: "Starter Max",
+  BusinessMax: "Business Max",
 };
 
 export const EARN_CATEGORY_DISPLAY = {

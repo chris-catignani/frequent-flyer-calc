@@ -137,7 +137,7 @@ describe('getQantasEarnCategory', () => {
     // Jetstar JQ
     test.each([
       ['EconomyStarterFare', 'discountEconomy'],
-      ['StarterFlexBizFare', 'discountEconomy'],
+      ['EconomyStarterFlexBiz', 'discountEconomy'],
 
       ['Flex', 'economy'],
       ['FlexPlus', 'economy'],

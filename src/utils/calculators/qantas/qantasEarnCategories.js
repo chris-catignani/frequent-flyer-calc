@@ -1,4 +1,4 @@
-import { QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants"
+import { JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants"
 import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from "../earnCategories"
 
 export const QANTAS_FARE_CLASSES = [
@@ -41,28 +41,16 @@ const buildJetstarFareBuckets = (iata) => {
 
   if( iata === 'jq' ) {
     rules.push({
-      origin: { country: new Set(['new zealand']) },
-      destination: { country: new Set(['new zealand']) },
-      categories: {
-        'EconomyStarterFare': 'discountEconomy',
-        'StarterFlexBizFare': 'discountEconomy',
-        'Flex': 'economy',
-        'FlexPlus': 'economy',
-        'StarterPlus': 'economy',
-        'StarterMax': 'flexibleEconomy'
-      }
-    })
+      origin: { country: new Set(["new zealand"]) },
+      destination: { country: new Set(["new zealand"]) },
+      categories: { ...JETSTAR_NEW_ZEALAND_FARE_CLASSES },
+    });
   }
 
   rules.push({
     all: true,
-    categories: {
-      'Flex': 'economy',
-      'FlexPlus': 'economy',
-      'StarterMax': 'flexibleEconomy',
-      'BusinessMax': 'business'
-    }
-  })
+    categories: { ...JETSTAR_FARE_CLASSES },
+  });
 
   return { rules }
 }

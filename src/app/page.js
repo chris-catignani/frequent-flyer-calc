@@ -191,7 +191,7 @@ export default function Home() {
       </Typography>
       <Box mt={5}>
         <Typography>Currently unsupported items:</Typography>
-        <Typography> - Jetstar in general</Typography>
+        <Typography> - Jetstar connecting flights in New Zealand (all else is fine)</Typography>
         <Typography> - Japan Airlines domestic flights (international is fine)</Typography>
         <Typography> - Autocomplete for airport input, only accepts iata codes for now</Typography>
         <Typography> - All Non-oneworld partners are not implemented</Typography>
