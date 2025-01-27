@@ -49,6 +49,15 @@ export default function Home() {
     setCalculationOutput(null);
   }
 
+  const segmentChanged = (segmentIdx, segment) => {
+    const newSegments = [...segments];
+    newSegments[segmentIdx] = segment;
+    setSegments(newSegments);
+
+    // if input changes, ensure calculated data is voided
+    setCalculationOutput(null);
+  }
+
   const eliteStatusSelected = (newEliteStatus) => {
     setEliteStatus(newEliteStatus);
 
@@ -116,14 +125,7 @@ export default function Home() {
                   <RouteInput
                     segment={segment}
                     errors={inputErrors}
-                    onChange={(segment) => {
-                      const newSegments = [...segments];
-                      newSegments[segmentIdx] = segment;
-                      setSegments(newSegments);
-
-                      // if input changes, ensure calculated data is voided
-                      setCalculationOutput(null);
-                    }}
+                    onChange={(segment) => segmentChanged(segmentIdx, segment)}
                   />
                   <RouteInputButton
                     segments={segments}

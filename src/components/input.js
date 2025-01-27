@@ -58,13 +58,16 @@ export const RouteInput = ({segment, errors, onChange}) => {
   );
 }
 
-const shouldClearFareClass = ({segment, airline}) => {
+const shouldClearFareClass = (segment, airline) => {
   if (airline === segment?.airline) {
     return false
   }
 
   const qantasAirlines = ['qf', 'jq', '3k', 'gk']
-  return qantasAirlines.includes(airline) !== qantasAirlines.includes(segment?.airline)
+  return (
+    qantasAirlines.includes(airline) !== qantasAirlines.includes(segment?.airline) ||
+    qantasAirlines.includes(airline) && qantasAirlines.includes(segment?.airline)
+  )
 }
 
 const AirlineInput = ({ value, error, onChange }) => {
