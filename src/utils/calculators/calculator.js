@@ -62,8 +62,6 @@ const calculateSegment = (segment, eliteStatus) => {
     fareEarnCategory
   );
 
-  console.log(eliteBonus);
-
   const qantasPointsBreakdown = {
     basePoints: calculation.qantasPoints,
     eliteBonus,
