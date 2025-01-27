@@ -1,5 +1,7 @@
 import { AIRLINES, EARN_CATEGORY_DISPLAY, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
-import { TableRow, TableCell, Grid2, Box, Typography, TableContainer, Table, TableHead, TableBody } from "@mui/material";
+import { TableRow, TableCell, Grid2, Box, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
+import { useState } from "react";
 
 export const Results = ({ calculatedData }) => {
   if (!calculatedData) {
@@ -61,8 +63,67 @@ const getFareClassDisplay = (fareClass) => {
   }
 }
 
+const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
+  const {
+    qantasPointsBreakdown: { basePoints, eliteBonus, minPoints, totalEarned },
+  } = segmentResult;
+  return (
+    <Dialog onClose={onClose} open={open}>
+      <DialogTitle>Points Calculation Breakdown</DialogTitle>
+      <Grid2
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        pb={2}
+      >
+        <Typography mb={1} sx={{ textDecoration: "underline" }}>
+          Total Points: {totalEarned?.toLocaleString()}
+        </Typography>
+        <Typography lineHeight={1}>
+          Base Points: {basePoints?.toLocaleString()}
+        </Typography>
+        <Typography lineHeight={1}>+</Typography>
+        <Typography lineHeight={1}>
+          Elite Bonus: {eliteBonus.qantasPoints?.toLocaleString() || "n/a"}
+        </Typography>
+        <Typography my={2}>- or -</Typography>
+        <Typography>
+          Min Points: {minPoints?.toLocaleString() || "n/a"}
+        </Typography>
+      </Grid2>
+    </Dialog>
+  );
+};
+
+const QantasPointsDisplay = ({ segmentResult }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Grid2 container justifyContent='flex-end'>
+      <Typography>{segmentResult.qantasPoints?.toLocaleString()}</Typography>
+      <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
+        <InfoIcon />
+      </IconButton>
+      <QantasPointsBreakdownDialog
+        open={open}
+        onClose={handleClose}
+        segmentResult={segmentResult}
+      />
+    </Grid2>
+  );
+}
+
 const SegmentTableRow = ({ segmentResult }) => {
-  const { segment, calculation, error } = segmentResult;
+  const { segment, error } = segmentResult;
 
   if (error) {
     return (
@@ -87,20 +148,24 @@ const SegmentTableRow = ({ segmentResult }) => {
         {segment.fromAirport} - {segment.toAirport}
       </TableCell>
       <TableCell align="right">{AIRLINES[segment.airline]}</TableCell>
-      <TableCell align="right">{calculation.qantasPoints?.toLocaleString()}</TableCell>
-      <TableCell align="right">{calculation.statusCredits?.toLocaleString()}</TableCell>
+      <TableCell align="right">
+        <QantasPointsDisplay segmentResult={segmentResult} />
+      </TableCell>
+      <TableCell align="right">
+        {segmentResult.statusCredits?.toLocaleString()}
+      </TableCell>
       <TableCell align="right">
         {getFareClassDisplay(segment.fareClass)}
       </TableCell>
       <TableCell align="right">
-        {EARN_CATEGORY_DISPLAY[calculation.fareEarnCategory]}
+        {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory]}
       </TableCell>
       <TableCell align="right">
-        <a href={calculation.ruleUrl} target="_blank">
-          {calculation.rule}
+        <a href={segmentResult.ruleUrl} target="_blank">
+          {segmentResult.rule.name}
         </a>
       </TableCell>
-      <TableCell align="right">{calculation.notes}</TableCell>
+      <TableCell align="right">{segmentResult.notes}</TableCell>
     </TableRow>
   );
 };
