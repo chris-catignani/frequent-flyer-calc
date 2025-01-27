@@ -217,7 +217,7 @@ const FareClassInput = ({ segment, error, onChange }) => {
       error={error}
       helperText={error ? 'Required' : ' '}
       onChange={(event) => {
-        onChange(event.target.value)
+        onChange(event.target.value?.trim()?.toLowerCase())
       }}
       label='Fare Class (e.g. "y" or "i")'
       sx={{ width: 250 }}
