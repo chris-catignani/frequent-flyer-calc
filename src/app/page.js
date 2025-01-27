@@ -3,7 +3,7 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Fab, Grid2, IconButton, Paper, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Fab, Grid2, IconButton, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Remove, ExpandMore } from "@mui/icons-material";
 import { Results } from '@/components/results';
@@ -14,6 +14,7 @@ export default function Home() {
   const [inputErrors, setInputErrors] = useState({})
   const [eliteStatus, setEliteStatus] = useState('Bronze')
   const [segments, setSegments] = useState([new Segment('', '', '', '')])
+  const [tripType, setTripType] = useState("one way")
   const [calculationOutput, setCalculationOutput] = useState();
 
   const validateInput = () => {
@@ -51,13 +52,31 @@ export default function Home() {
     return errors;
   }
 
+  const doCalculation = (theSegments, theEliteStatus, theTripType) => {
+    if (theTripType === "return") {
+      const returnSegments = [...theSegments];
+
+      // add the segments again, but in reverse, with from/to airports flipped
+      for(let i = theSegments.length - 1; i >= 0; i--) {
+        const {fromAirport, toAirport} = theSegments[i]
+        returnSegments.push(
+          theSegments[i].clone({fromAirport: toAirport, toAirport: fromAirport})
+        )
+      }
+
+      setCalculationOutput(calculate(returnSegments, theEliteStatus));
+    } else {
+      setCalculationOutput(calculate(theSegments, theEliteStatus));
+    }
+  };
+
   const calculatePressed = () => {
     const errors = validateInput()
     if (Object.keys(errors).length > 0) {
       setInputErrors(errors);
     } else {
       setInputErrors({});
-      setCalculationOutput(calculate(segments, eliteStatus));
+      doCalculation(segments, eliteStatus, tripType);
     }
   }
 
@@ -91,7 +110,16 @@ export default function Home() {
 
     // if we have calculated data, recalculate with new elite status level
     if (calculationOutput && validateInput()) {
-      setCalculationOutput(calculate(segments, newEliteStatus));
+      doCalculation(segments, newEliteStatus, tripType)
+    }
+  }
+
+  const tripTypeToggled = (newTripType) => {
+    setTripType(newTripType)
+
+    // if we have calculated data, recalculate with new return/oneway status
+    if (calculationOutput && validateInput()) {
+      doCalculation(segments, eliteStatus, newTripType);
     }
   }
 
@@ -184,9 +212,16 @@ export default function Home() {
                 alignItems: "center",
               }}
             >
-              <Button variant="contained" onClick={addSegmentPressed}>
-                Add Segment
-              </Button>
+              <ToggleButtonGroup
+                color="primary"
+                size="small"
+                value={tripType}
+                exclusive
+                onChange={(event) => tripTypeToggled(event.target.value)}
+              >
+                <ToggleButton value="one way">One Way</ToggleButton>
+                <ToggleButton value="return">Return</ToggleButton>
+              </ToggleButtonGroup>
               <Fab
                 variant="extended"
                 color="primary"
@@ -194,8 +229,7 @@ export default function Home() {
               >
                 Calculate
               </Fab>
-              {/* The button below exists to center the Calculate button above */}
-              <Button disabled sx={{ visibility: "hidden" }}>
+              <Button variant="contained" onClick={addSegmentPressed}>
                 Add Segment
               </Button>
             </Grid2>
