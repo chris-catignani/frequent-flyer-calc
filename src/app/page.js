@@ -3,7 +3,7 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Fab, Grid2, IconButton, List, ListItem, Paper, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Fab, Grid2, IconButton, Paper, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Remove, ExpandMore } from "@mui/icons-material";
 import { Results } from '@/components/results';

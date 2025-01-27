@@ -1,5 +1,5 @@
 import { JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants"
-import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from "../earnCategories"
+import { buildFareBuckets, getEarnCategory } from "../earnCategories"
 
 export const QANTAS_FARE_CLASSES = [
   'discountEconomy', 'economy', 'flexibleEconomy',

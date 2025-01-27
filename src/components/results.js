@@ -1,5 +1,5 @@
 import { AIRLINES, EARN_CATEGORY_DISPLAY, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
-import { TableRow, TableCell, Grid2, Box, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle } from "@mui/material";
+import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
 

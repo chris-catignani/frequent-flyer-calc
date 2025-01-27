@@ -11,11 +11,11 @@ class Rule {
     this.ruleUrl = ruleUrl
   }
 
-  applies(segment, fareEarnCategory) {
+  applies(segment, fareEarnCategory) { // eslint-disable-line
     return false
   }
 
-  calculate(segment, fareEarnCategory) {
+  calculate(segment, fareEarnCategory) { // eslint-disable-line
     return this.buildCalculationReturn('', '', 0, 0)
   }
 

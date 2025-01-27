@@ -17,6 +17,7 @@ describe('rules', () => {
         earnings: { business: new QantasEarnings(200, 20) }
       },
     ]
+    // eslint-disable-next-line
     const intraCountryRule = new IntraCountryRule('distance rule', 'https://google.com', 'United States', distanceBands)
     //TODO mock airports to specify distances?
     expect(true).toBe(true)
@@ -35,6 +36,7 @@ describe('rules', () => {
         earnings: { business: new QantasEarnings(200, 20) }
       },
     ]
+    // eslint-disable-next-line
     const distanceRule = new DistanceRule('distance rule', 'https://google.com', distanceBands)
     //TODO mock airports to specify distances?
     expect(true).toBe(true)
