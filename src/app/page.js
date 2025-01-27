@@ -3,7 +3,7 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Box, Button, Grid2, IconButton, Paper, Typography } from '@mui/material';
+import { Box, Button, Fab, Grid2, IconButton, Paper, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Remove } from '@mui/icons-material';
 import { Results } from '@/components/results';
@@ -125,6 +125,7 @@ export default function Home() {
             <Grid2
               container
               direction="row"
+              mt={1}
               sx={{
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -133,10 +134,15 @@ export default function Home() {
               <Button variant="contained" onClick={addSegmentPressed}>
                 Add Segment
               </Button>
-              <Button variant="contained" onClick={calculatePressed}>
+              <Fab
+                variant="extended"
+                color="primary"
+                onClick={calculatePressed}
+              >
                 Calculate
-              </Button>
-              <Box></Box>
+              </Fab>
+              {/* The button below exists to center the Calculate button above */}
+              <Button disabled sx={{visibility: 'hidden'}}>Add Segment</Button>
             </Grid2>
           </Box>
         </Paper>
