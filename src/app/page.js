@@ -3,7 +3,7 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Fab, Grid2, IconButton, Paper, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Fab, Grid2, IconButton, List, ListItem, Paper, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Remove, ExpandMore } from "@mui/icons-material";
 import { Results } from '@/components/results';
@@ -186,6 +186,16 @@ export default function Home() {
           </AccordionDetails>
         </Accordion>
       }
+      <Typography mt={5}>
+        Calculations based on Qantas earnings tables as of January 2025
+      </Typography>
+      <Box mt={5}>
+        <Typography>Currently unsupported items:</Typography>
+        <Typography> - Jetstar in general</Typography>
+        <Typography> - Japan Airlines domestic flights (international is fine)</Typography>
+        <Typography> - Autocomplete for airport input, only accepts iata codes for now</Typography>
+        <Typography> - All Non-oneworld partners are not implemented</Typography>
+      </Box>
     </Grid2>
   );
 }
