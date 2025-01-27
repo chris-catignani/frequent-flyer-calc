@@ -5,7 +5,7 @@ import { Segment } from '@/models/segment'
 import { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Fab, Grid2, IconButton, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
-import { Remove, ExpandMore } from "@mui/icons-material";
+import { ExpandMore, Clear } from "@mui/icons-material";
 import { Results } from '@/components/results';
 import { getAirport } from '@/utils/airports';
 
@@ -128,7 +128,7 @@ export default function Home() {
       return (
         // Dummy icon to maintain space for when we show icons
         <IconButton disabled sx={{ visibility: 'hidden' }}>
-          <Remove />
+          <Clear />
         </IconButton>
       );
     } else {
@@ -137,7 +137,7 @@ export default function Home() {
           sx={{ mb: 2 }}
           onClick={() => removeSegmentPressed(segmentIdx)}
         >
-          <Remove />
+          <Clear />
         </IconButton>
       );
     }
