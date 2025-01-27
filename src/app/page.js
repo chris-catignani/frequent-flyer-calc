@@ -7,28 +7,56 @@ import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Fab,
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Remove, ExpandMore } from "@mui/icons-material";
 import { Results } from '@/components/results';
+import { getAirport } from '@/utils/airports';
 
 export default function Home() {
 
-  const [inputErrors, setInputErrors] = useState(false)
+  const [inputErrors, setInputErrors] = useState({})
   const [eliteStatus, setEliteStatus] = useState('Bronze')
   const [segments, setSegments] = useState([new Segment('', '', '', '')])
   const [calculationOutput, setCalculationOutput] = useState();
 
   const validateInput = () => {
-    for (let segment of segments) {
-      if(!segment.airline || !segment.fromAirport || !segment.toAirport || !segment.fareClass) {
-        return false
+    const errors = {}
+
+    const addError = (segmentIdx, fieldName, error) => {
+      if (!errors[segmentIdx]) {
+        errors[segmentIdx] = {};
       }
+      errors[segmentIdx][fieldName] = error
     }
-    return true
+
+    segments.forEach((segment, idx) => {
+      if(!segment.airline) {
+        addError(idx, 'airline', 'Required')
+      }
+      if (!segment.fromAirport) {
+        addError(idx, "fromAirport", "Required");
+      }
+      if (!segment.toAirport) {
+        addError(idx, "toAirport", "Required");
+      }
+      if (!segment.fareClass) {
+        addError(idx, "fareClass", "Required");
+      }
+
+      if (segment.fromAirport && !getAirport(segment.fromAirport)) {
+        addError(idx, "fromAirport", "Invalid IATA");
+      }
+      if (segment.toAirport && !getAirport(segment.toAirport)) {
+        addError(idx, "toAirport", "Invalid IATA");
+      }
+    })
+
+    return errors;
   }
 
   const calculatePressed = () => {
-    if (!validateInput()) {
-      setInputErrors(true)
+    const errors = validateInput()
+    if (Object.keys(errors).length > 0) {
+      setInputErrors(errors);
     } else {
-      setInputErrors(false)
+      setInputErrors({});
       setCalculationOutput(calculate(segments, eliteStatus));
     }
   }
@@ -136,7 +164,7 @@ export default function Home() {
                 <Grid2 container key={segmentIdx}>
                   <RouteInput
                     segment={segment}
-                    errors={inputErrors}
+                    errors={inputErrors[segmentIdx] || {}}
                     onChange={(segment) => segmentChanged(segmentIdx, segment)}
                   />
                   <RouteInputButton

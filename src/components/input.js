@@ -22,7 +22,7 @@ export const RouteInput = ({segment, errors, onChange}) => {
     <Grid2 container justifyContent="center" alignItems="center" spacing={1}>
       <AirlineInput
         value={segment.airline}
-        error={errors && !segment.airline}
+        error={errors['airline']}
         onChange={(value) => {
           const newSegment = segment.clone({ airline: value });
           if (shouldClearFareClass(segment, value)) {
@@ -34,7 +34,7 @@ export const RouteInput = ({segment, errors, onChange}) => {
       <AirportInput
         label={"From (e.g. syd)"}
         value={segment.fromAirport}
-        error={errors && !segment.fromAirport}
+        error={errors['fromAirport']}
         onChange={(value) => {
           onChange(segment.clone({ fromAirport: value }));
         }}
@@ -42,14 +42,14 @@ export const RouteInput = ({segment, errors, onChange}) => {
       <AirportInput
         label={"To (e.g. mel)"}
         value={segment.toAirport}
-        error={errors && !segment.toAirport}
+        error={errors['toAirport']}
         onChange={(value) => {
           onChange(segment.clone({ toAirport: value }));
         }}
       />
       <FareClassInput
         segment={segment}
-        error={errors && !segment.fareClass}
+        error={errors['fareClass']}
         onChange={(value) => {
           onChange(segment.clone({ fareClass: value }));
         }}
@@ -92,7 +92,7 @@ const AirlineInput = ({ value, error, onChange }) => {
         <TextField
           {...params}
           error={error}
-          helperText={error ? "Required" : " "}
+          helperText={error ? error : " "}
           label="Airline"
         />
       )}
@@ -106,7 +106,7 @@ const AirportInput = ({ label, value, error, onChange }) => {
       label={label}
       value={value}
       error={error}
-      helperText={error ? "Required" : " "}
+      helperText={error ? error : " "}
       onChange={(event) => {
         onChange(event.target.value?.toLowerCase()?.trim());
       }}
@@ -152,7 +152,7 @@ const QantasFareClassInput = ({ segment, error, onChange }) => {
         <TextField
           {...params}
           error={error}
-          helperText={error ? 'Required' : ' '}
+          helperText={error ? error : " "}
           label="Fare Class" />
       )}
     />
@@ -193,7 +193,7 @@ const JetstarFareClassInput = ({ segment, error, onChange }) => {
         <TextField
           {...params}
           error={error}
-          helperText={error ? 'Required' : ' '}
+          helperText={error ? error : " "}
           label="Fare Class" />
       )}
     />
@@ -215,7 +215,7 @@ const FareClassInput = ({ segment, error, onChange }) => {
     <TextField
       value={segment.fareClass}
       error={error}
-      helperText={error ? 'Required' : ' '}
+      helperText={error ? error : " "}
       onChange={(event) => {
         onChange(event.target.value?.trim()?.toLowerCase())
       }}
