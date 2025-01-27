@@ -57,7 +57,7 @@ const buildJetstarFareBuckets = (iata) => {
 
 const earnCategories = {
   'qf': {
-    'fareBuckets': buildQantasFareBuckets(...WEBSITE_EARN_CATEGORIES.qf, QANTAS_FARE_CLASSES)
+    'fareBuckets': buildQantasFareBuckets(WEBSITE_EARN_CATEGORIES.qf[0], WEBSITE_EARN_CATEGORIES.qf[1])
   },
   'jq': {
     'fareBuckets': buildJetstarFareBuckets('jq'),

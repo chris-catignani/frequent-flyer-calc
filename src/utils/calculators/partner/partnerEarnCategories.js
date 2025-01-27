@@ -143,12 +143,14 @@ const partnerEarnCategories = {
   },
   mh: {
     fareBuckets: buildMalaysiaAirlinesFareBuckets(
-      ...WEBSITE_EARN_CATEGORIES.mh
+      WEBSITE_EARN_CATEGORIES.mh[0],
+      WEBSITE_EARN_CATEGORIES.mh[1],
     ),
   },
   ul: {
     fareBuckets: buildSriLankairlinesFareBuckets(
-      ...WEBSITE_EARN_CATEGORIES.ul
+      WEBSITE_EARN_CATEGORIES.ul[0],
+      WEBSITE_EARN_CATEGORIES.ul[1],
     ),
   },
 };
