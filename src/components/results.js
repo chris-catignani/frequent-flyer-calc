@@ -1,5 +1,5 @@
 import { AIRLINES, EARN_CATEGORY_DISPLAY, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
-import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle } from "@mui/material";
+import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
 
@@ -170,7 +170,9 @@ const SegmentTableRow = ({ segmentResult }) => {
         <TableCell align="right">{segment.fareClass}</TableCell>
         <TableCell align="right">n/a</TableCell>
         <TableCell align="right">n/a</TableCell>
-        <TableCell align="right">{error.message}</TableCell>
+        <TableCell align="right">
+          <Alert severity="error">{error.message}</Alert>
+        </TableCell>
       </TableRow>
     );
   }

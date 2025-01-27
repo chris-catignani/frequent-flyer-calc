@@ -3,7 +3,7 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Fab, Grid2, IconButton, Paper, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Fab, Grid2, IconButton, Paper, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Remove, ExpandMore } from "@mui/icons-material";
 import { Results } from '@/components/results';
@@ -86,6 +86,18 @@ export default function Home() {
       );
     }
   };
+
+  const ErrorDisplay = ({ calculationOutput }) => {
+    if (!calculationOutput || !calculationOutput.containsErrors) {
+      return <></>
+    }
+
+    return (
+    <Alert variant="filled" severity="error">
+      There are errors in the calculation. Expand the details below for details
+    </Alert>
+    )
+  }
 
   return (
     <Grid2
@@ -170,6 +182,7 @@ export default function Home() {
           Status Credits Earned: {calculationOutput?.statusCredits?.toLocaleString()}
         </Typography>
       </Box>
+      <ErrorDisplay calculationOutput={calculationOutput} />
       {calculationOutput &&
         <Accordion sx={{ '&:before':{height:'0px'}}}>
           <AccordionSummary

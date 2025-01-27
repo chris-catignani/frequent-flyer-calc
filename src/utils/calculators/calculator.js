@@ -19,6 +19,7 @@ const eliteStatusBonusMultiples = {
 export const calculate = (segments, eliteStatus) => {
   const retval = {
     segmentResults: [],
+    containsErrors: false,
     statusCredits: 0,
     qantasPoints: 0
   }
@@ -38,6 +39,7 @@ export const calculate = (segments, eliteStatus) => {
         error: err,
         segment,
       })
+      retval.containsErrors = true
     }
   }
 
