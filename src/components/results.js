@@ -14,14 +14,7 @@ export const Results = ({ calculatedData }) => {
       direction="column"
       justifyContent="center"
       alignItems="center"
-      mt={5}
     >
-      <Box>
-        <Typography variant="h4">Results:</Typography>
-        <Box>Qantas Points: {calculatedData.qantasPoints?.toLocaleString()}</Box>
-        <Box>Status Credits: {calculatedData.statusCredits?.toLocaleString()}</Box>
-      </Box>
-      <Box mt={5}>Calculation per segment:</Box>
       <TableContainer>
         <Table>
           <TableHead>
@@ -48,7 +41,6 @@ const SegmentTableHeader = () => {
       <TableCell align="right">Fare Class</TableCell>
       <TableCell align="right">Earning Category</TableCell>
       <TableCell align="right">Earning Rule</TableCell>
-      <TableCell align="right">Rule notes</TableCell>
     </TableRow>
   );
 };
@@ -122,6 +114,47 @@ const QantasPointsDisplay = ({ segmentResult }) => {
   );
 }
 
+const RuleDialog = ({ open, onClose, notes }) => {
+  return (
+    <Dialog onClose={onClose} open={open}>
+      <DialogTitle>Calculation notes</DialogTitle>
+      <Grid2
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        m={2}
+      >
+        <Typography>{notes}</Typography>
+      </Grid2>
+    </Dialog>
+  );
+};
+
+const RuleDisplay = ({ ruleName, ruleUrl, notes }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Grid2 container justifyContent="flex-end">
+      <a href={ruleUrl} target="_blank">
+        {ruleName}
+      </a>
+      <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
+        <InfoIcon />
+      </IconButton>
+      <RuleDialog open={open} onClose={handleClose} notes={notes} />
+    </Grid2>
+  );
+};
+
 const SegmentTableRow = ({ segmentResult }) => {
   const { segment, error } = segmentResult;
 
@@ -161,11 +194,12 @@ const SegmentTableRow = ({ segmentResult }) => {
         {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory]}
       </TableCell>
       <TableCell align="right">
-        <a href={segmentResult.ruleUrl} target="_blank">
-          {segmentResult.rule.name}
-        </a>
+        <RuleDisplay
+          ruleName={segmentResult.rule.name}
+          ruleUrl={segmentResult.ruleUrl}
+          notes={segmentResult.notes}
+        />
       </TableCell>
-      <TableCell align="right">{segmentResult.notes}</TableCell>
     </TableRow>
   );
 };

@@ -3,9 +3,9 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Box, Button, Fab, Grid2, IconButton, Paper, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Fab, Grid2, IconButton, Paper, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
-import { Remove } from '@mui/icons-material';
+import { Remove, ExpandMore } from "@mui/icons-material";
 import { Results } from '@/components/results';
 
 export default function Home() {
@@ -49,9 +49,19 @@ export default function Home() {
     setCalculationOutput(null);
   }
 
+  const eliteStatusSelected = (newEliteStatus) => {
+    setEliteStatus(newEliteStatus);
+
+    // if we have calculated data, recalculate with new elite status level
+    if (calculationOutput && validateInput()) {
+      setCalculationOutput(calculate(segments, newEliteStatus));
+    }
+  }
+
   const RouteInputButton = ({ segments, segmentIdx }) => {
     if (segments.length === 1) {
       return (
+        // Dummy icon to maintain space for when we show icons
         <IconButton disabled sx={{ visibility: 'hidden' }}>
           <Remove />
         </IconButton>
@@ -75,6 +85,7 @@ export default function Home() {
       justifyContent="center"
       alignItems="center"
       spacing={1}
+      m={2}
     >
       <Typography variant="h4">
         Qantas Points and Status Credit Calculator
@@ -93,7 +104,7 @@ export default function Home() {
           <Box></Box>
           <EliteStatusInput
             eliteStatus={eliteStatus}
-            onChange={(value) => setEliteStatus(value)}
+            onChange={(value) => eliteStatusSelected(value)}
           />
         </Grid2>
 
@@ -142,12 +153,37 @@ export default function Home() {
                 Calculate
               </Fab>
               {/* The button below exists to center the Calculate button above */}
-              <Button disabled sx={{visibility: 'hidden'}}>Add Segment</Button>
+              <Button disabled sx={{ visibility: "hidden" }}>
+                Add Segment
+              </Button>
             </Grid2>
           </Box>
         </Paper>
       </Box>
-      <Results calculatedData={calculationOutput} />
+      <Box mt={5}>
+        <Typography variant="h5">
+          Qantas Points Earned: {calculationOutput?.qantasPoints?.toLocaleString()}
+        </Typography>
+        <Typography variant="h5">
+          Status Credits Earned: {calculationOutput?.statusCredits?.toLocaleString()}
+        </Typography>
+      </Box>
+      {calculationOutput &&
+        <Accordion sx={{ '&:before':{height:'0px'}}}>
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            aria-controls="panel1-content"
+            id="panel1-header"
+          >
+            <Typography component="span" width='100%' textAlign='center'>
+              Expand to see detailed calculation per segment
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <Results calculatedData={calculationOutput} />
+          </AccordionDetails>
+        </Accordion>
+      }
     </Grid2>
   );
 }
