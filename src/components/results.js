@@ -197,7 +197,7 @@ const SegmentTableRow = ({ segmentResult }) => {
       </TableCell>
       <TableCell align="right">
         <RuleDisplay
-          ruleName={segmentResult.rule.name}
+          ruleName={segmentResult.ruleName}
           ruleUrl={segmentResult.ruleUrl}
           notes={segmentResult.notes}
         />

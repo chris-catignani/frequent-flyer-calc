@@ -73,7 +73,7 @@ const calculateSegment = (segment, eliteStatus) => {
   };
 
   return {
-    rule,
+    ruleName: rule.name,
     ruleUrl: calculation.ruleUrl,
     fareEarnCategory,
     notes: calculation.notes,

@@ -138,7 +138,7 @@ export const REGION_DISPLAY = {
   northernEurope: "Northern Europe",
   westernEurope: "Western Europe",
   northernAfrica: "Northern Africa",
-  usaEastCoast: "East Coast USA/Canada	",
+  usaEastCoast: "East Coast USA/Canada",
   usaWestCoast: "West Coast USA/Canada",
   usaNycBos: "New York and Boston USA",
   middleEast: "Middle East",
