@@ -127,14 +127,14 @@ export default function Home() {
     if (segments.length === 1) {
       return (
         // Dummy icon to maintain space for when we show icons
-        <IconButton disabled sx={{ visibility: 'hidden' }}>
+        <IconButton disabled sx={{ visibility: 'hidden', pr: 0 }}>
           <Clear />
         </IconButton>
       );
     } else {
       return (
         <IconButton
-          sx={{ mb: 2 }}
+          sx={{ mb: 3, pr: 0, '&:hover': { backgroundColor: 'inherit', boxShadow: 'none' } }}
           onClick={() => removeSegmentPressed(segmentIdx)}
         >
           <Clear />
@@ -169,24 +169,31 @@ export default function Home() {
       </Typography>
 
       <Box mt={3}>
-        <Grid2
-          container
-          direction="row"
-          sx={{
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-          }}
-        >
-          <Typography>Enter your itinerary segments below:</Typography>
-          <Box></Box>
-          <EliteStatusInput
-            eliteStatus={eliteStatus}
-            onChange={(value) => eliteStatusSelected(value)}
-          />
-        </Grid2>
-
         <Paper elevation={3}>
-          <Box mt={2} p={2}>
+          <Grid2
+            container
+            direction="row"
+            p={2}
+            sx={{
+              justifyContent: "space-between",
+            }}
+          >
+            <ToggleButtonGroup
+              color="primary"
+              size="small"
+              value={tripType}
+              exclusive
+              onChange={(event) => tripTypeToggled(event.target.value)}
+            >
+              <ToggleButton value="one way">One Way</ToggleButton>
+              <ToggleButton value="return">Return</ToggleButton>
+            </ToggleButtonGroup>
+            <EliteStatusInput
+              eliteStatus={eliteStatus}
+              onChange={(value) => eliteStatusSelected(value)}
+          />
+          </Grid2>
+          <Box p={2}>
             {segments.map((segment, segmentIdx) => {
               return (
                 <Grid2 container key={segmentIdx}>
@@ -212,16 +219,9 @@ export default function Home() {
                 alignItems: "center",
               }}
             >
-              <ToggleButtonGroup
-                color="primary"
-                size="small"
-                value={tripType}
-                exclusive
-                onChange={(event) => tripTypeToggled(event.target.value)}
-              >
-                <ToggleButton value="one way">One Way</ToggleButton>
-                <ToggleButton value="return">Return</ToggleButton>
-              </ToggleButtonGroup>
+              <Button variant="contained" onClick={addSegmentPressed}>
+                Add Segment
+              </Button>
               <Fab
                 variant="extended"
                 color="primary"
@@ -229,7 +229,7 @@ export default function Home() {
               >
                 Calculate
               </Fab>
-              <Button variant="contained" onClick={addSegmentPressed}>
+              <Button disabled variant="contained" sx={{ visibility: 'hidden' }}>
                 Add Segment
               </Button>
             </Grid2>
