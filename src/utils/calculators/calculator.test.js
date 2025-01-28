@@ -380,6 +380,44 @@ describe("calculate - partner rules", () => {
           [Segment.fromString(segmentString)],
           eliteStatus
         );
+        expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
+          expectedBaseQantasPoints
+        );
+        expect(results.qantasPoints).toBe(
+          expectedBaseQantasPoints + expectedEliteBonus
+        );
+      }
+    );
+  });
+
+  describe("calculate - elite status only applies to certain airlines", () => {
+    test.each([
+      ["qf d syd sin", "Silver", 8450, 0.5 * 5200],
+      ["aa d syd sin", "Silver", 5000, 0.5 * 4000],
+
+      ["jq Flex sin bkk", "Silver", 850, 0.5 * 850],
+      ["3k Flex sin bkk", "Silver", 850, 0.5 * 850],
+      ["gk Flex sin bkk", "Silver", 850, 0.5 * 850],
+
+      ["cx d syd sin", "Silver", 5000, 0],
+      ["jl d syd sin", "Silver", 5000, 0],
+      ["ba d syd sin", "Silver", 5000, 0],
+      ["ib d syd sin", "Silver", 5000, 0],
+    ])(
+      `Testing elite status is applied for %s %s level`,
+      (
+        segmentString,
+        eliteStatus,
+        expectedBaseQantasPoints,
+        expectedEliteBonus
+      ) => {
+        const results = calculate(
+          [Segment.fromString(segmentString)],
+          eliteStatus
+        );
+        expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
+          expectedBaseQantasPoints
+        );
         expect(results.qantasPoints).toBe(
           expectedBaseQantasPoints + expectedEliteBonus
         );
