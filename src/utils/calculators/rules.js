@@ -1,6 +1,7 @@
 import { calcDistance, getAirport } from '@/utils/airports'
 import { isInRegion } from './regions'
 import { QantasEarnings } from '@/models/qantasEarnings'
+import { REGION_DISPLAY } from '@/models/constants'
 
 /**
  * All rules should implement these methods
@@ -178,6 +179,24 @@ _getOriginAndDestination(segment) {
     return {origin, destination}
   }
 
+  _buildCalculationNotes(origin, destination) {
+    const _buildCalculationNotesInner = (location) => {
+      if (location.type === "airport") {
+        return `${location.value} airport`;
+      } else if (location.type === "city") {
+        return location.value
+      } else if (location.type === 'country') {
+        return location.value
+      } else if (location.type === 'region') {
+        return REGION_DISPLAY[location.value] || location.value
+      } else {
+        throw new Error(`Cannot create calcluation notes for unknown type ${location.type}`)
+      }
+    }
+
+    return _buildCalculationNotesInner(origin) + ' to ' + _buildCalculationNotesInner(destination)
+  }
+
   applies(segment, fareEarnCategory) {
     const {origin, destination} = this._getOriginAndDestination(segment)
     if (!origin || !destination) {
@@ -194,10 +213,10 @@ _getOriginAndDestination(segment) {
 
     return this.buildCalculationReturn(
       fareEarnCategory,
-      `${origin.value} ${origin.type} to ${destination.value} ${destination.type}`,
+      this._buildCalculationNotes(origin, destination),
       earnings[fareEarnCategory].qantasPoints,
       earnings[fareEarnCategory].statusCredits
-    )
+    );
   }
 }
 

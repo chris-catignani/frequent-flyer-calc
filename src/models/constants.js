@@ -130,3 +130,19 @@ export const EARN_CATEGORY_DISPLAY = {
   flexibleBusiness: "Flexible Business",
   first: "First",
 };
+
+export const REGION_DISPLAY = {
+  southeastAsia: "Southeast Asia",
+  northeastAsia: "Northeast Asia",
+  southeastEurope: "Southeast Europe",
+  northernEurope: "Northern Europe",
+  westernEurope: "Western Europe",
+  northernAfrica: "Northern Africa",
+  usaEastCoast: "East Coast USA/Canada	",
+  usaWestCoast: "West Coast USA/Canada",
+  usaNycBos: "New York and Boston USA",
+  middleEast: "Middle East",
+  southeastAustralia: "Southeast Australia",
+  hawaii: "Hawaii USA",
+  europe: "Europe",
+};
