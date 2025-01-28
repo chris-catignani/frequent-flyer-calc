@@ -46,12 +46,18 @@ const getIatasForCities = (citiesString) => {
   return airportIatas
 }
 
-// TODO check others here. Move this into airports js
 const countryNameOverrides = {
-  'Cocos Island': 'Cocos (Keeling) Islands',
-  'Republic of Korea': 'South Korea',
-  'Macao': 'Macau',
-}
+  "Cocos Island": "Cocos (Keeling) Islands",
+  "Republic of Korea": "South Korea",
+  "Macao": "Macau",
+  "Timor Lest": "East Timor",
+  "Burkino Faso": "Burkina Faso",
+  "Congo (Democratic Republic of)": "Congo (Kinshasa)",
+  "Guinea Bissau": "Guinea-Bissau",
+  "Ivory Coast": "Cote d'Ivoire",
+  "Republic of Cameroon": "Cameroon",
+  "Sao Tome Principe": "Sao Tome and Principe",
+};
 
 const cityNameOverrides = {
   'Washington DC': 'Washington'
@@ -62,7 +68,7 @@ const regions = {
   northeastAsia: getIatasForCountries('China, Hong Kong, Japan, Macao, Mongolia, North Korea, Republic of Korea, Taiwan'),
   southeastEurope: getIatasForCountries('Greece, Turkey, Cyprus'),
   northernEurope: getIatasForCountries('Finland, Norway, Sweden'),
-  westernEurope: getIatasForCountries('Austria, Belgium, Czech Republic, Germany, Denmark, Spain, France, United Kingdom, Ireland, Italy, Netherlands, Portugal, Switzerland'), 
+  westernEurope: getIatasForCountries('Austria, Belgium, Czech Republic, Germany, Denmark, Spain, France, United Kingdom, Ireland, Italy, Netherlands, Portugal, Switzerland'),
   northernAfrica: getIatasForCountries('Burkino Faso, Algeria, Benin, Cape Verde, Central African Republic, Chad, Congo (Democratic Republic of), Djibouti, Egypt, Equatorial Guinea, Eritrea, Ethiopia, Gambia, Ghana, Guinea, Guinea Bissau. Ivory Coast, Kenya, Liberia, Libya, Mali, Morocco, Niger, Nigeria, Republic of Cameroon, Sao Tome Principe, Senegal, Seychelles, Sierra Leone, Somalia, South Sudan, Sudan, Togo, Tunisia, Uganda'),
   usaEastCoast: new Set([...getIatasForCities('Boston, Charlotte, Chicago, Miami, New York, Orlando, Toronto, Washington DC'), 'ewr']),
   usaWestCoast: getIatasForCities('Las Vegas, Los Angeles, Phoenix, San Francisco, Seattle, Vancouver'),
