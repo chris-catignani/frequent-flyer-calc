@@ -349,5 +349,44 @@ describe("calculate - partner rules", () => {
     }
   );
 
+  describe("calculate - elite status levels", () => {
+    test.each([
+      ["qf e syd sin", "Bronze", 2600, 0 * 2600],
+      ["qf e syd sin", "Silver", 2600, 0.5 * 2600],
+      ["qf e syd sin", "Gold", 2600, 0.75 * 2600],
+      ["qf e syd sin", "Platinum", 2600, 1 * 2600],
+      ["qf e syd sin", "Platinum One", 2600, 1 * 2600],
+
+      ["qf g syd sin", "Bronze", 3900, 0 * 3900],
+      ["qf g syd sin", "Silver", 3900, 0.5 * 3900],
+      ["qf g syd sin", "Gold", 3900, 0.75 * 3900],
+      ["qf g syd sin", "Platinum", 3900, 1 * 3900],
+      ["qf g syd sin", "Platinum One", 3900, 1 * 3900],
+
+      ["qf d syd sin", "Bronze", 8450, 0 * 5200],
+      ["qf d syd sin", "Silver", 8450, 0.5 * 5200],
+      ["qf d syd sin", "Gold", 8450, 0.75 * 5200],
+      ["qf d syd sin", "Platinum", 8450, 1 * 5200],
+      ["qf d syd sin", "Platinum One", 8450, 1 * 5200],
+    ])(
+      `Testing elite status is applied for %s %s level`,
+      (
+        segmentString,
+        eliteStatus,
+        expectedBaseQantasPoints,
+        expectedEliteBonus
+      ) => {
+        const results = calculate(
+          [Segment.fromString(segmentString)],
+          eliteStatus
+        );
+        expect(results.qantasPoints).toBe(
+          expectedBaseQantasPoints + expectedEliteBonus
+        );
+      }
+    );
+  });
+
   // TODO specific test for srilanka and malaysia?
+  // TODO min points calc?
 });
