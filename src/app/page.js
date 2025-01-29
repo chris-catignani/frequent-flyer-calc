@@ -191,7 +191,7 @@ export default function Home() {
             <EliteStatusInput
               eliteStatus={eliteStatus}
               onChange={(value) => eliteStatusSelected(value)}
-          />
+            />
           </Grid2>
           <Box p={2}>
             {segments.map((segment, segmentIdx) => {
@@ -228,7 +228,11 @@ export default function Home() {
               >
                 Calculate
               </Fab>
-              <Button disabled variant="contained" sx={{ visibility: 'hidden' }}>
+              <Button
+                disabled
+                variant="contained"
+                sx={{ visibility: "hidden" }}
+              >
                 Add Segment
               </Button>
             </Grid2>
@@ -237,21 +241,23 @@ export default function Home() {
       </Box>
       <Box mt={5}>
         <Typography variant="h5">
-          Qantas Points Earned: {calculationOutput?.qantasPoints?.toLocaleString()}
+          Qantas Points Earned:{" "}
+          {calculationOutput?.qantasPoints?.toLocaleString()}
         </Typography>
         <Typography variant="h5">
-          Status Credits Earned: {calculationOutput?.statusCredits?.toLocaleString()}
+          Status Credits Earned:{" "}
+          {calculationOutput?.statusCredits?.toLocaleString()}
         </Typography>
       </Box>
       <ErrorDisplay calculationOutput={calculationOutput} />
-      {calculationOutput &&
-        <Accordion sx={{ '&:before':{height:'0px'}}}>
+      {calculationOutput && (
+        <Accordion sx={{ "&:before": { height: "0px" } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             aria-controls="panel1-content"
             id="panel1-header"
           >
-            <Typography component="span" width='100%' textAlign='center'>
+            <Typography component="span" width="100%" textAlign="center">
               Expand to see detailed calculation per segment
             </Typography>
           </AccordionSummary>
@@ -259,17 +265,34 @@ export default function Home() {
             <Results calculatedData={calculationOutput} />
           </AccordionDetails>
         </Accordion>
-      }
+      )}
       <Typography mt={5}>
-        Calculations based on Qantas earnings tables as of January 2025
+        Calculations based on{" "}
+        <a
+          href="https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html"
+          target="_blank"
+        >
+          Qantas/Jetstar
+        </a>{" "}
+        and{" "}
+        <a
+          href="https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html"
+          target="_blank"
+        >
+          Partner
+        </a>{" "}
+        earning tables as of January 2025.
       </Typography>
-      <Box mt={5}>
-        <Typography>Currently unsupported items:</Typography>
-        <Typography> - Jetstar connecting flights in New Zealand (all else is fine)</Typography>
-        <Typography> - Japan Airlines domestic flights (international is fine)</Typography>
-        <Typography> - Autocomplete for airport input, only accepts iata codes for now</Typography>
-        <Typography> - All Non-oneworld partners are not implemented</Typography>
-      </Box>
+      <Typography>
+        This webpage is not affiliated with Qantas Airlines.
+      </Typography>
+      <Typography mt={5}>
+        Currently unsupported items:
+        <br/>- Jetstar connecting flights in New Zealand (all else is fine)
+        <br/>- Japan Airlines domestic flights (international is fine)
+        <br/>- Autocomplete for airport input, only accepts iata codes for now
+        <br/>- All Non-oneworld partners are not implemented
+      </Typography>
     </Grid2>
   );
 }
