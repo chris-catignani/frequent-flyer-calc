@@ -1,4 +1,4 @@
-import { AIRLINES, EARN_CATEGORY_DISPLAY, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
+import { AIRLINES, EARN_CATEGORY_DISPLAY, EARN_CATEGORY_URLS, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
 import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
@@ -55,6 +55,15 @@ const getFareClassDisplay = (fareClass) => {
   }
 }
 
+const getEarnCategoryDisplay = (airline, earnCategory) => {
+  return (
+    <a href={EARN_CATEGORY_URLS[airline]} target="_blank">
+      {EARN_CATEGORY_DISPLAY[earnCategory]}
+    </a>
+  );
+
+}
+
 const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
   const {
     qantasPointsBreakdown: { basePoints, eliteBonus, minPoints, totalEarned },
@@ -69,7 +78,7 @@ const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
         alignItems="center"
         pb={2}
       >
-        <Typography mb={1} sx={{ textDecoration: "underline" }}>
+        <Typography mb={3} sx={{ textDecoration: "underline" }}>
           Total Points: {totalEarned?.toLocaleString()}
         </Typography>
         <Typography lineHeight={1}>
@@ -114,18 +123,18 @@ const QantasPointsDisplay = ({ segmentResult }) => {
   );
 }
 
-const RuleDialog = ({ open, onClose, notes }) => {
+const RuleDialog = ({ open, onClose, ruleName, ruleUrl, notes }) => {
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Calculation notes</DialogTitle>
       <Grid2
         container
         direction="column"
-        justifyContent="center"
-        alignItems="center"
-        m={2}
+        mx={2}
+        mb={2}
       >
-        <Typography>{notes}</Typography>
+        <Typography>Rule used: <a href={ruleUrl} target="_blank">{ruleName}</a></Typography>
+        <Typography>Rule specifics: {notes}</Typography>
       </Grid2>
     </Dialog>
   );
@@ -150,7 +159,7 @@ const RuleDisplay = ({ ruleName, ruleUrl, notes }) => {
       <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
         <InfoIcon />
       </IconButton>
-      <RuleDialog open={open} onClose={handleClose} notes={notes} />
+      <RuleDialog open={open} onClose={handleClose} ruleUrl={ruleUrl} ruleName={ruleName} notes={notes} />
     </Grid2>
   );
 };
@@ -193,7 +202,7 @@ const SegmentTableRow = ({ segmentResult }) => {
         {getFareClassDisplay(segment.fareClass)}
       </TableCell>
       <TableCell align="right">
-        {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory]}
+        {getEarnCategoryDisplay(segment.airline, segmentResult.fareEarnCategory)}
       </TableCell>
       <TableCell align="right">
         <RuleDisplay

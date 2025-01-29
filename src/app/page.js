@@ -213,10 +213,9 @@ export default function Home() {
             <Grid2
               container
               direction="row"
-              mt={1}
               sx={{
                 justifyContent: "space-between",
-                alignItems: "center",
+                alignItems: "flex-start",
               }}
             >
               <Button variant="contained" onClick={addSegmentPressed}>

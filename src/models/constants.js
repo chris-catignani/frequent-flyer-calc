@@ -47,6 +47,29 @@ export const WEBSITE_EARN_CATEGORIES = {
   qf: ["EGLMNOQSV	-	BHKY	T	R	W	-	DI	CJ	-", "ENOQ	GKLMSV	BHY	T	R	W	I	D	CJ	AF"],
 };
 
+export const EARN_CATEGORY_URLS = {
+  as: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#alaska-airlines",
+  aa: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#american-airlines",
+  ba: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#british-airways",
+  cx: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#cathay-pacific",
+  ay: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#finnair",
+  ib: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#iberia",
+  i2: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#iberia",
+  jl: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#japan-airlines",
+  nu: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#japan-airlines",
+  mh: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#malaysia-airlines",
+  qr: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#qatar-airways",
+  at: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#royal-air-maroc",
+  rj: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#royal-jordanian",
+  ul: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#srilankan-airlines",
+
+  qf: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#qantas",
+  jq: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar",
+  "3k": "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar",
+  gk: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar",
+};
+
+
 export const QANTAS_DOMESTIC_FARE_CLASSES = {
   RedeDeal: "discountEconomy",
   Flex: "flexibleEconomy",
