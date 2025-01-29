@@ -1,3 +1,4 @@
+import { fetchDataFromQantas } from "./qantasAPI/qantasAPIClient"
 import { getPartnerEarnCategory } from "./partner/partnerEarnCategories"
 import { getPartnerRules } from "./partner/partnerRules"
 import { getQantasEarnCategory } from "./qantas/qantasEarnCategories"
@@ -16,7 +17,7 @@ const eliteStatusBonusMultiples = {
   'Platinum One': 1.00,
 }
 
-export const calculate = (segments, eliteStatus) => {
+export const calculate = async (segments, eliteStatus, compareWithQantasCalc=false) => {
   const retval = {
     segmentResults: [],
     containsErrors: false,
@@ -28,9 +29,15 @@ export const calculate = (segments, eliteStatus) => {
     try {
       const segmentResult = calculateSegment(segment, eliteStatus);
 
+      let qantasCalcSegmentResult = {}
+      if (compareWithQantasCalc) {
+        qantasCalcSegmentResult = await getDataFromQantasCalc(segment, eliteStatus);
+      }
+
       retval.segmentResults.push({
         segment,
-        ...segmentResult
+        ...segmentResult,
+        qantasCalcSegmentResult,
       });
       retval.qantasPoints += segmentResult.qantasPoints;
       retval.statusCredits += segmentResult.statusCredits;
@@ -43,7 +50,19 @@ export const calculate = (segments, eliteStatus) => {
     }
   }
 
+  console.log(retval)
   return retval
+}
+
+const getDataFromQantasCalc = async (segment, eliteStatus) => {
+  let fareEarnCategory = null
+  if (segment.airline in qantasRules) {
+    fareEarnCategory = getQantasEarnCategory(segment);
+  } else {
+    fareEarnCategory = getPartnerEarnCategory(segment);
+  }
+
+  return await fetchDataFromQantas(segment, eliteStatus, fareEarnCategory);
 }
 
 const calculateSegment = (segment, eliteStatus) => {

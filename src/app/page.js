@@ -3,7 +3,7 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Fab, Grid2, IconButton, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Grid2, IconButton, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { ExpandMore, Clear } from "@mui/icons-material";
 import { Results } from '@/components/results';
@@ -15,6 +15,8 @@ export default function Home() {
   const [eliteStatus, setEliteStatus] = useState('Bronze')
   const [segments, setSegments] = useState([new Segment('', '', '', '')])
   const [tripType, setTripType] = useState("one way")
+
+  const [isCalculating, setIsCalculating] = useState(false)
   const [calculationOutput, setCalculationOutput] = useState();
 
   const validateInput = () => {
@@ -52,7 +54,9 @@ export default function Home() {
     return errors;
   }
 
-  const doCalculation = (theSegments, theEliteStatus, theTripType) => {
+  const doCalculation = async (theSegments, theEliteStatus, theTripType) => {
+    setIsCalculating(true)
+
     if (theTripType === "return") {
       const returnSegments = [...theSegments];
 
@@ -64,10 +68,12 @@ export default function Home() {
         )
       }
 
-      setCalculationOutput(calculate(returnSegments, theEliteStatus));
+      setCalculationOutput(await calculate(returnSegments, theEliteStatus, false));
     } else {
-      setCalculationOutput(calculate(theSegments, theEliteStatus));
+      setCalculationOutput(await calculate(theSegments, theEliteStatus, false));
     }
+
+    setIsCalculating(false);
   };
 
   const calculatePressed = () => {
@@ -221,13 +227,15 @@ export default function Home() {
               <Button variant="contained" onClick={addSegmentPressed}>
                 Add Segment
               </Button>
-              <Fab
-                variant="extended"
-                color="primary"
+              <Button
+                variant="contained"
+                size="large"
                 onClick={calculatePressed}
+                loading={isCalculating}
+                sx={{ "borderRadius": "28px", "right": "15px" }}
               >
                 Calculate
-              </Fab>
+              </Button>
               <Button
                 disabled
                 variant="contained"
@@ -288,10 +296,10 @@ export default function Home() {
       </Typography>
       <Typography mt={5}>
         Currently unsupported items:
-        <br/>- Jetstar connecting flights in New Zealand (all else is fine)
-        <br/>- Japan Airlines domestic flights (international is fine)
-        <br/>- Autocomplete for airport input, only accepts iata codes for now
-        <br/>- All Non-oneworld partners are not implemented
+        <br />- Jetstar connecting flights in New Zealand (all else is fine)
+        <br />- Japan Airlines domestic flights (international is fine)
+        <br />- Autocomplete for airport input, only accepts iata codes for now
+        <br />- All Non-oneworld partners are not implemented
       </Typography>
     </Grid2>
   );
