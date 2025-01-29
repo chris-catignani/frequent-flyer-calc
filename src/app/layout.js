@@ -6,6 +6,7 @@ import '@fontsource/roboto/700.css';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
+import { Analytics } from "@vercel/analytics/react";
 import theme from '../theme';
 
 import "./globals.css";
@@ -26,6 +27,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.variable}>
+        <Analytics/>
         <AppRouterCacheProvider>
           <ThemeProvider theme={theme}>
             {children}

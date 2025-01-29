@@ -18,6 +18,7 @@
     "@mui/material": "^6.4.1",
     "@mui/material-nextjs": "^6.3.1",
     "@nwpr/airport-codes": "^3.0.3",
+    "@vercel/analytics": "^1.4.1",
     "great-circle": "^0.2.8",
     "next": "15.1.4",
     "react": "^19.0.0",
