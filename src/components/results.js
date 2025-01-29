@@ -1,9 +1,10 @@
 import { AIRLINES, EARN_CATEGORY_DISPLAY, EARN_CATEGORY_URLS, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
-import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert } from "@mui/material";
+import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert, Tooltip } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
+import { CheckCircle } from "@mui/icons-material";
 
-export const Results = ({ calculatedData }) => {
+export const Results = ({ calculatedData, compareWithQantasCalc }) => {
   if (!calculatedData) {
     return <></>;
   }
@@ -18,11 +19,15 @@ export const Results = ({ calculatedData }) => {
       <TableContainer>
         <Table>
           <TableHead>
-            <SegmentTableHeader />
+            <SegmentTableHeader compareWithQantasCalc={compareWithQantasCalc} />
           </TableHead>
           <TableBody>
             {calculatedData.segmentResults.map((segmentResult, segmentIdx) => (
-              <SegmentTableRow key={segmentIdx} segmentResult={segmentResult} />
+              <SegmentTableRow
+                key={segmentIdx}
+                segmentResult={segmentResult}
+                compareWithQantasCalc={compareWithQantasCalc}
+              />
             ))}
           </TableBody>
         </Table>
@@ -31,16 +36,19 @@ export const Results = ({ calculatedData }) => {
   );
 };
 
-const SegmentTableHeader = () => {
+const SegmentTableHeader = ({ compareWithQantasCalc }) => {
   return (
     <TableRow>
-      <TableCell>Segment Route</TableCell>
+      <TableCell>Segment<br/>Route</TableCell>
       <TableCell align="right">Airline</TableCell>
       <TableCell align="right">Qantas Points</TableCell>
-      <TableCell align="right">Status Credits</TableCell>
+      <TableCell align="right">Status<br/>Credits</TableCell>
       <TableCell align="right">Fare Class</TableCell>
-      <TableCell align="right">Earning Category</TableCell>
+      <TableCell align="right">Earning<br/>Category</TableCell>
       <TableCell align="right">Earning Rule</TableCell>
+      { compareWithQantasCalc && (
+        <TableCell align="right">Matches<br/>Qantas</TableCell>
+      )}
     </TableRow>
   );
 };
@@ -164,7 +172,18 @@ const RuleDisplay = ({ ruleName, ruleUrl, notes }) => {
   );
 };
 
-const SegmentTableRow = ({ segmentResult }) => {
+const MatchesQantasSegment = ({ segmentResult }) => { // eslint-disable-line
+  // TODO this
+  return (
+    <Tooltip title="Matches Qantas Calculator">
+      <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+        <CheckCircle color="success" />
+      </IconButton>
+    </Tooltip>
+  )
+};
+
+const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   const { segment, error } = segmentResult;
 
   if (error) {
@@ -179,6 +198,7 @@ const SegmentTableRow = ({ segmentResult }) => {
         <TableCell align="right">{segment.fareClass}</TableCell>
         <TableCell align="right">n/a</TableCell>
         <TableCell align="right">n/a</TableCell>
+        { compareWithQantasCalc && (<TableCell align="right">n/a</TableCell> )}
         <TableCell align="right">
           <Alert severity="error">{error.message}</Alert>
         </TableCell>
@@ -202,7 +222,10 @@ const SegmentTableRow = ({ segmentResult }) => {
         {getFareClassDisplay(segment.fareClass)}
       </TableCell>
       <TableCell align="right">
-        {getEarnCategoryDisplay(segment.airline, segmentResult.fareEarnCategory)}
+        {getEarnCategoryDisplay(
+          segment.airline,
+          segmentResult.fareEarnCategory
+        )}
       </TableCell>
       <TableCell align="right">
         <RuleDisplay
@@ -211,6 +234,11 @@ const SegmentTableRow = ({ segmentResult }) => {
           notes={segmentResult.notes}
         />
       </TableCell>
+      {compareWithQantasCalc && (
+        <TableCell align="right">
+          <MatchesQantasSegment segmentResult={segmentResult} />
+        </TableCell>
+      )}
     </TableRow>
   );
 };

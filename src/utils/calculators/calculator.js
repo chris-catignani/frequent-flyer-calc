@@ -29,15 +29,15 @@ export const calculate = async (segments, eliteStatus, compareWithQantasCalc=fal
     try {
       const segmentResult = calculateSegment(segment, eliteStatus);
 
-      let qantasCalcSegmentResult = {}
+      let qantasAPIResults = {}
       if (compareWithQantasCalc) {
-        qantasCalcSegmentResult = await getDataFromQantasCalc(segment, eliteStatus);
+        qantasAPIResults = await getDataFromQantasCalc(segment, eliteStatus);
       }
 
       retval.segmentResults.push({
         segment,
         ...segmentResult,
-        qantasCalcSegmentResult,
+        qantasAPIResults,
       });
       retval.qantasPoints += segmentResult.qantasPoints;
       retval.statusCredits += segmentResult.statusCredits;
@@ -50,7 +50,6 @@ export const calculate = async (segments, eliteStatus, compareWithQantasCalc=fal
     }
   }
 
-  console.log(retval)
   return retval
 }
 

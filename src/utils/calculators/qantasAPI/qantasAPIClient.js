@@ -25,6 +25,7 @@ export const fetchDataFromQantas = async (segment, eliteStatus, fareEarnCategory
       retval.error = new Error('Failed to parse a matching Qantas result')
     } else {
       retval.qantasData = {
+        qantasPoints: result.earn,
         basePoints: result.base,
         eliteBonus: result.cabin_bonus,
         statusCredits: result.status_credits,

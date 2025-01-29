@@ -3,11 +3,13 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Grid2, IconButton, Paper, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
-import { ExpandMore, Clear } from "@mui/icons-material";
+import { ExpandMore, Clear, CheckCircle, Cancel } from "@mui/icons-material";
 import { Results } from '@/components/results';
 import { getAirport } from '@/utils/airports';
+
+const FLAG_ENABLE_QANTAS_API = false
 
 export default function Home() {
 
@@ -15,6 +17,7 @@ export default function Home() {
   const [eliteStatus, setEliteStatus] = useState('Bronze')
   const [segments, setSegments] = useState([new Segment('', '', '', '')])
   const [tripType, setTripType] = useState("one way")
+  const [compareWithQantasCalc, setCompareWithQantasCalc] = useState(false)
 
   const [isCalculating, setIsCalculating] = useState(false)
   const [calculationOutput, setCalculationOutput] = useState();
@@ -54,8 +57,9 @@ export default function Home() {
     return errors;
   }
 
-  const doCalculation = async (theSegments, theEliteStatus, theTripType) => {
+  const doCalculation = async (theSegments, theEliteStatus, theTripType, theCompareWithQantasCalc) => {
     setIsCalculating(true)
+    setCalculationOutput(null)
 
     if (theTripType === "return") {
       const returnSegments = [...theSegments];
@@ -68,9 +72,13 @@ export default function Home() {
         )
       }
 
-      setCalculationOutput(await calculate(returnSegments, theEliteStatus, false));
+      setCalculationOutput(
+        await calculate(returnSegments, theEliteStatus, theCompareWithQantasCalc)
+      );
     } else {
-      setCalculationOutput(await calculate(theSegments, theEliteStatus, false));
+      setCalculationOutput(
+        await calculate(theSegments, theEliteStatus, theCompareWithQantasCalc)
+      );
     }
 
     setIsCalculating(false);
@@ -82,7 +90,7 @@ export default function Home() {
       setInputErrors(errors);
     } else {
       setInputErrors({});
-      doCalculation(segments, eliteStatus, tripType);
+      doCalculation(segments, eliteStatus, tripType, compareWithQantasCalc);
     }
   }
 
@@ -116,7 +124,7 @@ export default function Home() {
 
     // if we have calculated data, recalculate with new elite status level
     if (calculationOutput && validateInput()) {
-      doCalculation(segments, newEliteStatus, tripType)
+      doCalculation(segments, newEliteStatus, tripType, compareWithQantasCalc)
     }
   }
 
@@ -125,7 +133,16 @@ export default function Home() {
 
     // if we have calculated data, recalculate with new return/oneway status
     if (calculationOutput && validateInput()) {
-      doCalculation(segments, eliteStatus, newTripType);
+      doCalculation(segments, eliteStatus, newTripType, compareWithQantasCalc);
+    }
+  }
+
+  const setCompareWithQantasCalcToggled = (newCompareWithQantasCalc) => {
+    setCompareWithQantasCalc(newCompareWithQantasCalc);
+
+    // if we have calculated data, recalculate with new return/oneway status
+    if (calculationOutput && validateInput()) {
+      doCalculation(segments, eliteStatus, tripType, newCompareWithQantasCalc);
     }
   }
 
@@ -160,6 +177,78 @@ export default function Home() {
     </Alert>
     )
   }
+
+  const MatchesQantasAPIIcon = ({expectedValue, fieldToCheck}) => {
+    if (!compareWithQantasCalc || !calculationOutput || isCalculating) {
+      return <></>
+    }
+
+    let sumOfQantasCalc = 0
+    calculationOutput.segmentResults.forEach((segmentResult) => {
+      sumOfQantasCalc +=
+        segmentResult.qantasAPIResults?.qantasData?.[fieldToCheck];
+    })
+
+    if (expectedValue === sumOfQantasCalc) {
+      return (
+        <Tooltip title="Matches Qantas Calculator">
+          <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+            <CheckCircle color="success" />
+          </IconButton>
+        </Tooltip>
+      );
+    } else {
+      return (
+        <Tooltip title="Does not match Qantas Calculator">
+          <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+            <Cancel color="error" />
+          </IconButton>
+        </Tooltip>
+      );
+    }
+  }
+
+  const TotalQantasPointsEarned = ({ calculationOutput }) => {
+    return (
+      <Grid2
+        container
+        justifyContent="center"
+        alignItems="center"
+        spacing={1}
+        direction={"row"}
+      >
+        <Typography variant="h5">
+          Qantas Points Earned:{" "}
+          {calculationOutput?.qantasPoints?.toLocaleString()}
+        </Typography>
+        <MatchesQantasAPIIcon
+          expectedValue={calculationOutput?.qantasPoints}
+          fieldToCheck={"qantasPoints"}
+        />
+      </Grid2>
+    );
+  };
+
+  const TotalStatusCreditsEarned = ({ calculationOutput }) => {
+    return (
+      <Grid2
+        container
+        justifyContent="center"
+        alignItems="center"
+        spacing={1}
+        direction={"row"}
+      >
+        <Typography variant="h5">
+          Status Credits Earned:{" "}
+          {calculationOutput?.statusCredits?.toLocaleString()}
+        </Typography>
+        <MatchesQantasAPIIcon
+          expectedValue={calculationOutput?.statusCredits}
+          fieldToCheck={"statusCredits"}
+        />
+      </Grid2>
+    );
+  };
 
   return (
     <Grid2
@@ -232,30 +321,40 @@ export default function Home() {
                 size="large"
                 onClick={calculatePressed}
                 loading={isCalculating}
-                sx={{ "borderRadius": "28px", "right": "15px" }}
+                sx={{ borderRadius: "28px" }}
               >
                 Calculate
               </Button>
-              <Button
-                disabled
-                variant="contained"
-                sx={{ visibility: "hidden" }}
+              <Grid2
+                container
+                direction="row"
+                sx={{
+                  alignItems: "center",
+                  visibility: FLAG_ENABLE_QANTAS_API ? "" : "hidden"
+                }}
               >
-                Add Segment
-              </Button>
+                <Switch
+                  checked={compareWithQantasCalc}
+                  onChange={(event) =>
+                    setCompareWithQantasCalcToggled(event.target.checked)
+                  }
+                  disabled={!FLAG_ENABLE_QANTAS_API}
+                />
+                <Tooltip title="Compare results with the Qantas website calculator">
+                  <Typography>
+                    Compare With
+                    <br />
+                    Qantas Calculator
+                  </Typography>
+                </Tooltip>
+              </Grid2>
             </Grid2>
           </Box>
         </Paper>
       </Box>
       <Box mt={5}>
-        <Typography variant="h5">
-          Qantas Points Earned:{" "}
-          {calculationOutput?.qantasPoints?.toLocaleString()}
-        </Typography>
-        <Typography variant="h5">
-          Status Credits Earned:{" "}
-          {calculationOutput?.statusCredits?.toLocaleString()}
-        </Typography>
+        <TotalQantasPointsEarned calculationOutput={calculationOutput} />
+        <TotalStatusCreditsEarned calculationOutput={calculationOutput} />
       </Box>
       <ErrorDisplay calculationOutput={calculationOutput} />
       {calculationOutput && (
@@ -270,7 +369,10 @@ export default function Home() {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Results calculatedData={calculationOutput} />
+            <Results
+              calculatedData={calculationOutput}
+              compareWithQantasCalc={compareWithQantasCalc}
+            />
           </AccordionDetails>
         </Accordion>
       )}
