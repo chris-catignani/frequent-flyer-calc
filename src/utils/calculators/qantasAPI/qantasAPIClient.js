@@ -15,7 +15,16 @@ export const fetchDataFromQantas = async (segment, eliteStatus, fareEarnCategory
   const retval = {};
 
   try {
-    const qantasData = await fetch(buildFetchUrl(segment, eliteStatus));
+    const url =
+      "/api/qantas?" +
+      new URLSearchParams({
+        airline: segment.airline,
+        fromIata: segment.fromAirport.iata,
+        toIata: segment.toAirport.iata,
+        eliteStatus
+      }).toString();
+
+    const qantasData = await fetch(url);
     const qantasJson = await qantasData.json();
 
     if(qantasJson.errorMessage) {
@@ -43,25 +52,4 @@ export const fetchDataFromQantas = async (segment, eliteStatus, fareEarnCategory
   }
 
   return retval
-};
-
-// Build the request url, e.g.
-// https://api.services.qantasloyalty.com/earnquote/v1/rewards?fares=AA_LHRJFK&tiers=Bronze&date=2025-01-29
-const buildFetchUrl = (segment, eliteStatus) => {
-  const date = new Date();
-  const qantasUrl = new URL(
-    "https://api.services.qantasloyalty.com/earnquote/v1/rewards"
-  );
-
-  qantasUrl.searchParams.append(
-    "fares",
-    segment.airline.toUpperCase() + "_" + segment.fromAirport.iata + segment.toAirport.iata
-  );
-  qantasUrl.searchParams.append("tiers", eliteStatus);
-  qantasUrl.searchParams.append(
-    "date",
-    date.getFullYear() + "-" + date.getMonth() + 1 + "-" + date.getDate()
-  );
-
-  return qantasUrl.href;
 };

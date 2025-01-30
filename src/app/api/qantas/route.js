@@ -1,0 +1,33 @@
+// Qantas API endpoint
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  const url = buildFQantasUrl(
+    searchParams.get('airline'),
+    searchParams.get('fromIata'),
+    searchParams.get('toIata'),
+    searchParams.get('eliteStatus')
+  );
+  const resp = await fetch(url);
+  return new Response(resp.body);
+}
+
+// Build the request url, e.g.
+// https://api.services.qantasloyalty.com/earnquote/v1/rewards?fares=AA_LHRJFK&tiers=Bronze&date=2025-01-29
+function buildFQantasUrl(airline, fromIata, toIata, eliteStatus){
+  const date = new Date();
+  const qantasUrl = new URL(
+    "https://api.services.qantasloyalty.com/earnquote/v1/rewards"
+  );
+
+  qantasUrl.searchParams.append(
+    "fares",
+    airline.toUpperCase() + "_" + fromIata.toUpperCase() + toIata.toUpperCase()
+  );
+  qantasUrl.searchParams.append("tiers", eliteStatus);
+  qantasUrl.searchParams.append(
+    "date",
+    date.getFullYear() + "-" + date.getMonth() + 1 + "-" + date.getDate()
+  );
+
+  return qantasUrl.href;
+};

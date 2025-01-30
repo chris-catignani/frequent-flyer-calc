@@ -11,7 +11,7 @@ import { ResultsSummary } from '@/components/resultsSummary';
 import { Segment } from '@/models/segment';
 import { SegmentInput } from '@/models/segmentInput';
 
-const FLAG_ENABLE_QANTAS_API = false
+const FLAG_ENABLE_QANTAS_API = true
 
 export default function Home() {
 
