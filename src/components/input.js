@@ -1,4 +1,4 @@
-import { AIRLINES, JETSTAR_AIRLINES, JETSTAR_FARE_CLASS_DISPLAY, JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
+import { AIRLINES, JETSTAR_AIRLINES, JETSTAR_FARE_CLASS_DISPLAY, JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_GRP_AIRLINES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
 import { getAirport } from "@/utils/airports";
 import { Autocomplete, TextField, Grid2 } from "@mui/material";
 
@@ -25,7 +25,7 @@ export const RouteInput = ({segment, errors, onChange}) => {
         error={errors['airline']}
         onChange={(value) => {
           const newSegment = segment.clone({ airline: value });
-          if (shouldClearFareClass(segment, value)) {
+          if (shouldClearFareClassForAirlineChange(segment, value)) {
             newSegment.fareClass = "";
           }
           onChange(newSegment);
@@ -36,7 +36,11 @@ export const RouteInput = ({segment, errors, onChange}) => {
         value={segment.fromAirport}
         error={errors['fromAirport']}
         onChange={(value) => {
-          onChange(segment.clone({ fromAirport: value }));
+          const newSegment = segment.clone({ fromAirport: value });
+          if (shouldClearFareClassForAirportChange(segment.airline, segment.fromAirport, value)) {
+            newSegment.fareClass = "";
+          }
+          onChange(newSegment);
         }}
       />
       <AirportInput
@@ -44,7 +48,11 @@ export const RouteInput = ({segment, errors, onChange}) => {
         value={segment.toAirport}
         error={errors['toAirport']}
         onChange={(value) => {
-          onChange(segment.clone({ toAirport: value }));
+          const newSegment = segment.clone({ toAirport: value });
+          if (shouldClearFareClassForAirportChange(segment.airline, segment.toAirport, value)) {
+            newSegment.fareClass = "";
+          }
+          onChange(newSegment);
         }}
       />
       <FareClassInput
@@ -58,17 +66,29 @@ export const RouteInput = ({segment, errors, onChange}) => {
   );
 }
 
-const shouldClearFareClass = (segment, airline) => {
+const shouldClearFareClassForAirlineChange = (segment, airline) => {
+  // if the airline did not change
   if (airline === segment?.airline) {
     return false
   }
 
-  const qantasAirlines = ['qf', 'jq', '3k', 'gk']
+  // if it used to be a qantas airline, and now it's not.
+  // or both are qantas group airlines
   return (
-    qantasAirlines.includes(airline) !== qantasAirlines.includes(segment?.airline) ||
-    qantasAirlines.includes(airline) && qantasAirlines.includes(segment?.airline)
+    QANTAS_GRP_AIRLINES.has(airline) !== QANTAS_GRP_AIRLINES.has(segment?.airline) ||
+    QANTAS_GRP_AIRLINES.has(airline) && QANTAS_GRP_AIRLINES.has(segment?.airline)
   )
 }
+
+const shouldClearFareClassForAirportChange = (airline, originalAirport, newAirport) => {
+  // ignore in progress typing
+  if(newAirport.length !== 3) {
+    return false
+  }
+
+  // to be lazy, clear if this is a qantas grp airline
+  return QANTAS_GRP_AIRLINES.has(airline);
+};
 
 const AirlineInput = ({ value, error, onChange }) => {
   const airlines = Object.entries(AIRLINES).map(([iata, name]) => {
