@@ -1,5 +1,5 @@
 import { Cancel, CheckCircle, Info } from "@mui/icons-material";
-import { Box, Dialog, DialogTitle, Grid2, IconButton, Tooltip, Typography } from "@mui/material";
+import { Box, Dialog, DialogTitle, Grid2, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 
 export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCalculating }) => {
@@ -10,6 +10,7 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
         <DialogTitle>Qantas Calculator failed to calculate segment</DialogTitle>
         <Grid2 container direction="column" mx={2} mb={2}>
           <Typography>Error returned: {error.message}</Typography>
+          <Typography mt={2}>Expand the results below to see details by segment</Typography>
         </Grid2>
       </Dialog>
     );
@@ -27,6 +28,7 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
           <Typography>{fieldLabel + ": " + expectedValue}</Typography>
           <Typography mt={2}>Qantas Calculator Results:</Typography>
           <Typography>{fieldLabel + ": " + actualValue}</Typography>
+          <Typography mt={2}>Expand the results below to see details by segment</Typography>
         </Grid2>
       </Dialog>
     );
@@ -102,24 +104,24 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
 
     if (qantasAPICalcError) {
       return (
-        <Tooltip title="Qantas Calculator failed to calculate a result">
+        <Box>
           <IconButton onClick={handleClickOpen} sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
             <Info color="warning" />
           </IconButton>
           <MatchesQantasErrorDialog open={open} onClose={handleClose} error={qantasAPICalcError} />
-        </Tooltip>
+        </Box>
       );
     } else if (expectedValue === sumOfQantasAPICalc) {
       return (
-        <Tooltip title="Matches Qantas Calculator">
+        <Box>
           <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
             <CheckCircle color="success" />
           </IconButton>
-        </Tooltip>
+        </Box>
       );
     } else {
       return (
-        <Tooltip title="Does not match Qantas Calculator">
+        <Box>
           <IconButton onClick={handleClickOpen} sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
             <Cancel color="error" />
           </IconButton>
@@ -130,7 +132,7 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
             expectedValue={expectedValue}
             actualValue={sumOfQantasAPICalc}
           />
-        </Tooltip>
+        </Box>
       );
     }
   };
