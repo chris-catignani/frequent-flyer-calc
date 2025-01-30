@@ -143,7 +143,7 @@ const calculateEliteBonusPoints = (eliteStatus, segment, rule, fareEarnCategory)
   const result = rule.calculate(segment, fareEarnCategoryToUse);
   return {
     eligibleFareCategory: fareEarnCategoryToUse,
-    qantasPoints: Math.floor(
+    qantasPoints: Math.ceil(
       result.qantasPoints * eliteStatusBonusMultiples[eliteStatus]
     ),
   };
