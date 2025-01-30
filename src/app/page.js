@@ -5,11 +5,11 @@ import { Segment } from '@/models/segment'
 import { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
-import { ExpandMore, Clear, CheckCircle, Cancel } from "@mui/icons-material";
+import { ExpandMore, Clear, CheckCircle, Cancel, Info } from "@mui/icons-material";
 import { Results } from '@/components/results';
 import { getAirport } from '@/utils/airports';
 
-const FLAG_ENABLE_QANTAS_API = false
+const FLAG_ENABLE_QANTAS_API = true
 
 export default function Home() {
 
@@ -183,13 +183,26 @@ export default function Home() {
       return <></>
     }
 
-    let sumOfQantasCalc = 0
+    let sumOfQantasAPICalc = 0
+    let qantasAPICalcError = null
     calculationOutput.segmentResults.forEach((segmentResult) => {
-      sumOfQantasCalc +=
-        segmentResult.qantasAPIResults?.qantasData?.[fieldToCheck];
+      if(segmentResult.qantasAPIResults?.error) {
+        qantasAPICalcError = segmentResult.qantasAPIResults?.error
+      } else {
+        sumOfQantasAPICalc +=
+          segmentResult.qantasAPIResults?.qantasData?.[fieldToCheck];
+      }
     })
 
-    if (expectedValue === sumOfQantasCalc) {
+    if (qantasAPICalcError) {
+      return (
+        <Tooltip title="Qantas Calculator failed to calculate a result">
+          <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+            <Info color="warning" />
+          </IconButton>
+        </Tooltip>
+      )
+    } else if(expectedValue === sumOfQantasAPICalc) {
       return (
         <Tooltip title="Matches Qantas Calculator">
           <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>

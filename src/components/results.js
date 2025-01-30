@@ -2,7 +2,7 @@ import { AIRLINES, EARN_CATEGORY_DISPLAY, EARN_CATEGORY_URLS, QANTAS_FARE_CLASS_
 import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert, Tooltip } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
-import { CheckCircle } from "@mui/icons-material";
+import { Cancel, CheckCircle, Info } from "@mui/icons-material";
 
 export const Results = ({ calculatedData, compareWithQantasCalc }) => {
   if (!calculatedData) {
@@ -172,15 +172,40 @@ const RuleDisplay = ({ ruleName, ruleUrl, notes }) => {
   );
 };
 
-const MatchesQantasSegment = ({ segmentResult }) => { // eslint-disable-line
-  // TODO this
-  return (
-    <Tooltip title="Matches Qantas Calculator">
-      <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
-        <CheckCircle color="success" />
-      </IconButton>
-    </Tooltip>
-  )
+const MatchesQantasSegment = ({ segmentResult }) => {
+  if(!segmentResult.qantasAPIResults) {
+    return <></>
+  }
+
+  const qantasAPIError = segmentResult.qantasAPIResults?.error
+  const matchesQantasPoints = segmentResult.qantasPoints === segmentResult.qantasAPIResults?.qantasData?.qantasPoints
+  const matchesStatusCredits = segmentResult.statusCredits === segmentResult.qantasAPIResults?.qantasData?.statusCredits
+
+  if (qantasAPIError) {
+    return (
+      <Tooltip title="Qantas Calculator Failed to Calculate">
+        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+          <Info color="warning" />
+        </IconButton>
+      </Tooltip>
+    );
+  } else if (matchesQantasPoints && matchesStatusCredits) {
+    return (
+      <Tooltip title="Matches Qantas Calculator">
+        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+          <CheckCircle color="success" />
+        </IconButton>
+      </Tooltip>
+    );
+  } else {
+    return (
+      <Tooltip title="Does not match Qantas Calculator">
+        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+          <Cancel color="error" />
+        </IconButton>
+      </Tooltip>
+    );
+  }
 };
 
 const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {

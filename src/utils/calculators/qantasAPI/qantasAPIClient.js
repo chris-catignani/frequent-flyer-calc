@@ -17,6 +17,12 @@ export const fetchDataFromQantas = async (segment, eliteStatus, fareEarnCategory
   try {
     const qantasData = await fetch(buildFetchUrl(segment, eliteStatus));
     const qantasJson = await qantasData.json();
+
+    console.log(`Qantas API returned an error: ${qantasJson.errorMessage}`)
+    if(qantasJson.errorMessage) {
+      throw new Error(errorMessage)
+    }
+
     const result = Object.values(qantasJson.rewards).find((result) => {
       return result.fare_class === EARN_CATEGORY_MAP[fareEarnCategory];
     });
