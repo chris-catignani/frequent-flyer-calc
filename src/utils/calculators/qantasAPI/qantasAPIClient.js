@@ -54,10 +54,7 @@ const buildFetchUrl = (segment, eliteStatus) => {
 
   qantasUrl.searchParams.append(
     "fares",
-    segment.airline.toUpperCase() +
-      "_" +
-      segment.fromAirport.iata.toUpperCase() +
-      segment.toAirport.iata.toUpperCase()
+    segment.airline.toUpperCase() + "_" + segment.fromAirport.iata + segment.toAirport.iata
   );
   qantasUrl.searchParams.append("tiers", eliteStatus);
   qantasUrl.searchParams.append(
