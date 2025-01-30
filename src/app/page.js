@@ -3,9 +3,9 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { Segment } from '@/models/segment'
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
-import { ExpandMore, Clear } from "@mui/icons-material";
+import { ExpandMore, Clear, Info } from "@mui/icons-material";
 import { SegmentResults } from '@/components/segmentResults';
 import { getAirport } from '@/utils/airports';
 import { ResultsSummary } from '@/components/resultsSummary';
@@ -167,6 +167,58 @@ export default function Home() {
     }
   };
 
+  const QantasApiDialog = ({ open, onClose}) => {
+    return (
+    <Dialog onClose={onClose} open={open}>
+      <DialogTitle>Compare with Qantas</DialogTitle>
+      <Grid2 container direction="column" mx={2} mb={2}>
+        <Typography>This enables us to compare our results with Qantas&apos;s website calculator results.</Typography>
+        <Typography>This makes an API call to Qantas&apos;s website, and as a result, can be slow.</Typography>
+      </Grid2>
+    </Dialog>
+    )
+  }
+
+  const CompareWithQantasAPISwitch = () => {
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+
+    const handleClose = () => {
+      setOpen(false);
+    };
+
+    return (
+      <Grid2
+        container
+        direction="row"
+        sx={{
+          alignItems: "center",
+          visibility: FLAG_ENABLE_QANTAS_API ? "" : "hidden",
+        }}
+      >
+        <Switch
+          checked={compareWithQantasCalc}
+          onChange={(event) =>
+            setCompareWithQantasCalcToggled(event.target.checked)
+          }
+          disabled={!FLAG_ENABLE_QANTAS_API}
+        />
+        <Typography>
+          Compare With
+          <br />
+          Qantas&apos;s Calculator
+        </Typography>
+        <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
+          <Info />
+        </IconButton>
+        <QantasApiDialog open={open} onClose={handleClose} />
+      </Grid2>
+    );
+  }
+
   const ErrorDisplay = ({ calculationOutput }) => {
     if (!calculationOutput || !calculationOutput.containsErrors) {
       return <></>
@@ -254,29 +306,7 @@ export default function Home() {
               >
                 Calculate
               </Button>
-              <Grid2
-                container
-                direction="row"
-                sx={{
-                  alignItems: "center",
-                  visibility: FLAG_ENABLE_QANTAS_API ? "" : "hidden",
-                }}
-              >
-                <Switch
-                  checked={compareWithQantasCalc}
-                  onChange={(event) =>
-                    setCompareWithQantasCalcToggled(event.target.checked)
-                  }
-                  disabled={!FLAG_ENABLE_QANTAS_API}
-                />
-                <Tooltip title="Compare results with the Qantas website calculator">
-                  <Typography>
-                    Compare With
-                    <br />
-                    Qantas Calculator
-                  </Typography>
-                </Tooltip>
-              </Grid2>
+              <CompareWithQantasAPISwitch />
             </Grid2>
           </Box>
         </Paper>

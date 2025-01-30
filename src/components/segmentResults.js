@@ -1,6 +1,5 @@
 import { AIRLINES, EARN_CATEGORY_DISPLAY, EARN_CATEGORY_URLS, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
 import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert, Tooltip } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
 import { Cancel, CheckCircle, Info } from "@mui/icons-material";
 
@@ -120,7 +119,7 @@ const QantasPointsDisplay = ({ segmentResult }) => {
     <Grid2 container justifyContent='flex-end'>
       <Typography>{segmentResult.qantasPoints?.toLocaleString()}</Typography>
       <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
-        <InfoIcon />
+        <Info />
       </IconButton>
       <QantasPointsBreakdownDialog
         open={open}
@@ -165,7 +164,7 @@ const RuleDisplay = ({ ruleName, ruleUrl, notes }) => {
         {ruleName}
       </a>
       <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
-        <InfoIcon />
+        <Info />
       </IconButton>
       <RuleDialog open={open} onClose={handleClose} ruleUrl={ruleUrl} ruleName={ruleName} notes={notes} />
     </Grid2>
