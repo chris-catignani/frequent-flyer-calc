@@ -17,66 +17,66 @@ export const EliteStatusInput = ({ eliteStatus, onChange }) => {
   );
 };
 
-export const RouteInput = ({segment, errors, onChange}) => {
+export const RouteInput = ({segmentInput, errors, onChange}) => {
   return (
     <Grid2 container justifyContent="center" alignItems="center" spacing={1}>
       <AirlineInput
-        value={segment.airline}
+        value={segmentInput.airline}
         error={errors['airline']}
         onChange={(value) => {
-          const newSegment = segment.clone({ airline: value });
-          if (shouldClearFareClassForAirlineChange(segment, value)) {
-            newSegment.fareClass = "";
+          const newSegmentInput = segmentInput.clone({ airline: value });
+          if (shouldClearFareClassForAirlineChange(segmentInput, value)) {
+            newSegmentInput.fareClass = "";
           }
-          onChange(newSegment);
+          onChange(newSegmentInput);
         }}
       />
       <AirportInput
         label={"From (e.g. syd)"}
-        value={segment.fromAirport}
+        value={segmentInput.fromAirport}
         error={errors['fromAirport']}
         onChange={(value) => {
-          const newSegment = segment.clone({ fromAirport: value });
-          if (shouldClearFareClassForAirportChange(segment.airline, segment.fromAirport, value)) {
-            newSegment.fareClass = "";
+          const newSegmentInput = segmentInput.clone({ fromAirport: value });
+          if (shouldClearFareClassForAirportChange(segmentInput.airline, segmentInput.fromAirport, value)) {
+            newSegmentInput.fareClass = "";
           }
-          onChange(newSegment);
+          onChange(newSegmentInput);
         }}
       />
       <AirportInput
         label={"To (e.g. mel)"}
-        value={segment.toAirport}
+        value={segmentInput.toAirport}
         error={errors['toAirport']}
         onChange={(value) => {
-          const newSegment = segment.clone({ toAirport: value });
-          if (shouldClearFareClassForAirportChange(segment.airline, segment.toAirport, value)) {
-            newSegment.fareClass = "";
+          const newSegmentInput = segmentInput.clone({ toAirport: value });
+          if (shouldClearFareClassForAirportChange(segmentInput.airline, segmentInput.toAirport, value)) {
+            newSegmentInput.fareClass = "";
           }
-          onChange(newSegment);
+          onChange(newSegmentInput);
         }}
       />
       <FareClassInput
-        segment={segment}
+        segmentInput={segmentInput}
         error={errors['fareClass']}
         onChange={(value) => {
-          onChange(segment.clone({ fareClass: value }));
+          onChange(segmentInput.clone({ fareClass: value }));
         }}
       />
     </Grid2>
   );
 }
 
-const shouldClearFareClassForAirlineChange = (segment, airline) => {
+const shouldClearFareClassForAirlineChange = (segmentInput, airline) => {
   // if the airline did not change
-  if (airline === segment?.airline) {
+  if (airline === segmentInput?.airline) {
     return false
   }
 
   // if it used to be a qantas airline, and now it's not.
   // or both are qantas group airlines
   return (
-    QANTAS_GRP_AIRLINES.has(airline) !== QANTAS_GRP_AIRLINES.has(segment?.airline) ||
-    QANTAS_GRP_AIRLINES.has(airline) && QANTAS_GRP_AIRLINES.has(segment?.airline)
+    QANTAS_GRP_AIRLINES.has(airline) !== QANTAS_GRP_AIRLINES.has(segmentInput?.airline) ||
+    QANTAS_GRP_AIRLINES.has(airline) && QANTAS_GRP_AIRLINES.has(segmentInput?.airline)
   )
 }
 
@@ -135,9 +135,9 @@ const AirportInput = ({ label, value, error, onChange }) => {
   );
 };
 
-const QantasFareClassInput = ({ segment, error, onChange }) => {
-  const fromAirport = getAirport(segment.fromAirport);
-  const toAirport = getAirport(segment.toAirport);
+const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
+  const fromAirport = getAirport(segmentInput.fromAirport);
+  const toAirport = getAirport(segmentInput.toAirport);
 
   let fareClassOptions = [];
   if(fromAirport && toAirport) {
@@ -164,7 +164,7 @@ const QantasFareClassInput = ({ segment, error, onChange }) => {
       disableClearable
       options={options}
       getOptionLabel={(option) => option.display || ""}
-      value={options.find((option) => option.data === segment.fareClass) || ''}
+      value={options.find((option) => option.data === segmentInput.fareClass) || ''}
       onChange={(_, value) => onChange(value?.data)}
       groupBy={(option) => option.display.length === 1 ? "Booking Class" : "Fare Type"}
       sx={{ width: 250 }}
@@ -179,13 +179,13 @@ const QantasFareClassInput = ({ segment, error, onChange }) => {
   );
 }
 
-const JetstarFareClassInput = ({ segment, error, onChange }) => {
-  const fromAirport = getAirport(segment.fromAirport);
-  const toAirport = getAirport(segment.toAirport);
+const JetstarFareClassInput = ({ segmentInput, error, onChange }) => {
+  const fromAirport = getAirport(segmentInput.fromAirport);
+  const toAirport = getAirport(segmentInput.toAirport);
 
   let fareClassOptions = [];
   if (fromAirport && toAirport) {
-    if (segment.airline === "jq" && fromAirport.country === "New Zealand" && toAirport.country === "New Zealand") {
+    if (segmentInput.airline === "jq" && fromAirport.country === "New Zealand" && toAirport.country === "New Zealand") {
       fareClassOptions = Object.keys(JETSTAR_NEW_ZEALAND_FARE_CLASSES);
     } else {
       fareClassOptions = Object.keys(JETSTAR_FARE_CLASSES);
@@ -206,7 +206,7 @@ const JetstarFareClassInput = ({ segment, error, onChange }) => {
       disableClearable
       options={options}
       getOptionLabel={(option) => option.display || ""}
-      value={options.find((option) => option.data === segment.fareClass) || ''}
+      value={options.find((option) => option.data === segmentInput.fareClass) || ''}
       onChange={(_, value) => onChange(value?.data)}
       sx={{ width: 250 }}
       renderInput={(params) => (
@@ -220,20 +220,20 @@ const JetstarFareClassInput = ({ segment, error, onChange }) => {
   );
 }
 
-const FareClassInput = ({ segment, error, onChange }) => {
-  if (segment.airline === "qf") {
+const FareClassInput = ({ segmentInput, error, onChange }) => {
+  if (segmentInput.airline === "qf") {
     return (
-      <QantasFareClassInput segment={segment} error={error} onChange={onChange} />
+      <QantasFareClassInput segmentInput={segmentInput} error={error} onChange={onChange} />
     )
-  } else if (JETSTAR_AIRLINES.has(segment.airline)) {
+  } else if (JETSTAR_AIRLINES.has(segmentInput.airline)) {
     return (
-      <JetstarFareClassInput segment={segment} error={error} onChange={onChange} />
+      <JetstarFareClassInput segmentInput={segmentInput} error={error} onChange={onChange} />
     )
   }
 
   return (
     <TextField
-      value={segment.fareClass}
+      value={segmentInput.fareClass}
       error={error}
       helperText={error ? error : " "}
       onChange={(event) => {

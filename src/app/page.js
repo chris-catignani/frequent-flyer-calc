@@ -1,14 +1,15 @@
 "use client"
 
 import { calculate } from '@/utils/calculators/calculator';
-import { Segment } from '@/models/segment'
 import { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
-import { EliteStatusInput, RouteInput } from '@/components/input';
+import { EliteStatusInput, RouteInput } from "@/components/input";
 import { ExpandMore, Clear, Info } from "@mui/icons-material";
 import { SegmentResults } from '@/components/segmentResults';
 import { getAirport } from '@/utils/airports';
 import { ResultsSummary } from '@/components/resultsSummary';
+import { Segment } from '@/models/segment';
+import { SegmentInput } from '@/models/segmentInput';
 
 const FLAG_ENABLE_QANTAS_API = true
 
@@ -16,7 +17,7 @@ export default function Home() {
 
   const [inputErrors, setInputErrors] = useState({})
   const [eliteStatus, setEliteStatus] = useState('Bronze')
-  const [segments, setSegments] = useState([new Segment('', '', '', '')])
+  const [segmentInputs, setSegmentInputs] = useState([new SegmentInput('', '', '', '')])
   const [tripType, setTripType] = useState("one way")
   const [compareWithQantasCalc, setCompareWithQantasCalc] = useState(false)
 
@@ -26,31 +27,31 @@ export default function Home() {
   const validateInput = () => {
     const errors = {}
 
-    const addError = (segmentIdx, fieldName, error) => {
-      if (!errors[segmentIdx]) {
-        errors[segmentIdx] = {};
+    const addError = (segmentInputIdx, fieldName, error) => {
+      if (!errors[segmentInputIdx]) {
+        errors[segmentInputIdx] = {};
       }
-      errors[segmentIdx][fieldName] = error
+      errors[segmentInputIdx][fieldName] = error
     }
 
-    segments.forEach((segment, idx) => {
-      if(!segment.airline) {
+    segmentInputs.forEach((segmentInput, idx) => {
+      if(!segmentInput.airline) {
         addError(idx, 'airline', 'Required')
       }
-      if (!segment.fromAirport) {
+      if (!segmentInput.fromAirport) {
         addError(idx, "fromAirport", "Required");
       }
-      if (!segment.toAirport) {
+      if (!segmentInput.toAirport) {
         addError(idx, "toAirport", "Required");
       }
-      if (!segment.fareClass) {
+      if (!segmentInput.fareClass) {
         addError(idx, "fareClass", "Required");
       }
 
-      if (segment.fromAirport && !getAirport(segment.fromAirport)) {
+      if (segmentInput.fromAirport && !getAirport(segmentInput.fromAirport)) {
         addError(idx, "fromAirport", "Invalid IATA");
       }
-      if (segment.toAirport && !getAirport(segment.toAirport)) {
+      if (segmentInput.toAirport && !getAirport(segmentInput.toAirport)) {
         addError(idx, "toAirport", "Invalid IATA");
       }
     })
@@ -58,19 +59,23 @@ export default function Home() {
     return errors;
   }
 
-  const doCalculation = async (theSegments, theEliteStatus, theTripType, theCompareWithQantasCalc) => {
+  const doCalculation = async (theEliteStatus, theTripType, theCompareWithQantasCalc) => {
     setIsCalculating(true)
     setCalculationOutput(null)
 
+    const segments = segmentInputs.map((segmentInput) => {
+      return new Segment(segmentInput.airline, segmentInput.fareClass, segmentInput.fromAirport, segmentInput.toAirport)
+    })
+
     if (theTripType === "return") {
-      const returnSegments = [...theSegments];
+      const returnSegments = [...segments];
 
       // add the segments again, but in reverse, with from/to airports flipped
-      for(let i = theSegments.length - 1; i >= 0; i--) {
-        const {fromAirport, toAirport} = theSegments[i]
+      for(let i = segments.length - 1; i >= 0; i--) {
+        const { fromAirport, toAirport } = segments[i];
         returnSegments.push(
-          theSegments[i].clone({fromAirport: toAirport, toAirport: fromAirport})
-        )
+          segments[i].clone({ fromAirport: toAirport, toAirport: fromAirport })
+        );
       }
 
       setCalculationOutput(
@@ -78,7 +83,7 @@ export default function Home() {
       );
     } else {
       setCalculationOutput(
-        await calculate(theSegments, theEliteStatus, theCompareWithQantasCalc)
+        await calculate(segments, theEliteStatus, theCompareWithQantasCalc)
       );
     }
 
@@ -91,30 +96,30 @@ export default function Home() {
       setInputErrors(errors);
     } else {
       setInputErrors({});
-      doCalculation(segments, eliteStatus, tripType, compareWithQantasCalc);
+      doCalculation(eliteStatus, tripType, compareWithQantasCalc);
     }
   }
 
   const addSegmentPressed = () => {
-    setSegments([...segments, new Segment("", "", "", "")]);
+    setSegmentInputs([...segmentInputs, new SegmentInput("", "", "", "")]);
 
     // clear calculation output
     setCalculationOutput(null);
   }
 
-  const removeSegmentPressed = (segmentIdx) => {
-    const newSegments = [...segments];
-    newSegments.splice(segmentIdx, 1);
-    setSegments(newSegments);
+  const removeSegmentPressed = (segmentInputIdx) => {
+    const newSegmentInputs = [...segmentInputs];
+    newSegmentInputs.splice(segmentInputIdx, 1);
+    setSegmentInputs(newSegmentInputs);
 
     // clear calculation output
     setCalculationOutput(null);
   }
 
-  const segmentChanged = (segmentIdx, segment) => {
-    const newSegments = [...segments];
-    newSegments[segmentIdx] = segment;
-    setSegments(newSegments);
+  const segmentInputChanged = (segmentInputIdx, segmentInput) => {
+    const newSegmentInputs = [...segmentInputs];
+    newSegmentInputs[segmentInputIdx] = segmentInput;
+    setSegmentInputs(newSegmentInputs);
 
     // if input changes, ensure calculated data is voided
     setCalculationOutput(null);
@@ -125,7 +130,7 @@ export default function Home() {
 
     // if we have calculated data, recalculate with new elite status level
     if (calculationOutput && validateInput()) {
-      doCalculation(segments, newEliteStatus, tripType, compareWithQantasCalc)
+      doCalculation(newEliteStatus, tripType, compareWithQantasCalc)
     }
   }
 
@@ -134,7 +139,7 @@ export default function Home() {
 
     // if we have calculated data, recalculate with new return/oneway status
     if (calculationOutput && validateInput()) {
-      doCalculation(segments, eliteStatus, newTripType, compareWithQantasCalc);
+      doCalculation(eliteStatus, newTripType, compareWithQantasCalc);
     }
   }
 
@@ -143,12 +148,12 @@ export default function Home() {
 
     // if we have calculated data, recalculate with new return/oneway status
     if (calculationOutput && validateInput()) {
-      doCalculation(segments, eliteStatus, tripType, newCompareWithQantasCalc);
+      doCalculation(eliteStatus, tripType, newCompareWithQantasCalc);
     }
   }
 
-  const RouteInputButton = ({ segments, segmentIdx }) => {
-    if (segments.length === 1) {
+  const RouteInputButton = ({ segmentInputs, segmentInputIdx }) => {
+    if (segmentInputs.length === 1) {
       return (
         // Dummy icon to maintain space for when we show icons
         <IconButton disabled sx={{ visibility: 'hidden', pr: 0 }}>
@@ -159,7 +164,7 @@ export default function Home() {
       return (
         <IconButton
           sx={{ mb: 3, pr: 0, '&:hover': { backgroundColor: 'inherit', boxShadow: 'none' } }}
-          onClick={() => removeSegmentPressed(segmentIdx)}
+          onClick={() => removeSegmentPressed(segmentInputIdx)}
         >
           <Clear />
         </IconButton>
@@ -270,17 +275,17 @@ export default function Home() {
             />
           </Grid2>
           <Box p={2}>
-            {segments.map((segment, segmentIdx) => {
+            {segmentInputs.map((segmentInput, segmentInputIdx) => {
               return (
-                <Grid2 container key={segmentIdx}>
+                <Grid2 container key={segmentInputIdx}>
                   <RouteInput
-                    segment={segment}
-                    errors={inputErrors[segmentIdx] || {}}
-                    onChange={(segment) => segmentChanged(segmentIdx, segment)}
+                    segmentInput={segmentInput}
+                    errors={inputErrors[segmentInputIdx] || {}}
+                    onChange={(segmentInput) => segmentInputChanged(segmentInputIdx, segmentInput)}
                   />
                   <RouteInputButton
-                    segments={segments}
-                    segmentIdx={segmentIdx}
+                    segmentInputs={segmentInputs}
+                    segmentInputIdx={segmentInputIdx}
                   />
                 </Grid2>
               );
