@@ -37,10 +37,7 @@ export const getAirportsForCountry = (country) => {
   }).map(airport => standardizeAirport(airport))
 }
 
-export const calcDistance = (iata1, iata2) => {
-  const airport1 = getAirport(iata1)
-  const airport2 = getAirport(iata2)
-
+export const calcDistance = (airport1, airport2) => {
   return Math.floor(
     GreatCircle.distance(
       airport1.latitude,

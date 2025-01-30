@@ -6,10 +6,6 @@ export class Segment {
     this.toAirport = toAirport
   }
 
-  static fromString(segmentString) {
-    return new Segment(...segmentString.split(" "))
-  }
-
   toString() {
     return `${this.airline} ${this.fareClass} ${this.fromAirport} ${this.toAirport}`
   }

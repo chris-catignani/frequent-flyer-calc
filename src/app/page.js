@@ -64,7 +64,7 @@ export default function Home() {
     setCalculationOutput(null)
 
     const segments = segmentInputs.map((segmentInput) => {
-      return new Segment(segmentInput.airline, segmentInput.fareClass, segmentInput.fromAirportText, segmentInput.toAirportText)
+      return new Segment(segmentInput.airline, segmentInput.fareClass, segmentInput.fromAirport, segmentInput.toAirport)
     })
 
     if (theTripType === "return") {

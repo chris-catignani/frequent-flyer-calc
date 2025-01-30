@@ -1,4 +1,4 @@
-import { calcDistance, getAirport } from '@/utils/airports'
+import { calcDistance } from '@/utils/airports'
 import { isInRegion } from './regions'
 import { QantasEarnings } from '@/models/qantasEarnings'
 import { REGION_DISPLAY } from '@/models/constants'
@@ -40,10 +40,7 @@ export class IntraCountryRule extends Rule {
   }
 
   applies(segment, fareEarnCategory) {
-    const fromAirport = getAirport(segment.fromAirport)
-    const toAirport = getAirport(segment.toAirport)
-
-    if (fromAirport.country !== this.country || toAirport.country !== this.country) {
+    if (segment.fromAirport.country !== this.country || segment.toAirport.country !== this.country) {
       return false
     }
 
@@ -111,18 +108,14 @@ export class GeographicalRule extends Rule {
     this.ruleConfig = ruleConfig
   }
 
-  _getOrigin(iata) {
+  _getOrigin(airport) {
     if (this.ruleConfig.origin.city) {
-      const airport = getAirport(iata)
-
       if (this.ruleConfig.origin.city.has(airport.city.toLowerCase())) {
         return {type: 'city', value: airport.city.toLowerCase()}
       }
     }
 
     if (this.ruleConfig.origin.country) {
-      const airport = getAirport(iata)
-
       if(this.ruleConfig.origin.country.has(airport.country.toLowerCase())) {
         return {type: 'country', value: airport.country.toLowerCase()}
       }
@@ -130,7 +123,7 @@ export class GeographicalRule extends Rule {
 
     if (this.ruleConfig.origin.region) {
       for (let region of this.ruleConfig.origin.region.values()) {
-        if (isInRegion(iata, region)) {
+        if (isInRegion(airport.iata.toLowerCase(), region)) {
           return {type: 'region', value: region}
         }
       }
@@ -139,18 +132,14 @@ export class GeographicalRule extends Rule {
     return null
   }
 
-  _getDestination(iata) {
+  _getDestination(airport) {
     if (this.ruleConfig.destination.city) {
-      const airport = getAirport(iata)
-
       if (airport.city.toLowerCase() in this.ruleConfig.destination.city) {
         return {type: 'city', value: airport.city.toLowerCase()}
       }
     }
 
     if (this.ruleConfig.destination.country) {
-      const airport = getAirport(iata)
-
       if(airport.country.toLowerCase() in this.ruleConfig.destination.country) {
         return {type: 'country', value: airport.country.toLowerCase()}
       }
@@ -158,7 +147,7 @@ export class GeographicalRule extends Rule {
 
     if (this.ruleConfig.destination.region) {
       for (let region of Object.keys(this.ruleConfig.destination.region)) {
-        if (isInRegion(iata, region)) {
+        if (isInRegion(airport.iata.toLowerCase(), region)) {
           return {type: 'region', value: region}
         }
       }

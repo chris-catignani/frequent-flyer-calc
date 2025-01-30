@@ -1,4 +1,3 @@
-import { getAirport } from "../airports"
 import { isInRegion } from "./regions"
 
 /**
@@ -84,7 +83,8 @@ const isApplicableRule = (segment, rule) => {
     return originApplies && destinationApplies
   }
 
-  const originAirport = getAirport(segment.fromAirport)
-  const destinationAirport = getAirport(segment.toAirport)
-  return check(originAirport, destinationAirport, rule) || check(destinationAirport, originAirport, rule)
+  return (
+    check(segment.fromAirport, segment.toAirport, rule) ||
+    check(segment.toAirport, segment.fromAirport, rule)
+  );
 }

@@ -1,5 +1,6 @@
 import { Segment } from "src/models/segment"
 import { getPartnerEarnCategory } from "./partnerEarnCategories"
+import { buildSegmentFromString } from "@/test/testUtils"
 
 describe('getPartnerEarnCategory', () => {
 
@@ -31,7 +32,7 @@ describe('getPartnerEarnCategory', () => {
     ['a', 'first'],
     ['f', 'first']
   ])('recognizes the American Airlines %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = Segment.fromString(`aa ${fareClass} jfk lax`)
+    const segment = buildSegmentFromString(`aa ${fareClass} jfk lax`)
     expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
   })
 
@@ -61,7 +62,7 @@ describe('getPartnerEarnCategory', () => {
     ['a', 'first'],
     ['f', 'first']
   ])('recognizes the Alaska Airline %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = Segment.fromString(`as ${fareClass} jfk lax`)
+    const segment = buildSegmentFromString(`as ${fareClass} jfk lax`)
     expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
   })
 
@@ -87,18 +88,18 @@ describe('getPartnerEarnCategory', () => {
     ['a', 'first'],
     ['f', 'first']
   ])('recognizes the Qatar Airlines %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = Segment.fromString(`qr ${fareClass} jfk lax`)
+    const segment = buildSegmentFromString(`qr ${fareClass} jfk lax`)
     expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
   })
 
   describe('Japan Airlines special cases', () => {
     test('intra-Japan flights fail', () => {
-      const segment = Segment.fromString(`jl i hnd cts`)
+      const segment = buildSegmentFromString(`jl i hnd cts`)
       expect(() => getPartnerEarnCategory(segment)).toThrow('Intra Japan flights on JAL are not yet supported')
     })
 
     test('non intra-Japan flights succeed', () => {
-      const segment = Segment.fromString(`jl i hnd tpe`)
+      const segment = buildSegmentFromString(`jl i hnd tpe`)
       expect(getPartnerEarnCategory(segment)).toBe('business')
     })
   })
@@ -112,7 +113,7 @@ describe('getPartnerEarnCategory', () => {
       ['mh j kul cdg', 'flexibleEconomy'],
       ['mh j cdg kul', 'flexibleEconomy'],
     ])('Flights between Australia and Malaysia, UK or Europe', (segmentString, expectedCategory) => {
-      const segment = Segment.fromString(segmentString)
+      const segment = buildSegmentFromString(segmentString)
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
     })
 
@@ -124,7 +125,7 @@ describe('getPartnerEarnCategory', () => {
       ['mh j akl cdg', 'flexibleEconomy'],
       ['mh j cdg akl', 'flexibleEconomy'],
     ])('Flights between New Zealand and Malaysia, UK or Europe', (segmentString, expectedCategory) => {
-      const segment = Segment.fromString(segmentString)
+      const segment = buildSegmentFromString(segmentString)
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
     })
 
@@ -136,7 +137,7 @@ describe('getPartnerEarnCategory', () => {
       ['mh j kul doh', 'flexibleEconomy'],
       ['mh j doh kul', 'flexibleEconomy'],
     ])('Flights between Malaysia and UK, Europe or Middle East', (segmentString, expectedCategory) => {
-      const segment = Segment.fromString(segmentString)
+      const segment = buildSegmentFromString(segmentString)
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
     })
 
@@ -144,7 +145,7 @@ describe('getPartnerEarnCategory', () => {
       ['mh j kul tpe', 'business'],
       ['mh j tpe kul', 'business'],
     ])('Non special case flights', (segmentString, expectedCategory) => {
-      const segment = Segment.fromString(segmentString)
+      const segment = buildSegmentFromString(segmentString)
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
     })
   })
@@ -158,7 +159,7 @@ describe('getPartnerEarnCategory', () => {
       ['ul p per kul', 'flexibleEconomy'],
       ['ul p kul per', 'flexibleEconomy'],
     ])('Flights between Southeast Australia and Malaysia or Sri Lanka', (segmentString, expectedCategory) => {
-      const segment = Segment.fromString(segmentString)
+      const segment = buildSegmentFromString(segmentString)
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
     })
 
@@ -172,7 +173,7 @@ describe('getPartnerEarnCategory', () => {
       ['ul p ist cmb', 'economy'],
       ['ul p cmb ist', 'economy'],
     ])('Flights between Europe and Malaysia or Sri Lanka', (segmentString, expectedCategory) => {
-      const segment = Segment.fromString(segmentString)
+      const segment = buildSegmentFromString(segmentString)
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
     })
 
@@ -180,19 +181,19 @@ describe('getPartnerEarnCategory', () => {
       ['ul p doh cmb', 'flexibleEconomy'],
       ['ul p cmb doh', 'flexibleEconomy'],
     ])('Non special case flights', (segmentString, expectedCategory) => {
-      const segment = Segment.fromString(segmentString)
+      const segment = buildSegmentFromString(segmentString)
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory)
     })
   })
 
   describe('Edge cases', () => {
     test('invalid airline code', () => {
-      const segment = Segment.fromString(`xx i hnd cts`)
+      const segment = buildSegmentFromString(`xx i hnd cts`)
       expect(() => getPartnerEarnCategory(segment)).toThrow('No airline configured for xx')
     })
 
     test('invalid fare code', () => {
-      const segment = Segment.fromString(`aa x hnd cts`)
+      const segment = buildSegmentFromString(`aa x hnd cts`)
       expect(() => getPartnerEarnCategory(segment)).toThrow('Airline aa is not configured for fare class x')
     })
   })
