@@ -18,9 +18,9 @@ export const fetchDataFromQantas = async (segment, eliteStatus, fareEarnCategory
     const qantasData = await fetch(buildFetchUrl(segment, eliteStatus));
     const qantasJson = await qantasData.json();
 
-    console.log(`Qantas API returned an error: ${qantasJson.errorMessage}`)
     if(qantasJson.errorMessage) {
-      throw new Error(qantasJson.errorMessage);
+      console.log(`Qantas API returned an error: ${qantasJson.errorMessage}`)
+      throw new Error(`Qantas API returned an error: ${qantasJson.errorMessage}`);
     }
 
     const result = Object.values(qantasJson.rewards).find((result) => {
@@ -28,7 +28,8 @@ export const fetchDataFromQantas = async (segment, eliteStatus, fareEarnCategory
     });
 
     if(!result) {
-      retval.error = new Error('Failed to parse a matching Qantas result')
+      console.log("Failed to find a matching Qantas API result", segment, eliteStatus, fareEarnCategory, qantasJson);
+      retval.error = new Error('Failed to find a matching Qantas API result')
     } else {
       retval.qantasData = {
         qantasPoints: result.earn,

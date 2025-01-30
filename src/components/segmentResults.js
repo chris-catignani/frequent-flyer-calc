@@ -176,7 +176,7 @@ const MatchesQantasSegmentErrorDialog = ({ open, onClose, error }) => {
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Qantas Calculator failed to calculate segment</DialogTitle>
       <Grid2 container direction="column" mx={2} mb={2}>
-        <Typography>Error returned: {error.message}</Typography>
+        <Typography>{error.message}</Typography>
       </Grid2>
     </Dialog>
   );
