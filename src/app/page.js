@@ -11,7 +11,7 @@ import { ResultsSummary } from '@/components/resultsSummary';
 import { Segment } from '@/models/segment';
 import { SegmentInput } from '@/models/segmentInput';
 
-const FLAG_ENABLE_QANTAS_API = true
+const FLAG_ENABLE_QANTAS_API = false
 
 export default function Home() {
 
@@ -323,7 +323,7 @@ export default function Home() {
                 size="large"
                 onClick={calculatePressed}
                 loading={isCalculating}
-                sx={{ borderRadius: "28px" }}
+                sx={{ borderRadius: "28px", left: "40px" }}
               >
                 Calculate
               </Button>
