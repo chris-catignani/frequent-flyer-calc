@@ -1,4 +1,3 @@
-import { Segment } from "src/models/segment"
 import { getPartnerEarnCategory } from "./partnerEarnCategories"
 import { buildSegmentFromString } from "@/test/testUtils"
 
