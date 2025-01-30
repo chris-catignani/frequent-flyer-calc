@@ -190,7 +190,7 @@ const MatchesQantasSegmentMisMatchDialog = ({ open, onClose, segmentResult }) =>
         <Typography>Our Results:</Typography>
         <Typography>Qantas Points: {segmentResult.qantasPoints}</Typography>
         <Typography>Status Credits: {segmentResult.statusCredits}</Typography>
-        <Typography mt={2}>Qantas Caclculator Results:</Typography>
+        <Typography mt={2}>Qantas Calculator Results:</Typography>
         <Typography>Qantas Points: {segmentResult.qantasAPIResults?.qantasData?.qantasPoints}</Typography>
         <Typography>Status Credits: {segmentResult.qantasAPIResults?.qantasData?.statusCredits}</Typography>
       </Grid2>
