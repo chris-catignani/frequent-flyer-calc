@@ -48,10 +48,10 @@ export default function Home() {
         addError(idx, "fareClass", "Required");
       }
 
-      if (segmentInput.fromAirportText && !getAirport(segmentInput.fromAirportText)) {
+      if (segmentInput.fromAirportText && !segmentInput.fromAirport) {
         addError(idx, "fromAirportText", "Invalid IATA");
       }
-      if (segmentInput.toAirportText && !getAirport(segmentInput.toAirportText)) {
+      if (segmentInput.toAirportText && !segmentInput.toAirport) {
         addError(idx, "toAirportText", "Invalid IATA");
       }
     })
@@ -117,6 +117,22 @@ export default function Home() {
   }
 
   const segmentInputChanged = (segmentInputIdx, segmentInput) => {
+    const oldSegmentInput = segmentInputs[segmentInputIdx]
+
+    if (oldSegmentInput.fromAirportText !== segmentInput.fromAirportText) {
+      segmentInput.fromAirport =
+        segmentInput.fromAirportText?.length === 3
+          ? getAirport(segmentInput.fromAirportText)
+          : null;
+    }
+
+    if (oldSegmentInput.toAirportText !== segmentInput.toAirportText) {
+      segmentInput.toAirport =
+        segmentInput.toAirportText?.length === 3
+          ? getAirport(segmentInput.toAirportText)
+          : null;
+    }
+
     const newSegmentInputs = [...segmentInputs];
     newSegmentInputs[segmentInputIdx] = segmentInput;
     setSegmentInputs(newSegmentInputs);

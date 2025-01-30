@@ -1,5 +1,4 @@
 import { AIRLINES, JETSTAR_AIRLINES, JETSTAR_FARE_CLASS_DISPLAY, JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_GRP_AIRLINES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
-import { getAirport } from "@/utils/airports";
 import { Autocomplete, TextField, Grid2 } from "@mui/material";
 
 export const EliteStatusInput = ({ eliteStatus, onChange }) => {
@@ -136,12 +135,9 @@ const AirportInput = ({ label, value, error, onChange }) => {
 };
 
 const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
-  const fromAirport = getAirport(segmentInput.fromAirportText);
-  const toAirport = getAirport(segmentInput.toAirportText);
-
   let fareClassOptions = [];
-  if(fromAirport && toAirport) {
-    if (fromAirport.country === "Australia" && toAirport.country === "Australia") {
+  if(segmentInput.fromAirport && segmentInput.toAirport) {
+    if (segmentInput.fromAirport.country === "Australia" && segmentInput.toAirport.country === "Australia") {
       fareClassOptions = Object.keys(QANTAS_DOMESTIC_FARE_CLASSES);
       fareClassOptions.push(...WEBSITE_EARN_CATEGORIES.qf[0].replace(/\W/g, '').split('').map(letter => letter.toLowerCase()))
     } else {
@@ -180,12 +176,9 @@ const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
 }
 
 const JetstarFareClassInput = ({ segmentInput, error, onChange }) => {
-  const fromAirport = getAirport(segmentInput.fromAirportText);
-  const toAirport = getAirport(segmentInput.toAirportText);
-
   let fareClassOptions = [];
-  if (fromAirport && toAirport) {
-    if (segmentInput.airline === "jq" && fromAirport.country === "New Zealand" && toAirport.country === "New Zealand") {
+  if (segmentInput.fromAirport && segmentInput.toAirport) {
+    if (segmentInput.airline === "jq" && segmentInput.fromAirport.country === "New Zealand" && segmentInput.toAirport.country === "New Zealand") {
       fareClassOptions = Object.keys(JETSTAR_NEW_ZEALAND_FARE_CLASSES);
     } else {
       fareClassOptions = Object.keys(JETSTAR_FARE_CLASSES);

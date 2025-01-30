@@ -4,6 +4,9 @@ export class SegmentInput {
     this.fareClass = fareClass;
     this.fromAirportText = fromAirportText;
     this.toAirportText = toAirportText;
+
+    this.fromAirport = undefined;
+    this.toAirport = undefined;
   }
 
   toString() {
@@ -11,11 +14,16 @@ export class SegmentInput {
   }
 
   clone({ airline, fareClass, fromAirportText, toAirportText }) {
-    return new SegmentInput(
+    const clonedSegment = new SegmentInput(
       airline !== undefined ? airline : this.airline,
       fareClass !== undefined ? fareClass : this.fareClass,
       fromAirportText !== undefined ? fromAirportText : this.fromAirportText,
-      toAirportText !== undefined ? toAirportText : this.toAirportText
+      toAirportText !== undefined ? toAirportText : this.toAirportText,
     );
+
+    clonedSegment.fromAirport = this.fromAirport;
+    clonedSegment.toAirport = this.toAirport
+
+    return clonedSegment;
   }
 }
