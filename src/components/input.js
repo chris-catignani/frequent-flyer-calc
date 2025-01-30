@@ -33,11 +33,11 @@ export const RouteInput = ({segmentInput, errors, onChange}) => {
       />
       <AirportInput
         label={"From (e.g. syd)"}
-        value={segmentInput.fromAirport}
-        error={errors['fromAirport']}
+        value={segmentInput.fromAirportText}
+        error={errors['fromAirportText']}
         onChange={(value) => {
-          const newSegmentInput = segmentInput.clone({ fromAirport: value });
-          if (shouldClearFareClassForAirportChange(segmentInput.airline, segmentInput.fromAirport, value)) {
+          const newSegmentInput = segmentInput.clone({ fromAirportText: value });
+          if (shouldClearFareClassForAirportChange(segmentInput.airline, segmentInput.fromAirportText, value)) {
             newSegmentInput.fareClass = "";
           }
           onChange(newSegmentInput);
@@ -45,11 +45,11 @@ export const RouteInput = ({segmentInput, errors, onChange}) => {
       />
       <AirportInput
         label={"To (e.g. mel)"}
-        value={segmentInput.toAirport}
-        error={errors['toAirport']}
+        value={segmentInput.toAirportText}
+        error={errors['toAirportText']}
         onChange={(value) => {
-          const newSegmentInput = segmentInput.clone({ toAirport: value });
-          if (shouldClearFareClassForAirportChange(segmentInput.airline, segmentInput.toAirport, value)) {
+          const newSegmentInput = segmentInput.clone({ toAirportText: value });
+          if (shouldClearFareClassForAirportChange(segmentInput.airline, segmentInput.toAirportText, value)) {
             newSegmentInput.fareClass = "";
           }
           onChange(newSegmentInput);
@@ -136,8 +136,8 @@ const AirportInput = ({ label, value, error, onChange }) => {
 };
 
 const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
-  const fromAirport = getAirport(segmentInput.fromAirport);
-  const toAirport = getAirport(segmentInput.toAirport);
+  const fromAirport = getAirport(segmentInput.fromAirportText);
+  const toAirport = getAirport(segmentInput.toAirportText);
 
   let fareClassOptions = [];
   if(fromAirport && toAirport) {
@@ -180,8 +180,8 @@ const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
 }
 
 const JetstarFareClassInput = ({ segmentInput, error, onChange }) => {
-  const fromAirport = getAirport(segmentInput.fromAirport);
-  const toAirport = getAirport(segmentInput.toAirport);
+  const fromAirport = getAirport(segmentInput.fromAirportText);
+  const toAirport = getAirport(segmentInput.toAirportText);
 
   let fareClassOptions = [];
   if (fromAirport && toAirport) {

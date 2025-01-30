@@ -1,21 +1,21 @@
 export class SegmentInput {
-  constructor(airline, fareClass, fromAirport, toAirport) {
-    this.airline = airline
-    this.fareClass = fareClass
-    this.fromAirport = fromAirport
-    this.toAirport = toAirport
+  constructor(airline, fareClass, fromAirportText, toAirportText) {
+    this.airline = airline;
+    this.fareClass = fareClass;
+    this.fromAirportText = fromAirportText;
+    this.toAirportText = toAirportText;
   }
 
   toString() {
-    return `${this.airline} ${this.fareClass} ${this.fromAirport} ${this.toAirport}`
+    return `${this.airline} ${this.fareClass} ${this.fromAirportText} ${this.toAirportText}`;
   }
 
-  clone({airline, fareClass, fromAirport, toAirport}) {
+  clone({ airline, fareClass, fromAirportText, toAirportText }) {
     return new SegmentInput(
       airline !== undefined ? airline : this.airline,
       fareClass !== undefined ? fareClass : this.fareClass,
-      fromAirport !== undefined ? fromAirport : this.fromAirport,
-      toAirport !== undefined ? toAirport : this.toAirport
+      fromAirportText !== undefined ? fromAirportText : this.fromAirportText,
+      toAirportText !== undefined ? toAirportText : this.toAirportText
     );
   }
 }

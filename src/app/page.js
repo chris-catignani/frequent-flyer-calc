@@ -38,21 +38,21 @@ export default function Home() {
       if(!segmentInput.airline) {
         addError(idx, 'airline', 'Required')
       }
-      if (!segmentInput.fromAirport) {
-        addError(idx, "fromAirport", "Required");
+      if (!segmentInput.fromAirportText) {
+        addError(idx, "fromAirportText", "Required");
       }
-      if (!segmentInput.toAirport) {
-        addError(idx, "toAirport", "Required");
+      if (!segmentInput.toAirportText) {
+        addError(idx, "toAirportText", "Required");
       }
       if (!segmentInput.fareClass) {
         addError(idx, "fareClass", "Required");
       }
 
-      if (segmentInput.fromAirport && !getAirport(segmentInput.fromAirport)) {
-        addError(idx, "fromAirport", "Invalid IATA");
+      if (segmentInput.fromAirportText && !getAirport(segmentInput.fromAirportText)) {
+        addError(idx, "fromAirportText", "Invalid IATA");
       }
-      if (segmentInput.toAirport && !getAirport(segmentInput.toAirport)) {
-        addError(idx, "toAirport", "Invalid IATA");
+      if (segmentInput.toAirportText && !getAirport(segmentInput.toAirportText)) {
+        addError(idx, "toAirportText", "Invalid IATA");
       }
     })
 
@@ -64,7 +64,7 @@ export default function Home() {
     setCalculationOutput(null)
 
     const segments = segmentInputs.map((segmentInput) => {
-      return new Segment(segmentInput.airline, segmentInput.fareClass, segmentInput.fromAirport, segmentInput.toAirport)
+      return new Segment(segmentInput.airline, segmentInput.fareClass, segmentInput.fromAirportText, segmentInput.toAirportText)
     })
 
     if (theTripType === "return") {
