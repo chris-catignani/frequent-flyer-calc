@@ -263,7 +263,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
     return (
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
         <TableCell component="th" scope="row">
-          {segment.fromAirport} - {segment.toAirport}
+          {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
         </TableCell>
         <TableCell align="right">{AIRLINES[segment.airline]}</TableCell>
         <TableCell align="right">n/a</TableCell>
@@ -282,7 +282,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   return (
     <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
       <TableCell component="th" scope="row">
-        {segment.fromAirport} - {segment.toAirport}
+        {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
       </TableCell>
       <TableCell align="right">{AIRLINES[segment.airline]}</TableCell>
       <TableCell align="right">
