@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Tooltip, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { ExpandMore, Clear, CheckCircle, Cancel, Info } from "@mui/icons-material";
-import { Results } from '@/components/results';
+import { SegmentResults } from '@/components/segmentResults';
 import { getAirport } from '@/utils/airports';
 
 const FLAG_ENABLE_QANTAS_API = true
@@ -382,7 +382,7 @@ export default function Home() {
             </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Results
+            <SegmentResults
               calculatedData={calculationOutput}
               compareWithQantasCalc={compareWithQantasCalc}
             />

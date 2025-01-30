@@ -4,7 +4,7 @@ import InfoIcon from "@mui/icons-material/Info";
 import { useState } from "react";
 import { Cancel, CheckCircle, Info } from "@mui/icons-material";
 
-export const Results = ({ calculatedData, compareWithQantasCalc }) => {
+export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
   if (!calculatedData) {
     return <></>;
   }
