@@ -1,5 +1,5 @@
 import { Cancel, CheckCircle, Info } from "@mui/icons-material";
-import { Box, Dialog, DialogTitle, Grid2, IconButton, Typography } from "@mui/material";
+import { Box, Dialog, DialogTitle, Grid2, IconButton, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 
 export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCalculating }) => {
@@ -114,9 +114,11 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
     } else if (expectedValue === sumOfQantasAPICalc) {
       return (
         <Box>
-          <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
-            <CheckCircle color="success" />
-          </IconButton>
+          <Tooltip title="Matches Qantas Calculator results">
+            <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+              <CheckCircle color="success" />
+            </IconButton>
+          </Tooltip>
         </Box>
       );
     } else {
