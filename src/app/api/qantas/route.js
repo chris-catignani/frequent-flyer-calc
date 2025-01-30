@@ -1,3 +1,5 @@
+import { NextResponse } from "next/server";
+
 // Qantas API endpoint
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
@@ -7,8 +9,10 @@ export async function GET(req) {
     searchParams.get('toIata'),
     searchParams.get('eliteStatus')
   );
+
   const resp = await fetch(url);
-  return new Response(resp.body);
+  const respJson = await resp.json()
+  return NextResponse.json(respJson);
 }
 
 // Build the request url, e.g.
