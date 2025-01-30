@@ -20,7 +20,7 @@ export const fetchDataFromQantas = async (segment, eliteStatus, fareEarnCategory
 
     console.log(`Qantas API returned an error: ${qantasJson.errorMessage}`)
     if(qantasJson.errorMessage) {
-      throw new Error(errorMessage)
+      throw new Error(qantasJson.errorMessage);
     }
 
     const result = Object.values(qantasJson.rewards).find((result) => {

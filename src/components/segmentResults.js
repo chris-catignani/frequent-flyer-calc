@@ -172,9 +172,46 @@ const RuleDisplay = ({ ruleName, ruleUrl, notes }) => {
   );
 };
 
+const MatchesQantasSegmentErrorDialog = ({ open, onClose, error }) => {
+  return (
+    <Dialog onClose={onClose} open={open}>
+      <DialogTitle>Qantas Calculator failed to calculate segment</DialogTitle>
+      <Grid2 container direction="column" mx={2} mb={2}>
+        <Typography>Error returned: {error.message}</Typography>
+      </Grid2>
+    </Dialog>
+  );
+};
+
+const MatchesQantasSegmentMisMatchDialog = ({ open, onClose, segmentResult }) => {
+  return (
+    <Dialog onClose={onClose} open={open}>
+      <DialogTitle>Qantas Calculator results do not match our results for this segment</DialogTitle>
+      <Grid2 container direction="column" mx={2} mb={2}>
+        <Typography>Our Results:</Typography>
+        <Typography>Qantas Points: {segmentResult.qantasPoints}</Typography>
+        <Typography>Status Credits: {segmentResult.statusCredits}</Typography>
+        <Typography mt={2}>Qantas Caclculator Results:</Typography>
+        <Typography>Qantas Points: {segmentResult.qantasAPIResults?.qantasData?.qantasPoints}</Typography>
+        <Typography>Status Credits: {segmentResult.qantasAPIResults?.qantasData?.statusCredits}</Typography>
+      </Grid2>
+    </Dialog>
+  );
+};
+
 const MatchesQantasSegment = ({ segmentResult }) => {
-  if(!segmentResult.qantasAPIResults) {
-    return <></>
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  if (!segmentResult.qantasAPIResults) {
+    return <></>;
   }
 
   const qantasAPIError = segmentResult.qantasAPIResults?.error
@@ -184,9 +221,17 @@ const MatchesQantasSegment = ({ segmentResult }) => {
   if (qantasAPIError) {
     return (
       <Tooltip title="Qantas Calculator Failed to Calculate">
-        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+        <IconButton
+          onClick={handleClickOpen}
+          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
+        >
           <Info color="warning" />
         </IconButton>
+        <MatchesQantasSegmentErrorDialog
+          open={open}
+          onClose={handleClose}
+          error={qantasAPIError}
+        />
       </Tooltip>
     );
   } else if (matchesQantasPoints && matchesStatusCredits) {
@@ -200,9 +245,13 @@ const MatchesQantasSegment = ({ segmentResult }) => {
   } else {
     return (
       <Tooltip title="Does not match Qantas Calculator">
-        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+        <IconButton
+          onClick={handleClickOpen}
+          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
+        >
           <Cancel color="error" />
         </IconButton>
+        <MatchesQantasSegmentMisMatchDialog open={open} onClose={handleClose} segmentResult={segmentResult} />
       </Tooltip>
     );
   }
