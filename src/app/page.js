@@ -383,7 +383,6 @@ export default function Home() {
         <br />- Jetstar connecting flights in New Zealand (all else is fine)
         <br />- Japan Airlines domestic flights (international is fine)
         <br />- Autocomplete for airport input, only accepts iata codes for now
-        <br />- All Non-oneworld partners are not implemented
       </Typography>
     </Grid2>
   );

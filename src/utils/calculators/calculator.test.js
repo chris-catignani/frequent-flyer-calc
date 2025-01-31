@@ -349,6 +349,22 @@ describe("calculate - partner rules", () => {
     }
   );
 
+  describe("Test for non Status Credit earning airlines", () => {
+    test.each([
+      ["af i cdg jfk", 5250, 0],
+      ["af i jfk cdg", 5250, 0],
+    ])(
+      `Air France %s. Should earn %s qantas points and %s status credit`,
+      async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+        const results = await calculate([
+          buildSegmentFromString(segmentString),
+        ]);
+        expect(results.qantasPoints).toBe(expectedQantasPoints);
+        expect(results.statusCredits).toBe(expectedStatusCredits);
+      }
+    );
+  });
+
   describe("calculate - elite status levels", () => {
     test.each([
       ["qf e syd sin", "Bronze", 2600, 0 * 2600],

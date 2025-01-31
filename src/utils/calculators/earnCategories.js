@@ -65,6 +65,15 @@ const isApplicableRule = (segment, rule) => {
       originApplies = rule.origin.country.has(originAirport.country.toLowerCase())
     }
 
+    if (!originApplies && rule.origin.region) {
+      for (let region of rule.origin.region) {
+        if (isInRegion(originAirport.iata.toLowerCase(), region)) {
+          originApplies = true;
+          break;
+        }
+      }
+    }
+
     if (rule.destination.country) {
       destinationApplies = rule.destination.country.has(destinationAirport.country.toLowerCase())
     }

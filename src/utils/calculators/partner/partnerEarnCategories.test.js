@@ -185,6 +185,131 @@ describe('getPartnerEarnCategory', () => {
     })
   })
 
+  describe("Air France special cases", () => {
+    test.each([
+      ["af r cdg ory", "discountEconomy"],
+      ["af r ory cdg", "discountEconomy"],
+      ["af a cdg ory", "flexibleEconomy"],
+      ["af a ory cdg", "flexibleEconomy"],
+    ])("Domestic flights within France", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+
+    test.each([
+      ["af r cdg mad", "discountEconomy"],
+      ["af r mad cdg", "discountEconomy"],
+      ["af a cdg mad", "economy"],
+      ["af a mad cdg", "economy"],
+      ["af i cdg mad", "business"],
+      ["af i mad cdg", "business"],
+      ["af a cdg waw", "economy"],
+      ["af a waw cdg", "economy"],
+    ])(
+      "Flights Intra Europe or flights between Europe and other European-esc countries",
+      (segmentString, expectedCategory) => {
+        const segment = buildSegmentFromString(segmentString);
+        expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+      }
+    );
+
+    test.each([
+      ["af a cdg jfk", "premiumEconomy"],
+      ["af a jfk cdg", "premiumEconomy"],
+      ["af i cdg jfk", "business"],
+      ["af i jfk cdg", "business"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+  });
+
+  describe("China Eastern special cases", () => {
+    test.each([
+      ["mu h pvg szx", "discountEconomy"],
+      ["mu h szx pvg", "discountEconomy"],
+      ["mu y pvg szx", "flexibleEconomy"],
+      ["mu y szx pvg", "flexibleEconomy"],
+      ["mu i pvg szx", "business"],
+      ["mu i szx pvg", "business"],
+      ["mu u pvg szx", "first"],
+      ["mu u szx pvg", "first"],
+    ])("Domestic flights within France", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+
+    test.each([
+      ["mu z pvg jfk", "discountEconomy"],
+      ["mu z jfk pvg", "discountEconomy"],
+      ["mu y pvg jfk", "flexibleEconomy"],
+      ["mu y jfk pvg", "flexibleEconomy"],
+      ["mu i pvg jfk", "business"],
+      ["mu i jfk pvg", "business"],
+      ["mu u pvg jfk", "first"],
+      ["mu u jfk pvg", "first"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+  });
+
+  describe("China Eastern special cases", () => {
+    test.each([
+      ["mu h pvg szx", "discountEconomy"],
+      ["mu h szx pvg", "discountEconomy"],
+      ["mu y pvg szx", "flexibleEconomy"],
+      ["mu y szx pvg", "flexibleEconomy"],
+      ["mu i pvg szx", "business"],
+      ["mu i szx pvg", "business"],
+      ["mu u pvg szx", "first"],
+      ["mu u szx pvg", "first"],
+    ])("Domestic flights within France", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+
+    test.each([
+      ["mu z pvg jfk", "discountEconomy"],
+      ["mu z jfk pvg", "discountEconomy"],
+      ["mu y pvg jfk", "flexibleEconomy"],
+      ["mu y jfk pvg", "flexibleEconomy"],
+      ["mu i pvg jfk", "business"],
+      ["mu i jfk pvg", "business"],
+      ["mu u pvg jfk", "first"],
+      ["mu u jfk pvg", "first"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+  });
+
+  describe("Fiji Airways special cases", () => {
+    test.each([
+      ["fj h nan lbs", "flexibleEconomy"],
+      ["fj h lbs nan", "flexibleEconomy"],
+      ["fj l nan lbs", "flexibleEconomy"],
+      ["fj l lbs nan", "flexibleEconomy"],
+      ["fj y nan lbs", "flexibleEconomy"],
+      ["fj y lbs nan", "flexibleEconomy"],
+    ])("Domestic flights within Fiji", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+
+    test.each([
+      ["fj g nan syd", "discountEconomy"],
+      ["fj g syd nan", "discountEconomy"],
+      ["fj l nan syd", "economy"],
+      ["fj l syd nan", "economy"],
+      ["fj i nan syd", "business"],
+      ["fj i syd nan", "business"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+  });
+
   describe('Edge cases', () => {
     test('invalid airline code', () => {
       const segment = buildSegmentFromString(`xx i hnd cts`)

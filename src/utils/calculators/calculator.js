@@ -1,5 +1,5 @@
 import { fetchDataFromQantas } from "./qantasAPI/qantasAPIClient"
-import { getPartnerEarnCategory } from "./partner/partnerEarnCategories"
+import { getPartnerEarnCategory, qualifiesForStatusCredits } from "./partner/partnerEarnCategories"
 import { getPartnerRules } from "./partner/partnerRules"
 import { getQantasEarnCategory } from "./qantas/qantasEarnCategories"
 import { getQantasMinimumPoints, getQantasRules } from "./qantas/qantasRules"
@@ -65,7 +65,7 @@ const getDataFromQantasCalc = async (segment, eliteStatus) => {
 }
 
 const calculateSegment = (segment, eliteStatus) => {
-  const { fareEarnCategory, rule, minPoints } = getEarnCalculationRequirements(segment);
+  const { fareEarnCategory, rule, minPoints, earnsStatusCredits } = getEarnCalculationRequirements(segment);
 
   if (!rule) {
     throw new Error(`Could not find a rule to calculate earnings for segment: ${segment}`);
@@ -95,7 +95,7 @@ const calculateSegment = (segment, eliteStatus) => {
     ruleUrl: calculation.ruleUrl,
     fareEarnCategory,
     notes: calculation.notes,
-    statusCredits: calculation.statusCredits,
+    statusCredits: earnsStatusCredits ? calculation.statusCredits : 0,
     qantasPoints: qantasPointsBreakdown.totalEarned,
     qantasPointsBreakdown,
   };
@@ -112,7 +112,7 @@ const getEarnCalculationRequirements = (segment) => {
 
     const minPoints = qantasMinPoints[segment.airline][fareEarnCategory]
 
-    return {fareEarnCategory, rule, minPoints}
+    return {fareEarnCategory, rule, minPoints, earnsStatusCredits: true}
   } else {
     const fareEarnCategory = getPartnerEarnCategory(segment)
 
@@ -120,7 +120,9 @@ const getEarnCalculationRequirements = (segment) => {
       return rule.applies(segment, fareEarnCategory)
     })
 
-    return {fareEarnCategory, rule, minPoints: undefined}
+    const earnsStatusCredits = qualifiesForStatusCredits(segment);
+
+    return {fareEarnCategory, rule, minPoints: undefined, earnsStatusCredits}
   }
 }
 

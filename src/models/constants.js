@@ -4,6 +4,7 @@ export const AIRLINES = {
   aa: "American Airlines",
   ba: "British Airways",
   cx: "Cathay Pacific",
+  fj: "Fiji Airways",
   ay: "Finnair",
   ib: "Iberia",
   i2: "Iberia Express",
@@ -17,8 +18,22 @@ export const AIRLINES = {
   qr: "Qatar Airways",
   at: "Royal Air Maroc",
   rj: "Royal Jordanian",
-  ul: "Malaysian Airlines"
-}
+  ul: "Malaysian Airlines",
+
+  //TODO should non-oneworld airlines be in a separate structure for display purposes?
+  af: "Air France",
+  mu: "China Eastern",
+  ly: "EL AL",
+  ek: "Emirates",
+  kl: "KLM",
+  la: "LATAM",
+  jj: "LATAM Brasil",
+  lu: "LATAM Express",
+  lp: "LATAM Peru",
+  xl: "LATAM Ecuador",
+  "4c": "LATAM Colombia",
+  ws: "WestJet",
+};
 
 export const QANTAS_GRP_AIRLINES = new Set([
   'qf', 'jq', '3k', 'gk'
@@ -33,11 +48,10 @@ export const WEBSITE_EARN_CATEGORIES = {
   aa: "NOQ 	GKLMSV	HY	PW 	CDIJR	AF ",
   ba: "GKLMNOQSV	-	BEHTWY	-	CDIRJ	AF",
   cx: "ML	BHK	YE	RW	CDIJP	AF",
+  fj: ["-	-	HLQY	-	-	-", "GNTV	KLMOQSW	BHY	-	CDIJZ	-"],
   ay: "AZ	GLMNOQSV	BHKY	EPTW	CDIJR	-",
   ib: "AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-",
-  i2: "AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-",
   jl: "GNOQZ^	HKLMSV	BY	EWPR	CDIJX	AF",
-  nu: "GNOQZ^	HKLMSV	BY	EWPR	CDIJX	AF",
   mh: ["BHKLMVY	-	ACDFIJZ~	-	-	-", "KLMV	BH	IYZ	-	CDJ	AF"],
   qr: "KLMV	BH 	Y	-	CDIJP*R	AF",
   at: "NOQRSTW	HKLMV	BY	-	CDIJ	-",
@@ -45,6 +59,22 @@ export const WEBSITE_EARN_CATEGORIES = {
   ul: ["EGKLMNOQRSW	BHP	Y	-	CDIJ	-", "GLNOQRSV	EKMW	BHPY	-	CDIJ	-"],
 
   qf: ["EGLMNOQSV	-	BHKY	T	R	W	-	DI	CJ	-", "ENOQ	GKLMSV	BHY	T	R	W	I	D	CJ	AF"],
+
+  af: [
+    "EGLNRTVX*	FHKQPU	ABDJMSWY	-	-	-",
+    "EGLNRTVX*	AFHKQPSUW	BMY	-	CDIJO*Z	-",
+    "EGLNRTVX*	HKQU	BMY	ASW	CDIJO*Z	FP",
+  ],
+  mu: ["TVZH	EKLNRS	BMPW*Y	-	CDIJQ	FU^", "TVZ	EKLNRS	BMPW*Y	-	CDIJQ	FU^"],
+  ly: "-	GHKLMNOSUV	Y	BPQW	CDIJZ 	AF ",
+  ek: "LQTV	BKMRUX	EP^WY	-	CH#IJO	AF",
+  kl: [
+    "EGLNRTVX*	FHKQPU	ABDJMSWY	-	-	-",
+    "EGLNRTVX*	AFHKQPSUW	BMY	-	CDIJO*Z	-",
+    "EGLNRTVX*	HKQU	BMY	-	CDIJO*Z	-",
+  ],
+  la: "AGNOQ	LMSVX	BHKY	PW	CDIJZ	-",
+  ws: "KTX	SNQ	HMBY	ROW	-	-",
 };
 
 export const EARN_CATEGORY_URLS = {
@@ -52,6 +82,7 @@ export const EARN_CATEGORY_URLS = {
   aa: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#american-airlines",
   ba: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#british-airways",
   cx: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#cathay-pacific",
+  fj: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#fiji-airways",
   ay: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#finnair",
   ib: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#iberia",
   i2: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#iberia",
@@ -67,6 +98,19 @@ export const EARN_CATEGORY_URLS = {
   jq: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar",
   "3k": "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar",
   gk: "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar",
+
+  af: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#air-france",
+  mu: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#china-eastern",
+  ly: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#el-al",
+  ek: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#emirates",
+  kl: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#klm",
+  la: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#latam",
+  jj: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#latam",
+  lu: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#latam",
+  lp: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#latam",
+  xl: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#latam",
+  "4c": "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#latam",
+  ws: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#westjet",
 };
 
 
