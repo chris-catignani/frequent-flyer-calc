@@ -85,6 +85,11 @@ const shouldClearFareClassForAirlineChange = (segmentInput, airline) => {
 }
 
 const shouldClearFareClassForAirportChange = (airline, originalAirport, newAirport) => {
+  // Because JAL's fare class can toggle between a drop down or free form text, just clear it on any airport change
+  if(JAL_AIRLINES.has(airline)) {
+    return true
+  }
+
   // ignore in progress typing
   if(newAirport.length !== 3) {
     return false
