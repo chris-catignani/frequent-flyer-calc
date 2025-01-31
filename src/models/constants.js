@@ -1,5 +1,11 @@
+export const QANTAS_GRP_AIRLINES = {
+  qf: "Qantas",
+  jq: "Jetstar Airlines",
+  "3k": "Jetstar Asia",
+  gk: "Jetstar Japan",
+}
 
-export const AIRLINES = {
+export const PARTNER_ONEWORLD_AIRLINES = {
   as: "Alaska Airlines",
   aa: "American Airlines",
   ba: "British Airways",
@@ -10,17 +16,14 @@ export const AIRLINES = {
   i2: "Iberia Express",
   jl: "Japan Airlines",
   nu: "Japan Transocean Air",
-  jq: "Jetstar Airlines",
-  "3k": "Jetstar Asia",
-  gk: "Jetstar Japan",
   mh: "Malaysia Airlines",
-  qf: "Qantas",
   qr: "Qatar Airways",
   at: "Royal Air Maroc",
   rj: "Royal Jordanian",
   ul: "Malaysian Airlines",
+};
 
-  //TODO should non-oneworld airlines be in a separate structure for display purposes?
+export const PARTNER_NON_ONEWORLD_AIRLINES = {
   af: "Air France",
   mu: "China Eastern",
   ly: "EL AL",
@@ -28,20 +31,20 @@ export const AIRLINES = {
   kl: "KLM",
   la: "LATAM",
   jj: "LATAM Brasil",
+  "4c": "LATAM Colombia",
+  xl: "LATAM Ecuador",
   lu: "LATAM Express",
   lp: "LATAM Peru",
-  xl: "LATAM Ecuador",
-  "4c": "LATAM Colombia",
   ws: "WestJet",
 };
 
-export const QANTAS_GRP_AIRLINES = new Set([
-  'qf', 'jq', '3k', 'gk'
-])
+export const AIRLINES = {
+  ...QANTAS_GRP_AIRLINES,
+  ...PARTNER_ONEWORLD_AIRLINES,
+  ...PARTNER_NON_ONEWORLD_AIRLINES,
+};
 
-export const JETSTAR_AIRLINES = new Set([
-  'jq', '3k', 'gk'
-])
+export const JETSTAR_AIRLINES = new Set(["jq", "3k", "gk"]);
 
 export const WEBSITE_EARN_CATEGORIES = {
   as: "GOQX	KLMNSV	BHY	-	CDIJ~	AF",
@@ -112,7 +115,6 @@ export const EARN_CATEGORY_URLS = {
   "4c": "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#latam",
   ws: "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#westjet",
 };
-
 
 export const QANTAS_DOMESTIC_FARE_CLASSES = {
   RedeDeal: "discountEconomy",

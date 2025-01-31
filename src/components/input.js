@@ -1,5 +1,6 @@
-import { AIRLINES, JETSTAR_AIRLINES, JETSTAR_FARE_CLASS_DISPLAY, JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_GRP_AIRLINES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
+import { JETSTAR_AIRLINES, JETSTAR_FARE_CLASS_DISPLAY, JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_GRP_AIRLINES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
 import { Autocomplete, TextField, Grid2 } from "@mui/material";
+import { GroupHeader, GroupItems } from "./autocomplete";
 
 export const EliteStatusInput = ({ eliteStatus, onChange }) => {
   return (
@@ -74,8 +75,8 @@ const shouldClearFareClassForAirlineChange = (segmentInput, airline) => {
   // if it used to be a qantas airline, and now it's not.
   // or both are qantas group airlines
   return (
-    QANTAS_GRP_AIRLINES.has(airline) !== QANTAS_GRP_AIRLINES.has(segmentInput?.airline) ||
-    QANTAS_GRP_AIRLINES.has(airline) && QANTAS_GRP_AIRLINES.has(segmentInput?.airline)
+    (airline in QANTAS_GRP_AIRLINES) !== (segmentInput?.airline in QANTAS_GRP_AIRLINES) ||
+    (airline in QANTAS_GRP_AIRLINES) && (segmentInput?.airline in QANTAS_GRP_AIRLINES)
   )
 }
 
@@ -86,25 +87,35 @@ const shouldClearFareClassForAirportChange = (airline, originalAirport, newAirpo
   }
 
   // to be lazy, clear if this is a qantas grp airline
-  return QANTAS_GRP_AIRLINES.has(airline);
+  return airline in QANTAS_GRP_AIRLINES
 };
 
 const AirlineInput = ({ value, error, onChange }) => {
-  const airlines = Object.entries(AIRLINES).map(([iata, name]) => {
-    return {
-      airlineLabel: `${name} (${iata})`,
-      iata,
-      id: iata,
-    };
-  });
+  const buildOptions = (airlines, groupName) => {
+    return Object.entries(airlines).map(([iata, name]) => {
+      return {
+        airlineLabel: `${name} (${iata})`,
+        iata,
+        groupName,
+        id: iata,
+      };
+    });
+  }
+
+  const options = [
+    ...buildOptions(QANTAS_GRP_AIRLINES, "Qantas Group Airlines"),
+    ...buildOptions(PARTNER_ONEWORLD_AIRLINES, "oneworld Partner Airlines"),
+    ...buildOptions(PARTNER_NON_ONEWORLD_AIRLINES, "Other Partner Airlines"),
+  ];
 
   return (
     <Autocomplete
       disablePortal
       disableClearable
-      options={airlines}
+      options={options}
       getOptionLabel={(airline) => airline.airlineLabel || ""}
-      value={airlines.find((airline) => airline.iata === value) || ""}
+      value={options.find((airline) => airline.iata === value) || ""}
+      groupBy={(option) => option.groupName}
       onChange={(_, value) => onChange(value?.iata)}
       sx={{ width: 250 }}
       renderInput={(params) => (
@@ -114,6 +125,12 @@ const AirlineInput = ({ value, error, onChange }) => {
           helperText={error ? error : " "}
           label="Airline"
         />
+      )}
+      renderGroup={(params) => (
+        <li key={params.key}>
+          <GroupHeader>{params.group}</GroupHeader>
+          <GroupItems>{params.children}</GroupItems>
+        </li>
       )}
     />
   );
@@ -170,6 +187,12 @@ const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
           error={error}
           helperText={error ? error : " "}
           label="Fare Class" />
+      )}
+      renderGroup={(params) => (
+        <li key={params.key}>
+          <GroupHeader>{params.group}</GroupHeader>
+          <GroupItems>{params.children}</GroupItems>
+        </li>
       )}
     />
   );
