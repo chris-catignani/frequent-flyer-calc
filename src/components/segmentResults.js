@@ -260,19 +260,14 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   const { segment, error } = segmentResult;
 
   if (error) {
+    const errorColSpan = compareWithQantasCalc ? 7 : 6
     return (
       <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
         <TableCell component="th" scope="row">
           {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
         </TableCell>
         <TableCell align="right">{AIRLINES[segment.airline]}</TableCell>
-        <TableCell align="right">n/a</TableCell>
-        <TableCell align="right">n/a</TableCell>
-        <TableCell align="right">{segment.fareClass}</TableCell>
-        <TableCell align="right">n/a</TableCell>
-        <TableCell align="right">n/a</TableCell>
-        { compareWithQantasCalc && (<TableCell align="right">n/a</TableCell> )}
-        <TableCell align="right">
+        <TableCell align="right" colSpan={errorColSpan}>
           <Alert severity="error">{error.message}</Alert>
         </TableCell>
       </TableRow>
