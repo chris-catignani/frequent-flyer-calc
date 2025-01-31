@@ -2,7 +2,7 @@
 
 import { calculate } from '@/utils/calculators/calculator';
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from "@/components/input";
 import { ExpandMore, Clear, Info } from "@mui/icons-material";
 import { SegmentResults } from '@/components/segmentResults';
@@ -10,6 +10,7 @@ import { getAirport } from '@/utils/airports';
 import { ResultsSummary } from '@/components/resultsSummary';
 import { Segment } from '@/models/segment';
 import { SegmentInput } from '@/models/segmentInput';
+import { JETSTAR_AIRLINES } from '@/models/constants';
 
 const FLAG_ENABLE_QANTAS_API = true
 
@@ -252,138 +253,184 @@ export default function Home() {
     )
   }
 
+  const InfoDisplay = ({ calculationOutput }) => {
+    if (!calculationOutput) {
+      return <></>;
+    }
+
+    const jetstarResults = calculationOutput.segmentResults.filter((segmentResult) => {
+      return JETSTAR_AIRLINES.has(segmentResult.segment.airline)
+    })
+    const jetstarDiscountEconomyResults = jetstarResults.filter(jetstarResult => {
+      return jetstarResult.fareEarnCategory === 'discountEconomy'
+    })
+
+    if (jetstarResults.length === 0) {
+      return <></>;
+    } else {
+      return (
+        <Alert severity="info">
+          {jetstarDiscountEconomyResults.length > 0 && (
+            <>
+              <Typography>
+                If you are travelling on a domestic Jetstar flight within New
+                Zealand that connects to an international Jetstar flight, you
+                will not earn Qantas Points or Status Credits unless you
+                purchase an Economy Starter Plus, Flex, Flex Plus, Economy
+                Starter Max or Business Max fare with Jetstar.
+              </Typography>
+              <br/>
+            </>
+          )}
+          <Typography>
+            Qantas Points and Status Credits are not earned when travelling in
+            the Economy Cabin on flights with a Jetstar (JQ), Jetstar Asia (3K),
+            or Jetstar Japan (GK) flight number as part of a Qantas
+            International fare or when a Jetstar flight voucher has been
+            selected in lieu of Points and Status Credits.
+          </Typography>
+        </Alert>
+      );
+    }
+  };
+
   return (
-    <Grid2
-      container
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      spacing={1}
-      m={2}
-    >
-      <Typography variant="h4">
-        Qantas Points and Status Credit Calculator
-      </Typography>
+    <Container maxWidth="lg">
+      <Grid2
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={1}
+        m={2}
+      >
+        <Typography variant="h4">
+          Qantas Points and Status Credit Calculator
+        </Typography>
 
-      <Box mt={3}>
-        <Paper elevation={3}>
-          <Grid2
-            container
-            direction="row"
-            p={2}
-            sx={{
-              justifyContent: "space-between",
-            }}
-          >
-            <ToggleButtonGroup
-              color="primary"
-              size="small"
-              value={tripType}
-              exclusive
-              onChange={(event) => tripTypeToggled(event.target.value)}
-            >
-              <ToggleButton value="one way">One Way</ToggleButton>
-              <ToggleButton value="return">Return</ToggleButton>
-            </ToggleButtonGroup>
-            <EliteStatusInput
-              eliteStatus={eliteStatus}
-              onChange={(value) => eliteStatusSelected(value)}
-            />
-          </Grid2>
-          <Box p={2}>
-            {segmentInputs.map((segmentInput, segmentInputIdx) => {
-              return (
-                <Grid2 container key={segmentInputIdx}>
-                  <RouteInput
-                    segmentInput={segmentInput}
-                    errors={inputErrors[segmentInputIdx] || {}}
-                    onChange={(segmentInput) => segmentInputChanged(segmentInputIdx, segmentInput)}
-                  />
-                  <RouteInputButton
-                    segmentInputs={segmentInputs}
-                    segmentInputIdx={segmentInputIdx}
-                  />
-                </Grid2>
-              );
-            })}
-
+        <Box mt={3}>
+          <Paper elevation={3}>
             <Grid2
               container
               direction="row"
+              p={2}
               sx={{
                 justifyContent: "space-between",
-                alignItems: "flex-start",
               }}
             >
-              <Button variant="contained" onClick={addSegmentPressed}>
-                Add Segment
-              </Button>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={calculatePressed}
-                loading={isCalculating}
-                sx={{ borderRadius: "28px", left: "40px" }}
+              <ToggleButtonGroup
+                color="primary"
+                size="small"
+                value={tripType}
+                exclusive
+                onChange={(event) => tripTypeToggled(event.target.value)}
               >
-                Calculate
-              </Button>
-              <CompareWithQantasAPISwitch />
+                <ToggleButton value="one way">One Way</ToggleButton>
+                <ToggleButton value="return">Return</ToggleButton>
+              </ToggleButtonGroup>
+              <EliteStatusInput
+                eliteStatus={eliteStatus}
+                onChange={(value) => eliteStatusSelected(value)}
+              />
             </Grid2>
-          </Box>
-        </Paper>
-      </Box>
-      <ResultsSummary
-        mt={5}
-        calculationOutput={calculationOutput}
-        compareWithQantasCalc={compareWithQantasCalc}
-        isCalculating={isCalculating}
-      />
-      <ErrorDisplay calculationOutput={calculationOutput} />
-      {calculationOutput && (
-        <Accordion sx={{ "&:before": { height: "0px" } }}>
-          <AccordionSummary
-            expandIcon={<ExpandMore />}
-            aria-controls="panel1-content"
-            id="panel1-header"
+            <Box p={2}>
+              {segmentInputs.map((segmentInput, segmentInputIdx) => {
+                return (
+                  <Grid2 container key={segmentInputIdx}>
+                    <RouteInput
+                      segmentInput={segmentInput}
+                      errors={inputErrors[segmentInputIdx] || {}}
+                      onChange={(segmentInput) =>
+                        segmentInputChanged(segmentInputIdx, segmentInput)
+                      }
+                    />
+                    <RouteInputButton
+                      segmentInputs={segmentInputs}
+                      segmentInputIdx={segmentInputIdx}
+                    />
+                  </Grid2>
+                );
+              })}
+
+              <Grid2
+                container
+                direction="row"
+                sx={{
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                }}
+              >
+                <Button variant="contained" onClick={addSegmentPressed}>
+                  Add Segment
+                </Button>
+                <Button
+                  variant="contained"
+                  size="large"
+                  onClick={calculatePressed}
+                  loading={isCalculating}
+                  sx={{ borderRadius: "28px", left: "40px" }}
+                >
+                  Calculate
+                </Button>
+                <CompareWithQantasAPISwitch />
+              </Grid2>
+            </Box>
+          </Paper>
+        </Box>
+        <ResultsSummary
+          mt={5}
+          calculationOutput={calculationOutput}
+          compareWithQantasCalc={compareWithQantasCalc}
+          isCalculating={isCalculating}
+        />
+        <ErrorDisplay calculationOutput={calculationOutput} />
+        <InfoDisplay calculationOutput={calculationOutput} />
+        {calculationOutput && (
+          <Accordion sx={{ "&:before": { height: "0px" } }}>
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              aria-controls="panel1-content"
+              id="panel1-header"
+            >
+              <Typography component="span" width="100%" textAlign="center">
+                Expand to see detailed calculation per segment
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <SegmentResults
+                calculatedData={calculationOutput}
+                compareWithQantasCalc={compareWithQantasCalc}
+              />
+            </AccordionDetails>
+          </Accordion>
+        )}
+        <Typography mt={5}>
+          Calculations based on{" "}
+          <a
+            href="https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html"
+            target="_blank"
           >
-            <Typography component="span" width="100%" textAlign="center">
-              Expand to see detailed calculation per segment
-            </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <SegmentResults
-              calculatedData={calculationOutput}
-              compareWithQantasCalc={compareWithQantasCalc}
-            />
-          </AccordionDetails>
-        </Accordion>
-      )}
-      <Typography mt={5}>
-        Calculations based on{" "}
-        <a
-          href="https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html"
-          target="_blank"
-        >
-          Qantas/Jetstar
-        </a>{" "}
-        and{" "}
-        <a
-          href="https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html"
-          target="_blank"
-        >
-          Partner
-        </a>{" "}
-        earning tables as of January 2025.
-      </Typography>
-      <Typography>
-        This webpage is not affiliated with Qantas Airlines.
-      </Typography>
-      <Typography mt={5}>
-        Currently unsupported items:
-        <br />- Jetstar connecting flights in New Zealand (all else is fine)
-        <br />- Japan Airlines domestic flights (international is fine)
-        <br />- Autocomplete for airport input, only accepts iata codes for now
-      </Typography>
-    </Grid2>
+            Qantas/Jetstar
+          </a>{" "}
+          and{" "}
+          <a
+            href="https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html"
+            target="_blank"
+          >
+            Partner
+          </a>{" "}
+          earning tables as of January 2025.
+        </Typography>
+        <Typography>
+          This webpage is not affiliated with Qantas Airlines.
+        </Typography>
+        <Typography mt={5}>
+          Currently unsupported items:
+          <br />- Japan Airlines domestic flights (international is fine)
+          <br />- Autocomplete for airport input, only accepts iata codes for
+          now
+        </Typography>
+      </Grid2>
+    </Container>
   );
 }
