@@ -92,9 +92,34 @@ describe('getPartnerEarnCategory', () => {
   })
 
   describe('Japan Airlines special cases', () => {
-    test('intra-Japan flights fail', () => {
-      const segment = buildSegmentFromString(`jl i hnd cts`)
-      expect(() => getPartnerEarnCategory(segment)).toThrow('Intra Japan flights on JAL are not yet supported')
+    test.each([
+      ['DiscountEconomy', 'economy'],
+      ['DiscountEconomyplusPremiumSurcharge', 'economy'],
+
+      ['Economy', 'flexibleEconomy'],
+      ['DiscountEconomyplusFirstSurcharge', 'flexibleEconomy'],
+
+      ['EconomyplusPremiumSurcharge', 'premiumEconomy'],
+
+      ['EconomyplusFirstSurcharge', 'first'],
+    ])('recognizes the JAL (jl) %s fareclass is a %s categories', (fareClass, expectedCategory) => {
+      const segment = buildSegmentFromString(`jl ${fareClass} hnd cts`)
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    })
+
+    test.each([
+      ['DiscountEconomy', 'economy'],
+      ['DiscountEconomyplusPremiumSurcharge', 'economy'],
+
+      ['Economy', 'flexibleEconomy'],
+      ['DiscountEconomyplusFirstSurcharge', 'flexibleEconomy'],
+
+      ['EconomyplusPremiumSurcharge', 'premiumEconomy'],
+
+      ['EconomyplusFirstSurcharge', 'first'],
+    ])('recognizes the JAL (nu) %s fareclass is a %s categories', (fareClass, expectedCategory) => {
+      const segment = buildSegmentFromString(`nu ${fareClass} hnd cts`)
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     })
 
     test('non intra-Japan flights succeed', () => {

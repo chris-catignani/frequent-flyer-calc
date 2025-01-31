@@ -1,4 +1,4 @@
-import { WEBSITE_EARN_CATEGORIES } from "@/models/constants"
+import { JAL_DOMESTIC_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants"
 import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from "../earnCategories"
 
 export const PARTNER_FARE_CLASSES = ['discountEconomy', 'economy', 'flexibleEconomy', 'premiumEconomy', 'business', 'first']
@@ -17,9 +17,7 @@ const buildJapanAirlinesFareBuckets = (qantasString) => {
       {
         origin: { country: new Set(['japan']) },
         destination: { country: new Set(['japan']) },
-        notSupported: {
-          reason: 'Intra Japan flights on JAL are not yet supported'
-        }
+        categories: {...JAL_DOMESTIC_FARE_CLASSES}
       },
       {
         all: true,

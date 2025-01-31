@@ -1,4 +1,4 @@
-import { JETSTAR_AIRLINES, JETSTAR_FARE_CLASS_DISPLAY, JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_GRP_AIRLINES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
+import { JAL_AIRLINES, JAL_DOMESTIC_FARE_CLASS_DISPLAY, JAL_DOMESTIC_FARE_CLASSES, JETSTAR_AIRLINES, JETSTAR_FARE_CLASS_DISPLAY, JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_GRP_AIRLINES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
 import { Autocomplete, TextField, Grid2 } from "@mui/material";
 import { GroupHeader, GroupItems } from "./autocomplete";
 
@@ -74,9 +74,13 @@ const shouldClearFareClassForAirlineChange = (segmentInput, airline) => {
 
   // if it used to be a qantas airline, and now it's not.
   // or both are qantas group airlines
+  // or used to be a JAL airline, and now isn't
+  // or both are JAL group airlines
   return (
     (airline in QANTAS_GRP_AIRLINES) !== (segmentInput?.airline in QANTAS_GRP_AIRLINES) ||
-    (airline in QANTAS_GRP_AIRLINES) && (segmentInput?.airline in QANTAS_GRP_AIRLINES)
+    (airline in QANTAS_GRP_AIRLINES) && (segmentInput?.airline in QANTAS_GRP_AIRLINES) ||
+    (JAL_AIRLINES.has(airline)) !== (JAL_AIRLINES.has(segmentInput?.airline)) ||
+    (JAL_AIRLINES.has(airline)) && (JAL_AIRLINES.has(segmentInput?.airline))
   )
 }
 
@@ -86,8 +90,8 @@ const shouldClearFareClassForAirportChange = (airline, originalAirport, newAirpo
     return false
   }
 
-  // to be lazy, clear if this is a qantas grp airline
-  return airline in QANTAS_GRP_AIRLINES
+  // to be lazy, clear if this is a qantas grp or JAL airline
+  return airline in QANTAS_GRP_AIRLINES || JAL_AIRLINES.has(airline)
 };
 
 const AirlineInput = ({ value, error, onChange }) => {
@@ -236,6 +240,38 @@ const JetstarFareClassInput = ({ segmentInput, error, onChange }) => {
   );
 }
 
+const JALFareClassInput = ({ segmentInput, error, onChange }) => {
+  const options = Object.keys(JAL_DOMESTIC_FARE_CLASSES).map((fareClass) => {
+    return {
+      display: JAL_DOMESTIC_FARE_CLASS_DISPLAY[fareClass],
+      data: fareClass,
+      id: fareClass,
+    };
+  });
+
+  return (
+    <Autocomplete
+      disablePortal
+      disableClearable
+      options={options}
+      getOptionLabel={(option) => option.display || ""}
+      value={
+        options.find((option) => option.data === segmentInput.fareClass) || ""
+      }
+      onChange={(_, value) => onChange(value?.data)}
+      sx={{ width: 250 }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          error={error}
+          helperText={error ? error : " "}
+          label="Fare Class"
+        />
+      )}
+    />
+  );
+};
+
 const FareClassInput = ({ segmentInput, error, onChange }) => {
   if (segmentInput.airline === "qf") {
     return (
@@ -245,6 +281,13 @@ const FareClassInput = ({ segmentInput, error, onChange }) => {
     return (
       <JetstarFareClassInput segmentInput={segmentInput} error={error} onChange={onChange} />
     )
+  } else if(
+    JAL_AIRLINES.has(segmentInput.airline)
+    && segmentInput.fromAirport?.country === "Japan"
+    && segmentInput.toAirport?.country === "Japan") {
+      return (
+        <JALFareClassInput segmentInput={segmentInput} error={error} onChange={onChange} />
+      )
   }
 
   return (

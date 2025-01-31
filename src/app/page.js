@@ -424,12 +424,6 @@ export default function Home() {
         <Typography>
           This webpage is not affiliated with Qantas Airlines.
         </Typography>
-        <Typography mt={5}>
-          Currently unsupported items:
-          <br />- Japan Airlines domestic flights (international is fine)
-          <br />- Autocomplete for airport input, only accepts iata codes for
-          now
-        </Typography>
       </Grid2>
     </Container>
   );

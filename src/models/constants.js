@@ -46,6 +46,8 @@ export const AIRLINES = {
 
 export const JETSTAR_AIRLINES = new Set(["jq", "3k", "gk"]);
 
+export const JAL_AIRLINES = new Set(["jl",  "nu"]);
+
 export const WEBSITE_EARN_CATEGORIES = {
   as: "GOQX	KLMNSV	BHY	-	CDIJ~	AF",
   aa: "NOQ 	GKLMSV	HY	PW 	CDIJR	AF ",
@@ -185,6 +187,24 @@ export const JETSTAR_FARE_CLASS_DISPLAY = {
   StarterPlus: "Starter Plus",
   StarterMax: "Starter Max",
   BusinessMax: "Business Max",
+};
+
+export const JAL_DOMESTIC_FARE_CLASSES = {
+  DiscountEconomy: "economy",
+  DiscountEconomyplusPremiumSurcharge: "economy",
+  Economy: "flexibleEconomy",
+  DiscountEconomyplusFirstSurcharge: "flexibleEconomy",
+  EconomyplusPremiumSurcharge: "premiumEconomy",
+  EconomyplusFirstSurcharge: "first",
+};
+
+export const JAL_DOMESTIC_FARE_CLASS_DISPLAY = {
+  DiscountEconomy: "Discount Economy",
+  DiscountEconomyplusPremiumSurcharge: "Discount Economy plus Premium Surcharge",
+  Economy: "Economy",
+  DiscountEconomyplusFirstSurcharge: "Discount Economy plus First Surcharge",
+  EconomyplusPremiumSurcharge: "Economy plus Premium Surcharge",
+  EconomyplusFirstSurcharge: "Economy plus First Surcharge",
 };
 
 export const EARN_CATEGORY_DISPLAY = {
