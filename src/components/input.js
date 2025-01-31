@@ -172,37 +172,16 @@ const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
     }
   }
 
-  const options = fareClassOptions.map(fareClass => {
-    return {
-      display: QANTAS_FARE_CLASS_DISPLAY[fareClass] || fareClass,
-      data: fareClass,
-      id: fareClass,
-    };
-  })
-
   return (
-    <Autocomplete
-      disablePortal
-      disableClearable
-      options={options}
-      getOptionLabel={(option) => option.display || ""}
-      value={options.find((option) => option.data === segmentInput.fareClass) || ''}
-      onChange={(_, value) => onChange(value?.data)}
-      groupBy={(option) => option.display.length === 1 ? "Booking Class" : "Fare Type"}
-      sx={{ width: 250 }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          error={error}
-          helperText={error ? error : " "}
-          label="Fare Class" />
-      )}
-      renderGroup={(params) => (
-        <li key={params.key}>
-          <GroupHeader>{params.group}</GroupHeader>
-          <GroupItems>{params.children}</GroupItems>
-        </li>
-      )}
+    <GenericFareClassInput
+      options={fareClassOptions}
+      value={segmentInput.fareClass || ''}
+      displayLookup={QANTAS_FARE_CLASS_DISPLAY}
+      onChange={onChange}
+      groupBy={(option) =>
+        option.length === 1 ? "Booking Class" : "Fare Type"
+      }
+      error={error}
     />
   );
 }
@@ -217,53 +196,41 @@ const JetstarFareClassInput = ({ segmentInput, error, onChange }) => {
     }
   }
 
-  const options = fareClassOptions.map(fareClass => {
-    return {
-      display: JETSTAR_FARE_CLASS_DISPLAY[fareClass],
-      data: fareClass,
-      id: fareClass,
-    };
-  })
-
   return (
-    <Autocomplete
-      disablePortal
-      disableClearable
-      options={options}
-      getOptionLabel={(option) => option.display || ""}
-      value={options.find((option) => option.data === segmentInput.fareClass) || ''}
-      onChange={(_, value) => onChange(value?.data)}
-      sx={{ width: 250 }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          error={error}
-          helperText={error ? error : " "}
-          label="Fare Class" />
-      )}
+    <GenericFareClassInput
+      options={fareClassOptions}
+      value={segmentInput.fareClass || ""}
+      displayLookup={JETSTAR_FARE_CLASS_DISPLAY}
+      onChange={onChange}
+      error={error}
     />
   );
 }
 
 const JALFareClassInput = ({ segmentInput, error, onChange }) => {
-  const options = Object.keys(JAL_DOMESTIC_FARE_CLASSES).map((fareClass) => {
-    return {
-      display: JAL_DOMESTIC_FARE_CLASS_DISPLAY[fareClass],
-      data: fareClass,
-      id: fareClass,
-    };
-  });
+  const fareClassOptions = Object.keys(JAL_DOMESTIC_FARE_CLASSES)
 
+  return (
+    <GenericFareClassInput
+      options={fareClassOptions}
+      value={segmentInput.fareClass || ""}
+      displayLookup={JAL_DOMESTIC_FARE_CLASS_DISPLAY}
+      onChange={onChange}
+      error={error}
+    />
+  );
+};
+
+const GenericFareClassInput = ({options, value, displayLookup, onChange, groupBy, error}) => {
   return (
     <Autocomplete
       disablePortal
       disableClearable
       options={options}
-      getOptionLabel={(option) => option.display || ""}
-      value={
-        options.find((option) => option.data === segmentInput.fareClass) || ""
-      }
-      onChange={(_, value) => onChange(value?.data)}
+      getOptionLabel={(option) => displayLookup[option] || option}
+      value={options.find(option => option === value) || ""}
+      onChange={(_, value) => onChange(value)}
+      groupBy={groupBy}
       sx={{ width: 250 }}
       renderInput={(params) => (
         <TextField
@@ -273,9 +240,15 @@ const JALFareClassInput = ({ segmentInput, error, onChange }) => {
           label="Fare Class"
         />
       )}
+      renderGroup={(params) => (
+        <li key={params.key}>
+          <GroupHeader>{params.group}</GroupHeader>
+          <GroupItems>{params.children}</GroupItems>
+        </li>
+      )}
     />
   );
-};
+}
 
 const FareClassInput = ({ segmentInput, error, onChange }) => {
   if (segmentInput.airline === "qf") {
