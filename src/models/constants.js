@@ -20,7 +20,7 @@ export const PARTNER_ONEWORLD_AIRLINES = {
   qr: "Qatar Airways",
   at: "Royal Air Maroc",
   rj: "Royal Jordanian",
-  ul: "Malaysian Airlines",
+  ul: "SriLankan Airlines",
 };
 
 export const PARTNER_NON_ONEWORLD_AIRLINES = {
