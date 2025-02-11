@@ -357,7 +357,7 @@ export default function Home() {
                 direction="row"
                 sx={{
                   justifyContent: "space-between",
-                  alignItems: "flex-start",
+                  alignItems: "center",
                 }}
               >
                 <Button variant="contained" onClick={addSegmentPressed}>
