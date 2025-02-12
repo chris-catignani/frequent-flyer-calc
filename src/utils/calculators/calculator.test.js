@@ -55,7 +55,7 @@ describe("calculate - go path", () => {
           segment: segment2,
           fareEarnCategory: "business",
           notes: "sydney to West Coast USA/Canada",
-          ruleName: "Syndey, Melbourne, Brisbane, Gold Coast",
+          ruleName: "Sydney, Melbourne, Brisbane, Gold Coast",
           ruleUrl:
             "https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-syd-mel-bne-ool-and-",
           qantasPoints: 13500,

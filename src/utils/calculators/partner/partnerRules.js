@@ -59,7 +59,7 @@ const buildSydMelBneGoldCoastRule = () => {
   }
 
   const ruleUrl = _base_rule_url + '#between-syd-mel-bne-ool-and-'
-  return new GeographicalRule('Syndey, Melbourne, Brisbane, Gold Coast', ruleUrl, ruleConfig)
+  return new GeographicalRule('Sydney, Melbourne, Brisbane, Gold Coast', ruleUrl, ruleConfig)
 }
 
 const buildPerthRule = () => {
