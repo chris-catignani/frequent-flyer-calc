@@ -1,7 +1,7 @@
 import { parseEarningRates, IntraCountryRule, GeographicalRule, DistanceRule } from "../rules"
 import { QANTAS_FARE_CLASSES } from "./qantasEarnCategories"
 
-const _base_rule_url = 'https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html'
+const _base_rule_url = 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html'
 
 export const getQantasRules = () => {
   const standardRules = [

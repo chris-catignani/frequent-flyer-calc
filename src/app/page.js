@@ -407,14 +407,14 @@ export default function Home() {
         <Typography mt={5}>
           Calculations based on{" "}
           <a
-            href="https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html"
+            href="https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html"
             target="_blank"
           >
             Qantas/Jetstar
           </a>{" "}
           and{" "}
           <a
-            href="https://www.qantas.com/es/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html"
+            href="https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html"
             target="_blank"
           >
             Partner
