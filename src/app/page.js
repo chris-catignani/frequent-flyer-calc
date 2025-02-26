@@ -277,7 +277,7 @@ export default function Home() {
   };
 
   return (
-    <Container maxWidth="lg" disableGutters>
+    <Container maxWidth="md" disableGutters>
       <Grid2
         container
         direction="column"
@@ -291,7 +291,7 @@ export default function Home() {
           Qantas Points and Status Credit Calculator
         </Typography>
 
-        <Box mt={3}>
+        <Box mt={3} width="100%">
           <Paper elevation={3}>
             <Grid2
               container
@@ -380,7 +380,7 @@ export default function Home() {
         <ErrorDisplay calculationOutput={calculationOutput} />
         <InfoDisplay calculationOutput={calculationOutput} />
         {calculationOutput && (
-          <Accordion sx={{ "&:before": { height: "0px" } }}>
+          <Accordion sx={{ "&:before": { height: "0px" }, width: "100%"}}>
             <AccordionSummary
               expandIcon={<ExpandMore />}
               aria-controls="panel1-content"
