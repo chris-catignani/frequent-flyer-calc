@@ -216,6 +216,7 @@ export default function Home() {
       <Grid2
         container
         direction="row"
+        wrap="nowrap"
         sx={{
           alignItems: "center",
           justifyContent: "flex-end",
@@ -303,7 +304,8 @@ export default function Home() {
         justifyContent="center"
         alignItems="center"
         spacing={1}
-        m={{ xs: 1, md: 2 }}
+        my={ 2 }
+        mx={{ xs: 0, sm: 2 }}
       >
         <Typography variant="h4" textAlign="center">
           Qantas Points and Status Credit Calculator
