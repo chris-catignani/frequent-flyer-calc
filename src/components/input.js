@@ -20,50 +20,90 @@ export const EliteStatusInput = ({ eliteStatus, onChange }) => {
 
 export const RouteInput = ({segmentInput, errors, showDeleteButton, onChange, onDeleteClicked}) => {
   return (
-    <Grid2 container justifyContent="center" alignItems="center" spacing={1}>
-      <AirlineInput
-        value={segmentInput.airline}
-        error={errors['airline']}
-        onChange={(value) => {
-          const newSegmentInput = segmentInput.clone({ airline: value });
-          if (shouldClearFareClassForAirlineChange(segmentInput, value)) {
-            newSegmentInput.fareClass = "";
-          }
-          onChange(newSegmentInput);
-        }}
-      />
-      <AirportInput
-        label={"From (e.g. syd)"}
-        value={segmentInput.fromAirportText}
-        error={errors['fromAirportText']}
-        onChange={(value) => {
-          const newSegmentInput = segmentInput.clone({ fromAirportText: value });
-          if (shouldClearFareClassForAirportChange(segmentInput.airline, segmentInput.fromAirportText, value)) {
-            newSegmentInput.fareClass = "";
-          }
-          onChange(newSegmentInput);
-        }}
-      />
-      <AirportInput
-        label={"To (e.g. mel)"}
-        value={segmentInput.toAirportText}
-        error={errors['toAirportText']}
-        onChange={(value) => {
-          const newSegmentInput = segmentInput.clone({ toAirportText: value });
-          if (shouldClearFareClassForAirportChange(segmentInput.airline, segmentInput.toAirportText, value)) {
-            newSegmentInput.fareClass = "";
-          }
-          onChange(newSegmentInput);
-        }}
-      />
-      <FareClassInput
-        segmentInput={segmentInput}
-        error={errors['fareClass']}
-        onChange={(value) => {
-          onChange(segmentInput.clone({ fareClass: value }));
-        }}
-      />
-      <RemoveRouteInputButton showDeleteButton={showDeleteButton} onDeleteClicked={onDeleteClicked} />
+    <Grid2
+      container
+      spacing={1}
+      columns={21}
+      sx={{
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <Grid2 size={6}>
+        <AirlineInput
+          value={segmentInput.airline}
+          error={errors["airline"]}
+          onChange={(value) => {
+            const newSegmentInput = segmentInput.clone({ airline: value });
+            if (shouldClearFareClassForAirlineChange(segmentInput, value)) {
+              newSegmentInput.fareClass = "";
+            }
+            onChange(newSegmentInput);
+          }}
+        />
+      </Grid2>
+      <Grid2 size={4}>
+        <AirportInput
+          label={"From (e.g. syd)"}
+          value={segmentInput.fromAirportText}
+          error={errors["fromAirportText"]}
+          onChange={(value) => {
+            const newSegmentInput = segmentInput.clone({
+              fromAirportText: value,
+            });
+            if (
+              shouldClearFareClassForAirportChange(
+                segmentInput.airline,
+                segmentInput.fromAirportText,
+                value
+              )
+            ) {
+              newSegmentInput.fareClass = "";
+            }
+            onChange(newSegmentInput);
+          }}
+        />
+      </Grid2>
+      <Grid2 size={4}>
+        <AirportInput
+          label={"To (e.g. mel)"}
+          value={segmentInput.toAirportText}
+          error={errors["toAirportText"]}
+          onChange={(value) => {
+            const newSegmentInput = segmentInput.clone({
+              toAirportText: value,
+            });
+            if (
+              shouldClearFareClassForAirportChange(
+                segmentInput.airline,
+                segmentInput.toAirportText,
+                value
+              )
+            ) {
+              newSegmentInput.fareClass = "";
+            }
+            onChange(newSegmentInput);
+          }}
+        />
+      </Grid2>
+      <Grid2 size={6}>
+        <FareClassInput
+          segmentInput={segmentInput}
+          error={errors["fareClass"]}
+          onChange={(value) => {
+            onChange(segmentInput.clone({ fareClass: value }));
+          }}
+        />
+      </Grid2>
+      <Grid2
+        size={1}
+        mb={2} // accomadate for the other fields that have "helper text" to display errors under them
+      >
+        <RemoveRouteInputButton
+          showDeleteButton={showDeleteButton}
+          onDeleteClicked={onDeleteClicked}
+        />
+      </Grid2>
     </Grid2>
   );
 }
@@ -80,8 +120,7 @@ const RemoveRouteInputButton = ({ showDeleteButton, onDeleteClicked }) => {
     return (
       <IconButton
         sx={{
-          mb: 3,
-          pr: 0,
+          pl: 0,
           "&:hover": { backgroundColor: "inherit", boxShadow: "none" },
         }}
         onClick={onDeleteClicked}
@@ -152,7 +191,6 @@ const AirlineInput = ({ value, error, onChange }) => {
       value={options.find((airline) => airline.iata === value) || ""}
       groupBy={(option) => option.groupName}
       onChange={(_, value) => onChange(value?.iata)}
-      sx={{ width: 250 }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -181,7 +219,6 @@ const AirportInput = ({ label, value, error, onChange }) => {
       onChange={(event) => {
         onChange(event.target.value?.toLowerCase()?.trim());
       }}
-      sx={{ width: 150 }}
     />
   );
 };
@@ -257,7 +294,6 @@ const GenericFareClassInput = ({options, value, displayLookup, onChange, groupBy
       value={options.find(option => option === value) || ""}
       onChange={(_, value) => onChange(value)}
       groupBy={groupBy}
-      sx={{ width: 250 }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -303,7 +339,7 @@ const FareClassInput = ({ segmentInput, error, onChange }) => {
         onChange(event.target.value?.trim()?.toLowerCase())
       }}
       label='Fare Class (e.g. "y" or "i")'
-      sx={{ width: 250 }}
+      sx={{ width: '100%' }}
     />
   );
 };
