@@ -1,6 +1,7 @@
 import { JAL_AIRLINES, JAL_DOMESTIC_FARE_CLASS_DISPLAY, JAL_DOMESTIC_FARE_CLASSES, JETSTAR_AIRLINES, JETSTAR_FARE_CLASS_DISPLAY, JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_FARE_CLASS_DISPLAY, QANTAS_GRP_AIRLINES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants";
-import { Autocomplete, TextField, Grid2 } from "@mui/material";
+import { Autocomplete, TextField, Grid2, IconButton } from "@mui/material";
 import { GroupHeader, GroupItems } from "./autocomplete";
+import { Clear } from "@mui/icons-material";
 
 export const EliteStatusInput = ({ eliteStatus, onChange }) => {
   return (
@@ -17,7 +18,7 @@ export const EliteStatusInput = ({ eliteStatus, onChange }) => {
   );
 };
 
-export const RouteInput = ({segmentInput, errors, onChange}) => {
+export const RouteInput = ({segmentInput, errors, showDeleteButton, onChange, onDeleteClicked}) => {
   return (
     <Grid2 container justifyContent="center" alignItems="center" spacing={1}>
       <AirlineInput
@@ -62,9 +63,34 @@ export const RouteInput = ({segmentInput, errors, onChange}) => {
           onChange(segmentInput.clone({ fareClass: value }));
         }}
       />
+      <RemoveRouteInputButton showDeleteButton={showDeleteButton} onDeleteClicked={onDeleteClicked} />
     </Grid2>
   );
 }
+
+const RemoveRouteInputButton = ({ showDeleteButton, onDeleteClicked }) => {
+  if (!showDeleteButton) {
+    return (
+      // Dummy icon to maintain space for when we show icons
+      <IconButton disabled sx={{ visibility: "hidden", pr: 0 }}>
+        <Clear />
+      </IconButton>
+    );
+  } else {
+    return (
+      <IconButton
+        sx={{
+          mb: 3,
+          pr: 0,
+          "&:hover": { backgroundColor: "inherit", boxShadow: "none" },
+        }}
+        onClick={onDeleteClicked}
+      >
+        <Clear />
+      </IconButton>
+    );
+  }
+};
 
 const shouldClearFareClassForAirlineChange = (segmentInput, airline) => {
   // if the airline did not change

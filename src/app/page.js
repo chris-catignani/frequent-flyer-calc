@@ -4,7 +4,7 @@ import { calculate } from '@/utils/calculators/calculator';
 import { useState } from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from "@/components/input";
-import { ExpandMore, Clear, Info } from "@mui/icons-material";
+import { ExpandMore, Info } from "@mui/icons-material";
 import { SegmentResults } from '@/components/segmentResults';
 import { getAirport } from '@/utils/airports';
 import { ResultsSummary } from '@/components/resultsSummary';
@@ -108,7 +108,7 @@ export default function Home() {
     setCalculationOutput(null);
   }
 
-  const removeSegmentPressed = (segmentInputIdx) => {
+  const deleteSegmentPressed = (segmentInputIdx) => {
     const newSegmentInputs = [...segmentInputs];
     newSegmentInputs.splice(segmentInputIdx, 1);
     setSegmentInputs(newSegmentInputs);
@@ -168,26 +168,6 @@ export default function Home() {
       doCalculation(eliteStatus, tripType, newCompareWithQantasCalc);
     }
   }
-
-  const RouteInputButton = ({ segmentInputs, segmentInputIdx }) => {
-    if (segmentInputs.length === 1) {
-      return (
-        // Dummy icon to maintain space for when we show icons
-        <IconButton disabled sx={{ visibility: 'hidden', pr: 0 }}>
-          <Clear />
-        </IconButton>
-      );
-    } else {
-      return (
-        <IconButton
-          sx={{ mb: 3, pr: 0, '&:hover': { backgroundColor: 'inherit', boxShadow: 'none' } }}
-          onClick={() => removeSegmentPressed(segmentInputIdx)}
-        >
-          <Clear />
-        </IconButton>
-      );
-    }
-  };
 
   const QantasApiDialog = ({ open, onClose}) => {
     return (
@@ -339,19 +319,16 @@ export default function Home() {
             <Box p={2}>
               {segmentInputs.map((segmentInput, segmentInputIdx) => {
                 return (
-                  <Grid2 container key={segmentInputIdx}>
-                    <RouteInput
-                      segmentInput={segmentInput}
-                      errors={inputErrors[segmentInputIdx] || {}}
-                      onChange={(segmentInput) =>
-                        segmentInputChanged(segmentInputIdx, segmentInput)
-                      }
-                    />
-                    <RouteInputButton
-                      segmentInputs={segmentInputs}
-                      segmentInputIdx={segmentInputIdx}
-                    />
-                  </Grid2>
+                  <RouteInput
+                    key={segmentInputIdx}
+                    segmentInput={segmentInput}
+                    showDeleteButton={segmentInputs.length > 1}
+                    onDeleteClicked={() => deleteSegmentPressed(segmentInputIdx)}
+                    errors={inputErrors[segmentInputIdx] || {}}
+                    onChange={(segmentInput) =>
+                      segmentInputChanged(segmentInputIdx, segmentInput)
+                    }
+                  />
                 );
               })}
 
