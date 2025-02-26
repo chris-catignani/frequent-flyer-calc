@@ -218,6 +218,7 @@ export default function Home() {
         direction="row"
         sx={{
           alignItems: "center",
+          justifyContent: "flex-end",
           visibility: FLAG_ENABLE_QANTAS_API ? "" : "hidden",
         }}
       >
@@ -295,16 +296,16 @@ export default function Home() {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" disableGutters>
       <Grid2
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
         spacing={1}
-        m={2}
+        m={{ xs: 1, md: 2 }}
       >
-        <Typography variant="h4">
+        <Typography variant="h4" textAlign="center">
           Qantas Points and Status Credit Calculator
         </Typography>
 
@@ -354,25 +355,39 @@ export default function Home() {
 
               <Grid2
                 container
-                direction="row"
+                columns={{ xs: 8, sm: 12 }}
+                spacing={{ xs: 2, sm: 0 }}
                 sx={{
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
               >
-                <Button variant="contained" onClick={addSegmentPressed}>
-                  Add Segment
-                </Button>
-                <Button
-                  variant="contained"
-                  size="large"
-                  onClick={calculatePressed}
-                  loading={isCalculating}
-                  sx={{ borderRadius: "28px", left: "40px" }}
+                <Grid2 size={4}>
+                  <Button variant="contained" onClick={addSegmentPressed}>
+                    Add Segment
+                  </Button>
+                </Grid2>
+                <Grid2
+                  container
+                  size={{xs: 8, sm: 4}}
+                  order={{ xs: 3, sm: 2 }}
+                  sx={{
+                    justifyContent: "center"
+                  }}
                 >
-                  Calculate
-                </Button>
-                <CompareWithQantasAPISwitch />
+                  <Button
+                    variant="contained"
+                    size="large"
+                    onClick={calculatePressed}
+                    loading={isCalculating}
+                    sx={{ borderRadius: "28px" }}
+                  >
+                    Calculate
+                  </Button>
+                </Grid2>
+                <Grid2 size={4} order={{ xs: 2, sm: 3 }}>
+                  <CompareWithQantasAPISwitch />
+                </Grid2>
               </Grid2>
             </Box>
           </Paper>
