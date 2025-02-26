@@ -25,11 +25,11 @@ export const RouteInput = ({segmentInput, errors, showDeleteButton, onChange, on
       spacing={1}
       columns={21}
       sx={{
-        justifyContent: "space-between",
+        justifyContent: "flex-start",
         alignItems: "center",
       }}
     >
-      <Grid2 size={6}>
+      <Grid2 size={{ xs: 20, sm: 6 }} order={1}>
         <AirlineInput
           value={segmentInput.airline}
           error={errors["airline"]}
@@ -42,7 +42,7 @@ export const RouteInput = ({segmentInput, errors, showDeleteButton, onChange, on
           }}
         />
       </Grid2>
-      <Grid2 size={4}>
+      <Grid2 size={{ xs: 10, sm: 4 }} order={2}>
         <AirportInput
           label={"From (e.g. syd)"}
           value={segmentInput.fromAirportText}
@@ -64,7 +64,7 @@ export const RouteInput = ({segmentInput, errors, showDeleteButton, onChange, on
           }}
         />
       </Grid2>
-      <Grid2 size={4}>
+      <Grid2 size={{ xs: 10, sm: 4 }} order={3}>
         <AirportInput
           label={"To (e.g. mel)"}
           value={segmentInput.toAirportText}
@@ -86,7 +86,7 @@ export const RouteInput = ({segmentInput, errors, showDeleteButton, onChange, on
           }}
         />
       </Grid2>
-      <Grid2 size={6}>
+      <Grid2 size={{ xs: 20, sm: 6 }} order={{ xs: 5, sm: 4 }}>
         <FareClassInput
           segmentInput={segmentInput}
           error={errors["fareClass"]}
@@ -97,7 +97,8 @@ export const RouteInput = ({segmentInput, errors, showDeleteButton, onChange, on
       </Grid2>
       <Grid2
         size={1}
-        mb={2} // accomadate for the other fields that have "helper text" to display errors under them
+        mb={2} // accommodate for the other fields that have "helper text" to display errors under them
+        order={{ xs: 4, sm: 5 }}
       >
         <RemoveRouteInputButton
           showDeleteButton={showDeleteButton}
@@ -191,6 +192,7 @@ const AirlineInput = ({ value, error, onChange }) => {
       value={options.find((airline) => airline.iata === value) || ""}
       groupBy={(option) => option.groupName}
       onChange={(_, value) => onChange(value?.iata)}
+      sx={{ width: "100%" }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -216,6 +218,7 @@ const AirportInput = ({ label, value, error, onChange }) => {
       value={value}
       error={error}
       helperText={error ? error : " "}
+      sx={{ width: "100%" }}
       onChange={(event) => {
         onChange(event.target.value?.toLowerCase()?.trim());
       }}
@@ -291,9 +294,10 @@ const GenericFareClassInput = ({options, value, displayLookup, onChange, groupBy
       disableClearable
       options={options}
       getOptionLabel={(option) => displayLookup[option] || option}
-      value={options.find(option => option === value) || ""}
+      value={options.find((option) => option === value) || ""}
       onChange={(_, value) => onChange(value)}
       groupBy={groupBy}
+      sx={{ width: "100%" }}
       renderInput={(params) => (
         <TextField
           {...params}
