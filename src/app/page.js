@@ -2,7 +2,7 @@
 
 import { calculate } from '@/utils/calculators/calculator';
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Dialog, DialogTitle, Divider, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from "@/components/input";
 import { ExpandMore, Info } from "@mui/icons-material";
 import { SegmentResults } from '@/components/segmentResults';
@@ -319,16 +319,21 @@ export default function Home() {
             <Box p={2}>
               {segmentInputs.map((segmentInput, segmentInputIdx) => {
                 return (
-                  <RouteInput
-                    key={segmentInputIdx}
-                    segmentInput={segmentInput}
-                    showDeleteButton={segmentInputs.length > 1}
-                    onDeleteClicked={() => deleteSegmentPressed(segmentInputIdx)}
-                    errors={inputErrors[segmentInputIdx] || {}}
-                    onChange={(segmentInput) =>
-                      segmentInputChanged(segmentInputIdx, segmentInput)
-                    }
-                  />
+                  <Box key={segmentInputIdx}>
+                    {/* Show divider only on mobile (sx breakpoint) */}
+                    {segmentInputIdx > 0 && <Divider sx={{mb: {xs: 3, sm: 0}, visibility: {sm: 'hidden'} }} />}
+                    <RouteInput
+                      segmentInput={segmentInput}
+                      showDeleteButton={segmentInputs.length > 1}
+                      onDeleteClicked={() =>
+                        deleteSegmentPressed(segmentInputIdx)
+                      }
+                      errors={inputErrors[segmentInputIdx] || {}}
+                      onChange={(segmentInput) =>
+                        segmentInputChanged(segmentInputIdx, segmentInput)
+                      }
+                    />
+                  </Box>
                 );
               })}
 
