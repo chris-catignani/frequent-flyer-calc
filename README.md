@@ -37,3 +37,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 Flights where this calc and qantas calc are not in sync:
 China Airlines PVG-SZX
+American Airlines DFW-LAX
