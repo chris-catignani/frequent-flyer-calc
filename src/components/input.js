@@ -121,7 +121,7 @@ const RemoveRouteInputButton = ({ showDeleteButton, onDeleteClicked }) => {
     return (
       <IconButton
         sx={{
-          pl: 0,
+          p: 0,
           "&:hover": { backgroundColor: "inherit", boxShadow: "none" },
         }}
         onClick={onDeleteClicked}
