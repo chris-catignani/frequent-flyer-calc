@@ -3,6 +3,9 @@ import { Box, Dialog, DialogTitle, Grid2, IconButton, Tooltip, Typography } from
 import { useState } from "react";
 
 export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCalculating }) => {
+  if (!calculationOutput) {
+    return (<></>)
+  }
 
   const MatchesQantasErrorDialog = ({ open, onClose, error }) => {
     return (
