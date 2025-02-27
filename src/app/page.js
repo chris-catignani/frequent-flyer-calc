@@ -403,7 +403,7 @@ export default function Home() {
             </AccordionDetails>
           </Accordion>
         )}
-        <Typography mt={5}>
+        <Typography mt={5} mx={2} textAlign={"center"}>
           Calculations based on{" "}
           <a
             href="https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html"
