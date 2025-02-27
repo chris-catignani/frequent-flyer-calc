@@ -2,9 +2,9 @@
 
 import { calculate } from '@/utils/calculators/calculator';
 import { useState } from 'react';
-import { Accordion, AccordionDetails, AccordionSummary, Alert, Box, Button, Container, Dialog, DialogTitle, Divider, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
+import { Alert, Box, Button, Container, Dialog, DialogTitle, Divider, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material';
 import { EliteStatusInput, RouteInput } from "@/components/input";
-import { ExpandMore, Info } from "@mui/icons-material";
+import { Info } from "@mui/icons-material";
 import { SegmentResults } from '@/components/segmentResults';
 import { getAirport } from '@/utils/airports';
 import { ResultsSummary } from '@/components/resultsSummary';
@@ -384,25 +384,10 @@ export default function Home() {
         />
         <ErrorDisplay calculationOutput={calculationOutput} />
         <InfoDisplay calculationOutput={calculationOutput} />
-        {calculationOutput && (
-          <Accordion sx={{ "&:before": { height: "0px" }, width: "100%"}}>
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-              aria-controls="panel1-content"
-              id="panel1-header"
-            >
-              <Typography component="span" width="100%" textAlign="center">
-                Expand to see detailed calculation per segment
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <SegmentResults
-                calculatedData={calculationOutput}
-                compareWithQantasCalc={compareWithQantasCalc}
-              />
-            </AccordionDetails>
-          </Accordion>
-        )}
+        <SegmentResults
+          calculatedData={calculationOutput}
+          compareWithQantasCalc={compareWithQantasCalc}
+        />
         <Typography mt={5} mx={2} textAlign={"center"}>
           Calculations based on{" "}
           <a

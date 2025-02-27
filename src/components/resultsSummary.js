@@ -10,7 +10,7 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
         <DialogTitle>Qantas Calculator failed to calculate at least one segment</DialogTitle>
         <Grid2 container direction="column" mx={2} mb={2}>
           <Typography>{error.message}</Typography>
-          <Typography mt={2}>Expand the results below to see details by segment</Typography>
+          <Typography mt={2}>See the results below to see details by segment</Typography>
         </Grid2>
       </Dialog>
     );
@@ -28,7 +28,7 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
           <Typography>{fieldLabel + ": " + expectedValue}</Typography>
           <Typography mt={2}>Qantas Calculator Results:</Typography>
           <Typography>{fieldLabel + ": " + actualValue}</Typography>
-          <Typography mt={2}>Expand the results below to see details by segment</Typography>
+          <Typography mt={2}>See the results below to see details by segment</Typography>
         </Grid2>
       </Dialog>
     );

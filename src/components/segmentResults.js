@@ -1,7 +1,7 @@
 import { AIRLINES, EARN_CATEGORY_DISPLAY, EARN_CATEGORY_URLS, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
-import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert, Tooltip } from "@mui/material";
+import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert, Tooltip, Collapse } from "@mui/material";
 import { useState } from "react";
-import { Cancel, CheckCircle, Info } from "@mui/icons-material";
+import { Cancel, CheckCircle, Info, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 
 export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
   if (!calculatedData) {
@@ -14,6 +14,8 @@ export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
       direction="column"
       justifyContent="center"
       alignItems="center"
+      width="100%"
+      maxWidth="sm"
     >
       <TableContainer>
         <Table>
@@ -38,15 +40,12 @@ export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
 const SegmentTableHeader = ({ compareWithQantasCalc }) => {
   return (
     <TableRow>
-      <TableCell>Segment<br/>Route</TableCell>
-      <TableCell align="right">Airline</TableCell>
+      <TableCell />
+      <TableCell>Segment Route</TableCell>
       <TableCell align="right">Qantas Points</TableCell>
-      <TableCell align="right">Status<br/>Credits</TableCell>
-      <TableCell align="right">Fare Class</TableCell>
-      <TableCell align="right">Earning<br/>Category</TableCell>
-      <TableCell align="right">Earning Rule</TableCell>
+      <TableCell align="right">Status Credits</TableCell>
       { compareWithQantasCalc && (
-        <TableCell align="right">Matches<br/>Qantas</TableCell>
+        <TableCell align="right">Matches Qantas</TableCell>
       )}
     </TableRow>
   );
@@ -60,15 +59,6 @@ const getFareClassDisplay = (fareClass) => {
   } else {
     return fareClass;
   }
-}
-
-const getEarnCategoryDisplay = (airline, earnCategory) => {
-  return (
-    <a href={EARN_CATEGORY_URLS[airline]} target="_blank">
-      {EARN_CATEGORY_DISPLAY[earnCategory]}
-    </a>
-  );
-
 }
 
 const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
@@ -129,47 +119,6 @@ const QantasPointsDisplay = ({ segmentResult }) => {
     </Grid2>
   );
 }
-
-const RuleDialog = ({ open, onClose, ruleName, ruleUrl, notes }) => {
-  return (
-    <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Calculation notes</DialogTitle>
-      <Grid2
-        container
-        direction="column"
-        mx={2}
-        mb={2}
-      >
-        <Typography>Rule used: <a href={ruleUrl} target="_blank">{ruleName}</a></Typography>
-        <Typography>Rule specifics: {notes}</Typography>
-      </Grid2>
-    </Dialog>
-  );
-};
-
-const RuleDisplay = ({ ruleName, ruleUrl, notes }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <Grid2 container justifyContent="flex-end">
-      <a href={ruleUrl} target="_blank">
-        {ruleName}
-      </a>
-      <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
-        <Info />
-      </IconButton>
-      <RuleDialog open={open} onClose={handleClose} ruleUrl={ruleUrl} ruleName={ruleName} notes={notes} />
-    </Grid2>
-  );
-};
 
 const MatchesQantasSegmentErrorDialog = ({ open, onClose, error }) => {
   return (
@@ -259,14 +208,16 @@ const MatchesQantasSegment = ({ segmentResult }) => {
 const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   const { segment, error } = segmentResult;
 
+  const [open, setOpen] = useState(false);
+
   if (error) {
-    const errorColSpan = compareWithQantasCalc ? 7 : 6
+    const errorColSpan = compareWithQantasCalc ? 3 : 2
     return (
-      <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+      <TableRow>
+        <TableCell></TableCell>
         <TableCell component="th" scope="row">
           {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
         </TableCell>
-        <TableCell align="right">{AIRLINES[segment.airline]}</TableCell>
         <TableCell align="right" colSpan={errorColSpan}>
           <Alert severity="error">{error.message}</Alert>
         </TableCell>
@@ -275,38 +226,79 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   }
 
   return (
-    <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-      <TableCell component="th" scope="row">
-        {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
-      </TableCell>
-      <TableCell align="right">{AIRLINES[segment.airline]}</TableCell>
-      <TableCell align="right">
-        <QantasPointsDisplay segmentResult={segmentResult} />
-      </TableCell>
-      <TableCell align="right">
-        {segmentResult.statusCredits?.toLocaleString()}
-      </TableCell>
-      <TableCell align="right">
-        {getFareClassDisplay(segment.fareClass)}
-      </TableCell>
-      <TableCell align="right">
-        {getEarnCategoryDisplay(
-          segment.airline,
-          segmentResult.fareEarnCategory
-        )}
-      </TableCell>
-      <TableCell align="right">
-        <RuleDisplay
-          ruleName={segmentResult.ruleName}
-          ruleUrl={segmentResult.ruleUrl}
-          notes={segmentResult.notes}
-        />
-      </TableCell>
-      {compareWithQantasCalc && (
-        <TableCell align="right">
-          <MatchesQantasSegment segmentResult={segmentResult} />
+    <>
+      <TableRow onClick={() => setOpen(!open)} sx={{cursor: "pointer"}}>
+        <TableCell>
+          <IconButton size="small">
+            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
         </TableCell>
-      )}
-    </TableRow>
+        <TableCell component="th" scope="row">
+          {segment.fromAirport.iata.toLowerCase()} -{" "}
+          {segment.toAirport.iata.toLowerCase()}
+        </TableCell>
+        <TableCell align="right">
+          {segmentResult.qantasPoints?.toLocaleString()}
+        </TableCell>
+        <TableCell align="right">
+          {segmentResult.statusCredits?.toLocaleString()}
+        </TableCell>
+        {compareWithQantasCalc && (
+          <TableCell align="right">
+            <MatchesQantasSegment segmentResult={segmentResult} />
+          </TableCell>
+        )}
+      </TableRow>
+      <TableRow>
+        <TableCell
+          style={{ paddingBottom: 0, paddingTop: 0 }}
+          colSpan={compareWithQantasCalc ? 5 : 4}
+        >
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <Grid2 container m={2} direction="column">
+              <Grid2>
+                <Typography>Airline: {AIRLINES[segment.airline]}</Typography>
+              </Grid2>
+              <Grid2>
+                <Typography>
+                  Fare Class: {getFareClassDisplay(segment.fareClass)}
+                </Typography>
+              </Grid2>
+              <Grid2 container direction="row" spacing={1}>
+                <Typography>Qantas Points:</Typography>
+                <QantasPointsDisplay segmentResult={segmentResult} />
+              </Grid2>
+              <Grid2>
+                <Typography>
+                  Status Credits:{" "}
+                  {segmentResult.statusCredits?.toLocaleString()}
+                </Typography>
+              </Grid2>
+              <Grid2 container direction="row" spacing={1}>
+                <Typography>Earn Category:</Typography>
+                <Typography>
+                  <a href={EARN_CATEGORY_URLS[segment.airline]} target="_blank">
+                    {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory]}
+                  </a>
+                </Typography>
+              </Grid2>
+              <Grid2 container direction="row" spacing={1}>
+                <Typography>Earning Table:</Typography>
+                <Typography>
+                  <a href={segmentResult.ruleUrl} target="_blank">
+                    {segmentResult.ruleName}
+                  </a>
+                </Typography>
+              </Grid2>
+              <Grid2>
+                <Typography>
+                  Calculation Notes: {segmentResult.notes}
+                </Typography>
+              </Grid2>
+            </Grid2>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
   );
 };
