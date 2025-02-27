@@ -113,7 +113,7 @@ const RemoveRouteInputButton = ({ showDeleteButton, onDeleteClicked }) => {
   if (!showDeleteButton) {
     return (
       // Dummy icon to maintain space for when we show icons
-      <IconButton disabled sx={{ visibility: "hidden", pr: 0 }}>
+      <IconButton disabled sx={{ visibility: "hidden", p: 0 }}>
         <Clear />
       </IconButton>
     );
