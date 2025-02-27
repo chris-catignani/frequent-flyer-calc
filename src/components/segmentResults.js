@@ -227,20 +227,33 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
 
   return (
     <>
-      <TableRow onClick={() => setOpen(!open)} sx={{cursor: "pointer"}}>
-        <TableCell>
+      <TableRow>
+        <TableCell onClick={() => setOpen(!open)} sx={{ cursor: "pointer" }}>
           <IconButton size="small">
             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
+        <TableCell
+          component="th"
+          scope="row"
+          onClick={() => setOpen(!open)}
+          sx={{ cursor: "pointer" }}
+        >
           {segment.fromAirport.iata.toLowerCase()} -{" "}
           {segment.toAirport.iata.toLowerCase()}
         </TableCell>
-        <TableCell align="right">
+        <TableCell
+          align="right"
+          onClick={() => setOpen(!open)}
+          sx={{ cursor: "pointer" }}
+        >
           {segmentResult.qantasPoints?.toLocaleString()}
         </TableCell>
-        <TableCell align="right">
+        <TableCell
+          align="right"
+          onClick={() => setOpen(!open)}
+          sx={{ cursor: "pointer" }}
+        >
           {segmentResult.statusCredits?.toLocaleString()}
         </TableCell>
         {compareWithQantasCalc && (
