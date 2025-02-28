@@ -147,39 +147,24 @@ const MatchesQantasSegmentMisMatchDialog = ({ open, onClose, segmentResult }) =>
   );
 };
 
-const MatchesQantasSegment = ({ segmentResult }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+const MatchesQantasSegmentIcon = ({
+  segmentResult,
+  qantasAPIError,
+  matchesQantasPoints,
+  matchesStatusCredits,
+}) => {
   if (!segmentResult.qantasAPIResults) {
     return <></>;
   }
-
-  const qantasAPIError = segmentResult.qantasAPIResults?.error
-  const matchesQantasPoints = segmentResult.qantasPoints === segmentResult.qantasAPIResults?.qantasData?.qantasPoints
-  const matchesStatusCredits = segmentResult.statusCredits === segmentResult.qantasAPIResults?.qantasData?.statusCredits
 
   if (qantasAPIError) {
     return (
       <Tooltip title="Qantas Calculator Failed to Calculate">
         <IconButton
-          onClick={handleClickOpen}
           sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
         >
           <Info color="warning" />
         </IconButton>
-        <MatchesQantasSegmentErrorDialog
-          open={open}
-          onClose={handleClose}
-          error={qantasAPIError}
-        />
       </Tooltip>
     );
   } else if (matchesQantasPoints && matchesStatusCredits) {
@@ -194,12 +179,10 @@ const MatchesQantasSegment = ({ segmentResult }) => {
     return (
       <Tooltip title="Does not match Qantas Calculator">
         <IconButton
-          onClick={handleClickOpen}
           sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
         >
           <Cancel color="error" />
         </IconButton>
-        <MatchesQantasSegmentMisMatchDialog open={open} onClose={handleClose} segmentResult={segmentResult} />
       </Tooltip>
     );
   }
@@ -208,7 +191,8 @@ const MatchesQantasSegment = ({ segmentResult }) => {
 const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   const { segment, error } = segmentResult;
 
-  const [open, setOpen] = useState(false);
+  const [expandRow, setExpandRow] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   if (error) {
     const errorColSpan = compareWithQantasCalc ? 3 : 2
@@ -225,40 +209,49 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
     );
   }
 
+  const qantasAPIError = segmentResult.qantasAPIResults?.error
+  const matchesQantasPoints = segmentResult.qantasPoints === segmentResult.qantasAPIResults?.qantasData?.qantasPoints
+  const matchesStatusCredits = segmentResult.statusCredits === segmentResult.qantasAPIResults?.qantasData?.statusCredits
+
   return (
     <>
-      <TableRow>
-        <TableCell onClick={() => setOpen(!open)} sx={{ cursor: "pointer" }}>
+      <TableRow sx={{ cursor: "pointer" }}>
+        <TableCell onClick={() => setExpandRow(!expandRow)}>
           <IconButton size="small">
-            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+            {expandRow ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>
         <TableCell
           component="th"
           scope="row"
-          onClick={() => setOpen(!open)}
-          sx={{ cursor: "pointer" }}
+          onClick={() => setExpandRow(!expandRow)}
         >
           {segment.fromAirport.iata.toLowerCase()} -{" "}
           {segment.toAirport.iata.toLowerCase()}
         </TableCell>
-        <TableCell
-          align="right"
-          onClick={() => setOpen(!open)}
-          sx={{ cursor: "pointer" }}
-        >
+        <TableCell align="right" onClick={() => setExpandRow(!expandRow)}>
           {segmentResult.qantasPoints?.toLocaleString()}
         </TableCell>
-        <TableCell
-          align="right"
-          onClick={() => setOpen(!open)}
-          sx={{ cursor: "pointer" }}
-        >
+        <TableCell align="right" onClick={() => setExpandRow(!expandRow)}>
           {segmentResult.statusCredits?.toLocaleString()}
         </TableCell>
         {compareWithQantasCalc && (
-          <TableCell align="right">
-            <MatchesQantasSegment segmentResult={segmentResult} />
+          <TableCell
+            align="right"
+            onClick={() => {
+              if (matchesQantasPoints && matchesStatusCredits) {
+                setExpandRow(!expandRow);
+              } else {
+                setOpenModal(true);
+              }
+            }}
+          >
+            <MatchesQantasSegmentIcon
+              segmentResult={segmentResult}
+              qantasAPIError={qantasAPIError}
+              matchesQantasPoints={matchesQantasPoints}
+              matchesStatusCredits={matchesStatusCredits}
+            />
           </TableCell>
         )}
       </TableRow>
@@ -267,7 +260,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
           style={{ paddingBottom: 0, paddingTop: 0 }}
           colSpan={compareWithQantasCalc ? 5 : 4}
         >
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={expandRow} timeout="auto" unmountOnExit>
             <Grid2 container m={2} direction="column">
               <Grid2>
                 <Typography>Airline: {AIRLINES[segment.airline]}</Typography>
@@ -312,6 +305,20 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
           </Collapse>
         </TableCell>
       </TableRow>
+      {qantasAPIError && (
+        <MatchesQantasSegmentErrorDialog
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          error={qantasAPIError}
+        />
+      )}
+      {!qantasAPIError && (!matchesQantasPoints || !matchesStatusCredits) && (
+        <MatchesQantasSegmentMisMatchDialog
+          open={openModal}
+          onClose={() => setOpenModal(false)}
+          segmentResult={segmentResult}
+        />
+      )}
     </>
   );
 };
