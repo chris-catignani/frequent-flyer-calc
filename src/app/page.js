@@ -11,6 +11,7 @@ import { ResultsSummary } from '@/components/resultsSummary';
 import { Segment } from '@/models/segment';
 import { SegmentInput } from '@/models/segmentInput';
 import { JETSTAR_AIRLINES } from '@/models/constants';
+import { Footer } from '@/components/footer';
 
 const FLAG_ENABLE_QANTAS_API = true
 
@@ -284,7 +285,7 @@ export default function Home() {
         justifyContent="center"
         alignItems="center"
         spacing={1}
-        my={ 2 }
+        my={2}
         mx={{ xs: 0, sm: 2 }}
       >
         <Typography variant="h4" textAlign="center">
@@ -321,7 +322,14 @@ export default function Home() {
                 return (
                   <Box key={segmentInputIdx}>
                     {/* Show divider only on mobile (sx breakpoint) */}
-                    {segmentInputIdx > 0 && <Divider sx={{mb: {xs: 3, sm: 0}, visibility: {sm: 'hidden'} }} />}
+                    {segmentInputIdx > 0 && (
+                      <Divider
+                        sx={{
+                          mb: { xs: 3, sm: 0 },
+                          visibility: { sm: "hidden" },
+                        }}
+                      />
+                    )}
                     <RouteInput
                       segmentInput={segmentInput}
                       showDeleteButton={segmentInputs.length > 1}
@@ -353,10 +361,10 @@ export default function Home() {
                 </Grid2>
                 <Grid2
                   container
-                  size={{xs: 8, sm: 4}}
+                  size={{ xs: 8, sm: 4 }}
                   order={{ xs: 3, sm: 2 }}
                   sx={{
-                    justifyContent: "center"
+                    justifyContent: "center",
                   }}
                 >
                   <Button
@@ -388,27 +396,8 @@ export default function Home() {
           calculatedData={calculationOutput}
           compareWithQantasCalc={compareWithQantasCalc}
         />
-        <Typography mt={5} mx={2} textAlign={"center"}>
-          Calculations based on{" "}
-          <a
-            href="https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html"
-            target="_blank"
-          >
-            Qantas/Jetstar
-          </a>{" "}
-          and{" "}
-          <a
-            href="https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html"
-            target="_blank"
-          >
-            Partner
-          </a>{" "}
-          earning tables as of January 2025.
-        </Typography>
-        <Typography>
-          This webpage is not affiliated with Qantas Airlines.
-        </Typography>
       </Grid2>
+      <Footer />
     </Container>
   );
 }
