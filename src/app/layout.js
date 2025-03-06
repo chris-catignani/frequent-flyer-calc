@@ -19,8 +19,8 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: 'Qantas Points Calculator',
-  description: 'Calculate Qantas point and Status Credits',
+  title: 'Qantas Points and Status Credits Calculator',
+  description: 'Calculate Qantas Points and Status Credits for multi segment itineraries',
 };
 
 export default function RootLayout({ children }) {
