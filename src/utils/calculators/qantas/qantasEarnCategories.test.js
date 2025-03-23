@@ -1,8 +1,7 @@
-import { getQantasEarnCategory } from "./qantasEarnCategories"
-import { buildSegmentFromString } from "@/test/testUtils";
+import { getQantasEarnCategory } from './qantasEarnCategories';
+import { buildSegmentFromString } from '@/test/testUtils';
 
 describe('getQantasEarnCategory', () => {
-
   // qantas domestic
   test.each([
     ['e', 'discountEconomy'],
@@ -38,11 +37,14 @@ describe('getQantasEarnCategory', () => {
 
     ['c', 'flexibleBusiness'],
     ['j', 'flexibleBusiness'],
-    ['Business', 'flexibleBusiness']
-  ])('recognizes the Qantas domestic %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = buildSegmentFromString(`qf ${fareClass} syd mel`);
-    expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
-  })
+    ['Business', 'flexibleBusiness'],
+  ])(
+    'recognizes the Qantas domestic %s fareclass is a %s categories',
+    (fareClass, expectedCategory) => {
+      const segment = buildSegmentFromString(`qf ${fareClass} syd mel`);
+      expect(getQantasEarnCategory(segment)).toBe(expectedCategory);
+    },
+  );
 
   // qantas international
   test.each([
@@ -88,11 +90,14 @@ describe('getQantasEarnCategory', () => {
     ['f', 'first'],
     ['FirstSale', 'first'],
     ['FirstSaver', 'first'],
-    ['FirstFlex', 'first']
-  ])('recognizes the Qantas international %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = buildSegmentFromString(`qf ${fareClass} syd lax`)
-    expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
-  })
+    ['FirstFlex', 'first'],
+  ])(
+    'recognizes the Qantas international %s fareclass is a %s categories',
+    (fareClass, expectedCategory) => {
+      const segment = buildSegmentFromString(`qf ${fareClass} syd lax`);
+      expect(getQantasEarnCategory(segment)).toBe(expectedCategory);
+    },
+  );
 
   // Jetstar JQ
   test.each([
@@ -103,9 +108,9 @@ describe('getQantasEarnCategory', () => {
 
     ['BusinessMax', 'business'],
   ])('recognizes the Jetstar JQ %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = buildSegmentFromString(`jq ${fareClass} syd lax`)
-    expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
-  })
+    const segment = buildSegmentFromString(`jq ${fareClass} syd lax`);
+    expect(getQantasEarnCategory(segment)).toBe(expectedCategory);
+  });
 
   // Jetstar 3k
   test.each([
@@ -116,9 +121,9 @@ describe('getQantasEarnCategory', () => {
 
     ['BusinessMax', 'business'],
   ])('recognizes the Jetstar 3k %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = buildSegmentFromString(`3k ${fareClass} syd lax`)
-    expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
-  })
+    const segment = buildSegmentFromString(`3k ${fareClass} syd lax`);
+    expect(getQantasEarnCategory(segment)).toBe(expectedCategory);
+  });
 
   // Jetstar GK
   test.each([
@@ -129,9 +134,9 @@ describe('getQantasEarnCategory', () => {
 
     ['BusinessMax', 'business'],
   ])('recognizes the Jetstar Gk %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = buildSegmentFromString(`gk ${fareClass} syd lax`)
-    expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
-  })
+    const segment = buildSegmentFromString(`gk ${fareClass} syd lax`);
+    expect(getQantasEarnCategory(segment)).toBe(expectedCategory);
+  });
 
   describe('Jetstar New Zealand special case', () => {
     // Jetstar JQ
@@ -144,9 +149,12 @@ describe('getQantasEarnCategory', () => {
       ['StarterPlus', 'economy'],
 
       ['StarterMax', 'flexibleEconomy'],
-    ])('recognizes the Jetstar JQ New Zealand %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-      const segment = buildSegmentFromString(`jq ${fareClass} akl chc`)
-      expect(getQantasEarnCategory(segment)).toBe(expectedCategory)
-    })
-  })
-})
+    ])(
+      'recognizes the Jetstar JQ New Zealand %s fareclass is a %s categories',
+      (fareClass, expectedCategory) => {
+        const segment = buildSegmentFromString(`jq ${fareClass} akl chc`);
+        expect(getQantasEarnCategory(segment)).toBe(expectedCategory);
+      },
+    );
+  });
+});

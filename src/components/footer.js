@@ -1,5 +1,5 @@
-import { Favorite } from "@mui/icons-material";
-import { Grid2, Typography } from "@mui/material";
+import { Favorite } from '@mui/icons-material';
+import { Grid2, Typography } from '@mui/material';
 
 export const Footer = () => {
   return (
@@ -12,12 +12,7 @@ export const Footer = () => {
       alignContent="center"
       spacing={2}
     >
-      <Grid2
-        container
-        justifyContent="center"
-        alignContent="center"
-        spacing={0}
-      >
+      <Grid2 container justifyContent="center" alignContent="center" spacing={0}>
         <Typography textAlign="center">Calculations based on&nbsp;</Typography>
         <Typography>
           <a
@@ -41,20 +36,12 @@ export const Footer = () => {
       <Typography textAlign="center">
         This webpage is not affiliated with Qantas Airlines.
       </Typography>
-      <Grid2
-        container
-        justifyContent="center"
-        alignContent="center"
-        spacing={0}
-      >
+      <Grid2 container justifyContent="center" alignContent="center" spacing={0}>
         <Typography>Made with&nbsp;</Typography>
-        <Favorite fontSize="small" sx={{ color: "red" }} />
+        <Favorite fontSize="small" sx={{ color: 'red' }} />
         <Typography>&nbsp;from&nbsp;</Typography>
         <Typography>
-          <a
-            href="https://www.flyertalk.com/forum/members/delighted5153.html"
-            target="_blank"
-          >
+          <a href="https://www.flyertalk.com/forum/members/delighted5153.html" target="_blank">
             delighted5153
           </a>
         </Typography>
@@ -62,4 +49,4 @@ export const Footer = () => {
       </Grid2>
     </Grid2>
   );
-}
+};

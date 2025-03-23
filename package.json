@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write 'src/app/**/*.{js,jsx,ts,tsx,css,html}'",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,html}'",
     "test": "jest"
   },
   "dependencies": {

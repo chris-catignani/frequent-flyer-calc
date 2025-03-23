@@ -1,24 +1,36 @@
-import { JETSTAR_FARE_CLASSES, JETSTAR_NEW_ZEALAND_FARE_CLASSES, QANTAS_DOMESTIC_FARE_CLASSES, QANTAS_INTL_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from "@/models/constants"
-import { buildFareBuckets, getEarnCategory } from "../earnCategories"
+import {
+  JETSTAR_FARE_CLASSES,
+  JETSTAR_NEW_ZEALAND_FARE_CLASSES,
+  QANTAS_DOMESTIC_FARE_CLASSES,
+  QANTAS_INTL_FARE_CLASSES,
+  WEBSITE_EARN_CATEGORIES,
+} from '@/models/constants';
+import { buildFareBuckets, getEarnCategory } from '../earnCategories';
 
 export const QANTAS_FARE_CLASSES = [
-  'discountEconomy', 'economy', 'flexibleEconomy',
-  'discountPremiumEconomy', 'premiumEconomy', 'flexiblePremiumEconomy',
-  'discountBusiness', 'business', 'flexibleBusiness',
-  'first'
-]
+  'discountEconomy',
+  'economy',
+  'flexibleEconomy',
+  'discountPremiumEconomy',
+  'premiumEconomy',
+  'flexiblePremiumEconomy',
+  'discountBusiness',
+  'business',
+  'flexibleBusiness',
+  'first',
+];
 
 export const getQantasEarnCategory = (segment) => {
-  return getEarnCategory(segment, earnCategories)
-}
+  return getEarnCategory(segment, earnCategories);
+};
 
 const buildQantasFareBuckets = (domesticQantasString, internationalQantasString) => {
   return {
     rules: [
       // domestic
       {
-        origin: { country: new Set(["australia"]) },
-        destination: { country: new Set(["australia"]) },
+        origin: { country: new Set(['australia']) },
+        destination: { country: new Set(['australia']) },
         categories: {
           ...buildFareBuckets(domesticQantasString, QANTAS_FARE_CLASSES),
           ...QANTAS_DOMESTIC_FARE_CLASSES,
@@ -34,15 +46,15 @@ const buildQantasFareBuckets = (domesticQantasString, internationalQantasString)
       },
     ],
   };
-}
+};
 
 const buildJetstarFareBuckets = (iata) => {
-  const rules = []
+  const rules = [];
 
-  if( iata === 'jq' ) {
+  if (iata === 'jq') {
     rules.push({
-      origin: { country: new Set(["new zealand"]) },
-      destination: { country: new Set(["new zealand"]) },
+      origin: { country: new Set(['new zealand']) },
+      destination: { country: new Set(['new zealand']) },
       categories: { ...JETSTAR_NEW_ZEALAND_FARE_CLASSES },
     });
   }
@@ -52,20 +64,23 @@ const buildJetstarFareBuckets = (iata) => {
     categories: { ...JETSTAR_FARE_CLASSES },
   });
 
-  return { rules }
-}
+  return { rules };
+};
 
 const earnCategories = {
-  'qf': {
-    'fareBuckets': buildQantasFareBuckets(WEBSITE_EARN_CATEGORIES.qf[0], WEBSITE_EARN_CATEGORIES.qf[1])
+  qf: {
+    fareBuckets: buildQantasFareBuckets(
+      WEBSITE_EARN_CATEGORIES.qf[0],
+      WEBSITE_EARN_CATEGORIES.qf[1],
+    ),
   },
-  'jq': {
-    'fareBuckets': buildJetstarFareBuckets('jq'),
+  jq: {
+    fareBuckets: buildJetstarFareBuckets('jq'),
   },
   '3k': {
-    'fareBuckets': buildJetstarFareBuckets('3k'),
+    fareBuckets: buildJetstarFareBuckets('3k'),
   },
-  'gk': {
-    'fareBuckets': buildJetstarFareBuckets('gk'),
-  }
-}
+  gk: {
+    fareBuckets: buildJetstarFareBuckets('gk'),
+  },
+};

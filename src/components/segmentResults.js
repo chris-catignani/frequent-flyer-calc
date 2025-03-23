@@ -1,7 +1,27 @@
-import { AIRLINES, EARN_CATEGORY_DISPLAY, EARN_CATEGORY_URLS, QANTAS_FARE_CLASS_DISPLAY } from "@/models/constants";
-import { TableRow, TableCell, Grid2, Typography, TableContainer, Table, TableHead, TableBody, IconButton, Dialog, DialogTitle, Alert, Tooltip, Collapse } from "@mui/material";
-import { useState } from "react";
-import { Cancel, CheckCircle, Info, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import {
+  AIRLINES,
+  EARN_CATEGORY_DISPLAY,
+  EARN_CATEGORY_URLS,
+  QANTAS_FARE_CLASS_DISPLAY,
+} from '@/models/constants';
+import {
+  TableRow,
+  TableCell,
+  Grid2,
+  Typography,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  Alert,
+  Tooltip,
+  Collapse,
+} from '@mui/material';
+import { useState } from 'react';
+import { Cancel, CheckCircle, Info, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
 
 export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
   if (!calculatedData) {
@@ -44,9 +64,7 @@ const SegmentTableHeader = ({ compareWithQantasCalc }) => {
       <TableCell>Segment Route</TableCell>
       <TableCell align="right">Qantas Points</TableCell>
       <TableCell align="right">Status Credits</TableCell>
-      { compareWithQantasCalc && (
-        <TableCell align="right">Matches Qantas</TableCell>
-      )}
+      {compareWithQantasCalc && <TableCell align="right">Matches Qantas</TableCell>}
     </TableRow>
   );
 };
@@ -59,7 +77,7 @@ const getFareClassDisplay = (fareClass) => {
   } else {
     return fareClass;
   }
-}
+};
 
 const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
   const {
@@ -68,27 +86,17 @@ const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Points Calculation Breakdown</DialogTitle>
-      <Grid2
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        pb={2}
-      >
-        <Typography mb={3} sx={{ textDecoration: "underline" }}>
+      <Grid2 container direction="column" justifyContent="center" alignItems="center" pb={2}>
+        <Typography mb={3} sx={{ textDecoration: 'underline' }}>
           Total Points: {totalEarned?.toLocaleString()}
         </Typography>
-        <Typography lineHeight={1}>
-          Base Points: {basePoints?.toLocaleString()}
-        </Typography>
+        <Typography lineHeight={1}>Base Points: {basePoints?.toLocaleString()}</Typography>
         <Typography lineHeight={1}>+</Typography>
         <Typography lineHeight={1}>
-          Elite Bonus: {eliteBonus.qantasPoints?.toLocaleString() || "n/a"}
+          Elite Bonus: {eliteBonus.qantasPoints?.toLocaleString() || 'n/a'}
         </Typography>
         <Typography my={2}>- or -</Typography>
-        <Typography>
-          Min Points: {minPoints?.toLocaleString() || "n/a"}
-        </Typography>
+        <Typography>Min Points: {minPoints?.toLocaleString() || 'n/a'}</Typography>
       </Grid2>
     </Dialog>
   );
@@ -106,7 +114,7 @@ const QantasPointsDisplay = ({ segmentResult }) => {
   };
 
   return (
-    <Grid2 container justifyContent='flex-end'>
+    <Grid2 container justifyContent="flex-end">
       <Typography>{segmentResult.qantasPoints?.toLocaleString()}</Typography>
       <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
         <Info />
@@ -118,7 +126,7 @@ const QantasPointsDisplay = ({ segmentResult }) => {
       />
     </Grid2>
   );
-}
+};
 
 const MatchesQantasSegmentErrorDialog = ({ open, onClose, error }) => {
   return (
@@ -140,8 +148,12 @@ const MatchesQantasSegmentMisMatchDialog = ({ open, onClose, segmentResult }) =>
         <Typography>Qantas Points: {segmentResult.qantasPoints}</Typography>
         <Typography>Status Credits: {segmentResult.statusCredits}</Typography>
         <Typography mt={2}>Qantas Calculator Results:</Typography>
-        <Typography>Qantas Points: {segmentResult.qantasAPIResults?.qantasData?.qantasPoints}</Typography>
-        <Typography>Status Credits: {segmentResult.qantasAPIResults?.qantasData?.statusCredits}</Typography>
+        <Typography>
+          Qantas Points: {segmentResult.qantasAPIResults?.qantasData?.qantasPoints}
+        </Typography>
+        <Typography>
+          Status Credits: {segmentResult.qantasAPIResults?.qantasData?.statusCredits}
+        </Typography>
       </Grid2>
     </Dialog>
   );
@@ -160,9 +172,7 @@ const MatchesQantasSegmentIcon = ({
   if (qantasAPIError) {
     return (
       <Tooltip title="Qantas Calculator Failed to Calculate">
-        <IconButton
-          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
-        >
+        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
           <Info color="warning" />
         </IconButton>
       </Tooltip>
@@ -178,9 +188,7 @@ const MatchesQantasSegmentIcon = ({
   } else {
     return (
       <Tooltip title="Does not match Qantas Calculator">
-        <IconButton
-          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
-        >
+        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
           <Cancel color="error" />
         </IconButton>
       </Tooltip>
@@ -195,7 +203,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   const [openModal, setOpenModal] = useState(false);
 
   if (error) {
-    const errorColSpan = compareWithQantasCalc ? 3 : 2
+    const errorColSpan = compareWithQantasCalc ? 3 : 2;
     return (
       <TableRow>
         <TableCell></TableCell>
@@ -209,25 +217,22 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
     );
   }
 
-  const qantasAPIError = segmentResult.qantasAPIResults?.error
-  const matchesQantasPoints = segmentResult.qantasPoints === segmentResult.qantasAPIResults?.qantasData?.qantasPoints
-  const matchesStatusCredits = segmentResult.statusCredits === segmentResult.qantasAPIResults?.qantasData?.statusCredits
+  const qantasAPIError = segmentResult.qantasAPIResults?.error;
+  const matchesQantasPoints =
+    segmentResult.qantasPoints === segmentResult.qantasAPIResults?.qantasData?.qantasPoints;
+  const matchesStatusCredits =
+    segmentResult.statusCredits === segmentResult.qantasAPIResults?.qantasData?.statusCredits;
 
   return (
     <>
-      <TableRow sx={{ cursor: "pointer" }}>
+      <TableRow sx={{ cursor: 'pointer' }}>
         <TableCell onClick={() => setExpandRow(!expandRow)}>
           <IconButton size="small">
             {expandRow ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>
-        <TableCell
-          component="th"
-          scope="row"
-          onClick={() => setExpandRow(!expandRow)}
-        >
-          {segment.fromAirport.iata.toLowerCase()} -{" "}
-          {segment.toAirport.iata.toLowerCase()}
+        <TableCell component="th" scope="row" onClick={() => setExpandRow(!expandRow)}>
+          {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
         </TableCell>
         <TableCell align="right" onClick={() => setExpandRow(!expandRow)}>
           {segmentResult.qantasPoints?.toLocaleString()}
@@ -266,9 +271,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
                 <Typography>Airline: {AIRLINES[segment.airline]}</Typography>
               </Grid2>
               <Grid2>
-                <Typography>
-                  Fare Class: {getFareClassDisplay(segment.fareClass)}
-                </Typography>
+                <Typography>Fare Class: {getFareClassDisplay(segment.fareClass)}</Typography>
               </Grid2>
               <Grid2 container direction="row" spacing={1}>
                 <Typography>Qantas Points:</Typography>
@@ -276,8 +279,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
               </Grid2>
               <Grid2>
                 <Typography>
-                  Status Credits:{" "}
-                  {segmentResult.statusCredits?.toLocaleString()}
+                  Status Credits: {segmentResult.statusCredits?.toLocaleString()}
                 </Typography>
               </Grid2>
               <Grid2 container direction="row" spacing={1}>
@@ -297,9 +299,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
                 </Typography>
               </Grid2>
               <Grid2>
-                <Typography>
-                  Calculation Notes: {segmentResult.notes}
-                </Typography>
+                <Typography>Calculation Notes: {segmentResult.notes}</Typography>
               </Grid2>
             </Grid2>
           </Collapse>

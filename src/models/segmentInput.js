@@ -22,7 +22,7 @@ export class SegmentInput {
     );
 
     clonedSegment.fromAirport = this.fromAirport;
-    clonedSegment.toAirport = this.toAirport
+    clonedSegment.toAirport = this.toAirport;
 
     return clonedSegment;
   }

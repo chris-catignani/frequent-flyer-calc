@@ -1,21 +1,21 @@
 export class Segment {
   constructor(airline, fareClass, fromAirport, toAirport) {
-    this.airline = airline
-    this.fareClass = fareClass
-    this.fromAirport = fromAirport
-    this.toAirport = toAirport
+    this.airline = airline;
+    this.fareClass = fareClass;
+    this.fromAirport = fromAirport;
+    this.toAirport = toAirport;
   }
 
   toString() {
-    return `${this.airline} ${this.fareClass} ${this.fromAirport} ${this.toAirport}`
+    return `${this.airline} ${this.fareClass} ${this.fromAirport} ${this.toAirport}`;
   }
 
-  clone({airline, fareClass, fromAirport, toAirport}) {
+  clone({ airline, fareClass, fromAirport, toAirport }) {
     return new Segment(
       airline !== undefined ? airline : this.airline,
       fareClass !== undefined ? fareClass : this.fareClass,
       fromAirport !== undefined ? fromAirport : this.fromAirport,
-      toAirport !== undefined ? toAirport : this.toAirport
+      toAirport !== undefined ? toAirport : this.toAirport,
     );
   }
 }

@@ -1,10 +1,10 @@
-import { Cancel, CheckCircle, Info } from "@mui/icons-material";
-import { Box, Dialog, DialogTitle, Grid2, IconButton, Tooltip, Typography } from "@mui/material";
-import { useState } from "react";
+import { Cancel, CheckCircle, Info } from '@mui/icons-material';
+import { Box, Dialog, DialogTitle, Grid2, IconButton, Tooltip, Typography } from '@mui/material';
+import { useState } from 'react';
 
 export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCalculating }) => {
   if (!calculationOutput) {
-    return (<></>)
+    return <></>;
   }
 
   const MatchesQantasErrorDialog = ({ open, onClose, error }) => {
@@ -20,17 +20,15 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
   };
 
   const MatchesQantasMisMatchDialog = ({ open, onClose, field, expectedValue, actualValue }) => {
-    const fieldLabel = field === 'qantasPoints' ? "Qantas Points" : "Status Credits"
+    const fieldLabel = field === 'qantasPoints' ? 'Qantas Points' : 'Status Credits';
     return (
       <Dialog onClose={onClose} open={open}>
-        <DialogTitle>
-          Qantas Calculator results do not match our results
-        </DialogTitle>
+        <DialogTitle>Qantas Calculator results do not match our results</DialogTitle>
         <Grid2 container direction="column" mx={2} mb={2}>
           <Typography>Our Results:</Typography>
-          <Typography>{fieldLabel + ": " + expectedValue}</Typography>
+          <Typography>{fieldLabel + ': ' + expectedValue}</Typography>
           <Typography mt={2}>Qantas Calculator Results:</Typography>
-          <Typography>{fieldLabel + ": " + actualValue}</Typography>
+          <Typography>{fieldLabel + ': ' + actualValue}</Typography>
           <Typography mt={2}>See the results below to see details by segment</Typography>
         </Grid2>
       </Dialog>
@@ -39,20 +37,13 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
 
   const TotalQantasPointsEarned = () => {
     return (
-      <Grid2
-        container
-        justifyContent="center"
-        alignItems="center"
-        spacing={1}
-        direction={"row"}
-      >
+      <Grid2 container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
         <Typography variant="h5">
-          Qantas Points Earned:{" "}
-          {calculationOutput?.qantasPoints?.toLocaleString()}
+          Qantas Points Earned: {calculationOutput?.qantasPoints?.toLocaleString()}
         </Typography>
         <MatchesQantasAPIIcon
           expectedValue={calculationOutput?.qantasPoints}
-          fieldToCheck={"qantasPoints"}
+          fieldToCheck={'qantasPoints'}
         />
       </Grid2>
     );
@@ -60,20 +51,13 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
 
   const TotalStatusCreditsEarned = () => {
     return (
-      <Grid2
-        container
-        justifyContent="center"
-        alignItems="center"
-        spacing={1}
-        direction={"row"}
-      >
+      <Grid2 container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
         <Typography variant="h5">
-          Status Credits Earned:{" "}
-          {calculationOutput?.statusCredits?.toLocaleString()}
+          Status Credits Earned: {calculationOutput?.statusCredits?.toLocaleString()}
         </Typography>
         <MatchesQantasAPIIcon
           expectedValue={calculationOutput?.statusCredits}
-          fieldToCheck={"statusCredits"}
+          fieldToCheck={'statusCredits'}
         />
       </Grid2>
     );
@@ -100,8 +84,7 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
       if (segmentResult.qantasAPIResults?.error) {
         qantasAPICalcError = segmentResult.qantasAPIResults?.error;
       } else {
-        sumOfQantasAPICalc +=
-          segmentResult.qantasAPIResults?.qantasData?.[fieldToCheck];
+        sumOfQantasAPICalc += segmentResult.qantasAPIResults?.qantasData?.[fieldToCheck];
       }
     });
 
