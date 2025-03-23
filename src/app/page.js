@@ -118,7 +118,9 @@ export default function Home() {
     Object.entries(newParams).forEach(([k, v]) => {
       params.set(k, v);
     });
-    window.history.pushState(null, '', `?${params.toString()}`);
+    if (searchParams.toString() !== params.toString()) {
+      window.history.pushState(null, '', `?${params.toString()}`);
+    }
   };
 
   const calculatePressed = () => {
