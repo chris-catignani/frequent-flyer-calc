@@ -244,7 +244,7 @@ export default function Home() {
 
     return (
       <Alert variant="filled" severity="error">
-        There are errors in the calculation. Expand the details below for details
+        There are errors in the calculation. See the details below.
       </Alert>
     );
   };
