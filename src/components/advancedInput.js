@@ -1,4 +1,4 @@
-import { parseItaMatrixInput, parseTextItin } from '@/utils/segmentInputParser';
+import { parseEncodedTextItin, parseTextItin } from '@/utils/segmentInputParser';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Accordion,
@@ -42,7 +42,7 @@ const AdvancedInputSelection = ({ setSegmentInputs }) => {
   };
 
   const applyTextItinInput = () => {
-    const { segmentInputs, parsingError } = parseTextItin(textItin);
+    const { segmentInputs, parsingError } = parseEncodedTextItin(textItin, '\n', ' ');
 
     if (parsingError) {
       setExpanded('text-itin');

@@ -1,6 +1,6 @@
 import { SegmentInput } from '@/models/segmentInput';
 
-export const parseTextItin = (textItin) => {
+export const parseEncodedTextItin = (textItin, segmentSeparator, segmentItemSeparator) => {
   const segmentInputs = [];
 
   if (!textItin || textItin === '') {
@@ -8,8 +8,8 @@ export const parseTextItin = (textItin) => {
     return { segmentInputs, parsingError };
   }
 
-  for (const itin of textItin.split('\n')) {
-    const parts = itin.split(' ');
+  for (const itin of textItin.split(segmentSeparator)) {
+    const parts = itin.split(segmentItemSeparator);
 
     if (parts.length !== 4) {
       const parsingError = `"${itin}" is not formatted correctly`;
