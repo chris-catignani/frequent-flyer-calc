@@ -43,6 +43,7 @@ export default function Home() {
     if (segmentInputs) {
       setAllSegmentInputs(segmentInputs);
     }
+    // I struggled to fix the warning about the dependencies below. Won't spend more time on it
   }, [searchParams, setEliteStatus, setTripType]);
 
   const validateInput = () => {
