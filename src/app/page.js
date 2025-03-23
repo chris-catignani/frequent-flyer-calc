@@ -12,6 +12,7 @@ import { Segment } from '@/models/segment';
 import { SegmentInput } from '@/models/segmentInput';
 import { JETSTAR_AIRLINES } from '@/models/constants';
 import { Footer } from '@/components/footer';
+import { AdvancedInput } from '@/components/advancedInput';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
@@ -100,6 +101,18 @@ export default function Home() {
       setInputErrors({});
       doCalculation(eliteStatus, tripType, compareWithQantasCalc);
     }
+  };
+
+  const setAllSegmentInputs = (segmentInputs) => {
+    segmentInputs.forEach((segmentInput) => {
+      segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
+      segmentInput.toAirport = getAirport(segmentInput.toAirportText);
+    });
+
+    setSegmentInputs(segmentInputs);
+
+    // if input changes, ensure calculated data is voided
+    setCalculationOutput(null);
   };
 
   const addSegmentPressed = () => {
@@ -377,6 +390,9 @@ export default function Home() {
                   <CompareWithQantasAPISwitch />
                 </Grid2>
               </Grid2>
+            </Box>
+            <Box p={2} pt={0}>
+              <AdvancedInput setSegmentInputs={setAllSegmentInputs} />
             </Box>
           </Paper>
         </Box>
