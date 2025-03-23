@@ -12,13 +12,13 @@ class Rule {
     this.ruleUrl = ruleUrl;
   }
 
+  // eslint-disable-next-line
   applies(segment, fareEarnCategory) {
-    // eslint-disable-line
     return false;
   }
 
+  // eslint-disable-next-line
   calculate(segment, fareEarnCategory) {
-    // eslint-disable-line
     return this.buildCalculationReturn('', '', 0, 0);
   }
 
