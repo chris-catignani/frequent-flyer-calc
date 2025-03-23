@@ -1,7 +1,7 @@
 'use client';
 
 import { calculate } from '@/utils/calculators/calculator';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Box, Button, Container, Dialog, DialogTitle, Divider, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'; // prettier-ignore
 import { EliteStatusInput, RouteInput } from '@/components/input';
 import { Info } from '@mui/icons-material';
@@ -13,10 +13,14 @@ import { SegmentInput } from '@/models/segmentInput';
 import { JETSTAR_AIRLINES } from '@/models/constants';
 import { Footer } from '@/components/footer';
 import { AdvancedInput } from '@/components/advancedInput';
+import { createUrlQueryParams, parseUrlQueryParams } from '@/utils/segmentInputUrlParser';
+import { useSearchParams } from 'next/navigation';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
 export default function Home() {
+  const searchParams = useSearchParams();
+
   const [inputErrors, setInputErrors] = useState({});
   const [eliteStatus, setEliteStatus] = useState('Bronze');
   const [segmentInputs, setSegmentInputs] = useState([new SegmentInput('', '', '', '')]);
@@ -25,6 +29,21 @@ export default function Home() {
 
   const [isCalculating, setIsCalculating] = useState(false);
   const [calculationOutput, setCalculationOutput] = useState();
+
+  // if we entered this page from a deeplink, pull the params and hydrate the page
+  useEffect(() => {
+    const { eliteStatus, tripType, segmentInputs } = parseUrlQueryParams(searchParams);
+
+    if (eliteStatus) {
+      setEliteStatus(eliteStatus);
+    }
+    if (tripType) {
+      setTripType(tripType);
+    }
+    if (segmentInputs) {
+      setAllSegmentInputs(segmentInputs);
+    }
+  }, [searchParams, setEliteStatus, setTripType]);
 
   const validateInput = () => {
     const errors = {};
@@ -91,6 +110,14 @@ export default function Home() {
     }
 
     setIsCalculating(false);
+
+    // replace the URL query params with the current search params
+    const params = new URLSearchParams(searchParams.toString());
+    const newParams = createUrlQueryParams(eliteStatus, segmentInputs, tripType);
+    Object.entries(newParams).forEach(([k, v]) => {
+      params.set(k, v);
+    });
+    window.history.pushState(null, '', `?${params.toString()}`);
   };
 
   const calculatePressed = () => {
@@ -103,16 +130,31 @@ export default function Home() {
     }
   };
 
-  const setAllSegmentInputs = (segmentInputs) => {
-    segmentInputs.forEach((segmentInput) => {
+  const setAllSegmentInputs = (theSegmentInputs) => {
+    theSegmentInputs.forEach((segmentInput) => {
       segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
       segmentInput.toAirport = getAirport(segmentInput.toAirportText);
     });
 
-    setSegmentInputs(segmentInputs);
+    setSegmentInputs(theSegmentInputs);
 
-    // if input changes, ensure calculated data is voided
-    setCalculationOutput(null);
+    let clearCalculation = false;
+    if (theSegmentInputs.length !== segmentInputs.length) {
+      clearCalculation = true;
+    } else {
+      for (let i = 0; i < theSegmentInputs.length; i++) {
+        for (const property of ['airline', 'fromAirportText', 'toAirportText', 'fareClass']) {
+          if (theSegmentInputs[i][property] !== segmentInputs[i][property]) {
+            clearCalculation = true;
+            break;
+          }
+        }
+      }
+    }
+
+    if (clearCalculation) {
+      setCalculationOutput(null);
+    }
   };
 
   const addSegmentPressed = () => {
