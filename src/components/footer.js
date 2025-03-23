@@ -6,6 +6,7 @@ export const Footer = () => {
     <Grid2
       mx={2}
       mt={5}
+      mb={1}
       container
       direction="column"
       justifyContent="center"
