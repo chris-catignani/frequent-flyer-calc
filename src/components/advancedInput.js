@@ -1,4 +1,4 @@
-import { SegmentInput } from '@/models/segmentInput';
+import { parseItaMatrixInput, parseTextItin } from '@/utils/segmentInputParser';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Accordion,
@@ -34,10 +34,24 @@ export const AdvancedInput = ({ setSegmentInputs }) => {
 const AdvancedInputSelection = ({ setSegmentInputs }) => {
   const [expanded, setExpanded] = useState(false);
   const [inputError, setInputError] = useState({});
+  const [textItin, setTextItin] = useState();
   const [itaMatrixJson, setItaMatrixJson] = useState();
 
-  const handleChange = (accordianPanel) => (event, isExpanded) => {
+  const handleAccordianChange = (accordianPanel) => (event, isExpanded) => {
     setExpanded(isExpanded ? accordianPanel : false);
+  };
+
+  const applyTextItinInput = () => {
+    const { segmentInputs, parsingError } = parseTextItin(textItin);
+
+    if (parsingError) {
+      setExpanded('text-itin');
+      setInputError({ 'text-itin': parsingError });
+    } else {
+      setExpanded(false);
+      setInputError({});
+      setSegmentInputs(segmentInputs);
+    }
   };
 
   const applyItaMatrixInput = () => {
@@ -53,22 +67,27 @@ const AdvancedInputSelection = ({ setSegmentInputs }) => {
     }
   };
 
-  console.log(inputError);
-
   return (
     <Box pt={1}>
-      <Accordion expanded={expanded === 'free-form'} onChange={handleChange('free-form')}>
+      <Accordion expanded={expanded === 'text-itin'} onChange={handleAccordianChange('text-itin')}>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>Free Form Text Itinerary</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          <FreeFormTextItinerary />
+        <AccordionDetails sx={{ pb: 0 }}>
+          <FreeFormTextItinerary
+            textItin={textItin}
+            textItinChanged={setTextItin}
+            error={inputError['text-itin']}
+          />
         </AccordionDetails>
-        <AccordionActions>
-          <Button>Apply</Button>
+        <AccordionActions sx={{ pt: 0 }}>
+          <Button onClick={applyTextItinInput}>Apply</Button>
         </AccordionActions>
       </Accordion>
-      <Accordion expanded={expanded === 'ita-matrix'} onChange={handleChange('ita-matrix')}>
+      <Accordion
+        expanded={expanded === 'ita-matrix'}
+        onChange={handleAccordianChange('ita-matrix')}
+      >
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>ITA Matrix Itinerary</Typography>
         </AccordionSummary>
@@ -87,11 +106,40 @@ const AdvancedInputSelection = ({ setSegmentInputs }) => {
   );
 };
 
-const FreeFormTextItinerary = () => {
+const FreeFormTextItinerary = ({ textItin, textItinChanged, error }) => {
   return (
-    <Box>
-      <Typography>Coming soon</Typography>
-    </Box>
+    <Stack spacing={2}>
+      <Box>
+        <Typography>Type out an itinerary below, the format rules are:</Typography>
+        <ul style={{ margin: 0 }}>
+          <li>
+            <Typography>Each segment of the itinerary should be on it&apos;s on line</Typography>
+          </li>
+          <li>
+            <Typography>
+              Format a segment as: &lt;airline iata&gt; &lt;from airport iata&gt; &lt;to airport
+              iata&gt; &lt;fare class letter&gt;
+            </Typography>
+            <ul>
+              <li>
+                <Typography>For example: qf syd mel i</Typography>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </Box>
+      <TextField
+        fullWidth
+        multiline
+        maxRows={10}
+        label=""
+        placeholder="Text Itinerary here"
+        value={textItin}
+        error={error}
+        helperText={error ? error : ' '}
+        onChange={(event) => textItinChanged(event.target.value)}
+      />
+    </Stack>
   );
 };
 
@@ -118,44 +166,4 @@ const ItaMatrixItinerary = ({ itaMatrixJson, itaMatrixJsonChanged, error }) => {
       />
     </Stack>
   );
-};
-
-const parseItaMatrixInput = (itaMatrixJson) => {
-  const segmentInputs = [];
-
-  if (!itaMatrixJson || itaMatrixJson === '') {
-    const parsingError = 'ITA Matrix JSON required';
-    return { segmentInputs, parsingError };
-  }
-
-  let itaMatrixObj = undefined;
-
-  try {
-    itaMatrixObj = JSON.parse(itaMatrixJson);
-  } catch (err) {
-    console.log(err);
-    const parsingError = 'Invalid JSON format';
-    return { segmentInputs, parsingError };
-  }
-
-  if (!itaMatrixObj.itinerary?.slices) {
-    const parsingError = 'ITA Matrix JSON missing itinerary, or slices';
-    return { segmentInputs, parsingError };
-  }
-
-  itaMatrixObj.itinerary.slices.forEach((slice) => {
-    slice.segments.forEach((segment) => {
-      const airline = segment.carrier.code.toLowerCase();
-      const fareClass = segment.bookingInfos[0].bookingCode.toLowerCase();
-
-      segment.legs.forEach((leg) => {
-        const fromAirportText = leg.origin.code.toLowerCase();
-        const toAirportText = leg.destination.code.toLowerCase();
-
-        segmentInputs.push(new SegmentInput(airline, fareClass, fromAirportText, toAirportText));
-      });
-    });
-  });
-
-  return { segmentInputs, parsingError: undefined };
 };
