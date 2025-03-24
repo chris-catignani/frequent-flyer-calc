@@ -361,6 +361,20 @@ describe('Test for non Status Credit earning airlines', () => {
   );
 });
 
+describe('Test for non earning airline fare classes', () => {
+  test.each([
+    ['jq starter syd mel', 0, 0],
+    ['jq starter syd mel', 0, 0],
+  ])(
+    `Jetatar %s. Should earn %s qantas points and %s status credit`,
+    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+      const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.qantasPoints).toBe(expectedQantasPoints);
+      expect(results.statusCredits).toBe(expectedStatusCredits);
+    },
+  );
+});
+
 describe('calculate - elite status levels', () => {
   test.each([
     ['qf e syd sin', 'Bronze', 2600, 0 * 2600],

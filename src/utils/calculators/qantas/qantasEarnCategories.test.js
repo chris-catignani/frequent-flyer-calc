@@ -101,6 +101,10 @@ describe('getQantasEarnCategory', () => {
 
   // Jetstar JQ
   test.each([
+    ['Starter', 'n/a'],
+    ['StarterPlus', 'n/a'],
+    ['Buisness', 'n/a'],
+
     ['Flex', 'economy'],
     ['FlexPlus', 'economy'],
 
@@ -114,6 +118,10 @@ describe('getQantasEarnCategory', () => {
 
   // Jetstar 3k
   test.each([
+    ['Starter', 'n/a'],
+    ['StarterPlus', 'n/a'],
+    ['Buisness', 'n/a'],
+
     ['Flex', 'economy'],
     ['FlexPlus', 'economy'],
 
@@ -127,6 +135,10 @@ describe('getQantasEarnCategory', () => {
 
   // Jetstar GK
   test.each([
+    ['Starter', 'n/a'],
+    ['StarterPlus', 'n/a'],
+    ['Buisness', 'n/a'],
+
     ['Flex', 'economy'],
     ['FlexPlus', 'economy'],
 
@@ -141,8 +153,8 @@ describe('getQantasEarnCategory', () => {
   describe('Jetstar New Zealand special case', () => {
     // Jetstar JQ
     test.each([
-      ['EconomyStarterFare', 'discountEconomy'],
-      ['EconomyStarterFlexBiz', 'discountEconomy'],
+      ['Starter', 'discountEconomy'],
+      ['StarterFlexBiz', 'discountEconomy'],
 
       ['Flex', 'economy'],
       ['FlexPlus', 'economy'],
