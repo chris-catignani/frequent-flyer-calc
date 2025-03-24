@@ -7,6 +7,7 @@ import {
   AccordionSummary,
   Box,
   Button,
+  Collapse,
   Stack,
   TextField,
   Typography,
@@ -15,6 +16,12 @@ import { useState } from 'react';
 
 export const AdvancedInput = ({ setSegmentInputs }) => {
   const [isOpen, setOpen] = useState(false);
+
+  const onApplyClicked = (segmentInputs) => {
+    setSegmentInputs(segmentInputs);
+    setOpen(false);
+  };
+
   return (
     <Stack spacing={1}>
       <Stack
@@ -26,12 +33,14 @@ export const AdvancedInput = ({ setSegmentInputs }) => {
         <Typography pl={{ xs: 2, sm: 0 }}>Advanced Input</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </Stack>
-      {isOpen && <AdvancedInputSelection setSegmentInputs={setSegmentInputs} />}
+      <Collapse in={isOpen} timeout="auto">
+        <AdvancedInputSelection onApplyClicked={onApplyClicked} />
+      </Collapse>
     </Stack>
   );
 };
 
-const AdvancedInputSelection = ({ setSegmentInputs }) => {
+const AdvancedInputSelection = ({ onApplyClicked }) => {
   const [expanded, setExpanded] = useState(false);
   const [inputError, setInputError] = useState({});
   const [textItin, setTextItin] = useState();
@@ -50,7 +59,7 @@ const AdvancedInputSelection = ({ setSegmentInputs }) => {
     } else {
       setExpanded(false);
       setInputError({});
-      setSegmentInputs(segmentInputs);
+      onApplyClicked(segmentInputs);
     }
   };
 
@@ -63,7 +72,7 @@ const AdvancedInputSelection = ({ setSegmentInputs }) => {
     } else {
       setExpanded(false);
       setInputError({});
-      setSegmentInputs(segmentInputs);
+      onApplyClicked(segmentInputs);
     }
   };
 
@@ -110,7 +119,8 @@ const FreeFormTextItinerary = ({ textItin, textItinChanged, error }) => {
   return (
     <Stack spacing={2}>
       <Box>
-        <Typography>Type out an itinerary below, the format rules are:</Typography>
+        <Typography>Type out an itinerary below, click apply followed by calculate.</Typography>
+        <Typography>The itinerary format rules are:</Typography>
         <ul style={{ margin: 0 }}>
           <li>
             <Typography>Each segment of the itinerary should be on it&apos;s on line</Typography>
