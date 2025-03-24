@@ -60,11 +60,11 @@ export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
 const SegmentTableHeader = ({ compareWithQantasCalc }) => {
   return (
     <TableRow>
-      <TableCell />
       <TableCell>Segment Route</TableCell>
       <TableCell align="right">Qantas Points</TableCell>
       <TableCell align="right">Status Credits</TableCell>
       {compareWithQantasCalc && <TableCell align="right">Matches Qantas</TableCell>}
+      <TableCell />
     </TableRow>
   );
 };
@@ -203,10 +203,9 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   const [openModal, setOpenModal] = useState(false);
 
   if (error) {
-    const errorColSpan = compareWithQantasCalc ? 3 : 2;
+    const errorColSpan = compareWithQantasCalc ? 4 : 3;
     return (
       <TableRow>
-        <TableCell></TableCell>
         <TableCell component="th" scope="row">
           {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
         </TableCell>
@@ -226,11 +225,6 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   return (
     <>
       <TableRow sx={{ cursor: 'pointer' }}>
-        <TableCell onClick={() => setExpandRow(!expandRow)}>
-          <IconButton size="small">
-            {expandRow ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
-        </TableCell>
         <TableCell component="th" scope="row" onClick={() => setExpandRow(!expandRow)}>
           {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
         </TableCell>
@@ -259,6 +253,11 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
             />
           </TableCell>
         )}
+        <TableCell onClick={() => setExpandRow(!expandRow)}>
+          <IconButton size="small">
+            {expandRow ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell
