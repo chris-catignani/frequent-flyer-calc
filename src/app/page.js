@@ -436,7 +436,7 @@ export default function Home() {
                 </Grid2>
               </Grid2>
             </Box>
-            <Box p={2} pt={0}>
+            <Box pt={0} pb={2} px={{ xs: 0, sm: 2 }}>
               <AdvancedInput setSegmentInputs={setAllSegmentInputs} />
             </Box>
           </Paper>

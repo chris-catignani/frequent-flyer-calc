@@ -23,7 +23,7 @@ export const AdvancedInput = ({ setSegmentInputs }) => {
         onClick={() => setOpen(!isOpen)}
         sx={{ cursor: 'pointer' }}
       >
-        <Typography>Advanced Input</Typography>
+        <Typography pl={{ xs: 2, sm: 0 }}>Advanced Input</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </Stack>
       {isOpen && <AdvancedInputSelection setSegmentInputs={setSegmentInputs} />}
