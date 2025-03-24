@@ -231,65 +231,65 @@ describe('calculate - partner rules', () => {
       expect(results.statusCredits).toBe(expectedStatusCredits);
     },
   );
+});
 
-  describe('calculate - qantas rules', () => {
-    test.each([
-      ['qf i syd mel', 1400, 40],
-      ['qf i syd asp', 2100, 60],
-      ['qf i syd per', 3300, 80],
-    ])(
-      `Testing routing %s. Should earn %s qantas points and %s status credit for Domestic Australia`,
-      async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
-        const results = await calculate([buildSegmentFromString(segmentString)]);
-        expect(results.qantasPoints).toBe(expectedQantasPoints);
-        expect(results.statusCredits).toBe(expectedStatusCredits);
-      },
-    );
+describe('calculate - qantas rules', () => {
+  test.each([
+    ['qf i syd mel', 1400, 40],
+    ['qf i syd asp', 2100, 60],
+    ['qf i syd per', 3300, 80],
+  ])(
+    `Testing routing %s. Should earn %s qantas points and %s status credit for Domestic Australia`,
+    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+      const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.qantasPoints).toBe(expectedQantasPoints);
+      expect(results.statusCredits).toBe(expectedStatusCredits);
+    },
+  );
 
-    test.each([
-      ['qf d syd akl', 2700, 85],
-      ['qf d syd bkk', 8450, 125],
-      ['qf d syd hnd', 8450, 125],
-      ['qf d mel hnl', 9750, 150],
-      ['qf d adl dfw', 15950, 210],
-      ['qf d bne lax', 14625, 190],
-      ['qf d ool jfk', 20150, 295],
-    ])(
-      `Testing routing %s. Should earn %s qantas points and %s status credit for Adelaide, Brisbane, Gold Coast, Melbourne, Sydney`,
-      async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
-        const results = await calculate([buildSegmentFromString(segmentString)]);
-        expect(results.qantasPoints).toBe(expectedQantasPoints);
-        expect(results.statusCredits).toBe(expectedStatusCredits);
-      },
-    );
+  test.each([
+    ['qf d syd akl', 2700, 85],
+    ['qf d syd bkk', 8450, 125],
+    ['qf d syd hnd', 8450, 125],
+    ['qf d mel hnl', 9750, 150],
+    ['qf d adl dfw', 15950, 210],
+    ['qf d bne lax', 14625, 190],
+    ['qf d ool jfk', 20150, 295],
+  ])(
+    `Testing routing %s. Should earn %s qantas points and %s status credit for Adelaide, Brisbane, Gold Coast, Melbourne, Sydney`,
+    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+      const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.qantasPoints).toBe(expectedQantasPoints);
+      expect(results.statusCredits).toBe(expectedStatusCredits);
+    },
+  );
 
-    test.each([
-      ['qf d drw bkk', 4400, 100],
-      ['qf d per hnd', 8125, 125],
-      ['qf d drw dxb', 9750, 150],
-      ['qf d per lhr', 15300, 255],
-    ])(
-      `Testing routing %s. Should earn %s qantas points and %s status credit for Darwin, Perth`,
-      async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
-        const results = await calculate([buildSegmentFromString(segmentString)]);
-        expect(results.qantasPoints).toBe(expectedQantasPoints);
-        expect(results.statusCredits).toBe(expectedStatusCredits);
-      },
-    );
+  test.each([
+    ['qf d drw bkk', 4400, 100],
+    ['qf d per hnd', 8125, 125],
+    ['qf d drw dxb', 9750, 150],
+    ['qf d per lhr', 15300, 255],
+  ])(
+    `Testing routing %s. Should earn %s qantas points and %s status credit for Darwin, Perth`,
+    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+      const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.qantasPoints).toBe(expectedQantasPoints);
+      expect(results.statusCredits).toBe(expectedStatusCredits);
+    },
+  );
 
-    test.each([
-      ['qf d akl dfw', 13835, 180],
-      ['qf d akl scl', 9450, 150],
-      ['qf d akl jfk', 17450, 210],
-    ])(
-      `Testing routing %s. Should earn %s qantas points and %s status credit for New Zealand`,
-      async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
-        const results = await calculate([buildSegmentFromString(segmentString)]);
-        expect(results.qantasPoints).toBe(expectedQantasPoints);
-        expect(results.statusCredits).toBe(expectedStatusCredits);
-      },
-    );
-  });
+  test.each([
+    ['qf d akl dfw', 13835, 180],
+    ['qf d akl scl', 9450, 150],
+    ['qf d akl jfk', 17450, 210],
+  ])(
+    `Testing routing %s. Should earn %s qantas points and %s status credit for New Zealand`,
+    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+      const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.qantasPoints).toBe(expectedQantasPoints);
+      expect(results.statusCredits).toBe(expectedStatusCredits);
+    },
+  );
 
   test.each([
     ['qf d dfw jfk', 4200, 85],
@@ -345,77 +345,77 @@ describe('calculate - partner rules', () => {
       expect(results.statusCredits).toBe(expectedStatusCredits);
     },
   );
-
-  describe('Test for non Status Credit earning airlines', () => {
-    test.each([
-      ['af i cdg jfk', 5250, 0],
-      ['af i jfk cdg', 5250, 0],
-    ])(
-      `Air France %s. Should earn %s qantas points and %s status credit`,
-      async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
-        const results = await calculate([buildSegmentFromString(segmentString)]);
-        expect(results.qantasPoints).toBe(expectedQantasPoints);
-        expect(results.statusCredits).toBe(expectedStatusCredits);
-      },
-    );
-  });
-
-  describe('calculate - elite status levels', () => {
-    test.each([
-      ['qf e syd sin', 'Bronze', 2600, 0 * 2600],
-      ['qf e syd sin', 'Silver', 2600, 0.5 * 2600],
-      ['qf e syd sin', 'Gold', 2600, 0.75 * 2600],
-      ['qf e syd sin', 'Platinum', 2600, 1 * 2600],
-      ['qf e syd sin', 'Platinum One', 2600, 1 * 2600],
-
-      ['qf g syd sin', 'Bronze', 3900, 0 * 3900],
-      ['qf g syd sin', 'Silver', 3900, 0.5 * 3900],
-      ['qf g syd sin', 'Gold', 3900, 0.75 * 3900],
-      ['qf g syd sin', 'Platinum', 3900, 1 * 3900],
-      ['qf g syd sin', 'Platinum One', 3900, 1 * 3900],
-
-      ['qf d syd sin', 'Bronze', 8450, 0 * 5200],
-      ['qf d syd sin', 'Silver', 8450, 0.5 * 5200],
-      ['qf d syd sin', 'Gold', 8450, 0.75 * 5200],
-      ['qf d syd sin', 'Platinum', 8450, 1 * 5200],
-      ['qf d syd sin', 'Platinum One', 8450, 1 * 5200],
-    ])(
-      `Testing elite status is applied for %s %s level`,
-      async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
-        const results = await calculate([buildSegmentFromString(segmentString)], eliteStatus);
-        expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
-          expectedBaseQantasPoints,
-        );
-        expect(results.qantasPoints).toBe(expectedBaseQantasPoints + expectedEliteBonus);
-      },
-    );
-  });
-
-  describe('calculate - elite status only applies to certain airlines', () => {
-    test.each([
-      ['qf d syd sin', 'Silver', 8450, 0.5 * 5200],
-      ['aa d syd sin', 'Silver', 5000, 0.5 * 4000],
-
-      ['jq Flex sin bkk', 'Silver', 850, 0.5 * 850],
-      ['3k Flex sin bkk', 'Silver', 850, 0.5 * 850],
-      ['gk Flex sin bkk', 'Silver', 850, 0.5 * 850],
-
-      ['cx d syd sin', 'Silver', 5000, 0],
-      ['jl d syd sin', 'Silver', 5000, 0],
-      ['ba d syd sin', 'Silver', 5000, 0],
-      ['ib d syd sin', 'Silver', 5000, 0],
-    ])(
-      `Testing elite status is applied for %s %s level`,
-      async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
-        const results = await calculate([buildSegmentFromString(segmentString)], eliteStatus);
-        expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
-          expectedBaseQantasPoints,
-        );
-        expect(results.qantasPoints).toBe(expectedBaseQantasPoints + expectedEliteBonus);
-      },
-    );
-  });
-
-  // TODO specific test for srilanka and malaysia?
-  // TODO min points calc?
 });
+
+describe('Test for non Status Credit earning airlines', () => {
+  test.each([
+    ['af i cdg jfk', 5250, 0],
+    ['af i jfk cdg', 5250, 0],
+  ])(
+    `Air France %s. Should earn %s qantas points and %s status credit`,
+    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+      const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.qantasPoints).toBe(expectedQantasPoints);
+      expect(results.statusCredits).toBe(expectedStatusCredits);
+    },
+  );
+});
+
+describe('calculate - elite status levels', () => {
+  test.each([
+    ['qf e syd sin', 'Bronze', 2600, 0 * 2600],
+    ['qf e syd sin', 'Silver', 2600, 0.5 * 2600],
+    ['qf e syd sin', 'Gold', 2600, 0.75 * 2600],
+    ['qf e syd sin', 'Platinum', 2600, 1 * 2600],
+    ['qf e syd sin', 'Platinum One', 2600, 1 * 2600],
+
+    ['qf g syd sin', 'Bronze', 3900, 0 * 3900],
+    ['qf g syd sin', 'Silver', 3900, 0.5 * 3900],
+    ['qf g syd sin', 'Gold', 3900, 0.75 * 3900],
+    ['qf g syd sin', 'Platinum', 3900, 1 * 3900],
+    ['qf g syd sin', 'Platinum One', 3900, 1 * 3900],
+
+    ['qf d syd sin', 'Bronze', 8450, 0 * 5200],
+    ['qf d syd sin', 'Silver', 8450, 0.5 * 5200],
+    ['qf d syd sin', 'Gold', 8450, 0.75 * 5200],
+    ['qf d syd sin', 'Platinum', 8450, 1 * 5200],
+    ['qf d syd sin', 'Platinum One', 8450, 1 * 5200],
+  ])(
+    `Testing elite status is applied for %s %s level`,
+    async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
+      const results = await calculate([buildSegmentFromString(segmentString)], eliteStatus);
+      expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
+        expectedBaseQantasPoints,
+      );
+      expect(results.qantasPoints).toBe(expectedBaseQantasPoints + expectedEliteBonus);
+    },
+  );
+});
+
+describe('calculate - elite status only applies to certain airlines', () => {
+  test.each([
+    ['qf d syd sin', 'Silver', 8450, 0.5 * 5200],
+    ['aa d syd sin', 'Silver', 5000, 0.5 * 4000],
+
+    ['jq Flex sin bkk', 'Silver', 850, 0.5 * 850],
+    ['3k Flex sin bkk', 'Silver', 850, 0.5 * 850],
+    ['gk Flex sin bkk', 'Silver', 850, 0.5 * 850],
+
+    ['cx d syd sin', 'Silver', 5000, 0],
+    ['jl d syd sin', 'Silver', 5000, 0],
+    ['ba d syd sin', 'Silver', 5000, 0],
+    ['ib d syd sin', 'Silver', 5000, 0],
+  ])(
+    `Testing elite status is applied for %s %s level`,
+    async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
+      const results = await calculate([buildSegmentFromString(segmentString)], eliteStatus);
+      expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
+        expectedBaseQantasPoints,
+      );
+      expect(results.qantasPoints).toBe(expectedBaseQantasPoints + expectedEliteBonus);
+    },
+  );
+});
+
+// TODO specific test for srilanka and malaysia?
+// TODO min points calc?
