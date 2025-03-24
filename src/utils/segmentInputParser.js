@@ -1,3 +1,4 @@
+import { JETSTAR_AIRLINES, JETSTAR_LETTER_FARE_CLASSES } from '@/models/constants';
 import { SegmentInput } from '@/models/segmentInput';
 
 export const parseEncodedTextItin = (textItin, segmentSeparator, segmentItemSeparator) => {
@@ -19,7 +20,7 @@ export const parseEncodedTextItin = (textItin, segmentSeparator, segmentItemSepa
     const airline = parts[0].toLowerCase();
     const fromAirportText = parts[1].toLowerCase();
     const toAirportText = parts[2].toLowerCase();
-    const fareClass = parts[3].toLowerCase();
+    const fareClass = parseFareClass(airline, parts[3].toLowerCase());
 
     segmentInputs.push(new SegmentInput(airline, fareClass, fromAirportText, toAirportText));
   }
@@ -53,7 +54,7 @@ export const parseItaMatrixInput = (itaMatrixJson) => {
   itaMatrixObj.itinerary.slices.forEach((slice) => {
     slice.segments.forEach((segment) => {
       const airline = segment.carrier.code.toLowerCase();
-      const fareClass = segment.bookingInfos[0].bookingCode.toLowerCase();
+      const fareClass = parseFareClass(airline, segment.bookingInfos[0].bookingCode.toLowerCase());
 
       segment.legs.forEach((leg) => {
         const fromAirportText = leg.origin.code.toLowerCase();
@@ -64,5 +65,15 @@ export const parseItaMatrixInput = (itaMatrixJson) => {
     });
   });
 
+  console.log(segmentInputs);
+
   return { segmentInputs, parsingError: undefined };
+};
+
+const parseFareClass = (airline, fareClass) => {
+  if (JETSTAR_AIRLINES.has(airline)) {
+    return JETSTAR_LETTER_FARE_CLASSES[fareClass] || fareClass;
+  }
+
+  return fareClass;
 };

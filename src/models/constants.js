@@ -185,6 +185,26 @@ export const JETSTAR_FARE_CLASS_DISPLAY = {
   BusinessMax: 'Business Max',
 };
 
+// https://www.jetstar.com/_/media/files/agenthub/gds-guide.pdf
+export const JETSTAR_LETTER_FARE_CLASSES = {
+  c: 'EconomyStarterFare',
+
+  k: 'StarterPlus',
+  l: 'StarterPlus',
+  m: 'StarterPlus',
+  n: 'StarterPlus',
+  o: 'StarterPlus',
+
+  q: 'StarterMax',
+  r: 'StarterMax',
+  s: 'StarterMax',
+  t: 'StarterMax',
+  v: 'StarterMax',
+  y: 'StarterMax',
+
+  j: 'BusinessMax',
+};
+
 export const JAL_DOMESTIC_FARE_CLASSES = {
   DiscountEconomy: 'economy',
   DiscountEconomyplusPremiumSurcharge: 'economy',
