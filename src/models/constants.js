@@ -160,8 +160,8 @@ export const QANTAS_FARE_CLASS_DISPLAY = {
 };
 
 export const JETSTAR_NEW_ZEALAND_FARE_CLASSES = {
-  EconomyStarterFare: 'discountEconomy',
-  EconomyStarterFlexBiz: 'discountEconomy',
+  Starter: 'discountEconomy',
+  StarterFlexBiz: 'discountEconomy',
   Flex: 'economy',
   FlexPlus: 'economy',
   StarterPlus: 'economy',
@@ -176,8 +176,8 @@ export const JETSTAR_FARE_CLASSES = {
 };
 
 export const JETSTAR_FARE_CLASS_DISPLAY = {
-  EconomyStarterFare: 'Economy Starter Fare',
-  EconomyStarterFlexBiz: 'Economy Starter FlexBiz Fare',
+  Starter: 'Starter',
+  StarterFlexBiz: 'Starter FlexBiz Fare',
   Flex: 'Flex',
   FlexPlus: 'Flex Plus',
   StarterPlus: 'Starter Plus',
@@ -187,7 +187,7 @@ export const JETSTAR_FARE_CLASS_DISPLAY = {
 
 // https://www.jetstar.com/_/media/files/agenthub/gds-guide.pdf
 export const JETSTAR_LETTER_FARE_CLASSES = {
-  c: 'EconomyStarterFare',
+  c: 'Starter',
 
   k: 'StarterPlus',
   l: 'StarterPlus',
