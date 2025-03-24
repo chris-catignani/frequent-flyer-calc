@@ -107,6 +107,28 @@ export class DistanceRule extends Rule {
   }
 }
 
+export class FareClassRule extends Rule {
+  constructor(name, ruleUrl, fareClassEarnings) {
+    super(name, ruleUrl);
+    this.fareClassEarnings = fareClassEarnings;
+  }
+
+  // es-lint-disable-next-line
+  applies(segment, fareEarnCategory) {
+    return fareEarnCategory in this.fareClassEarnings;
+  }
+
+  // es-lint-disable-next-line
+  calculate(segment, fareEarnCategory) {
+    return this.buildCalculationReturn(
+      fareEarnCategory,
+      this.fareClassEarnings[fareEarnCategory].calculationNotes,
+      this.fareClassEarnings[fareEarnCategory].qantasPoints,
+      this.fareClassEarnings[fareEarnCategory].statusCredits,
+    );
+  }
+}
+
 /**
  * Rule for Geographical pairings. Can be setup in a few ways:
  * ...

@@ -169,6 +169,9 @@ export const JETSTAR_NEW_ZEALAND_FARE_CLASSES = {
 };
 
 export const JETSTAR_FARE_CLASSES = {
+  Starter: 'n/a',
+  StarterPlus: 'n/a',
+  Buisness: 'n/a',
   Flex: 'economy',
   FlexPlus: 'economy',
   StarterMax: 'flexibleEconomy',
@@ -182,12 +185,15 @@ export const JETSTAR_FARE_CLASS_DISPLAY = {
   FlexPlus: 'Flex Plus',
   StarterPlus: 'Starter Plus',
   StarterMax: 'Starter Max',
+  Business: 'Business',
   BusinessMax: 'Business Max',
 };
 
 // https://www.jetstar.com/_/media/files/agenthub/gds-guide.pdf
 export const JETSTAR_LETTER_FARE_CLASSES = {
   c: 'Starter',
+
+  h: 'Starter', // +bag
 
   k: 'StarterPlus',
   l: 'StarterPlus',
@@ -234,6 +240,8 @@ export const EARN_CATEGORY_DISPLAY = {
   business: 'Business',
   flexibleBusiness: 'Flexible Business',
   first: 'First',
+
+  'n/a': 'n/a',
 };
 
 export const REGION_DISPLAY = {

@@ -1,8 +1,17 @@
-import { parseEarningRates, IntraCountryRule, GeographicalRule, DistanceRule } from '../rules';
+import {
+  parseEarningRates,
+  IntraCountryRule,
+  GeographicalRule,
+  DistanceRule,
+  FareClassRule,
+} from '../rules';
 import { QANTAS_FARE_CLASSES } from './qantasEarnCategories';
 
 const _base_rule_url =
   'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html';
+
+const _base_fare_category_url =
+  'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html';
 
 export const getQantasRules = () => {
   const standardRules = [
@@ -16,6 +25,7 @@ export const getQantasRules = () => {
     buildEuropeRule(),
     buildTelAvivRule(),
     buildFallbackRule(),
+    buildNonEarningRule(),
   ];
 
   return {
@@ -412,4 +422,17 @@ const buildFallbackRule = () => {
 
   const ruleUrl = _base_rule_url + '#all-other-flights';
   return new DistanceRule('All other flights', ruleUrl, distanceBands);
+};
+
+const buildNonEarningRule = () => {
+  const fareClassEarnings = {
+    'n/a': {
+      qantasPoints: 0,
+      statusCredits: 0,
+      calculationNotes: 'Fare class not eligable for earnings',
+    },
+  };
+
+  const ruleUrl = _base_fare_category_url + '#jetstar';
+  return new FareClassRule('Non eligable fare class', ruleUrl, fareClassEarnings);
 };
