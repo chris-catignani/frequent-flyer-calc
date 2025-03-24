@@ -1,4 +1,4 @@
-import { parseEncodedTextItin } from '@/utils/segmentInputParser';
+import { parseEncodedTextItin, parseItaMatrixInput } from '@/utils/segmentInputParser';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import {
   Accordion,
