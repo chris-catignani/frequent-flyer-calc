@@ -16,7 +16,7 @@ import { useState } from 'react';
 export const AdvancedInput = ({ setSegmentInputs }) => {
   const [isOpen, setOpen] = useState(false);
   return (
-    <Box>
+    <Stack spacing={1}>
       <Stack
         direction="row"
         spacing={1}
@@ -27,7 +27,7 @@ export const AdvancedInput = ({ setSegmentInputs }) => {
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </Stack>
       {isOpen && <AdvancedInputSelection setSegmentInputs={setSegmentInputs} />}
-    </Box>
+    </Stack>
   );
 };
 
@@ -68,7 +68,7 @@ const AdvancedInputSelection = ({ setSegmentInputs }) => {
   };
 
   return (
-    <Box pt={1}>
+    <Box>
       <Accordion expanded={expanded === 'text-itin'} onChange={handleAccordianChange('text-itin')}>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>Free Form Text Itinerary</Typography>
