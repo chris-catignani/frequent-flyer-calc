@@ -15,6 +15,13 @@ import { Footer } from '@/components/footer';
 import { AdvancedInput } from '@/components/advancedInput';
 import { createUrlQueryParams, parseUrlQueryParams } from '@/utils/segmentInputUrlParser';
 import { useSearchParams } from 'next/navigation';
+import {
+  deleteAllSavedCalculations,
+  deleteSavedCalculationAtIdx,
+  getSavedCalculations,
+  saveCalculation,
+} from '@/utils/recentCalculations';
+import { RecentCalculations } from '@/components/recentCalculations';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
@@ -27,6 +34,8 @@ export default function Home() {
   const [tripType, setTripType] = useState('one way');
   const [compareWithQantasCalc, setCompareWithQantasCalc] = useState(false);
 
+  const [savedCalculations, setSavedCalculations] = useState([]);
+
   const [isCalculating, setIsCalculating] = useState(false);
   const [calculationOutput, setCalculationOutput] = useState();
 
@@ -34,17 +43,14 @@ export default function Home() {
   useEffect(() => {
     const { eliteStatus, tripType, segmentInputs } = parseUrlQueryParams(searchParams);
 
-    if (eliteStatus) {
-      setEliteStatus(eliteStatus);
-    }
-    if (tripType) {
-      setTripType(tripType);
-    }
-    if (segmentInputs) {
-      setAllSegmentInputs(segmentInputs);
-    }
-    // I struggled to fix the warning about the dependencies below. Won't spend more time on it
-  }, [searchParams, setEliteStatus, setTripType]);
+    setAllInputParams(eliteStatus, tripType, segmentInputs);
+  }, [searchParams]);
+
+  // fetch the saved calculations on page load
+  useEffect(() => {
+    const theSavedCalculations = getSavedCalculations();
+    setSavedCalculations(theSavedCalculations);
+  }, []);
 
   const validateInput = () => {
     const errors = {};
@@ -95,22 +101,24 @@ export default function Home() {
     });
 
     if (theTripType === 'return') {
-      const returnSegments = [...segments];
-
-      // add the segments again, but in reverse, with from/to airports flipped
+      // add the segments in reverse, with from/to airports flipped
       for (let i = segments.length - 1; i >= 0; i--) {
         const { fromAirport, toAirport } = segments[i];
-        returnSegments.push(segments[i].clone({ fromAirport: toAirport, toAirport: fromAirport }));
+        segments.push(segments[i].clone({ fromAirport: toAirport, toAirport: fromAirport }));
       }
-
-      setCalculationOutput(
-        await calculate(returnSegments, theEliteStatus, theCompareWithQantasCalc),
-      );
-    } else {
-      setCalculationOutput(await calculate(segments, theEliteStatus, theCompareWithQantasCalc));
     }
 
-    setIsCalculating(false);
+    const calculationResult = await calculate(segments, theEliteStatus, theCompareWithQantasCalc);
+    setCalculationOutput(calculationResult);
+
+    // save the calculation
+    const theSavedCalculations = saveCalculation(
+      segmentInputs,
+      theTripType,
+      theEliteStatus,
+      calculationResult,
+    );
+    setSavedCalculations(theSavedCalculations);
 
     // replace the URL query params with the current search params
     const params = new URLSearchParams(searchParams.toString());
@@ -121,6 +129,8 @@ export default function Home() {
     if (searchParams.toString() !== params.toString()) {
       window.history.pushState(null, '', `?${params.toString()}`);
     }
+
+    setIsCalculating(false);
   };
 
   const calculatePressed = () => {
@@ -130,6 +140,18 @@ export default function Home() {
     } else {
       setInputErrors({});
       doCalculation(eliteStatus, tripType, compareWithQantasCalc);
+    }
+  };
+
+  const setAllInputParams = (eliteStatus, tripType, segmentInputs) => {
+    if (eliteStatus) {
+      setEliteStatus(eliteStatus);
+    }
+    if (tripType) {
+      setTripType(tripType);
+    }
+    if (segmentInputs) {
+      setAllSegmentInputs(segmentInputs);
     }
   };
 
@@ -224,6 +246,25 @@ export default function Home() {
     if (calculationOutput && validateInput()) {
       doCalculation(eliteStatus, tripType, newCompareWithQantasCalc);
     }
+  };
+
+  const recentCalculationClicked = (idx) => {
+    const savedCalculation = savedCalculations[idx];
+    setAllInputParams(
+      savedCalculation.eliteStatus,
+      savedCalculation.tripType,
+      savedCalculation.segmentInputs,
+    );
+  };
+
+  const recentCalculationDeleteClicked = (idx) => {
+    const theSavedCalculations = deleteSavedCalculationAtIdx(idx);
+    setSavedCalculations(theSavedCalculations);
+  };
+
+  const clearAllRecentCalculationsClicked = () => {
+    const theSavedCalculations = deleteAllSavedCalculations();
+    setSavedCalculations(theSavedCalculations);
   };
 
   const QantasApiDialog = ({ open, onClose }) => {
@@ -436,6 +477,16 @@ export default function Home() {
                 </Grid2>
               </Grid2>
             </Box>
+            {savedCalculations && savedCalculations.length > 0 && (
+              <Box pt={0} pb={2} px={2}>
+                <RecentCalculations
+                  recentCalculations={savedCalculations}
+                  onRecentCalculationClick={recentCalculationClicked}
+                  onRecentCalcutionDeleteClick={recentCalculationDeleteClicked}
+                  onClearAllClick={clearAllRecentCalculationsClicked}
+                />
+              </Box>
+            )}
             <Box pt={0} pb={2} px={{ xs: 0, sm: 2 }}>
               <AdvancedInput setSegmentInputs={setAllSegmentInputs} />
             </Box>
