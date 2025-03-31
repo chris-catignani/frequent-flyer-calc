@@ -112,12 +112,7 @@ export default function Home() {
     setCalculationOutput(calculationResult);
 
     // save the calculation
-    const theSavedCalculations = saveCalculation(
-      segmentInputs,
-      theTripType,
-      theEliteStatus,
-      calculationResult,
-    );
+    const theSavedCalculations = saveCalculation(segmentInputs, theTripType, theEliteStatus);
     setSavedCalculations(theSavedCalculations);
 
     // replace the URL query params with the current search params

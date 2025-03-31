@@ -1,6 +1,6 @@
 import { SegmentInput } from '@/models/segmentInput';
 
-export const saveCalculation = (segmentInputs, theTripType, theEliteStatus, calculationResult) => {
+export const saveCalculation = (segmentInputs, theTripType, theEliteStatus) => {
   const calculationToSave = {
     segmentInputs: segmentInputs.map(
       (segmentInput) =>
@@ -13,7 +13,6 @@ export const saveCalculation = (segmentInputs, theTripType, theEliteStatus, calc
     ),
     tripType: theTripType,
     eliteStatus: theEliteStatus,
-    // calculationResult,
   };
 
   // get the current saved calculations and remove and matching calc's so we don't create duplicates
