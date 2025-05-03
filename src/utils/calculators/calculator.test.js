@@ -423,9 +423,48 @@ describe('calculate - elite status levels', () => {
     ['qf d syd sin', 'Platinum', 8450, 1 * 5200],
     ['qf d syd sin', 'Platinum One', 8450, 1 * 5200],
   ])(
-    `Testing elite status is applied for %s %s level`,
+    `Testing elite status pre July 2025 is applied for %s %s level`,
     async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
-      const results = await calculate([buildSegmentFromString(segmentString)], eliteStatus);
+      const results = await calculate(
+        [buildSegmentFromString(segmentString)],
+        eliteStatus,
+        false,
+        true,
+      );
+      expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
+        expectedBaseQantasPoints,
+      );
+      expect(results.qantasPoints).toBe(expectedBaseQantasPoints + expectedEliteBonus);
+    },
+  );
+
+  test.each([
+    ['qf e syd sin', 'Bronze', 2600, 0 * 2600],
+    ['qf e syd sin', 'Silver', 2600, 0.5 * 2600],
+    ['qf e syd sin', 'Gold', 2600, 0.75 * 2600],
+    ['qf e syd sin', 'Platinum', 2600, 1 * 2600],
+    ['qf e syd sin', 'Platinum One', 2600, 1 * 2600],
+
+    ['qf g syd sin', 'Bronze', 3900, 0 * 3900],
+    ['qf g syd sin', 'Silver', 3900, 0.5 * 3900],
+    ['qf g syd sin', 'Gold', 3900, 0.75 * 3900],
+    ['qf g syd sin', 'Platinum', 3900, 1 * 3900],
+    ['qf g syd sin', 'Platinum One', 3900, 1 * 3900],
+
+    ['qf d syd sin', 'Bronze', 8450, 0 * 8450],
+    ['qf d syd sin', 'Silver', 8450, Math.floor(0.5 * 8450)],
+    ['qf d syd sin', 'Gold', 8450, Math.floor(0.75 * 8450)],
+    ['qf d syd sin', 'Platinum', 8450, 1 * 8450],
+    ['qf d syd sin', 'Platinum One', 8450, 1 * 8450],
+  ])(
+    `Testing elite status post July 2025 is applied for %s %s level`,
+    async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
+      const results = await calculate(
+        [buildSegmentFromString(segmentString)],
+        eliteStatus,
+        false,
+        false,
+      );
       expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
         expectedBaseQantasPoints,
       );

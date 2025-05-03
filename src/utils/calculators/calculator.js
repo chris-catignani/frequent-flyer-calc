@@ -82,7 +82,19 @@ const calculateSegment = (segment, eliteStatus, preJuly2025) => {
 
   const calculation = rule.calculate(segment, fareEarnCategory);
 
-  const eliteBonus = calculateEliteBonusPoints(eliteStatus, segment, rule, fareEarnCategory);
+  let eliteBonus = {};
+
+  if (preJuly2025) {
+    eliteBonus = calculateEliteBonusPoints(eliteStatus, segment, rule, fareEarnCategory);
+  } else if (
+    eliteStatusBonusMultiples[eliteStatus] &&
+    eliteStatusBonusAirlines.has(segment.airline)
+  ) {
+    eliteBonus = {
+      eligibleFareCategory: fareEarnCategory,
+      qantasPoints: Math.floor(calculation.qantasPoints * eliteStatusBonusMultiples[eliteStatus]),
+    };
+  }
 
   const qantasPointsBreakdown = {
     basePoints: calculation.qantasPoints,
