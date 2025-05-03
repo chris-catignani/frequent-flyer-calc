@@ -256,7 +256,8 @@ const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
         ...WEBSITE_EARN_CATEGORIES.qf[0]
           .replace(/\W/g, '')
           .split('')
-          .map((letter) => letter.toLowerCase()),
+          .map((letter) => letter.toLowerCase())
+          .sort(),
       );
     } else {
       fareClassOptions = Object.keys(QANTAS_INTL_FARE_CLASSES);
@@ -264,7 +265,8 @@ const QantasFareClassInput = ({ segmentInput, error, onChange }) => {
         ...WEBSITE_EARN_CATEGORIES.qf[1]
           .replace(/\W/g, '')
           .split('')
-          .map((letter) => letter.toLowerCase()),
+          .map((letter) => letter.toLowerCase())
+          .sort(),
       );
     }
   }
