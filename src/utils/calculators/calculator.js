@@ -6,7 +6,8 @@ import { getQantasMinimumPoints, getQantasRules } from './qantas/qantasRules';
 
 // TODO make this a map of airline to rules?
 const partnerRules = getPartnerRules(); // this is a list
-const qantasRules = getQantasRules(); // this is a map of airlineCode -> rules[]
+const qantasRulesPreJuly2025 = getQantasRules(true); // this is a map of airlineCode -> rules[]
+const qantasRules = getQantasRules(false); // this is a map of airlineCode -> rules[]
 const qantasMinPoints = getQantasMinimumPoints();
 
 const eliteStatusBonusAirlines = new Set(['aa', 'qf', 'jq', '3k', 'gk']);
@@ -17,7 +18,12 @@ const eliteStatusBonusMultiples = {
   'Platinum One': 1.0,
 };
 
-export const calculate = async (segments, eliteStatus, compareWithQantasCalc = false) => {
+export const calculate = async (
+  segments,
+  eliteStatus,
+  compareWithQantasCalc = false,
+  preJuly2025 = true,
+) => {
   const retval = {
     segmentResults: [],
     containsErrors: false,
@@ -27,7 +33,7 @@ export const calculate = async (segments, eliteStatus, compareWithQantasCalc = f
 
   for (let segment of segments) {
     try {
-      const segmentResult = calculateSegment(segment, eliteStatus);
+      const segmentResult = calculateSegment(segment, eliteStatus, preJuly2025);
 
       let qantasAPIResults = {};
       if (compareWithQantasCalc) {
@@ -64,9 +70,11 @@ const getDataFromQantasCalc = async (segment, eliteStatus) => {
   return await fetchDataFromQantas(segment, eliteStatus, fareEarnCategory);
 };
 
-const calculateSegment = (segment, eliteStatus) => {
-  const { fareEarnCategory, rule, minPoints, earnsStatusCredits } =
-    getEarnCalculationRequirements(segment);
+const calculateSegment = (segment, eliteStatus, preJuly2025) => {
+  const { fareEarnCategory, rule, minPoints, earnsStatusCredits } = getEarnCalculationRequirements(
+    segment,
+    preJuly2025,
+  );
 
   if (!rule) {
     throw new Error(`Could not find a rule to calculate earnings for segment: ${segment}`);
@@ -98,13 +106,20 @@ const calculateSegment = (segment, eliteStatus) => {
 };
 
 // TODO clean this up
-const getEarnCalculationRequirements = (segment) => {
+const getEarnCalculationRequirements = (segment, preJuly2025) => {
   if (segment.airline in qantasRules) {
     const fareEarnCategory = getQantasEarnCategory(segment);
 
-    const rule = qantasRules[segment.airline].find((rule) => {
-      return rule.applies(segment, fareEarnCategory);
-    });
+    let rule = undefined;
+    if (preJuly2025) {
+      rule = qantasRulesPreJuly2025[segment.airline].find((rule) => {
+        return rule.applies(segment, fareEarnCategory);
+      });
+    } else {
+      rule = qantasRules[segment.airline].find((rule) => {
+        return rule.applies(segment, fareEarnCategory);
+      });
+    }
 
     const minPoints = qantasMinPoints[segment.airline][fareEarnCategory];
 

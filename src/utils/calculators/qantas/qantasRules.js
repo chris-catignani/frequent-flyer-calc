@@ -13,9 +13,8 @@ const _base_rule_url =
 const _base_fare_category_url =
   'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html';
 
-export const getQantasRules = () => {
+export const getQantasRules = (preJuly2025) => {
   const standardRules = [
-    buildIntraAustraliaRule(),
     buildAdlBneGoldCoastSydMelRule(),
     buildDarwinPerthRule(),
     buildNewZealandRule(),
@@ -29,10 +28,10 @@ export const getQantasRules = () => {
   ];
 
   return {
-    qf: standardRules,
-    '3k': standardRules,
-    gk: standardRules,
-    jq: [buildIntraNewZealandRule(), ...standardRules],
+    qf: [buildQantasIntraAustraliaRule(preJuly2025), ...standardRules],
+    '3k': [buildJetstarIntraAustraliaRule(), ...standardRules],
+    gk: [buildJetstarIntraAustraliaRule(), ...standardRules],
+    jq: [buildJetstarIntraNewZealandRule(), buildJetstarIntraAustraliaRule(), ...standardRules],
   };
 };
 
@@ -62,7 +61,7 @@ const parseQantasEarningRates = (qantasPointsString, qantasCreditsString) => {
   return parseEarningRates(qantasPointsString, qantasCreditsString, QANTAS_FARE_CLASSES);
 };
 
-const buildIntraNewZealandRule = () => {
+const buildJetstarIntraNewZealandRule = () => {
   const ruleConfig = {
     origin: {
       country: new Set(['new zealand']),
@@ -78,7 +77,7 @@ const buildIntraNewZealandRule = () => {
   return new GeographicalRule('Domestic New Zealand', ruleUrl, ruleConfig);
 };
 
-const buildIntraAustraliaRule = () => {
+const buildJetstarIntraAustraliaRule = () => {
   const distanceBands = [
     {
       minDistance: 0,
@@ -106,7 +105,69 @@ const buildIntraAustraliaRule = () => {
   ];
 
   const ruleUrl = _base_rule_url + '#domestic-australia-and-new-zealand';
-  return new IntraCountryRule('Domestic Australia', ruleUrl, 'Australia', distanceBands);
+  return new IntraCountryRule('Jetstar Domestic Australia', ruleUrl, 'Australia', distanceBands);
+};
+
+const buildQantasIntraAustraliaRule = (preJuly2025) => {
+  if (preJuly2025) {
+    const distanceBands = [
+      {
+        minDistance: 0,
+        maxDistance: 750,
+        earnings: parseQantasEarningRates(
+          '400^    	400^	600^    	600^	900^	1,000^	-	1,400	1,600	1,800',
+          '10	10	20	20	20	20	-	40	45	60',
+        ),
+      },
+      {
+        minDistance: 751,
+        maxDistance: 1500,
+        earnings: parseQantasEarningRates(
+          '700^	700^	1,100^	1,100^	1,400	1,550	-	2,100	2,350	2,800',
+          '15	15	30	30	30	30	-	60	70	90',
+        ),
+      },
+      {
+        minDistance: 1501,
+        earnings: parseQantasEarningRates(
+          '1,450	1,450	2,200	2,200	2,700	2,900	-	3,300	3,600	4,400',
+          '20	20	40	40	40	40	-	80	95	120',
+        ),
+      },
+    ];
+
+    const ruleUrl = _base_rule_url + '#domestic-australia-and-new-zealand';
+    return new IntraCountryRule('Qantas Domestic Australia', ruleUrl, 'Australia', distanceBands);
+  } else {
+    const distanceBands = [
+      {
+        minDistance: 0,
+        maxDistance: 750,
+        earnings: parseQantasEarningRates(
+          '500	500	750	750	1,125	1,250	-	1,750	2,000	2,250',
+          '10	10	20	20	20	20	-	40	45	60',
+        ),
+      },
+      {
+        minDistance: 751,
+        maxDistance: 1500,
+        earnings: parseQantasEarningRates(
+          '875	875	1,375	1,375	1,750	1,940	-	2,625	2,940	3,500',
+          '15	15	30	30	30	30	-	60	70	90',
+        ),
+      },
+      {
+        minDistance: 1501,
+        earnings: parseQantasEarningRates(
+          '1,815	1,815	2,750	2,750	3,375	3,625	-	4,125	4,500	5,500',
+          '20	20	40	40	40	40	-	80	95	120',
+        ),
+      },
+    ];
+
+    const ruleUrl = _base_rule_url + '#domestic-australia-and-new-zealand';
+    return new IntraCountryRule('Qantas Domestic Australia', ruleUrl, 'Australia', distanceBands);
+  }
 };
 
 const buildAdlBneGoldCoastSydMelRule = () => {

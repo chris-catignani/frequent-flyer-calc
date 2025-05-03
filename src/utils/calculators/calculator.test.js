@@ -239,9 +239,22 @@ describe('calculate - qantas rules', () => {
     ['qf i syd asp', 2100, 60],
     ['qf i syd per', 3300, 80],
   ])(
-    `Testing routing %s. Should earn %s qantas points and %s status credit for Domestic Australia`,
+    `Testing routing %s. Should earn %s qantas points and %s status credit for pre July 2025 Domestic Australia`,
     async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
-      const results = await calculate([buildSegmentFromString(segmentString)]);
+      const results = await calculate([buildSegmentFromString(segmentString)], null, false, true);
+      expect(results.qantasPoints).toBe(expectedQantasPoints);
+      expect(results.statusCredits).toBe(expectedStatusCredits);
+    },
+  );
+
+  test.each([
+    ['qf i syd mel', 1750, 40],
+    ['qf i syd asp', 2625, 60],
+    ['qf i syd per', 4125, 80],
+  ])(
+    `Testing routing %s. Should earn %s qantas points and %s status credit for post July 2025 Domestic Australia`,
+    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+      const results = await calculate([buildSegmentFromString(segmentString)], null, false, false);
       expect(results.qantasPoints).toBe(expectedQantasPoints);
       expect(results.statusCredits).toBe(expectedStatusCredits);
     },
@@ -339,6 +352,21 @@ describe('calculate - qantas rules', () => {
 
   test.each([['qf d tlv hkg', 13000, 130]])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Tel Aviv`,
+    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+      const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.qantasPoints).toBe(expectedQantasPoints);
+      expect(results.statusCredits).toBe(expectedStatusCredits);
+    },
+  );
+});
+
+describe('calculate - jetstar rules', () => {
+  test.each([
+    ['jq BusinessMax syd mel', 1400, 40],
+    ['jq BusinessMax syd asp', 2100, 60],
+    ['jq BusinessMax syd per', 3300, 80],
+  ])(
+    `Testing routing %s. Should earn %s qantas points and %s status credit for Domestic Australia`,
     async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
       expect(results.qantasPoints).toBe(expectedQantasPoints);
