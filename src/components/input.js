@@ -208,6 +208,8 @@ const AirlineInput = ({ value, error, onChange }) => {
     <Autocomplete
       disablePortal
       disableClearable
+      autoHighlight
+      autoSelect
       options={options}
       getOptionLabel={(airline) => airline.airlineLabel || ''}
       value={options.find((airline) => airline.iata === value) || ''}
@@ -323,6 +325,8 @@ const GenericFareClassInput = ({ options, value, displayLookup, onChange, groupB
     <Autocomplete
       disablePortal
       disableClearable
+      autoHighlight
+      autoSelect
       options={options}
       getOptionLabel={(option) => displayLookup[option] || option}
       value={options.find((option) => option === value) || ''}
