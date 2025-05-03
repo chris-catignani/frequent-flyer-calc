@@ -189,10 +189,11 @@ export default function Home() {
   };
 
   const addSegmentPressed = () => {
-    setSegmentInputs([...segmentInputs, new SegmentInput('', '', '', '')]);
-
-    // clear calculation output
-    setCalculationOutput(null);
+    const previousSegment = segmentInputs[segmentInputs.length - 1];
+    setAllSegmentInputs([
+      ...segmentInputs,
+      new SegmentInput(previousSegment.airline, '', previousSegment.toAirportText, ''),
+    ]);
   };
 
   const deleteSegmentPressed = (segmentInputIdx) => {
