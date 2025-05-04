@@ -2,8 +2,8 @@
 
 import { calculate } from '@/utils/calculators/calculator';
 import { useEffect, useState } from 'react';
-import { Alert, Box, Button, Container, Dialog, DialogTitle, Divider, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'; // prettier-ignore
-import { EliteStatusInput, RouteInputList } from '@/components/input';
+import { Alert, Box, Button, Container, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'; // prettier-ignore
+import { EliteStatusInput, SegmentInputList } from '@/components/input';
 import { Info } from '@mui/icons-material';
 import { SegmentResults } from '@/components/segmentResults';
 import { getAirport } from '@/utils/airports';
@@ -25,12 +25,16 @@ import { RecentCalculations } from '@/components/recentCalculations';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
+// hack to create a default segment with a specific uuid
+// this is so nextjs doesn't get mad the initial emtpy segment has differing uuids on the client vs server
+const defaultSegmentInput = new SegmentInput('', '', '', '', '00000000-0000-0000-0000-000000000000'); // prettier-ignore
+
 export default function Home() {
   const searchParams = useSearchParams();
 
   const [inputErrors, setInputErrors] = useState({});
   const [eliteStatus, setEliteStatus] = useState('Bronze');
-  const [segmentInputs, setSegmentInputs] = useState([new SegmentInput('', '', '', '')]);
+  const [segmentInputs, setSegmentInputs] = useState([defaultSegmentInput]);
   const [tripType, setTripType] = useState('one way');
   const [compareWithQantasCalc, setCompareWithQantasCalc] = useState(false);
   const [preJuly2025, setPreJuly2025] = useState(true);
@@ -226,6 +230,14 @@ export default function Home() {
 
     // if input changes, ensure calculated data is voided
     setCalculationOutput(null);
+  };
+
+  const segmentsReordered = (originIdx, targetIdx) => {
+    const newSegmentInputs = [...segmentInputs];
+    const itemToMove = newSegmentInputs[originIdx];
+    newSegmentInputs.splice(originIdx, 1);
+    newSegmentInputs.splice(targetIdx, 0, itemToMove);
+    setSegmentInputs(newSegmentInputs);
   };
 
   const eliteStatusSelected = (newEliteStatus) => {
@@ -464,13 +476,12 @@ export default function Home() {
               </Grid2>
             </Grid2>
             <Box p={2}>
-              <RouteInputList
+              <SegmentInputList
                 segmentInputs={segmentInputs}
                 errors={inputErrors}
-                onDeleteSegmentPressed={(segmentInputIdx) => deleteSegmentPressed(segmentInputIdx)}
-                onSegmentInputChanged={(segmentInputIdx, segmentInput) =>
-                  segmentInputChanged(segmentInputIdx, segmentInput)
-                }
+                onDeleteSegmentPressed={deleteSegmentPressed}
+                onSegmentInputChanged={segmentInputChanged}
+                onSegmentsReordered={segmentsReordered}
               />
 
               <Grid2

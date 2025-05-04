@@ -1,5 +1,9 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export class SegmentInput {
-  constructor(airline, fareClass, fromAirportText, toAirportText) {
+  constructor(airline, fareClass, fromAirportText, toAirportText, uuid = '') {
+    this.uuid = uuid || uuidv4(); // this makes me feel uncomfortable
+
     this.airline = airline;
     this.fareClass = fareClass;
     this.fromAirportText = fromAirportText;
@@ -19,6 +23,7 @@ export class SegmentInput {
       fareClass !== undefined ? fareClass : this.fareClass,
       fromAirportText !== undefined ? fromAirportText : this.fromAirportText,
       toAirportText !== undefined ? toAirportText : this.toAirportText,
+      this.uuid,
     );
 
     clonedSegment.fromAirport = this.fromAirport;

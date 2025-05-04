@@ -14,9 +14,10 @@ import {
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
 } from '@/models/constants';
-import { Autocomplete, TextField, Grid2, IconButton, Box, Divider } from '@mui/material';
+import { Autocomplete, TextField, Grid2, IconButton, Divider } from '@mui/material';
 import { GroupHeader, GroupItems } from './autocomplete';
-import { Clear } from '@mui/icons-material';
+import { Clear, DragHandle } from '@mui/icons-material';
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 
 export const EliteStatusInput = ({ eliteStatus, onChange }) => {
   return (
@@ -33,9 +34,82 @@ export const EliteStatusInput = ({ eliteStatus, onChange }) => {
   );
 };
 
-export const RouteInput = ({
+export const SegmentInputList = ({
+  segmentInputs,
+  errors,
+  onDeleteSegmentPressed,
+  onSegmentInputChanged,
+  onSegmentsReordered,
+}) => {
+  // https://medium.com/@rekdhmer/how-to-drag-drop-like-trello-b21c4e821429
+  const onDragEnd = (result) => {
+    if (result.source.index !== result.destination.index) {
+      onSegmentsReordered(result.source.index, result.destination.index);
+    }
+  };
+
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="segmentList">
+        {(provided) => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {segmentInputs.map((segmentInput, segmentInputIdx) => (
+              <SegmentInputListItem
+                key={segmentInput.uuid}
+                segmentInput={segmentInput}
+                segmentInputIdx={segmentInputIdx}
+                showDeleteButton={segmentInputs.length > 1}
+                enableDrag={segmentInputs.length > 1}
+                errors={errors[segmentInputIdx] || {}}
+                onDeleteSegmentPressed={onDeleteSegmentPressed}
+                onSegmentInputChanged={onSegmentInputChanged}
+              />
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
+};
+
+const SegmentInputListItem = ({
+  segmentInput,
+  segmentInputIdx,
+  showDeleteButton,
+  enableDrag,
+  errors,
+  onDeleteSegmentPressed,
+  onSegmentInputChanged,
+}) => {
+  return (
+    <Draggable draggableId={segmentInput.uuid} index={segmentInputIdx} isDragDisabled={!enableDrag}>
+      {(provided) => (
+        <div {...provided.draggableProps} ref={provided.innerRef}>
+          <Divider
+            sx={{
+              mb: { xs: 3, sm: 0 },
+              visibility: { sm: 'hidden' },
+            }}
+          />
+          <SegmentInput
+            segmentInput={segmentInput}
+            errors={errors}
+            dragHandleProps={provided.dragHandleProps}
+            showDeleteButton={showDeleteButton}
+            onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
+            onChange={(segmentInput) => onSegmentInputChanged(segmentInputIdx, segmentInput)}
+          />
+        </div>
+      )}
+    </Draggable>
+  );
+};
+
+const SegmentInput = ({
   segmentInput,
   errors,
+  dragHandleProps,
   showDeleteButton,
   onChange,
   onDeleteClicked,
@@ -44,13 +118,21 @@ export const RouteInput = ({
     <Grid2
       container
       spacing={1}
-      columns={21}
+      columns={22}
       sx={{
         justifyContent: 'flex-start',
         alignItems: 'center',
       }}
     >
-      <Grid2 size={{ xs: 20, sm: 6 }} order={1}>
+      <Grid2
+        size={{ xs: 2, sm: 1 }}
+        mb={2} // accommodate for the other fields that have "helper text" to display errors under them
+        order={{ xs: 2, sm: 1 }}
+        {...dragHandleProps}
+      >
+        <ReorderSegmentInputButton showReorderButton={showDeleteButton} />
+      </Grid2>
+      <Grid2 size={{ xs: 22, sm: 6 }} order={{ xs: 1, sm: 2 }}>
         <AirlineInput
           value={segmentInput.airline}
           error={errors['airline']}
@@ -63,7 +145,7 @@ export const RouteInput = ({
           }}
         />
       </Grid2>
-      <Grid2 size={{ xs: 10, sm: 4 }} order={2}>
+      <Grid2 size={{ xs: 9, sm: 4 }} order={3}>
         <AirportInput
           label={'From (e.g. syd)'}
           value={segmentInput.fromAirportText}
@@ -85,7 +167,7 @@ export const RouteInput = ({
           }}
         />
       </Grid2>
-      <Grid2 size={{ xs: 10, sm: 4 }} order={3}>
+      <Grid2 size={{ xs: 9, sm: 4 }} order={4}>
         <AirportInput
           label={'To (e.g. mel)'}
           value={segmentInput.toAirportText}
@@ -107,7 +189,7 @@ export const RouteInput = ({
           }}
         />
       </Grid2>
-      <Grid2 size={{ xs: 20, sm: 6 }} order={{ xs: 5, sm: 4 }}>
+      <Grid2 size={{ xs: 22, sm: 6 }} order={{ xs: 6, sm: 5 }}>
         <FareClassInput
           segmentInput={segmentInput}
           error={errors['fareClass']}
@@ -117,11 +199,11 @@ export const RouteInput = ({
         />
       </Grid2>
       <Grid2
-        size={1}
+        size={{ xs: 2, sm: 1 }}
         mb={2} // accommodate for the other fields that have "helper text" to display errors under them
-        order={{ xs: 4, sm: 5 }}
+        order={{ xs: 5, sm: 6 }}
       >
-        <RemoveRouteInputButton
+        <RemoveSegmentInputButton
           showDeleteButton={showDeleteButton}
           onDeleteClicked={onDeleteClicked}
         />
@@ -130,41 +212,29 @@ export const RouteInput = ({
   );
 };
 
-export const RouteInputList = ({
-  segmentInputs,
-  errors,
-  onDeleteSegmentPressed,
-  onSegmentInputChanged,
-}) => {
-  return (
-    <Box>
-      {segmentInputs.map((segmentInput, segmentInputIdx) => {
-        return (
-          <Box key={segmentInputIdx}>
-            {/* Show divider only on mobile (sx breakpoint) */}
-            {segmentInputIdx > 0 && (
-              <Divider
-                sx={{
-                  mb: { xs: 3, sm: 0 },
-                  visibility: { sm: 'hidden' },
-                }}
-              />
-            )}
-            <RouteInput
-              segmentInput={segmentInput}
-              showDeleteButton={segmentInputs.length > 1}
-              onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
-              errors={errors[segmentInputIdx] || {}}
-              onChange={(segmentInput) => onSegmentInputChanged(segmentInputIdx, segmentInput)}
-            />
-          </Box>
-        );
-      })}
-    </Box>
-  );
+const ReorderSegmentInputButton = ({ showReorderButton }) => {
+  if (!showReorderButton) {
+    return (
+      // Dummy icon to maintain space for when we show icons
+      <IconButton disabled sx={{ visibility: 'hidden', p: 0 }}>
+        <DragHandle />
+      </IconButton>
+    );
+  } else {
+    return (
+      <IconButton
+        sx={{
+          p: 0,
+          cursor: 'grab',
+        }}
+      >
+        <DragHandle />
+      </IconButton>
+    );
+  }
 };
 
-const RemoveRouteInputButton = ({ showDeleteButton, onDeleteClicked }) => {
+const RemoveSegmentInputButton = ({ showDeleteButton, onDeleteClicked }) => {
   if (!showDeleteButton) {
     return (
       // Dummy icon to maintain space for when we show icons
