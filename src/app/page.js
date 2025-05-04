@@ -3,7 +3,7 @@
 import { calculate } from '@/utils/calculators/calculator';
 import { useEffect, useState } from 'react';
 import { Alert, Box, Button, Container, Dialog, DialogTitle, Divider, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'; // prettier-ignore
-import { EliteStatusInput, RouteInput } from '@/components/input';
+import { EliteStatusInput, RouteInputList } from '@/components/input';
 import { Info } from '@mui/icons-material';
 import { SegmentResults } from '@/components/segmentResults';
 import { getAirport } from '@/utils/airports';
@@ -464,30 +464,14 @@ export default function Home() {
               </Grid2>
             </Grid2>
             <Box p={2}>
-              {segmentInputs.map((segmentInput, segmentInputIdx) => {
-                return (
-                  <Box key={segmentInputIdx}>
-                    {/* Show divider only on mobile (sx breakpoint) */}
-                    {segmentInputIdx > 0 && (
-                      <Divider
-                        sx={{
-                          mb: { xs: 3, sm: 0 },
-                          visibility: { sm: 'hidden' },
-                        }}
-                      />
-                    )}
-                    <RouteInput
-                      segmentInput={segmentInput}
-                      showDeleteButton={segmentInputs.length > 1}
-                      onDeleteClicked={() => deleteSegmentPressed(segmentInputIdx)}
-                      errors={inputErrors[segmentInputIdx] || {}}
-                      onChange={(segmentInput) =>
-                        segmentInputChanged(segmentInputIdx, segmentInput)
-                      }
-                    />
-                  </Box>
-                );
-              })}
+              <RouteInputList
+                segmentInputs={segmentInputs}
+                errors={inputErrors}
+                onDeleteSegmentPressed={(segmentInputIdx) => deleteSegmentPressed(segmentInputIdx)}
+                onSegmentInputChanged={(segmentInputIdx, segmentInput) =>
+                  segmentInputChanged(segmentInputIdx, segmentInput)
+                }
+              />
 
               <Grid2
                 container

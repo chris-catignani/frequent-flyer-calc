@@ -14,7 +14,7 @@ import {
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
 } from '@/models/constants';
-import { Autocomplete, TextField, Grid2, IconButton } from '@mui/material';
+import { Autocomplete, TextField, Grid2, IconButton, Box, Divider } from '@mui/material';
 import { GroupHeader, GroupItems } from './autocomplete';
 import { Clear } from '@mui/icons-material';
 
@@ -127,6 +127,40 @@ export const RouteInput = ({
         />
       </Grid2>
     </Grid2>
+  );
+};
+
+export const RouteInputList = ({
+  segmentInputs,
+  errors,
+  onDeleteSegmentPressed,
+  onSegmentInputChanged,
+}) => {
+  return (
+    <Box>
+      {segmentInputs.map((segmentInput, segmentInputIdx) => {
+        return (
+          <Box key={segmentInputIdx}>
+            {/* Show divider only on mobile (sx breakpoint) */}
+            {segmentInputIdx > 0 && (
+              <Divider
+                sx={{
+                  mb: { xs: 3, sm: 0 },
+                  visibility: { sm: 'hidden' },
+                }}
+              />
+            )}
+            <RouteInput
+              segmentInput={segmentInput}
+              showDeleteButton={segmentInputs.length > 1}
+              onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
+              errors={errors[segmentInputIdx] || {}}
+              onChange={(segmentInput) => onSegmentInputChanged(segmentInputIdx, segmentInput)}
+            />
+          </Box>
+        );
+      })}
+    </Box>
   );
 };
 
