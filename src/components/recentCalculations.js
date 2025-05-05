@@ -18,7 +18,7 @@ export const RecentCalculationSelection = ({
         onClick={() => setOpen(!isOpen)}
         sx={{ cursor: 'pointer' }}
       >
-        <Typography pl={{ xs: 2, sm: 0 }}>Recent Calculations</Typography>
+        <Typography>Recent Calculations</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </Stack>
       <Collapse in={isOpen} timeout="auto">
