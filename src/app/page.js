@@ -15,13 +15,8 @@ import { Footer } from '@/components/footer';
 import { AdvancedInput } from '@/components/advancedInput';
 import { createUrlQueryParams, parseUrlQueryParams } from '@/utils/segmentInputUrlParser';
 import { useSearchParams } from 'next/navigation';
-import {
-  deleteAllSavedCalculations,
-  deleteSavedCalculationAtIdx,
-  getSavedCalculations,
-  saveCalculation,
-} from '@/utils/recentCalculations';
-import { RecentCalculations } from '@/components/recentCalculations';
+import { deleteAllSavedCalculations, deleteSavedCalculationAtIdx, getSavedCalculations, saveCalculation } from '@/utils/recentCalculations'; // prettier-ignore
+import { RecentCalculationSelection } from '@/components/recentCalculations';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
@@ -434,7 +429,7 @@ export default function Home() {
         mx={{ xs: 0, sm: 2 }}
       >
         <Typography variant="h4" textAlign="center">
-          Qantas Points and Status Credit Calculator
+          Qantas Points and Status Credits Calculator
         </Typography>
 
         <Box mt={3} width="100%">
@@ -523,7 +518,7 @@ export default function Home() {
             </Box>
             {savedCalculations && savedCalculations.length > 0 && (
               <Box pt={0} pb={2} px={2}>
-                <RecentCalculations
+                <RecentCalculationSelection
                   recentCalculations={savedCalculations}
                   onRecentCalculationClick={recentCalculationClicked}
                   onRecentCalcutionDeleteClick={recentCalculationDeleteClicked}

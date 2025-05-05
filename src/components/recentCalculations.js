@@ -1,4 +1,37 @@
-import { Box, Chip, Grid2, Typography } from '@mui/material';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { Chip, Collapse, Grid2, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+
+export const RecentCalculationSelection = ({
+  recentCalculations,
+  onRecentCalculationClick,
+  onRecentCalcutionDeleteClick,
+  onClearAllClick,
+}) => {
+  const [isOpen, setOpen] = useState(false);
+
+  return (
+    <Stack spacing={1}>
+      <Stack
+        direction="row"
+        spacing={1}
+        onClick={() => setOpen(!isOpen)}
+        sx={{ cursor: 'pointer' }}
+      >
+        <Typography pl={{ xs: 2, sm: 0 }}>Recent Calculations</Typography>
+        {isOpen ? <ExpandLess /> : <ExpandMore />}
+      </Stack>
+      <Collapse in={isOpen} timeout="auto">
+        <RecentCalculations
+          recentCalculations={recentCalculations}
+          onRecentCalculationClick={onRecentCalculationClick}
+          onRecentCalcutionDeleteClick={onRecentCalcutionDeleteClick}
+          onClearAllClick={onClearAllClick}
+        />
+      </Collapse>
+    </Stack>
+  );
+};
 
 export const RecentCalculations = ({
   recentCalculations,
@@ -54,13 +87,10 @@ export const RecentCalculations = ({
   });
 
   return (
-    <Box>
-      <Typography>Recent Calculations</Typography>
-      <Grid2 container spacing={1}>
-        {calcChips}
-        <ClearAllChip onClick={onClearAllClick} />
-      </Grid2>
-    </Box>
+    <Grid2 container spacing={1}>
+      {calcChips}
+      <ClearAllChip onClick={onClearAllClick} />
+    </Grid2>
   );
 };
 

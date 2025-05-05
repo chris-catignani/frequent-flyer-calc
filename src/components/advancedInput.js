@@ -46,8 +46,8 @@ const AdvancedInputSelection = ({ onApplyClicked }) => {
   const [textItin, setTextItin] = useState();
   const [itaMatrixJson, setItaMatrixJson] = useState();
 
-  const handleAccordianChange = (accordianPanel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? accordianPanel : false);
+  const handleAccordionChange = (accordionPanel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? accordionPanel : false);
   };
 
   const applyTextItinInput = () => {
@@ -78,7 +78,7 @@ const AdvancedInputSelection = ({ onApplyClicked }) => {
 
   return (
     <Box>
-      <Accordion expanded={expanded === 'text-itin'} onChange={handleAccordianChange('text-itin')}>
+      <Accordion expanded={expanded === 'text-itin'} onChange={handleAccordionChange('text-itin')}>
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>Free Form Text Itinerary</Typography>
         </AccordionSummary>
@@ -95,7 +95,7 @@ const AdvancedInputSelection = ({ onApplyClicked }) => {
       </Accordion>
       <Accordion
         expanded={expanded === 'ita-matrix'}
-        onChange={handleAccordianChange('ita-matrix')}
+        onChange={handleAccordionChange('ita-matrix')}
       >
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>ITA Matrix Itinerary</Typography>
