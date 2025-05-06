@@ -7,7 +7,6 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
 import { Analytics } from '@vercel/analytics/react';
-import { Suspense } from 'react';
 
 import theme from '../theme';
 
@@ -31,11 +30,7 @@ export default function RootLayout({ children }) {
       <body className={roboto.variable}>
         <Analytics />
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            {/* Putting <Suspense></Suspense> here because we use useSearchParams on startup */}
-            {/* https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout */}
-            <Suspense>{children}</Suspense>
-          </ThemeProvider>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </AppRouterCacheProvider>
       </body>
     </html>
