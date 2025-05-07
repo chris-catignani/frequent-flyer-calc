@@ -23,8 +23,8 @@ export const getPartnerRules = () => {
 const _base_rule_url =
   'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html';
 
-const parsePartnerEarningRates = (qantasPointsString, qantasCreditsString) => {
-  return parseEarningRates(qantasPointsString, qantasCreditsString, PARTNER_FARE_CLASSES);
+const parsePartnerEarningRates = (airlinePointsString, qantasCreditsString) => {
+  return parseEarningRates(airlinePointsString, qantasCreditsString, PARTNER_FARE_CLASSES);
 };
 
 const buildSydMelBneGoldCoastRule = () => {

@@ -1,16 +1,19 @@
 'use client';
 
-import { calculate } from '@/shared/calculators/qantas/calculator';
+import { calculate } from '@/app/_shared/calculators/qantas/calculator';
 import { useEffect, useState } from 'react';
 import { Alert, Box, Button, Container, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'; // prettier-ignore
 import { Info } from '@mui/icons-material';
-import { getAirport } from '@/shared/utils/airports';
-import { Segment } from '@/shared/models/segment';
-import { SegmentInput } from '@/shared/models/segmentInput';
-import { JETSTAR_AIRLINES } from '@/shared/models/qantasConstants';
-import { createUrlQueryParams, parseUrlQueryParams } from '@/shared/utils/segmentInputUrlParser';
+import { getAirport } from '@/app/_shared/utils/airports';
+import { Segment } from '@/app/_shared/models/segment';
+import { SegmentInput } from '@/app/_shared/models/segmentInput';
+import { JETSTAR_AIRLINES } from '@/app/_shared/models/qantasConstants';
+import {
+  createUrlQueryParams,
+  parseUrlQueryParams,
+} from '@/app/_shared/utils/segmentInputUrlParser';
 import { useSearchParams } from 'next/navigation';
-import { deleteAllSavedCalculations, deleteSavedCalculationAtIdx, getSavedCalculations, saveCalculation } from '@/shared/utils/recentCalculations'; // prettier-ignore
+import { deleteAllSavedCalculations, deleteSavedCalculationAtIdx, getSavedCalculations, saveCalculation } from '@/app/_shared/utils/recentCalculations'; // prettier-ignore
 import { EliteStatusInput, SegmentInputList } from './_components/input';
 import { RecentCalculationSelection } from './_components/recentCalculations';
 import { AdvancedInput } from './_components/advancedInput';

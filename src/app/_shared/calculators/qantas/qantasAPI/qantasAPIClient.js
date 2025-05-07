@@ -47,10 +47,10 @@ export const fetchDataFromQantas = async (segment, eliteStatus, fareEarnCategory
       retval.error = new Error('Failed to find a matching Qantas API result');
     } else {
       retval.qantasData = {
-        qantasPoints: result.earn,
+        airlinePoints: result.earn,
         basePoints: result.base,
         eliteBonus: result.cabin_bonus,
-        statusCredits: result.status_credits,
+        elitePoints: result.status_credits,
       };
     }
   } catch (error) {

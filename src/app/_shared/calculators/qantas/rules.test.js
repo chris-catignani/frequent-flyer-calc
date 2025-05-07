@@ -1,6 +1,6 @@
-import { Earnings } from '@/shared/models/earnings';
 import { IntraCountryRule, DistanceRule, GeographicalRule } from './rules';
-import { buildSegmentFromString } from '@/test/testUtils';
+import { buildSegmentFromString } from '../../test/testUtils';
+import { Earnings } from '../../models/earnings';
 
 describe('rules', () => {
   describe('IntraCountryRule', () => {
@@ -62,8 +62,8 @@ describe('rules', () => {
       expect(
         distanceRule.calculate(buildSegmentFromString('aa i jfk lax'), 'business'),
       ).toMatchObject({
-        qantasPoints: 200,
-        statusCredits: 20,
+        airlinePoints: 200,
+        elitePoints: 20,
       });
     });
   });
@@ -108,12 +108,12 @@ describe('rules', () => {
         ['aa i bos dfw', 200, 20],
       ])(
         `Go path - calculate - %s should yield %s and %s`,
-        (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+        (segmentString, expectedAirlinePoints, expectedElitePoints) => {
           expect(
             geographicalRule.calculate(buildSegmentFromString(segmentString), 'business'),
           ).toMatchObject({
-            qantasPoints: expectedQantasPoints,
-            statusCredits: expectedStatusCredits,
+            airlinePoints: expectedAirlinePoints,
+            elitePoints: expectedElitePoints,
           });
         },
       );
@@ -187,12 +187,12 @@ describe('rules', () => {
         ['aa i cdg yyz', 400, 40],
       ])(
         `Go path - calculate - %s should yield %s and %s`,
-        (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+        (segmentString, expectedAirlinePoints, expectedElitePoints) => {
           expect(
             geographicalRule.calculate(buildSegmentFromString(segmentString), 'business'),
           ).toMatchObject({
-            qantasPoints: expectedQantasPoints,
-            statusCredits: expectedStatusCredits,
+            airlinePoints: expectedAirlinePoints,
+            elitePoints: expectedElitePoints,
           });
         },
       );
@@ -266,12 +266,12 @@ describe('rules', () => {
         ['aa i bkk hel', 600, 60],
       ])(
         `Go path - calculate - %s should yield %s and %s`,
-        (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+        (segmentString, expectedAirlinePoints, expectedElitePoints) => {
           expect(
             geographicalRule.calculate(buildSegmentFromString(segmentString), 'business'),
           ).toMatchObject({
-            qantasPoints: expectedQantasPoints,
-            statusCredits: expectedStatusCredits,
+            airlinePoints: expectedAirlinePoints,
+            elitePoints: expectedElitePoints,
           });
         },
       );

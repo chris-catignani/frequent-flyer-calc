@@ -1,7 +1,7 @@
 import {
   JAL_DOMESTIC_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
-} from '@/shared/models/qantasConstants';
+} from '@/app/_shared/models/qantasConstants';
 import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from '../earnCategories';
 
 export const PARTNER_FARE_CLASSES = [
@@ -17,8 +17,8 @@ export const getPartnerEarnCategory = (segment) => {
   return getEarnCategory(segment, partnerEarnCategories);
 };
 
-export const qualifiesForStatusCredits = (segment) => {
-  return partnerEarnCategories[segment.airline].earnsStatusCredits;
+export const qualifiesForElitePoints = (segment) => {
+  return partnerEarnCategories[segment.airline].earnsElitePoints;
 };
 
 const buildJapanAirlinesFareBuckets = (qantasString) => {
@@ -158,69 +158,69 @@ const buildFijiAirwaysFareBuckets = (domesticQantasString, allOtherQantasString)
 
 const partnerEarnCategories = {
   aa: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.aa, PARTNER_FARE_CLASSES),
   },
   as: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.as, PARTNER_FARE_CLASSES),
   },
   ba: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.ba, PARTNER_FARE_CLASSES),
   },
   fj: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildFijiAirwaysFareBuckets(
       WEBSITE_EARN_CATEGORIES.fj[0],
       WEBSITE_EARN_CATEGORIES.fj[1],
     ),
   },
   ay: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.ay, PARTNER_FARE_CLASSES),
   },
   ib: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.ib, PARTNER_FARE_CLASSES),
   },
   i2: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.ib, PARTNER_FARE_CLASSES),
   },
   cx: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.cx, PARTNER_FARE_CLASSES),
   },
   qr: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.qr, PARTNER_FARE_CLASSES),
   },
   at: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.at, PARTNER_FARE_CLASSES),
   },
   rj: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.rj, PARTNER_FARE_CLASSES),
   },
   jl: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildJapanAirlinesFareBuckets(WEBSITE_EARN_CATEGORIES.jl),
   },
   nu: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildJapanAirlinesFareBuckets(WEBSITE_EARN_CATEGORIES.jl),
   },
   mh: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildMalaysiaAirlinesFareBuckets(
       WEBSITE_EARN_CATEGORIES.mh[0],
       WEBSITE_EARN_CATEGORIES.mh[1],
     ),
   },
   ul: {
-    earnsStatusCredits: true,
+    earnsElitePoints: true,
     fareBuckets: buildSriLankairlinesFareBuckets(
       WEBSITE_EARN_CATEGORIES.ul[0],
       WEBSITE_EARN_CATEGORIES.ul[1],
@@ -228,7 +228,7 @@ const partnerEarnCategories = {
   },
 
   af: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildAirFranceKLMFareBuckets(
       WEBSITE_EARN_CATEGORIES.af[0],
       WEBSITE_EARN_CATEGORIES.af[1],
@@ -236,22 +236,22 @@ const partnerEarnCategories = {
     ),
   },
   mu: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildChinaEasternFareBuckets(
       WEBSITE_EARN_CATEGORIES.mu[0],
       WEBSITE_EARN_CATEGORIES.mu[1],
     ),
   },
   ly: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.ly, PARTNER_FARE_CLASSES),
   },
   ek: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.ek, PARTNER_FARE_CLASSES),
   },
   kl: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildAirFranceKLMFareBuckets(
       WEBSITE_EARN_CATEGORIES.kl[0],
       WEBSITE_EARN_CATEGORIES.kl[1],
@@ -259,31 +259,31 @@ const partnerEarnCategories = {
     ),
   },
   la: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
   },
   jj: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
   },
   lu: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
   },
   lp: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
   },
   xl: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
   },
   '4c': {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
   },
   ws: {
-    earnsStatusCredits: false,
+    earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.ws, PARTNER_FARE_CLASSES),
   },
 };

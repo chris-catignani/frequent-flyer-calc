@@ -1,8 +1,8 @@
 import { fetchDataFromQantas } from './qantasAPI/qantasAPIClient';
-import { getPartnerEarnCategory, qualifiesForStatusCredits } from './partner/partnerEarnCategories';
 import { getPartnerRules } from './partner/partnerRules';
 import { getQantasEarnCategory } from './qantas/qantasEarnCategories';
 import { getQantasMinimumPoints, getQantasRules } from './qantas/qantasRules';
+import { getPartnerEarnCategory, qualifiesForElitePoints } from './partner/partnerEarnCategories';
 
 // TODO make this a map of airline to rules?
 const partnerRules = getPartnerRules(); // this is a list
@@ -27,8 +27,8 @@ export const calculate = async (
   const retval = {
     segmentResults: [],
     containsErrors: false,
-    statusCredits: 0,
-    qantasPoints: 0,
+    elitePoints: 0,
+    airlinePoints: 0,
   };
 
   for (let segment of segments) {
@@ -45,8 +45,8 @@ export const calculate = async (
         ...segmentResult,
         qantasAPIResults,
       });
-      retval.qantasPoints += segmentResult.qantasPoints;
-      retval.statusCredits += segmentResult.statusCredits;
+      retval.airlinePoints += segmentResult.airlinePoints;
+      retval.elitePoints += segmentResult.elitePoints;
     } catch (err) {
       retval.segmentResults.push({
         error: err,
@@ -71,7 +71,7 @@ const getDataFromQantasCalc = async (segment, eliteStatus) => {
 };
 
 const calculateSegment = (segment, eliteStatus, preJuly2025) => {
-  const { fareEarnCategory, rule, minPoints, earnsStatusCredits } = getEarnCalculationRequirements(
+  const { fareEarnCategory, rule, minPoints, earnsElitePoints } = getEarnCalculationRequirements(
     segment,
     preJuly2025,
   );
@@ -92,16 +92,16 @@ const calculateSegment = (segment, eliteStatus, preJuly2025) => {
   ) {
     eliteBonus = {
       eligibleFareCategory: fareEarnCategory,
-      qantasPoints: Math.floor(calculation.qantasPoints * eliteStatusBonusMultiples[eliteStatus]),
+      airlinePoints: Math.floor(calculation.airlinePoints * eliteStatusBonusMultiples[eliteStatus]),
     };
   }
 
-  const qantasPointsBreakdown = {
-    basePoints: calculation.qantasPoints,
+  const airlinePointsBreakdown = {
+    basePoints: calculation.airlinePoints,
     eliteBonus,
     minPoints,
     totalEarned: Math.max(
-      calculation.qantasPoints + (eliteBonus?.qantasPoints || 0),
+      calculation.airlinePoints + (eliteBonus?.airlinePoints || 0),
       minPoints || 0,
     ),
   };
@@ -111,9 +111,9 @@ const calculateSegment = (segment, eliteStatus, preJuly2025) => {
     ruleUrl: calculation.ruleUrl,
     fareEarnCategory,
     notes: calculation.notes,
-    statusCredits: earnsStatusCredits ? calculation.statusCredits : 0,
-    qantasPoints: qantasPointsBreakdown.totalEarned,
-    qantasPointsBreakdown,
+    elitePoints: earnsElitePoints ? calculation.elitePoints : 0,
+    airlinePoints: airlinePointsBreakdown.totalEarned,
+    airlinePointsBreakdown,
   };
 };
 
@@ -135,7 +135,7 @@ const getEarnCalculationRequirements = (segment, preJuly2025) => {
 
     const minPoints = qantasMinPoints[segment.airline][fareEarnCategory];
 
-    return { fareEarnCategory, rule, minPoints, earnsStatusCredits: true };
+    return { fareEarnCategory, rule, minPoints, earnsElitePoints: true };
   } else {
     const fareEarnCategory = getPartnerEarnCategory(segment);
 
@@ -143,9 +143,9 @@ const getEarnCalculationRequirements = (segment, preJuly2025) => {
       return rule.applies(segment, fareEarnCategory);
     });
 
-    const earnsStatusCredits = qualifiesForStatusCredits(segment);
+    const earnsElitePoints = qualifiesForElitePoints(segment);
 
-    return { fareEarnCategory, rule, minPoints: undefined, earnsStatusCredits };
+    return { fareEarnCategory, rule, minPoints: undefined, earnsElitePoints };
   }
 };
 
@@ -163,6 +163,6 @@ const calculateEliteBonusPoints = (eliteStatus, segment, rule, fareEarnCategory)
   const result = rule.calculate(segment, fareEarnCategoryToUse);
   return {
     eligibleFareCategory: fareEarnCategoryToUse,
-    qantasPoints: Math.ceil(result.qantasPoints * eliteStatusBonusMultiples[eliteStatus]),
+    airlinePoints: Math.ceil(result.airlinePoints * eliteStatusBonusMultiples[eliteStatus]),
   };
 };

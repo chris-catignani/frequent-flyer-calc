@@ -1,7 +1,7 @@
-import { calcDistance } from '@/shared/utils/airports';
+import { calcDistance } from '@/app/_shared/utils/airports';
 import { isInRegion } from './regions';
-import { Earnings } from '@/shared/models/earnings';
-import { REGION_DISPLAY } from '@/shared/models/qantasConstants';
+import { Earnings } from '@/app/_shared/models/earnings';
+import { REGION_DISPLAY } from '@/app/_shared/models/qantasConstants';
 
 /**
  * All rules should implement these methods
@@ -22,14 +22,14 @@ class Rule {
     return this.buildCalculationReturn('', '', 0, 0);
   }
 
-  buildCalculationReturn(fareEarnCategory, notes, qantasPoints, statusCredits) {
+  buildCalculationReturn(fareEarnCategory, notes, airlinePoints, elitePoints) {
     return {
       rule: this.name,
       ruleUrl: this.ruleUrl,
       fareEarnCategory,
       notes,
-      qantasPoints,
-      statusCredits,
+      airlinePoints,
+      elitePoints,
     };
   }
 }
@@ -101,8 +101,8 @@ export class DistanceRule extends Rule {
     return this.buildCalculationReturn(
       fareEarnCategory,
       `Distance calculated to ${distance} miles, ${notesForDistance}`,
-      distanceBand.earnings[fareEarnCategory].qantasPoints,
-      distanceBand.earnings[fareEarnCategory].statusCredits,
+      distanceBand.earnings[fareEarnCategory].airlinePoints,
+      distanceBand.earnings[fareEarnCategory].elitePoints,
     );
   }
 }
@@ -123,8 +123,8 @@ export class FareClassRule extends Rule {
     return this.buildCalculationReturn(
       fareEarnCategory,
       this.fareClassEarnings[fareEarnCategory].calculationNotes,
-      this.fareClassEarnings[fareEarnCategory].qantasPoints,
-      this.fareClassEarnings[fareEarnCategory].statusCredits,
+      this.fareClassEarnings[fareEarnCategory].airlinePoints,
+      this.fareClassEarnings[fareEarnCategory].elitePoints,
     );
   }
 }
@@ -234,14 +234,14 @@ export class GeographicalRule extends Rule {
     return this.buildCalculationReturn(
       fareEarnCategory,
       this._buildCalculationNotes(origin, destination),
-      earnings[fareEarnCategory].qantasPoints,
-      earnings[fareEarnCategory].statusCredits,
+      earnings[fareEarnCategory].airlinePoints,
+      earnings[fareEarnCategory].elitePoints,
     );
   }
 }
 
-export const parseEarningRates = (qantasPointsString, qantasCreditsString, fareClasses) => {
-  const pointsPerFareclass = qantasPointsString
+export const parseEarningRates = (airlinePointsString, qantasCreditsString, fareClasses) => {
+  const pointsPerFareclass = airlinePointsString
     .trim()
     .replace(/\,/gm, '')
     .replace(/\s+/gm, ' ')

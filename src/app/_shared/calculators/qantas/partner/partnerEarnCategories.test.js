@@ -1,5 +1,5 @@
+import { buildSegmentFromString } from '@/app/_shared/test/testUtils';
 import { getPartnerEarnCategory } from './partnerEarnCategories';
-import { buildSegmentFromString } from '@/test/testUtils';
 
 describe('getPartnerEarnCategory', () => {
   // basic case

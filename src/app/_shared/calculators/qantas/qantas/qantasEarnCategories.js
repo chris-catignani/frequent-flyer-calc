@@ -4,7 +4,7 @@ import {
   QANTAS_DOMESTIC_FARE_CLASSES,
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
-} from '@/shared/models/qantasConstants';
+} from '@/app/_shared/models/qantasConstants';
 import { buildFareBuckets, getEarnCategory } from '../earnCategories';
 
 export const QANTAS_FARE_CLASSES = [

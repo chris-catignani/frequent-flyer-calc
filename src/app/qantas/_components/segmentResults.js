@@ -3,7 +3,7 @@ import {
   EARN_CATEGORY_DISPLAY,
   EARN_CATEGORY_URLS,
   QANTAS_FARE_CLASS_DISPLAY,
-} from '@/shared/models/qantasConstants';
+} from '@/app/_shared/models/qantasConstants';
 import {
   TableRow,
   TableCell,
@@ -79,9 +79,9 @@ const getFareClassDisplay = (fareClass) => {
   }
 };
 
-const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
+const AirlinePointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
   const {
-    qantasPointsBreakdown: { basePoints, eliteBonus, minPoints, totalEarned },
+    airlinePointsBreakdown: { basePoints, eliteBonus, minPoints, totalEarned },
   } = segmentResult;
   return (
     <Dialog onClose={onClose} open={open}>
@@ -93,7 +93,7 @@ const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
         <Typography lineHeight={1}>Base Points: {basePoints?.toLocaleString()}</Typography>
         <Typography lineHeight={1}>+</Typography>
         <Typography lineHeight={1}>
-          Elite Bonus: {eliteBonus.qantasPoints?.toLocaleString() || 'n/a'}
+          Elite Bonus: {eliteBonus.airlinePoints?.toLocaleString() || 'n/a'}
         </Typography>
         <Typography my={2}>- or -</Typography>
         <Typography>Min Points: {minPoints?.toLocaleString() || 'n/a'}</Typography>
@@ -102,7 +102,7 @@ const QantasPointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
   );
 };
 
-const QantasPointsDisplay = ({ segmentResult }) => {
+const AirlinePointsDisplay = ({ segmentResult }) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -115,11 +115,11 @@ const QantasPointsDisplay = ({ segmentResult }) => {
 
   return (
     <Grid2 container justifyContent="flex-end">
-      <Typography>{segmentResult.qantasPoints?.toLocaleString()}</Typography>
+      <Typography>{segmentResult.airlinePoints?.toLocaleString()}</Typography>
       <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
         <Info />
       </IconButton>
-      <QantasPointsBreakdownDialog
+      <AirlinePointsBreakdownDialog
         open={open}
         onClose={handleClose}
         segmentResult={segmentResult}
@@ -145,14 +145,14 @@ const MatchesQantasSegmentMisMatchDialog = ({ open, onClose, segmentResult }) =>
       <DialogTitle>Qantas Calculator results do not match our results for this segment</DialogTitle>
       <Grid2 container direction="column" mx={2} mb={2}>
         <Typography>Our Results:</Typography>
-        <Typography>Qantas Points: {segmentResult.qantasPoints}</Typography>
-        <Typography>Status Credits: {segmentResult.statusCredits}</Typography>
+        <Typography>Qantas Points: {segmentResult.airlinePoints}</Typography>
+        <Typography>Status Credits: {segmentResult.elitePoints}</Typography>
         <Typography mt={2}>Qantas Calculator Results:</Typography>
         <Typography>
-          Qantas Points: {segmentResult.qantasAPIResults?.qantasData?.qantasPoints}
+          Qantas Points: {segmentResult.qantasAPIResults?.qantasData?.airlinePoints}
         </Typography>
         <Typography>
-          Status Credits: {segmentResult.qantasAPIResults?.qantasData?.statusCredits}
+          Status Credits: {segmentResult.qantasAPIResults?.qantasData?.elitePoints}
         </Typography>
       </Grid2>
     </Dialog>
@@ -162,8 +162,8 @@ const MatchesQantasSegmentMisMatchDialog = ({ open, onClose, segmentResult }) =>
 const MatchesQantasSegmentIcon = ({
   segmentResult,
   qantasAPIError,
-  matchesQantasPoints,
-  matchesStatusCredits,
+  matchesAirlinePoints,
+  matchesElitePoints,
 }) => {
   if (!segmentResult.qantasAPIResults) {
     return <></>;
@@ -177,7 +177,7 @@ const MatchesQantasSegmentIcon = ({
         </IconButton>
       </Tooltip>
     );
-  } else if (matchesQantasPoints && matchesStatusCredits) {
+  } else if (matchesAirlinePoints && matchesElitePoints) {
     return (
       <Tooltip title="Matches Qantas Calculator">
         <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
@@ -217,10 +217,10 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
   }
 
   const qantasAPIError = segmentResult.qantasAPIResults?.error;
-  const matchesQantasPoints =
-    segmentResult.qantasPoints === segmentResult.qantasAPIResults?.qantasData?.qantasPoints;
-  const matchesStatusCredits =
-    segmentResult.statusCredits === segmentResult.qantasAPIResults?.qantasData?.statusCredits;
+  const matchesAirlinePoints =
+    segmentResult.airlinePoints === segmentResult.qantasAPIResults?.qantasData?.airlinePoints;
+  const matchesElitePoints =
+    segmentResult.elitePoints === segmentResult.qantasAPIResults?.qantasData?.elitePoints;
 
   return (
     <>
@@ -229,16 +229,16 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
           {segment.fromAirport.iata.toLowerCase()} - {segment.toAirport.iata.toLowerCase()}
         </TableCell>
         <TableCell align="right" onClick={() => setExpandRow(!expandRow)}>
-          {segmentResult.qantasPoints?.toLocaleString()}
+          {segmentResult.airlinePoints?.toLocaleString()}
         </TableCell>
         <TableCell align="right" onClick={() => setExpandRow(!expandRow)}>
-          {segmentResult.statusCredits?.toLocaleString()}
+          {segmentResult.elitePoints?.toLocaleString()}
         </TableCell>
         {compareWithQantasCalc && (
           <TableCell
             align="right"
             onClick={() => {
-              if (matchesQantasPoints && matchesStatusCredits) {
+              if (matchesAirlinePoints && matchesElitePoints) {
                 setExpandRow(!expandRow);
               } else {
                 setOpenModal(true);
@@ -248,8 +248,8 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
             <MatchesQantasSegmentIcon
               segmentResult={segmentResult}
               qantasAPIError={qantasAPIError}
-              matchesQantasPoints={matchesQantasPoints}
-              matchesStatusCredits={matchesStatusCredits}
+              matchesAirlinePoints={matchesAirlinePoints}
+              matchesElitePoints={matchesElitePoints}
             />
           </TableCell>
         )}
@@ -274,11 +274,11 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
               </Grid2>
               <Grid2 container direction="row" spacing={1}>
                 <Typography>Qantas Points:</Typography>
-                <QantasPointsDisplay segmentResult={segmentResult} />
+                <AirlinePointsDisplay segmentResult={segmentResult} />
               </Grid2>
               <Grid2>
                 <Typography>
-                  Status Credits: {segmentResult.statusCredits?.toLocaleString()}
+                  Status Credits: {segmentResult.elitePoints?.toLocaleString()}
                 </Typography>
               </Grid2>
               <Grid2 container direction="row" spacing={1}>
@@ -311,7 +311,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
           error={qantasAPIError}
         />
       )}
-      {!qantasAPIError && (!matchesQantasPoints || !matchesStatusCredits) && (
+      {!qantasAPIError && (!matchesAirlinePoints || !matchesElitePoints) && (
         <MatchesQantasSegmentMisMatchDialog
           open={openModal}
           onClose={() => setOpenModal(false)}

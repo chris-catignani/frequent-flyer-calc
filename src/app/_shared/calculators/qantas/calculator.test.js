@@ -1,5 +1,5 @@
+import { buildSegment, buildSegmentFromString } from '../../test/testUtils';
 import { calculate } from './calculator';
-import { buildSegment, buildSegmentFromString } from '@/test/testUtils';
 
 describe('calculate - go path', () => {
   test('basic 1 segment test', async () => {
@@ -14,9 +14,9 @@ describe('calculate - go path', () => {
           ruleName: 'USA East Coast / Canada',
           ruleUrl:
             'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-east-coast-usa-canada-and-',
-          qantasPoints: 3125,
-          statusCredits: 100,
-          qantasPointsBreakdown: {
+          airlinePoints: 3125,
+          elitePoints: 100,
+          airlinePointsBreakdown: {
             basePoints: 3125,
             eliteBonus: {},
             minPoints: undefined,
@@ -25,8 +25,8 @@ describe('calculate - go path', () => {
         },
       ],
       containsErrors: false,
-      statusCredits: 100,
-      qantasPoints: 3125,
+      elitePoints: 100,
+      airlinePoints: 3125,
     });
   });
 
@@ -43,9 +43,9 @@ describe('calculate - go path', () => {
           ruleName: 'USA East Coast / Canada',
           ruleUrl:
             'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-east-coast-usa-canada-and-',
-          qantasPoints: 3125,
-          statusCredits: 100,
-          qantasPointsBreakdown: {
+          airlinePoints: 3125,
+          elitePoints: 100,
+          airlinePointsBreakdown: {
             basePoints: 3125,
             eliteBonus: {},
             minPoints: undefined,
@@ -59,9 +59,9 @@ describe('calculate - go path', () => {
           ruleName: 'Sydney, Melbourne, Brisbane, Gold Coast',
           ruleUrl:
             'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-syd-mel-bne-ool-and-',
-          qantasPoints: 13500,
-          statusCredits: 180,
-          qantasPointsBreakdown: {
+          airlinePoints: 13500,
+          elitePoints: 180,
+          airlinePointsBreakdown: {
             basePoints: 13500,
             eliteBonus: {},
             minPoints: undefined,
@@ -70,8 +70,8 @@ describe('calculate - go path', () => {
         },
       ],
       containsErrors: false,
-      statusCredits: 280,
-      qantasPoints: 16625,
+      elitePoints: 280,
+      airlinePoints: 16625,
     });
   });
 });
@@ -87,10 +87,10 @@ describe('calculate - partner rules', () => {
     ['ba i mel lhr', 13125, 140],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Sydney, Melbourne, Brisbane, Gold Coast and`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -99,10 +99,10 @@ describe('calculate - partner rules', () => {
     ['qr i per doh', 5800, 120],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Perth and`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -111,19 +111,19 @@ describe('calculate - partner rules', () => {
     ['qr i adl doh', 7000, 90],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Adelaide and`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
   test.each([['cx i cns hkg', 4250, 50]])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Cairns and`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -135,10 +135,10 @@ describe('calculate - partner rules', () => {
     ['qr i mad doh', 3000, 60],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Western Europe`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -149,28 +149,28 @@ describe('calculate - partner rules', () => {
     ['qr i hel doh', 3000, 60],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Northern Europe`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
   test.each([['qr i doh ist', 1800, 50]])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Southern Europe`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
   test.each([['cx i hkg tlv', 6000, 60]])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Tel Aviv`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -180,10 +180,10 @@ describe('calculate - partner rules', () => {
     ['qr i doh kul', 4250, 100],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dubai Doha`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -192,19 +192,19 @@ describe('calculate - partner rules', () => {
     ['aa i jfk ord', 750, 40],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Intra USA Short Haul`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
   test.each([['aa i jfk lax', 3125, 100]])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for East Coast USA/Canada`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -213,10 +213,10 @@ describe('calculate - partner rules', () => {
     ['aa i akl dfw', 12750, 170],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for New Zealand`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -225,10 +225,10 @@ describe('calculate - partner rules', () => {
     ['aa i dfw bos', 1875, 80],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dallas`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 });
@@ -240,10 +240,10 @@ describe('calculate - qantas rules', () => {
     ['qf i syd per', 3300, 80],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for pre July 2025 Domestic Australia`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)], null, false, true);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -253,10 +253,10 @@ describe('calculate - qantas rules', () => {
     ['qf i syd per', 4125, 80],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for post July 2025 Domestic Australia`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)], null, false, false);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -270,10 +270,10 @@ describe('calculate - qantas rules', () => {
     ['qf d ool jfk', 20150, 295],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Adelaide, Brisbane, Gold Coast, Melbourne, Sydney`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -284,10 +284,10 @@ describe('calculate - qantas rules', () => {
     ['qf d per lhr', 15300, 255],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Darwin, Perth`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -297,10 +297,10 @@ describe('calculate - qantas rules', () => {
     ['qf d akl jfk', 17450, 210],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for New Zealand`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -309,19 +309,19 @@ describe('calculate - qantas rules', () => {
     ['qf d dfw lax', 5525, 105],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dallas`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
   test.each([['qf d jfk lax', 5525, 105]])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for USA East Coast`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -331,10 +331,10 @@ describe('calculate - qantas rules', () => {
     ['qf d dxb bkk', 5525, 105],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dubai`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
@@ -343,19 +343,19 @@ describe('calculate - qantas rules', () => {
     ['qf d lhr bkk', 11700, 165],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Europe`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 
   test.each([['qf d tlv hkg', 13000, 130]])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Tel Aviv`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 });
@@ -367,10 +367,10 @@ describe('calculate - jetstar rules', () => {
     ['jq BusinessMax syd per', 3300, 80],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Domestic Australia`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 });
@@ -381,10 +381,10 @@ describe('Test for non Status Credit earning airlines', () => {
     ['af i jfk cdg', 5250, 0],
   ])(
     `Air France %s. Should earn %s qantas points and %s status credit`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 });
@@ -395,10 +395,10 @@ describe('Test for non earning airline fare classes', () => {
     ['jq starter syd mel', 0, 0],
   ])(
     `Jetatar %s. Should earn %s qantas points and %s status credit`,
-    async (segmentString, expectedQantasPoints, expectedStatusCredits) => {
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
-      expect(results.qantasPoints).toBe(expectedQantasPoints);
-      expect(results.statusCredits).toBe(expectedStatusCredits);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
 });
@@ -424,17 +424,17 @@ describe('calculate - elite status levels', () => {
     ['qf d syd sin', 'Platinum One', 8450, 1 * 5200],
   ])(
     `Testing elite status pre July 2025 is applied for %s %s level`,
-    async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
+    async (segmentString, eliteStatus, expectedBaseAirlinePoints, expectedEliteBonus) => {
       const results = await calculate(
         [buildSegmentFromString(segmentString)],
         eliteStatus,
         false,
         true,
       );
-      expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
-        expectedBaseQantasPoints,
+      expect(results.segmentResults[0].airlinePointsBreakdown.basePoints).toBe(
+        expectedBaseAirlinePoints,
       );
-      expect(results.qantasPoints).toBe(expectedBaseQantasPoints + expectedEliteBonus);
+      expect(results.airlinePoints).toBe(expectedBaseAirlinePoints + expectedEliteBonus);
     },
   );
 
@@ -458,17 +458,17 @@ describe('calculate - elite status levels', () => {
     ['qf d syd sin', 'Platinum One', 8450, 1 * 8450],
   ])(
     `Testing elite status post July 2025 is applied for %s %s level`,
-    async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
+    async (segmentString, eliteStatus, expectedBaseAirlinePoints, expectedEliteBonus) => {
       const results = await calculate(
         [buildSegmentFromString(segmentString)],
         eliteStatus,
         false,
         false,
       );
-      expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
-        expectedBaseQantasPoints,
+      expect(results.segmentResults[0].airlinePointsBreakdown.basePoints).toBe(
+        expectedBaseAirlinePoints,
       );
-      expect(results.qantasPoints).toBe(expectedBaseQantasPoints + expectedEliteBonus);
+      expect(results.airlinePoints).toBe(expectedBaseAirlinePoints + expectedEliteBonus);
     },
   );
 });
@@ -488,12 +488,12 @@ describe('calculate - elite status only applies to certain airlines', () => {
     ['ib d syd sin', 'Silver', 5000, 0],
   ])(
     `Testing elite status is applied for %s %s level`,
-    async (segmentString, eliteStatus, expectedBaseQantasPoints, expectedEliteBonus) => {
+    async (segmentString, eliteStatus, expectedBaseAirlinePoints, expectedEliteBonus) => {
       const results = await calculate([buildSegmentFromString(segmentString)], eliteStatus);
-      expect(results.segmentResults[0].qantasPointsBreakdown.basePoints).toBe(
-        expectedBaseQantasPoints,
+      expect(results.segmentResults[0].airlinePointsBreakdown.basePoints).toBe(
+        expectedBaseAirlinePoints,
       );
-      expect(results.qantasPoints).toBe(expectedBaseQantasPoints + expectedEliteBonus);
+      expect(results.airlinePoints).toBe(expectedBaseAirlinePoints + expectedEliteBonus);
     },
   );
 });

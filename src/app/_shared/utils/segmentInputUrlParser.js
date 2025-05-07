@@ -1,4 +1,4 @@
-import { SegmentInput } from '@/shared/models/segmentInput';
+import { SegmentInput } from '@/app/_shared/models/segmentInput';
 
 export const createUrlQueryParams = (eliteStatus, segmentInputs, tripType) => {
   return {

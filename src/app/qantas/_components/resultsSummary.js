@@ -20,7 +20,7 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
   };
 
   const MatchesQantasMisMatchDialog = ({ open, onClose, field, expectedValue, actualValue }) => {
-    const fieldLabel = field === 'qantasPoints' ? 'Qantas Points' : 'Status Credits';
+    const fieldLabel = field === 'airlinePoints' ? 'Qantas Points' : 'Status Credits';
     return (
       <Dialog onClose={onClose} open={open}>
         <DialogTitle>Qantas Calculator results do not match our results</DialogTitle>
@@ -35,29 +35,29 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
     );
   };
 
-  const TotalQantasPointsEarned = () => {
+  const TotalAirlinePointsEarned = () => {
     return (
       <Grid2 container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
         <Typography variant="h5">
-          Qantas Points Earned: {calculationOutput?.qantasPoints?.toLocaleString()}
+          Qantas Points Earned: {calculationOutput?.airlinePoints?.toLocaleString()}
         </Typography>
         <MatchesQantasAPIIcon
-          expectedValue={calculationOutput?.qantasPoints}
-          fieldToCheck={'qantasPoints'}
+          expectedValue={calculationOutput?.airlinePoints}
+          fieldToCheck={'airlinePoints'}
         />
       </Grid2>
     );
   };
 
-  const TotalStatusCreditsEarned = () => {
+  const TotalElitePointsEarned = () => {
     return (
       <Grid2 container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
         <Typography variant="h5">
-          Status Credits Earned: {calculationOutput?.statusCredits?.toLocaleString()}
+          Status Credits Earned: {calculationOutput?.elitePoints?.toLocaleString()}
         </Typography>
         <MatchesQantasAPIIcon
-          expectedValue={calculationOutput?.statusCredits}
-          fieldToCheck={'statusCredits'}
+          expectedValue={calculationOutput?.elitePoints}
+          fieldToCheck={'elitePoints'}
         />
       </Grid2>
     );
@@ -127,8 +127,8 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
 
   return (
     <Box mt={5}>
-      <TotalQantasPointsEarned />
-      <TotalStatusCreditsEarned />
+      <TotalAirlinePointsEarned />
+      <TotalElitePointsEarned />
     </Box>
   );
 };

@@ -1,7 +1,7 @@
 'use client';
 
-import { SegmentInput } from '@/shared/models/segmentInput';
-import { parseEncodedTextItin } from '@/shared/utils/segmentInputParser';
+import { SegmentInput } from '@/app/_shared/models/segmentInput';
+import { parseEncodedTextItin } from '@/app/_shared/utils/segmentInputParser';
 import { Button, Grid2, TextField } from '@mui/material';
 import { useState } from 'react';
 import { ProgramComparison } from './_components/programComparison';

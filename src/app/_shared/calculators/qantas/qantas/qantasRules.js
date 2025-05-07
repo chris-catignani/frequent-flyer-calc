@@ -57,8 +57,8 @@ export const getQantasMinimumPoints = () => {
   };
 };
 
-const parseQantasEarningRates = (qantasPointsString, qantasCreditsString) => {
-  return parseEarningRates(qantasPointsString, qantasCreditsString, QANTAS_FARE_CLASSES);
+const parseQantasEarningRates = (airlinePointsString, qantasCreditsString) => {
+  return parseEarningRates(airlinePointsString, qantasCreditsString, QANTAS_FARE_CLASSES);
 };
 
 const buildJetstarIntraNewZealandRule = () => {
@@ -488,8 +488,8 @@ const buildFallbackRule = () => {
 const buildNonEarningRule = () => {
   const fareClassEarnings = {
     'n/a': {
-      qantasPoints: 0,
-      statusCredits: 0,
+      airlinePoints: 0,
+      elitePoints: 0,
       calculationNotes: 'Fare class not eligable for earnings',
     },
   };

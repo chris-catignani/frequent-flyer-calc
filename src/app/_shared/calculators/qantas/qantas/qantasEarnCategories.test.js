@@ -1,5 +1,5 @@
+import { buildSegmentFromString } from '@/app/_shared/test/testUtils';
 import { getQantasEarnCategory } from './qantasEarnCategories';
-import { buildSegmentFromString } from '@/test/testUtils';
 
 describe('getQantasEarnCategory', () => {
   // qantas domestic
