@@ -13,7 +13,7 @@ import {
   QANTAS_GRP_AIRLINES,
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
-} from '@/shared/models/constants';
+} from '@/shared/models/qantasConstants';
 import { Autocomplete, TextField, Grid2, IconButton, Divider } from '@mui/material';
 import { GroupHeader, GroupItems } from './autocomplete';
 import { Clear, DragHandle } from '@mui/icons-material';

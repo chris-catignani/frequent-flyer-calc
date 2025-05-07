@@ -3,7 +3,7 @@ import {
   EARN_CATEGORY_DISPLAY,
   EARN_CATEGORY_URLS,
   QANTAS_FARE_CLASS_DISPLAY,
-} from '@/shared/models/constants';
+} from '@/shared/models/qantasConstants';
 import {
   TableRow,
   TableCell,

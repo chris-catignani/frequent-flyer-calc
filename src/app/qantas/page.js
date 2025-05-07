@@ -7,7 +7,7 @@ import { Info } from '@mui/icons-material';
 import { getAirport } from '@/shared/utils/airports';
 import { Segment } from '@/shared/models/segment';
 import { SegmentInput } from '@/shared/models/segmentInput';
-import { JETSTAR_AIRLINES } from '@/shared/models/constants';
+import { JETSTAR_AIRLINES } from '@/shared/models/qantasConstants';
 import { createUrlQueryParams, parseUrlQueryParams } from '@/shared/utils/segmentInputUrlParser';
 import { useSearchParams } from 'next/navigation';
 import { deleteAllSavedCalculations, deleteSavedCalculationAtIdx, getSavedCalculations, saveCalculation } from '@/shared/utils/recentCalculations'; // prettier-ignore

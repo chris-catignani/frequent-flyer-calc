@@ -1,4 +1,4 @@
-import { JETSTAR_AIRLINES, JETSTAR_LETTER_FARE_CLASSES } from '@/shared/models/constants';
+import { JETSTAR_AIRLINES, JETSTAR_LETTER_FARE_CLASSES } from '@/shared/models/qantasConstants';
 import { SegmentInput } from '@/shared/models/segmentInput';
 
 export const parseEncodedTextItin = (textItin, segmentSeparator, segmentItemSeparator) => {

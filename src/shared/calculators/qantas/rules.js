@@ -1,7 +1,7 @@
 import { calcDistance } from '@/shared/utils/airports';
 import { isInRegion } from './regions';
 import { Earnings } from '@/shared/models/earnings';
-import { REGION_DISPLAY } from '@/shared/models/constants';
+import { REGION_DISPLAY } from '@/shared/models/qantasConstants';
 
 /**
  * All rules should implement these methods
