@@ -1,18 +1,30 @@
 'use client';
 
-import { SegmentInput } from '@/app/_shared/models/segmentInput';
 import { parseEncodedTextItin } from '@/app/_shared/utils/segmentInputParser';
 import { Button, Grid2, TextField } from '@mui/material';
 import { useState } from 'react';
 import { ProgramComparison } from './_components/programComparison';
+import { Calculator } from '../_shared/calculators/calculator';
+import { getAirport } from '../_shared/utils/airports';
+import { Route } from '../_shared/models/route';
+
+const calculator = new Calculator();
 
 const AddRoute = ({ onAddRoute }) => {
   const [route, setRoute] = useState('');
 
   const addRoute = () => {
+    // TODO handle errors\
+    // eslint-disable-next-line
     const { segmentInputs, parsingError } = parseEncodedTextItin(route, ',', ' ');
-    console.log(segmentInputs, parsingError);
-    onAddRoute(segmentInputs);
+
+    // populate the Airport objects
+    segmentInputs.forEach((segmentInput) => {
+      segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
+      segmentInput.toAirport = getAirport(segmentInput.toAirportText);
+    });
+
+    onAddRoute(new Route(segmentInputs));
     setRoute('');
   };
 
@@ -25,16 +37,48 @@ const AddRoute = ({ onAddRoute }) => {
 };
 
 export default function Oneworld() {
-  const [routes, setRoutes] = useState([[new SegmentInput('aa', 'i', 'jfk', 'sfo')]]);
+  // eslint-disable-next-line
+  const [programs, setPrograms] = useState(['qantas']);
 
-  const onAddRoute = (route) => {
+  // eslint-disable-next-line
+  const [eliteLevels, setEliteLevels] = useState({
+    qantas: ['base', 'Silver', 'Gold', 'Platinum'],
+  });
+  const [routes, setRoutes] = useState([]);
+  const [results, setResults] = useState({});
+
+  const onAddRouteClicked = (route) => {
     setRoutes([...routes, route]);
+  };
+
+  const onCalculateClicked = async () => {
+    const newResults = {};
+
+    for (const route of routes) {
+      newResults[route.uuid] = {};
+
+      for (const program of programs) {
+        newResults[route.uuid][program] = {};
+        for (const eliteLevel of eliteLevels[program]) {
+          const calcResults = await calculator.calculate(program, route.segmentInputs, eliteLevel);
+          newResults[route.uuid][program][eliteLevel] = calcResults;
+        }
+      }
+    }
+
+    setResults(newResults);
   };
 
   return (
     <>
-      <ProgramComparison routes={routes} programs={['qantas']} results={[]} />
-      <AddRoute onAddRoute={onAddRoute} />
+      <ProgramComparison
+        routes={routes}
+        programs={programs}
+        eliteLevels={eliteLevels}
+        results={results}
+      />
+      <AddRoute onAddRoute={onAddRouteClicked} />
+      <Button onClick={onCalculateClicked}>Calculate</Button>
     </>
   );
 }
