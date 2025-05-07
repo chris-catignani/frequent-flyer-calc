@@ -24,7 +24,7 @@ const FLAG_ENABLE_QANTAS_API = true;
 // this is so nextjs doesn't get mad the initial emtpy segment has differing uuids on the client vs server
 const defaultSegmentInput = new SegmentInput('', '', '', '', '00000000-0000-0000-0000-000000000000'); // prettier-ignore
 
-export default function Home() {
+export default function Qantas() {
   const searchParams = useSearchParams();
 
   const [inputErrors, setInputErrors] = useState({});

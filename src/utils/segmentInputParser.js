@@ -10,10 +10,11 @@ export const parseEncodedTextItin = (textItin, segmentSeparator, segmentItemSepa
   }
 
   for (const itin of textItin.split(segmentSeparator)) {
-    const parts = itin.split(segmentItemSeparator);
+    const formattedItin = itin.trim();
+    const parts = formattedItin.split(segmentItemSeparator);
 
     if (parts.length !== 4) {
-      const parsingError = `"${itin}" is not formatted correctly`;
+      const parsingError = `"${formattedItin}" is not formatted correctly`;
       return { segmentInputs: [], parsingError };
     }
 
