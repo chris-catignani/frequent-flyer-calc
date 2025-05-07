@@ -1,4 +1,4 @@
-import { QantasEarnings } from '@/shared/models/qantasEarnings';
+import { Earnings } from '@/shared/models/earnings';
 import { IntraCountryRule, DistanceRule, GeographicalRule } from './rules';
 import { buildSegmentFromString } from '@/test/testUtils';
 
@@ -8,12 +8,12 @@ describe('rules', () => {
       {
         minDistance: 0,
         maxDistance: 100,
-        earnings: { business: new QantasEarnings(100, 10) },
+        earnings: { business: new Earnings(100, 10) },
       },
       {
         minDistance: 100,
         maxDistance: 200,
-        earnings: { business: new QantasEarnings(200, 20) },
+        earnings: { business: new Earnings(200, 20) },
       },
     ];
     // eslint-disable-next-line
@@ -32,12 +32,12 @@ describe('rules', () => {
       {
         minDistance: 0,
         maxDistance: 100,
-        earnings: { business: new QantasEarnings(100, 10) },
+        earnings: { business: new Earnings(100, 10) },
       },
       {
         minDistance: 100,
         maxDistance: 200,
-        earnings: { business: new QantasEarnings(200, 20) },
+        earnings: { business: new Earnings(200, 20) },
       },
     ];
     // eslint-disable-next-line
@@ -50,11 +50,11 @@ describe('rules', () => {
         {
           minDistance: 0,
           maxDistance: 100,
-          earnings: { business: new QantasEarnings(100, 10) },
+          earnings: { business: new Earnings(100, 10) },
         },
         {
           minDistance: 100,
-          earnings: { business: new QantasEarnings(200, 20) },
+          earnings: { business: new Earnings(200, 20) },
         },
       ];
       const distanceRule = new DistanceRule('distance rule', 'https://google.com', distanceBands);
@@ -74,8 +74,8 @@ describe('rules', () => {
         origin: { city: new Set(['dallas', 'houston']) },
         destination: {
           city: {
-            'san francisco': { business: new QantasEarnings(100, 10) },
-            boston: { business: new QantasEarnings(200, 20) },
+            'san francisco': { business: new Earnings(100, 10) },
+            boston: { business: new Earnings(200, 20) },
           },
         },
       });
@@ -153,8 +153,8 @@ describe('rules', () => {
         origin: { country: new Set(['united states', 'canada']) },
         destination: {
           country: {
-            'united kingdom': { business: new QantasEarnings(300, 30) },
-            france: { business: new QantasEarnings(400, 40) },
+            'united kingdom': { business: new Earnings(300, 30) },
+            france: { business: new Earnings(400, 40) },
           },
         },
       });
@@ -232,8 +232,8 @@ describe('rules', () => {
         origin: { region: new Set(['usaEastCoast', 'northernEurope']) },
         destination: {
           region: {
-            westernEurope: { business: new QantasEarnings(500, 50) },
-            southeastAsia: { business: new QantasEarnings(600, 60) },
+            westernEurope: { business: new Earnings(500, 50) },
+            southeastAsia: { business: new Earnings(600, 60) },
           },
         },
       });

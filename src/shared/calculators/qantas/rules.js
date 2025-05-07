@@ -1,6 +1,6 @@
 import { calcDistance } from '@/shared/utils/airports';
 import { isInRegion } from './regions';
-import { QantasEarnings } from '@/shared/models/qantasEarnings';
+import { Earnings } from '@/shared/models/earnings';
 import { REGION_DISPLAY } from '@/shared/models/constants';
 
 /**
@@ -250,7 +250,7 @@ export const parseEarningRates = (qantasPointsString, qantasCreditsString, fareC
   const retval = {};
 
   fareClasses.forEach((fareClass, index) => {
-    retval[fareClass] = new QantasEarnings(
+    retval[fareClass] = new Earnings(
       parseInt(pointsPerFareclass[index]) || 0,
       parseInt(creditsPerFareclass[index]) || 0,
     );
