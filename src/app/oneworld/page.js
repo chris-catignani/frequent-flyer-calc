@@ -26,7 +26,6 @@ const AddRoute = ({ onAddRoute }) => {
 
 export default function Oneworld() {
   const [routes, setRoutes] = useState([[new SegmentInput('aa', 'i', 'jfk', 'sfo')]]);
-  const [programs, setPrograms] = useState(['qantas']);
 
   const onAddRoute = (route) => {
     setRoutes([...routes, route]);
@@ -34,7 +33,7 @@ export default function Oneworld() {
 
   return (
     <>
-      <ProgramComparison routes={routes} programs={programs} results={[]} />
+      <ProgramComparison routes={routes} programs={['qantas']} results={[]} />
       <AddRoute onAddRoute={onAddRoute} />
     </>
   );

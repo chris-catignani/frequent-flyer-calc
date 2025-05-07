@@ -5,7 +5,7 @@ const programLevels = {
   qantas: ['base', 'silver', 'gold', 'platinum'],
 };
 
-export const ProgramComparison = ({ routes, programs, results }) => {
+export const ProgramComparison = ({ routes, programs }) => {
   console.log(routes);
   return (
     <TableContainer>
