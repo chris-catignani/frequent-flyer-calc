@@ -1,4 +1,4 @@
-import { buildRouteDisplayString } from '@/utils/routes';
+import { buildRouteDisplayString } from '@/shared/utils/routes';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'; // prettier-ignore
 
 const programLevels = {

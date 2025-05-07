@@ -1,5 +1,5 @@
-import { Segment } from '@/models/segment';
-import { getAirport } from '@/utils/airports';
+import { Segment } from '@/shared/models/segment';
+import { getAirport } from '@/shared/utils/airports';
 
 export const buildSegment = (airline, fareClass, fromAirportIata, toAirportIata) => {
   return new Segment(airline, fareClass, getAirport(fromAirportIata), getAirport(toAirportIata));

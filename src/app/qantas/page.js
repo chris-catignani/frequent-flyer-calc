@@ -1,22 +1,22 @@
 'use client';
 
-import { calculate } from '@/utils/calculators/calculator';
+import { calculate } from '@/shared/calculators/qantas/calculator';
 import { useEffect, useState } from 'react';
 import { Alert, Box, Button, Container, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'; // prettier-ignore
-import { EliteStatusInput, SegmentInputList } from '@/components/input';
 import { Info } from '@mui/icons-material';
-import { SegmentResults } from '@/components/segmentResults';
-import { getAirport } from '@/utils/airports';
-import { ResultsSummary } from '@/components/resultsSummary';
-import { Segment } from '@/models/segment';
-import { SegmentInput } from '@/models/segmentInput';
-import { JETSTAR_AIRLINES } from '@/models/constants';
-import { Footer } from '@/components/footer';
-import { AdvancedInput } from '@/components/advancedInput';
-import { createUrlQueryParams, parseUrlQueryParams } from '@/utils/segmentInputUrlParser';
+import { getAirport } from '@/shared/utils/airports';
+import { Segment } from '@/shared/models/segment';
+import { SegmentInput } from '@/shared/models/segmentInput';
+import { JETSTAR_AIRLINES } from '@/shared/models/constants';
+import { createUrlQueryParams, parseUrlQueryParams } from '@/shared/utils/segmentInputUrlParser';
 import { useSearchParams } from 'next/navigation';
-import { deleteAllSavedCalculations, deleteSavedCalculationAtIdx, getSavedCalculations, saveCalculation } from '@/utils/recentCalculations'; // prettier-ignore
-import { RecentCalculationSelection } from '@/components/recentCalculations';
+import { deleteAllSavedCalculations, deleteSavedCalculationAtIdx, getSavedCalculations, saveCalculation } from '@/shared/utils/recentCalculations'; // prettier-ignore
+import { EliteStatusInput, SegmentInputList } from './_components/input';
+import { RecentCalculationSelection } from './_components/recentCalculations';
+import { AdvancedInput } from './_components/advancedInput';
+import { ResultsSummary } from './_components/resultsSummary';
+import { SegmentResults } from './_components/segmentResults';
+import { Footer } from './_components/footer';
 
 const FLAG_ENABLE_QANTAS_API = true;
 

@@ -1,4 +1,4 @@
-import { buildRouteDisplayString } from '@/utils/routes';
+import { buildRouteDisplayString } from '@/shared/utils/routes';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Chip, Collapse, Grid2, Stack, Typography } from '@mui/material';
 import { useState } from 'react';

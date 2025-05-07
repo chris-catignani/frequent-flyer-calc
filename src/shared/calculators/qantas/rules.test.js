@@ -1,4 +1,4 @@
-import { QantasEarnings } from '@/models/qantasEarnings';
+import { QantasEarnings } from '@/shared/models/qantasEarnings';
 import { IntraCountryRule, DistanceRule, GeographicalRule } from './rules';
 import { buildSegmentFromString } from '@/test/testUtils';
 

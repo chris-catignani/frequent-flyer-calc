@@ -1,4 +1,4 @@
-import { SegmentInput } from '@/models/segmentInput';
+import { SegmentInput } from '@/shared/models/segmentInput';
 
 export const saveCalculation = (segmentInputs, theTripType, theEliteStatus) => {
   const calculationToSave = {

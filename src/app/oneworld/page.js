@@ -1,10 +1,10 @@
 'use client';
 
-import { ProgramComparison } from '@/components/display/programComparison';
-import { SegmentInput } from '@/models/segmentInput';
-import { parseEncodedTextItin } from '@/utils/segmentInputParser';
+import { SegmentInput } from '@/shared/models/segmentInput';
+import { parseEncodedTextItin } from '@/shared/utils/segmentInputParser';
 import { Button, Grid2, TextField } from '@mui/material';
 import { useState } from 'react';
+import { ProgramComparison } from './_components/programComparison';
 
 const AddRoute = ({ onAddRoute }) => {
   const [route, setRoute] = useState('');

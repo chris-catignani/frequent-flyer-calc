@@ -1,5 +1,5 @@
-import { JETSTAR_AIRLINES, JETSTAR_LETTER_FARE_CLASSES } from '@/models/constants';
-import { SegmentInput } from '@/models/segmentInput';
+import { JETSTAR_AIRLINES, JETSTAR_LETTER_FARE_CLASSES } from '@/shared/models/constants';
+import { SegmentInput } from '@/shared/models/segmentInput';
 
 export const parseEncodedTextItin = (textItin, segmentSeparator, segmentItemSeparator) => {
   const segmentInputs = [];

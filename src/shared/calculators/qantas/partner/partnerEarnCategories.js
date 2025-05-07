@@ -1,4 +1,4 @@
-import { JAL_DOMESTIC_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from '@/models/constants';
+import { JAL_DOMESTIC_FARE_CLASSES, WEBSITE_EARN_CATEGORIES } from '@/shared/models/constants';
 import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from '../earnCategories';
 
 export const PARTNER_FARE_CLASSES = [
