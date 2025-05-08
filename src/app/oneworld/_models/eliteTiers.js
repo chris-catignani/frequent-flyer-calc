@@ -1,7 +1,31 @@
 export const frequentFlyerPrograms = {
+  malaysia: {
+    eliteTiers: {
+      blue: {
+        requirements: {
+          achieve: 0,
+        },
+      },
+      silver: {
+        requirements: {
+          achieve: 30,
+        },
+      },
+      gold: {
+        requirements: {
+          achieve: 60,
+        },
+      },
+      platinum: {
+        requirements: {
+          achieve: 100,
+        },
+      },
+    },
+  },
   qantas: {
     eliteTiers: {
-      base: {
+      bronze: {
         requirements: {
           achieve: 0,
           maintain: 0,

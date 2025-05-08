@@ -1,6 +1,8 @@
+import { calculate as malaysiaCalculate } from './malaysia/calculator';
 import { calculate as qantasCalculate } from './qantas/calculator';
 
 const _calculators = {
+  malaysia: malaysiaCalculate,
   qantas: qantasCalculate,
 };
 

@@ -8,7 +8,7 @@ import { Calculator } from '../_shared/calculators/calculator';
 import { getAirport } from '../_shared/utils/airports';
 import { Route } from '../_shared/models/route';
 import { SegmentInput } from '../_shared/models/segmentInput';
-import { getEliteTierLevel } from './_models/eliteTiers';
+import { getEliteTierLevel, getEliteTiersForProgram } from './_models/eliteTiers';
 
 const calculator = new Calculator();
 
@@ -46,8 +46,11 @@ export default function Oneworld() {
 
   // TODO temporarily seed test data
   useEffect(() => {
-    setPrograms(['qantas']);
-    setEliteTiers({ qantas: ['base', 'silver', 'gold', 'platinum'] });
+    setPrograms(['malaysia', 'qantas']);
+    setEliteTiers({
+      malaysia: getEliteTiersForProgram('malaysia'),
+      qantas: getEliteTiersForProgram('qantas'),
+    });
 
     const segmentInputs = [
       new SegmentInput('aa', 'i', 'jfk', 'lhr'),
