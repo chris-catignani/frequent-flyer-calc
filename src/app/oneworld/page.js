@@ -2,11 +2,12 @@
 
 import { parseEncodedTextItin } from '@/app/_shared/utils/segmentInputParser';
 import { Button, Grid2, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProgramComparison } from './_components/programComparison';
 import { Calculator } from '../_shared/calculators/calculator';
 import { getAirport } from '../_shared/utils/airports';
 import { Route } from '../_shared/models/route';
+import { SegmentInput } from '../_shared/models/segmentInput';
 
 const calculator = new Calculator();
 
@@ -37,15 +38,24 @@ const AddRoute = ({ onAddRoute }) => {
 };
 
 export default function Oneworld() {
-  // eslint-disable-next-line
-  const [programs, setPrograms] = useState(['qantas']);
-
-  // eslint-disable-next-line
-  const [eliteTiers, setEliteTiers] = useState({
-    qantas: ['base', 'silver', 'gold', 'platinum'],
-  });
+  const [programs, setPrograms] = useState([]);
+  const [eliteTiers, setEliteTiers] = useState({});
   const [routes, setRoutes] = useState([]);
   const [results, setResults] = useState({});
+
+  // TODO temporarily seed test data
+  useEffect(() => {
+    setPrograms(['qantas']);
+    setEliteTiers({ qantas: ['base', 'silver', 'gold', 'platinum'] });
+
+    const segmentInputs = [new SegmentInput('aa', 'i', 'jfk', 'lhr')];
+    segmentInputs.forEach((segmentInput) => {
+      segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
+      segmentInput.toAirport = getAirport(segmentInput.toAirportText);
+    });
+
+    setRoutes([new Route(segmentInputs)]);
+  }, [setPrograms, setEliteTiers, setRoutes]);
 
   const onAddRouteClicked = (route) => {
     setRoutes([...routes, route]);
