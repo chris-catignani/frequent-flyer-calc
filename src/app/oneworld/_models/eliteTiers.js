@@ -82,3 +82,7 @@ export const getEliteTiersForProgram = (program) => {
 export const getEliteTierLevel = (program, eliteTier) => {
   return Object.keys(frequentFlyerPrograms[program]['eliteTiers']).indexOf(eliteTier);
 };
+
+export const getSupportedPrograms = () => {
+  return Object.keys(frequentFlyerPrograms);
+};

@@ -1,14 +1,18 @@
 'use client';
 
 import { parseEncodedTextItin } from '@/app/_shared/utils/segmentInputParser';
-import { Button, Grid2, TextField } from '@mui/material';
+import { Autocomplete, Button, Container, Grid2, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ProgramComparison } from './_components/programComparison';
 import { Calculator } from '../_shared/calculators/calculator';
 import { getAirport } from '../_shared/utils/airports';
 import { Route } from '../_shared/models/route';
 import { SegmentInput } from '../_shared/models/segmentInput';
-import { getEliteTierLevel, getEliteTiersForProgram } from './_models/eliteTiers';
+import {
+  getEliteTierLevel,
+  getEliteTiersForProgram,
+  getSupportedPrograms,
+} from './_models/eliteTiers';
 
 const calculator = new Calculator();
 
@@ -35,6 +39,18 @@ const AddRoute = ({ onAddRoute }) => {
       <TextField value={route} onChange={(event) => setRoute(event.target.value)} />
       <Button onClick={addRoute}>Add Route</Button>
     </Grid2>
+  );
+};
+
+const ProgramSelect = ({ programs, onChange }) => {
+  return (
+    <Autocomplete
+      multiple
+      value={programs}
+      options={getSupportedPrograms()}
+      onChange={(_, value) => onChange(value)}
+      renderInput={(params) => <TextField {...params} label="Frequent Flyer Programs" />}
+    />
   );
 };
 
@@ -107,7 +123,11 @@ export default function Oneworld() {
   };
 
   return (
-    <>
+    <Container disableGutters>
+      <Typography variant="h4" textAlign="center">
+        oneworld Airlines Frequent Flyer Programs Comparer
+      </Typography>
+      <ProgramSelect programs={programs} onChange={setPrograms} />
       <ProgramComparison
         routes={routes}
         programs={programs}
@@ -117,6 +137,6 @@ export default function Oneworld() {
       />
       <AddRoute onAddRoute={onAddRouteClicked} />
       <Button onClick={onCalculateClicked}>Calculate</Button>
-    </>
+    </Container>
   );
 }
