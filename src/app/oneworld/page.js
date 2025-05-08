@@ -50,6 +50,7 @@ const ProgramSelect = ({ programs, onChange }) => {
       options={getSupportedPrograms()}
       onChange={(_, value) => onChange(value)}
       renderInput={(params) => <TextField {...params} label="Frequent Flyer Programs" />}
+      sx={{ width: '100%', maxWidth: '500px' }}
     />
   );
 };
@@ -128,19 +129,21 @@ export default function Oneworld() {
 
   return (
     <Container disableGutters>
-      <Typography variant="h4" textAlign="center">
-        oneworld Airlines Frequent Flyer Programs Comparer
-      </Typography>
-      <ProgramSelect programs={programs} onChange={setPrograms} />
-      <ProgramComparison
-        routes={routes}
-        programs={programs}
-        eliteTiers={eliteTiers}
-        onEliteTierChange={onEliteTierChange}
-        results={results}
-      />
-      <AddRoute onAddRoute={onAddRouteClicked} />
-      <Button onClick={onCalculateClicked}>Calculate</Button>
+      <Grid2 container direction="column" justifyContent="center" alignItems="center" spacing={1}>
+        <Typography variant="h4" textAlign="center">
+          oneworld Airlines Frequent Flyer Programs Comparer
+        </Typography>
+        <ProgramSelect programs={programs} onChange={setPrograms} />
+        <ProgramComparison
+          routes={routes}
+          programs={programs}
+          eliteTiers={eliteTiers}
+          onEliteTierChange={onEliteTierChange}
+          results={results}
+        />
+        <AddRoute onAddRoute={onAddRouteClicked} />
+        <Button onClick={onCalculateClicked}>Calculate</Button>
+      </Grid2>
     </Container>
   );
 }
