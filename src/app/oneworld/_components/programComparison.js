@@ -1,16 +1,32 @@
 import { buildRouteDisplayString } from '@/app/_shared/utils/routes';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'; // prettier-ignore
-import { calcPercentageOfEliteTier } from '../_models/eliteTiers';
+import { Checkbox, FormControlLabel, FormGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'; // prettier-ignore
+import { calcPercentageOfEliteTier, getEliteTiersForProgram } from '../_models/eliteTiers';
 
-const Header = ({ programs, eliteTiers }) => {
+const Header = ({ programs, eliteTiers, onEliteTierChange }) => {
   const level1Headers = [];
   const level2Headers = [];
   const level3Headers = [];
 
   programs.forEach((program) => {
+    // build list of checkboxes for each elite status of the program
+    const eliteCheckboxes = getEliteTiersForProgram(program).map((eliteTier) => {
+      return (
+        <FormControlLabel
+          key={`${program}-${eliteTier}-elite-checkbox`}
+          checked={eliteTiers[program].includes(eliteTier)}
+          control={<Checkbox />}
+          label={eliteTier}
+          onChange={(event) => {
+            onEliteTierChange(program, eliteTier, event.target.checked);
+          }}
+        />
+      );
+    });
+
     level1Headers.push(
       <TableCell key={`${program}-header`} colSpan={eliteTiers[program].length * 3}>
         {program}
+        <FormGroup row>{eliteCheckboxes}</FormGroup>
       </TableCell>,
     );
 
@@ -47,7 +63,7 @@ const Header = ({ programs, eliteTiers }) => {
   );
 };
 
-const Body = ({ routes, results }) => {
+const Body = ({ routes, eliteTiers, results }) => {
   const rows = [];
 
   routes.forEach((route) => {
@@ -66,6 +82,10 @@ const Body = ({ routes, results }) => {
       const program = 'qantas';
 
       Object.entries(results[route.uuid][program]).forEach(([eliteTier, result]) => {
+        if (!eliteTiers[program].includes(eliteTier)) {
+          return;
+        }
+
         cells.push(
           <TableCell key={`${route.uuid}-${program}-${eliteTier}-airline-points`}>
             {result.airlinePoints}
@@ -86,12 +106,12 @@ const Body = ({ routes, results }) => {
   return <TableBody>{rows}</TableBody>;
 };
 
-export const ProgramComparison = ({ routes, programs, eliteTiers, results }) => {
+export const ProgramComparison = ({ routes, programs, eliteTiers, onEliteTierChange, results }) => {
   return (
     <TableContainer>
       <Table>
-        <Header programs={programs} eliteTiers={eliteTiers} />
-        <Body routes={routes} results={results} />
+        <Header programs={programs} eliteTiers={eliteTiers} onEliteTierChange={onEliteTierChange} />
+        <Body routes={routes} eliteTiers={eliteTiers} results={results} />
       </Table>
     </TableContainer>
   );

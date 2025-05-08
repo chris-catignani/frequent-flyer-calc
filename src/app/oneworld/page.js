@@ -8,6 +8,7 @@ import { Calculator } from '../_shared/calculators/calculator';
 import { getAirport } from '../_shared/utils/airports';
 import { Route } from '../_shared/models/route';
 import { SegmentInput } from '../_shared/models/segmentInput';
+import { getEliteTierLevel } from './_models/eliteTiers';
 
 const calculator = new Calculator();
 
@@ -57,6 +58,23 @@ export default function Oneworld() {
     setRoutes([new Route(segmentInputs)]);
   }, [setPrograms, setEliteTiers, setRoutes]);
 
+  const onEliteTierChange = (program, eliteTier, include) => {
+    const programEliteTiers = [...eliteTiers[program]];
+
+    const eliteTierIdx = programEliteTiers.indexOf(eliteTier);
+    if (include) {
+      if (eliteTierIdx === -1) {
+        programEliteTiers.splice(getEliteTierLevel(program, eliteTier), 0, eliteTier);
+      }
+    } else {
+      if (eliteTierIdx !== -1) {
+        programEliteTiers.splice(eliteTierIdx, 1);
+      }
+    }
+
+    setEliteTiers({ ...eliteTiers, [program]: programEliteTiers });
+  };
+
   const onAddRouteClicked = (route) => {
     setRoutes([...routes, route]);
   };
@@ -85,6 +103,7 @@ export default function Oneworld() {
         routes={routes}
         programs={programs}
         eliteTiers={eliteTiers}
+        onEliteTierChange={onEliteTierChange}
         results={results}
       />
       <AddRoute onAddRoute={onAddRouteClicked} />

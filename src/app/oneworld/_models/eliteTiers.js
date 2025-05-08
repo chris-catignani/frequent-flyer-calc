@@ -45,3 +45,16 @@ export const calcPercentageOfEliteTier = (program, eliteTier, elitePoints, initi
     frequentFlyerPrograms[program]['eliteTiers'][eliteTier]['requirements'][requirement]
   );
 };
+
+export const getEliteTiersForProgram = (program) => {
+  if (!frequentFlyerPrograms[program]) {
+    console.error(`${program} not setup as a valid frequent flyer program`);
+    return [];
+  }
+
+  return Object.keys(frequentFlyerPrograms[program]['eliteTiers']);
+};
+
+export const getEliteTierLevel = (program, eliteTier) => {
+  return Object.keys(frequentFlyerPrograms[program]['eliteTiers']).indexOf(eliteTier);
+};
