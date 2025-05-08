@@ -74,7 +74,7 @@ const Body = ({ routes, programs, eliteTiers, results }) => {
 
     if (results[route.uuid]) {
       programs.forEach((program) => {
-        Object.entries(results[route.uuid][program]).forEach(([eliteTier, result]) => {
+        Object.entries(results[route.uuid][program] || {}).forEach(([eliteTier, result]) => {
           if (!eliteTiers[program].includes(eliteTier)) {
             return;
           }

@@ -105,6 +105,10 @@ export default function Oneworld() {
   const onCalculateClicked = async () => {
     const newResults = {};
 
+    if (programs.length === 0) {
+      return;
+    }
+
     for (const route of routes) {
       newResults[route.uuid] = {};
 
