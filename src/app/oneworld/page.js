@@ -14,7 +14,7 @@ const AddRoute = ({ onAddRoute }) => {
   const [route, setRoute] = useState('');
 
   const addRoute = () => {
-    // TODO handle errors\
+    // TODO handle errors
     // eslint-disable-next-line
     const { segmentInputs, parsingError } = parseEncodedTextItin(route, ',', ' ');
 
@@ -41,8 +41,8 @@ export default function Oneworld() {
   const [programs, setPrograms] = useState(['qantas']);
 
   // eslint-disable-next-line
-  const [eliteLevels, setEliteLevels] = useState({
-    qantas: ['base', 'Silver', 'Gold', 'Platinum'],
+  const [eliteTiers, setEliteTiers] = useState({
+    qantas: ['base', 'silver', 'gold', 'platinum'],
   });
   const [routes, setRoutes] = useState([]);
   const [results, setResults] = useState({});
@@ -59,9 +59,9 @@ export default function Oneworld() {
 
       for (const program of programs) {
         newResults[route.uuid][program] = {};
-        for (const eliteLevel of eliteLevels[program]) {
-          const calcResults = await calculator.calculate(program, route.segmentInputs, eliteLevel);
-          newResults[route.uuid][program][eliteLevel] = calcResults;
+        for (const eliteTier of eliteTiers[program]) {
+          const calcResults = await calculator.calculate(program, route.segmentInputs, eliteTier);
+          newResults[route.uuid][program][eliteTier] = calcResults;
         }
       }
     }
@@ -74,7 +74,7 @@ export default function Oneworld() {
       <ProgramComparison
         routes={routes}
         programs={programs}
-        eliteLevels={eliteLevels}
+        eliteTiers={eliteTiers}
         results={results}
       />
       <AddRoute onAddRoute={onAddRouteClicked} />
