@@ -17,8 +17,6 @@ const buildFareClassObj = (data) => {
 };
 
 export const MALAYSIA_FARE_CLASSES = {
-  //TODO parse these cleaner
-
   aa: {
     ...buildFareClassObj([
       ['F / A', 'first', 1.5],
