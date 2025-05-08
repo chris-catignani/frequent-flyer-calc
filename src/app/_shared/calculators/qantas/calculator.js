@@ -12,10 +12,10 @@ const qantasMinPoints = getQantasMinimumPoints();
 
 const eliteStatusBonusAirlines = new Set(['aa', 'qf', 'jq', '3k', 'gk']);
 const eliteStatusBonusMultiples = {
-  Silver: 0.5,
-  Gold: 0.75,
-  Platinum: 1.0,
-  'Platinum One': 1.0,
+  silver: 0.5,
+  gold: 0.75,
+  platinum: 1.0,
+  'platinum one': 1.0,
 };
 
 export const calculate = async (
@@ -33,7 +33,7 @@ export const calculate = async (
 
   for (let segment of segments) {
     try {
-      const segmentResult = calculateSegment(segment, eliteStatus, preJuly2025);
+      const segmentResult = calculateSegment(segment, eliteStatus.toLowerCase(), preJuly2025);
 
       let qantasAPIResults = {};
       if (compareWithQantasCalc) {
