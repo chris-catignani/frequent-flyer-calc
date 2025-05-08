@@ -49,13 +49,17 @@ export default function Oneworld() {
     setPrograms(['qantas']);
     setEliteTiers({ qantas: ['base', 'silver', 'gold', 'platinum'] });
 
-    const segmentInputs = [new SegmentInput('aa', 'i', 'jfk', 'lhr')];
+    const segmentInputs = [
+      new SegmentInput('aa', 'i', 'jfk', 'lhr'),
+      new SegmentInput('ay', 'i', 'lhr', 'hel'),
+      new SegmentInput('ay', 'i', 'hel', 'agp'),
+    ];
     segmentInputs.forEach((segmentInput) => {
       segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
       segmentInput.toAirport = getAirport(segmentInput.toAirportText);
     });
 
-    setRoutes([new Route(segmentInputs)]);
+    setRoutes([new Route([segmentInputs[0]]), new Route([segmentInputs[1], segmentInputs[2]])]);
   }, [setPrograms, setEliteTiers, setRoutes]);
 
   const onEliteTierChange = (program, eliteTier, include) => {
@@ -93,6 +97,8 @@ export default function Oneworld() {
         }
       }
     }
+
+    console.log(newResults);
 
     setResults(newResults);
   };

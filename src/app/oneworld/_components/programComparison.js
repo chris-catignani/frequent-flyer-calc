@@ -63,42 +63,36 @@ const Header = ({ programs, eliteTiers, onEliteTierChange }) => {
   );
 };
 
-const Body = ({ routes, eliteTiers, results }) => {
+const Body = ({ routes, programs, eliteTiers, results }) => {
   const rows = [];
 
   routes.forEach((route) => {
     const cells = [];
-    const routeString = buildRouteDisplayString(route.segmentInputs);
 
+    const routeString = buildRouteDisplayString(route.segmentInputs);
     cells.push(<TableCell key={`${route.uuid}-route`}>{routeString}</TableCell>);
 
-    routes.forEach((route) => {
-      if (!results[route.uuid]) {
-        cells.push(<TableCell key={route.uuid}></TableCell>); // TODO specify colspan?
-        return;
-      }
+    if (results[route.uuid]) {
+      programs.forEach((program) => {
+        Object.entries(results[route.uuid][program]).forEach(([eliteTier, result]) => {
+          if (!eliteTiers[program].includes(eliteTier)) {
+            return;
+          }
 
-      //TODO get the specific program here
-      const program = 'qantas';
-
-      Object.entries(results[route.uuid][program]).forEach(([eliteTier, result]) => {
-        if (!eliteTiers[program].includes(eliteTier)) {
-          return;
-        }
-
-        cells.push(
-          <TableCell key={`${route.uuid}-${program}-${eliteTier}-airline-points`}>
-            {result.airlinePoints}
-          </TableCell>,
-          <TableCell key={`${route.uuid}-${program}-${eliteTier}-elite-points`}>
-            {result.elitePoints}
-          </TableCell>,
-          <TableCell key={`${route.uuid}-${program}-${eliteTier}-elite-percent`}>
-            {calcPercentageOfEliteTier(program, eliteTier, result.elitePoints, true)}
-          </TableCell>,
-        );
+          cells.push(
+            <TableCell key={`${route.uuid}-${program}-${eliteTier}-airline-points`}>
+              {result.airlinePoints}
+            </TableCell>,
+            <TableCell key={`${route.uuid}-${program}-${eliteTier}-elite-points`}>
+              {result.elitePoints}
+            </TableCell>,
+            <TableCell key={`${route.uuid}-${program}-${eliteTier}-elite-percent`}>
+              {calcPercentageOfEliteTier(program, eliteTier, result.elitePoints, true)}
+            </TableCell>,
+          );
+        });
       });
-    });
+    }
 
     rows.push(<TableRow key={route.uuid}>{cells}</TableRow>);
   });
@@ -111,7 +105,7 @@ export const ProgramComparison = ({ routes, programs, eliteTiers, onEliteTierCha
     <TableContainer>
       <Table>
         <Header programs={programs} eliteTiers={eliteTiers} onEliteTierChange={onEliteTierChange} />
-        <Body routes={routes} eliteTiers={eliteTiers} results={results} />
+        <Body routes={routes} programs={programs} eliteTiers={eliteTiers} results={results} />
       </Table>
     </TableContainer>
   );
