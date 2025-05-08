@@ -20,7 +20,7 @@ const eliteStatusBonusMultiples = {
 
 export const calculate = async (
   segments,
-  eliteStatus,
+  eliteStatus = '',
   compareWithQantasCalc = false,
   preJuly2025 = true,
 ) => {

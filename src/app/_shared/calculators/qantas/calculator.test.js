@@ -89,6 +89,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Sydney, Melbourne, Brisbane, Gold Coast and`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -101,6 +102,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Perth and`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -113,6 +115,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Adelaide and`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -122,6 +125,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Cairns and`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -137,6 +141,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Western Europe`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -151,6 +156,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Northern Europe`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -160,6 +166,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Southern Europe`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -169,6 +176,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Tel Aviv`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -182,6 +190,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dubai Doha`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -194,6 +203,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Intra USA Short Haul`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -203,6 +213,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for East Coast USA/Canada`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -215,6 +226,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for New Zealand`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -227,6 +239,7 @@ describe('calculate - partner rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dallas`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -241,7 +254,8 @@ describe('calculate - qantas rules', () => {
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for pre July 2025 Domestic Australia`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
-      const results = await calculate([buildSegmentFromString(segmentString)], null, false, true);
+      const results = await calculate([buildSegmentFromString(segmentString)], '', false, true);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -254,7 +268,8 @@ describe('calculate - qantas rules', () => {
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for post July 2025 Domestic Australia`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
-      const results = await calculate([buildSegmentFromString(segmentString)], null, false, false);
+      const results = await calculate([buildSegmentFromString(segmentString)], '', false, false);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -272,6 +287,7 @@ describe('calculate - qantas rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Adelaide, Brisbane, Gold Coast, Melbourne, Sydney`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -286,6 +302,7 @@ describe('calculate - qantas rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Darwin, Perth`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -299,6 +316,7 @@ describe('calculate - qantas rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for New Zealand`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -311,6 +329,7 @@ describe('calculate - qantas rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dallas`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -320,6 +339,7 @@ describe('calculate - qantas rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for USA East Coast`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -333,6 +353,7 @@ describe('calculate - qantas rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dubai`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -345,6 +366,7 @@ describe('calculate - qantas rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Europe`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -354,6 +376,7 @@ describe('calculate - qantas rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Tel Aviv`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -369,6 +392,7 @@ describe('calculate - jetstar rules', () => {
     `Testing routing %s. Should earn %s qantas points and %s status credit for Domestic Australia`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -383,6 +407,7 @@ describe('Test for non Status Credit earning airlines', () => {
     `Air France %s. Should earn %s qantas points and %s status credit`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -397,6 +422,7 @@ describe('Test for non earning airline fare classes', () => {
     `Jetatar %s. Should earn %s qantas points and %s status credit`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(true);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
@@ -431,6 +457,7 @@ describe('calculate - elite status levels', () => {
         false,
         true,
       );
+      expect(results.containsErrors).toBe(false);
       expect(results.segmentResults[0].airlinePointsBreakdown.basePoints).toBe(
         expectedBaseAirlinePoints,
       );
@@ -465,6 +492,7 @@ describe('calculate - elite status levels', () => {
         false,
         false,
       );
+      expect(results.containsErrors).toBe(false);
       expect(results.segmentResults[0].airlinePointsBreakdown.basePoints).toBe(
         expectedBaseAirlinePoints,
       );
@@ -490,6 +518,7 @@ describe('calculate - elite status only applies to certain airlines', () => {
     `Testing elite status is applied for %s %s level`,
     async (segmentString, eliteStatus, expectedBaseAirlinePoints, expectedEliteBonus) => {
       const results = await calculate([buildSegmentFromString(segmentString)], eliteStatus);
+      expect(results.containsErrors).toBe(false);
       expect(results.segmentResults[0].airlinePointsBreakdown.basePoints).toBe(
         expectedBaseAirlinePoints,
       );
