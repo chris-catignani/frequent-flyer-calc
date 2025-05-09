@@ -1,46 +1,31 @@
 'use client';
 
-import { parseEncodedTextItin } from '@/app/_shared/utils/segmentInputParser';
-import { Autocomplete, Button, Container, Grid2, TextField, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid2,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState } from 'react';
 import { ProgramComparison } from './_components/programComparison';
 import { Calculator } from '../_shared/calculators/calculator';
 import { getAirport } from '../_shared/utils/airports';
 import { Route } from '../_shared/models/route';
-import { SegmentInput } from '../_shared/models/segmentInput';
+import { defaultSegmentInput, SegmentInput } from '../_shared/models/segmentInput';
 import {
   getEliteTierLevel,
   getEliteTiersForProgram,
   getSupportedPrograms,
 } from './_models/eliteTiers';
+import { RouteInput } from './_components/routeInput';
 
 const calculator = new Calculator();
-
-const AddRoute = ({ onAddRoute }) => {
-  const [route, setRoute] = useState('');
-
-  const addRoute = () => {
-    // TODO handle errors
-    // eslint-disable-next-line
-    const { segmentInputs, parsingError } = parseEncodedTextItin(route, ',', ' ');
-
-    // populate the Airport objects
-    segmentInputs.forEach((segmentInput) => {
-      segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
-      segmentInput.toAirport = getAirport(segmentInput.toAirportText);
-    });
-
-    onAddRoute(new Route(segmentInputs));
-    setRoute('');
-  };
-
-  return (
-    <Grid2 container>
-      <TextField value={route} onChange={(event) => setRoute(event.target.value)} />
-      <Button onClick={addRoute}>Add Route</Button>
-    </Grid2>
-  );
-};
 
 const ProgramSelect = ({ programs, onChange }) => {
   return (
@@ -52,6 +37,45 @@ const ProgramSelect = ({ programs, onChange }) => {
       renderInput={(params) => <TextField {...params} label="Frequent Flyer Programs" />}
       sx={{ width: '100%', maxWidth: '500px' }}
     />
+  );
+};
+
+const AddRoute = ({ onAddRoute }) => {
+  const [route, setRoute] = useState(new Route([defaultSegmentInput]));
+  const [routeEntryOpen, setRouteEntryOpen] = useState(false);
+
+  const handleOpen = () => {
+    setRouteEntryOpen(true);
+  };
+
+  const handleClose = () => {
+    setRouteEntryOpen(false);
+    setRoute(new Route([defaultSegmentInput]));
+  };
+
+  const onAddRouteClicked = () => {
+    onAddRoute(route);
+    handleClose();
+  };
+
+  return (
+    <>
+      <Button variant="contained" onClick={handleOpen}>
+        Add Route
+      </Button>
+      <Dialog onClose={handleClose} open={routeEntryOpen} fullWidth={true} maxWidth="md">
+        <DialogTitle>Add a Route</DialogTitle>
+        <DialogContent>
+          <RouteInput route={route} onRouteUpdate={setRoute} />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button variant="contained" onClick={onAddRouteClicked}>
+            Add Route
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
@@ -142,7 +166,9 @@ export default function Oneworld() {
           results={results}
         />
         <AddRoute onAddRoute={onAddRouteClicked} />
-        <Button onClick={onCalculateClicked}>Calculate</Button>
+        <Button variant="contained" onClick={onCalculateClicked}>
+          Calculate
+        </Button>
       </Grid2>
     </Container>
   );

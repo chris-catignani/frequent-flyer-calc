@@ -6,7 +6,7 @@ import { Alert, Box, Button, Container, Dialog, DialogTitle, Grid2, IconButton, 
 import { Info } from '@mui/icons-material';
 import { getAirport } from '@/app/_shared/utils/airports';
 import { Segment } from '@/app/_shared/models/segment';
-import { SegmentInput } from '@/app/_shared/models/segmentInput';
+import { defaultSegmentInput, SegmentInput } from '@/app/_shared/models/segmentInput';
 import {
   JETSTAR_AIRLINES,
   PARTNER_NON_ONEWORLD_AIRLINES,
@@ -28,10 +28,6 @@ import { Footer } from './_components/footer';
 import { buildAirlineOptions, SegmentInputList } from '../_shared/components/segmentInput';
 
 const FLAG_ENABLE_QANTAS_API = true;
-
-// hack to create a default segment with a specific uuid
-// this is so nextjs doesn't get mad the initial emtpy segment has differing uuids on the client vs server
-const defaultSegmentInput = new SegmentInput('', '', '', '', '00000000-0000-0000-0000-000000000000'); // prettier-ignore
 
 export default function Qantas() {
   const searchParams = useSearchParams();

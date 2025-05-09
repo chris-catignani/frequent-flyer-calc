@@ -1,4 +1,4 @@
-export const AIRLINE_NAMES = {
+export const AIRLINES = {
   aa: 'American Airlines',
   ba: 'British Airways',
   ay: 'Finnair',
