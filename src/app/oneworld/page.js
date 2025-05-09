@@ -1,5 +1,6 @@
 'use client';
 
+import { v4 as uuidv4 } from 'uuid';
 import {
   Autocomplete,
   Button,
@@ -27,6 +28,10 @@ import { RouteInput } from './_components/routeInput';
 
 const calculator = new Calculator();
 
+// hack to create a default route with a specific uuid
+// this is so nextjs doesn't get mad the initial emtpy segment has differing uuids on the client vs server
+export const defaultRoute = new Route([defaultSegmentInput], '00000000-0000-0000-0000-000000000000'); // prettier-ignore
+
 const ProgramSelect = ({ programs, onChange }) => {
   return (
     <Autocomplete
@@ -40,48 +45,27 @@ const ProgramSelect = ({ programs, onChange }) => {
   );
 };
 
-const AddRoute = ({ onAddRoute }) => {
-  const [route, setRoute] = useState(new Route([defaultSegmentInput]));
-  const [routeEntryOpen, setRouteEntryOpen] = useState(false);
-
-  const handleOpen = () => {
-    setRouteEntryOpen(true);
-  };
-
-  const handleClose = () => {
-    setRouteEntryOpen(false);
-    setRoute(new Route([defaultSegmentInput]));
-  };
-
-  const onAddRouteClicked = () => {
-    onAddRoute(route);
-    handleClose();
-  };
-
+const RouteEntry = ({ title, route, onRouteUpdate, onSubmit, onCancel }) => {
   return (
-    <>
-      <Button variant="contained" onClick={handleOpen}>
-        Add Route
-      </Button>
-      <Dialog onClose={handleClose} open={routeEntryOpen} fullWidth={true} maxWidth="md">
-        <DialogTitle>Add a Route</DialogTitle>
-        <DialogContent>
-          <RouteInput route={route} onRouteUpdate={setRoute} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button variant="contained" onClick={onAddRouteClicked}>
-            Add Route
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Dialog onClose={onCancel} open={route !== undefined} fullWidth={true} maxWidth="md">
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <RouteInput route={route} onRouteUpdate={onRouteUpdate} />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onCancel}>Cancel</Button>
+        <Button variant="contained" onClick={onSubmit}>
+          Submit
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 };
 
 export default function Oneworld() {
   const [programs, setPrograms] = useState([]);
   const [eliteTiers, setEliteTiers] = useState({});
+  const [routeInEntry, setRouteInEntry] = useState();
   const [routes, setRoutes] = useState([]);
   const [results, setResults] = useState({});
 
@@ -123,8 +107,35 @@ export default function Oneworld() {
     setEliteTiers({ ...eliteTiers, [program]: programEliteTiers });
   };
 
-  const onAddRouteClicked = (route) => {
-    setRoutes([...routes, route]);
+  const deleteRouteClicked = (routeIdx) => {
+    const newRoutes = [...routes];
+    newRoutes.splice(routeIdx, 1);
+    setRoutes(newRoutes);
+  };
+
+  const updateRouteClicked = (routeIdx) => {
+    setRouteInEntry(routes[routeIdx]);
+  };
+
+  const onAddRouteClicked = () => {
+    setRouteInEntry(defaultRoute);
+  };
+
+  const onRouteEntrySubmitClicked = () => {
+    if (routeInEntry.uuid === defaultRoute.uuid) {
+      routeInEntry.uuid = uuidv4();
+      setRoutes([...routes, routeInEntry]);
+    } else {
+      const routeIdx = routes.findIndex((route) => route.uuid === routeInEntry.uuid);
+      const newRoutes = [...routes];
+      newRoutes[routeIdx] = routeInEntry;
+      setRoutes(newRoutes);
+    }
+    setRouteInEntry(undefined);
+  };
+
+  const onRouteEntryCancelClicked = () => {
+    setRouteInEntry(undefined);
   };
 
   const onCalculateClicked = async () => {
@@ -162,13 +173,24 @@ export default function Oneworld() {
           routes={routes}
           programs={programs}
           eliteTiers={eliteTiers}
-          onEliteTierChange={onEliteTierChange}
           results={results}
+          onEliteTierChange={onEliteTierChange}
+          updateRouteClicked={updateRouteClicked}
+          deleteRouteClicked={deleteRouteClicked}
         />
-        <AddRoute onAddRoute={onAddRouteClicked} />
+        <Button variant="contained" onClick={onAddRouteClicked}>
+          Add Route
+        </Button>
         <Button variant="contained" onClick={onCalculateClicked}>
           Calculate
         </Button>
+        <RouteEntry
+          title={routeInEntry?.uuid === defaultRoute.uuid ? 'Add Route' : 'Update Route'}
+          route={routeInEntry}
+          onRouteUpdate={setRouteInEntry}
+          onSubmit={onRouteEntrySubmitClicked}
+          onCancel={onRouteEntryCancelClicked}
+        />
       </Grid2>
     </Container>
   );

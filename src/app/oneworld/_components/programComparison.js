@@ -1,6 +1,7 @@
 import { buildRouteDisplayString } from '@/app/_shared/utils/routes';
-import { Checkbox, FormControlLabel, FormGroup, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'; // prettier-ignore
+import { Checkbox, FormControlLabel, FormGroup, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material'; // prettier-ignore
 import { calcPercentageOfEliteTier, getEliteTiersForProgram } from '../_models/eliteTiers';
+import { Delete, Edit } from '@mui/icons-material';
 
 const Header = ({ programs, eliteTiers, onEliteTierChange }) => {
   const level1Headers = [];
@@ -48,14 +49,17 @@ const Header = ({ programs, eliteTiers, onEliteTierChange }) => {
   return (
     <TableHead>
       <TableRow>
+        <TableCell></TableCell>
         <TableCell>Routes</TableCell>
         {level1Headers}
       </TableRow>
       <TableRow>
         <TableCell></TableCell>
+        <TableCell></TableCell>
         {level2Headers}
       </TableRow>
       <TableRow>
+        <TableCell></TableCell>
         <TableCell></TableCell>
         {level3Headers}
       </TableRow>
@@ -63,13 +67,45 @@ const Header = ({ programs, eliteTiers, onEliteTierChange }) => {
   );
 };
 
-const Body = ({ routes, programs, eliteTiers, results }) => {
+const RowActions = ({ updateClicked, deleteClicked }) => {
+  return (
+    <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+      <Tooltip title="Edit Route">
+        <IconButton size="small" onClick={updateClicked}>
+          <Edit fontSize="inherit" />
+        </IconButton>
+      </Tooltip>
+      <Tooltip title="Delete Route">
+        <IconButton size="small" onClick={deleteClicked}>
+          <Delete fontSize="inherit" />
+        </IconButton>
+      </Tooltip>
+    </Stack>
+  );
+};
+
+const Body = ({
+  routes,
+  programs,
+  eliteTiers,
+  results,
+  updateRouteClicked,
+  deleteRouteClicked,
+}) => {
   const rows = [];
 
-  routes.forEach((route) => {
+  routes.forEach((route, routeIdx) => {
     const cells = [];
 
     const routeString = buildRouteDisplayString(route.segmentInputs);
+    cells.push(
+      <TableCell key={`${route.uuid}-route-actions`}>
+        <RowActions
+          updateClicked={() => updateRouteClicked(routeIdx)}
+          deleteClicked={() => deleteRouteClicked(routeIdx)}
+        />
+      </TableCell>,
+    );
     cells.push(<TableCell key={`${route.uuid}-route`}>{routeString}</TableCell>);
 
     if (results[route.uuid]) {
@@ -100,12 +136,27 @@ const Body = ({ routes, programs, eliteTiers, results }) => {
   return <TableBody>{rows}</TableBody>;
 };
 
-export const ProgramComparison = ({ routes, programs, eliteTiers, onEliteTierChange, results }) => {
+export const ProgramComparison = ({
+  routes,
+  programs,
+  eliteTiers,
+  results,
+  onEliteTierChange,
+  updateRouteClicked,
+  deleteRouteClicked,
+}) => {
   return (
     <TableContainer>
       <Table>
         <Header programs={programs} eliteTiers={eliteTiers} onEliteTierChange={onEliteTierChange} />
-        <Body routes={routes} programs={programs} eliteTiers={eliteTiers} results={results} />
+        <Body
+          routes={routes}
+          programs={programs}
+          eliteTiers={eliteTiers}
+          results={results}
+          updateRouteClicked={updateRouteClicked}
+          deleteRouteClicked={deleteRouteClicked}
+        />
       </Table>
     </TableContainer>
   );

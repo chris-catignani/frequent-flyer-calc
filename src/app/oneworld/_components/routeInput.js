@@ -6,12 +6,16 @@ import { getAirport } from '@/app/_shared/utils/airports';
 import { Button } from '@mui/material';
 
 export const RouteInput = ({ route, onRouteUpdate }) => {
+  if (!route) {
+    return <></>;
+  }
+
   const setAndHydrateSegmentInputs = (theSegmentInputs) => {
     theSegmentInputs.forEach((segmentInput) => {
       segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
       segmentInput.toAirport = getAirport(segmentInput.toAirportText);
     });
-    onRouteUpdate(new Route(theSegmentInputs));
+    onRouteUpdate(route.clone({ segmentInputs: theSegmentInputs }));
   };
 
   const addSegmentPressed = () => {
