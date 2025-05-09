@@ -9,8 +9,6 @@ import {
   JETSTAR_FARE_CLASS_DISPLAY,
   JETSTAR_FARE_CLASSES,
   JETSTAR_NEW_ZEALAND_FARE_CLASSES,
-  PARTNER_NON_ONEWORLD_AIRLINES,
-  PARTNER_ONEWORLD_AIRLINES,
   QANTAS_DOMESTIC_FARE_CLASSES,
   QANTAS_FARE_CLASS_DISPLAY,
   QANTAS_GRP_AIRLINES,
@@ -19,9 +17,24 @@ import {
 } from '../models/qantasConstants';
 import { GroupHeader, GroupItems } from './autocomplete';
 
+/**
+ * Helper function to bulild the options for the airline dropdown
+ */
+export const buildAirlineOptions = (airlines, groupName) => {
+  return Object.entries(airlines).map(([iata, name]) => {
+    return {
+      airlineLabel: `${name} (${iata})`,
+      iata,
+      groupName,
+      id: iata,
+    };
+  });
+};
+
 export const SegmentInputList = ({
   segmentInputs,
   errors,
+  airlineOptions,
   onDeleteSegmentPressed,
   onSegmentInputChanged,
   onSegmentsReordered,
@@ -46,6 +59,7 @@ export const SegmentInputList = ({
                 showDeleteButton={segmentInputs.length > 1}
                 enableDrag={segmentInputs.length > 1}
                 errors={errors[segmentInputIdx] || {}}
+                airlineOptions={airlineOptions}
                 onDeleteSegmentPressed={onDeleteSegmentPressed}
                 onSegmentInputChanged={onSegmentInputChanged}
               />
@@ -64,6 +78,7 @@ const SegmentInputListItem = ({
   showDeleteButton,
   enableDrag,
   errors,
+  airlineOptions,
   onDeleteSegmentPressed,
   onSegmentInputChanged,
 }) => {
@@ -82,6 +97,7 @@ const SegmentInputListItem = ({
             errors={errors}
             dragHandleProps={provided.dragHandleProps}
             showDeleteButton={showDeleteButton}
+            airlineOptions={airlineOptions}
             onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
             onChange={(segmentInput) => onSegmentInputChanged(segmentInputIdx, segmentInput)}
           />
@@ -96,6 +112,7 @@ const SegmentInput = ({
   errors,
   dragHandleProps,
   showDeleteButton,
+  airlineOptions,
   onChange,
   onDeleteClicked,
 }) => {
@@ -121,6 +138,7 @@ const SegmentInput = ({
         <AirlineInput
           value={segmentInput.airline}
           error={errors['airline']}
+          airlineOptions={airlineOptions}
           onChange={(value) => {
             const newSegmentInput = segmentInput.clone({ airline: value });
             if (shouldClearFareClassForAirlineChange(segmentInput, value)) {
@@ -275,33 +293,16 @@ const shouldClearFareClassForAirportChange = (airline, originalAirport, newAirpo
   return airline in QANTAS_GRP_AIRLINES || JAL_AIRLINES.has(airline);
 };
 
-const AirlineInput = ({ value, error, onChange }) => {
-  const buildOptions = (airlines, groupName) => {
-    return Object.entries(airlines).map(([iata, name]) => {
-      return {
-        airlineLabel: `${name} (${iata})`,
-        iata,
-        groupName,
-        id: iata,
-      };
-    });
-  };
-
-  const options = [
-    ...buildOptions(QANTAS_GRP_AIRLINES, 'Qantas Group Airlines'),
-    ...buildOptions(PARTNER_ONEWORLD_AIRLINES, 'oneworld Partner Airlines'),
-    ...buildOptions(PARTNER_NON_ONEWORLD_AIRLINES, 'Other Partner Airlines'),
-  ];
-
+const AirlineInput = ({ value, error, airlineOptions, onChange }) => {
   return (
     <Autocomplete
       disablePortal
       disableClearable
       autoHighlight
       autoSelect
-      options={options}
+      options={airlineOptions}
       getOptionLabel={(airline) => airline.airlineLabel || ''}
-      value={options.find((airline) => airline.iata === value) || ''}
+      value={airlineOptions.find((airline) => airline.iata === value) || ''}
       groupBy={(option) => option.groupName}
       onChange={(_, value) => onChange(value?.iata)}
       sx={{ width: '100%' }}
