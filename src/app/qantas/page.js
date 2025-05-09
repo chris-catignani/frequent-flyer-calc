@@ -14,12 +14,13 @@ import {
 } from '@/app/_shared/utils/segmentInputUrlParser';
 import { useSearchParams } from 'next/navigation';
 import { deleteAllSavedCalculations, deleteSavedCalculationAtIdx, getSavedCalculations, saveCalculation } from '@/app/_shared/utils/recentCalculations'; // prettier-ignore
-import { EliteStatusInput, SegmentInputList } from './_components/input';
+import { EliteStatusInput } from './_components/input';
 import { RecentCalculationSelection } from './_components/recentCalculations';
-import { AdvancedInput } from './_components/advancedInput';
+import { AdvancedInput } from '../_shared/components/advancedInput';
 import { ResultsSummary } from './_components/resultsSummary';
 import { SegmentResults } from './_components/segmentResults';
 import { Footer } from './_components/footer';
+import { SegmentInputList } from '../_shared/components/segmentInput';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
