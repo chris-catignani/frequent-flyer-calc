@@ -2,6 +2,7 @@ import { buildRouteDisplayString } from '@/app/_shared/utils/routes';
 import { Checkbox, FormControlLabel, FormGroup, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material'; // prettier-ignore
 import { calcPercentageOfEliteTier, getEliteTiersForProgram } from '../_models/eliteTiers';
 import { Delete, Edit } from '@mui/icons-material';
+import { formatAsPercentage } from '@/app/_shared/utils/display';
 
 const Header = ({ programs, eliteTiers, onEliteTierChange }) => {
   const level1Headers = [];
@@ -115,6 +116,13 @@ const Body = ({
             return;
           }
 
+          const percentOfEliteTier = calcPercentageOfEliteTier(
+            program,
+            eliteTier,
+            result.elitePoints,
+            true,
+          );
+
           cells.push(
             <TableCell key={`${route.uuid}-${program}-${eliteTier}-airline-points`}>
               {result.airlinePoints}
@@ -123,7 +131,7 @@ const Body = ({
               {result.elitePoints}
             </TableCell>,
             <TableCell key={`${route.uuid}-${program}-${eliteTier}-elite-percent`}>
-              {calcPercentageOfEliteTier(program, eliteTier, result.elitePoints, true)}
+              {formatAsPercentage(percentOfEliteTier)}
             </TableCell>,
           );
         });
