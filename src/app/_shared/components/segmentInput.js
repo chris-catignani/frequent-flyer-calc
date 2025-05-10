@@ -11,19 +11,19 @@ import {
   JETSTAR_NEW_ZEALAND_FARE_CLASSES,
   QANTAS_DOMESTIC_FARE_CLASSES,
   QANTAS_FARE_CLASS_DISPLAY,
-  QANTAS_GRP_AIRLINES,
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
 } from '../models/qantasConstants';
 import { GroupHeader, GroupItems } from './autocomplete';
+import { ALL_AIRLINES, QANTAS_GRP_AIRLINES } from '../models/constants';
 
 /**
  * Helper function to bulild the options for the airline dropdown
  */
 export const buildAirlineOptions = (airlines, groupName) => {
-  return Object.entries(airlines).map(([iata, name]) => {
+  return airlines.map((iata) => {
     return {
-      airlineLabel: `${name} (${iata})`,
+      airlineLabel: `${ALL_AIRLINES[iata]} (${iata})`,
       iata,
       groupName,
       id: iata,

@@ -7,12 +7,7 @@ import { Info } from '@mui/icons-material';
 import { getAirport } from '@/app/_shared/utils/airports';
 import { Segment } from '@/app/_shared/models/segment';
 import { defaultSegmentInput, SegmentInput } from '@/app/_shared/models/segmentInput';
-import {
-  JETSTAR_AIRLINES,
-  PARTNER_NON_ONEWORLD_AIRLINES,
-  PARTNER_ONEWORLD_AIRLINES,
-  QANTAS_GRP_AIRLINES,
-} from '@/app/_shared/models/qantasConstants';
+import { JETSTAR_AIRLINES } from '@/app/_shared/models/qantasConstants';
 import {
   createUrlQueryParams,
   parseUrlQueryParams,
@@ -26,6 +21,8 @@ import { ResultsSummary } from './_components/resultsSummary';
 import { SegmentResults } from './_components/segmentResults';
 import { Footer } from './_components/footer';
 import { buildAirlineOptions, SegmentInputList } from '../_shared/components/segmentInput';
+import { QANTAS_GRP_AIRLINES } from '../_shared/models/constants';
+import { PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES } from './_models/contants';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
@@ -480,7 +477,7 @@ export default function Qantas() {
                 segmentInputs={segmentInputs}
                 errors={inputErrors}
                 airlineOptions={[
-                  ...buildAirlineOptions(QANTAS_GRP_AIRLINES, 'Qantas Group Airlines'),
+                  ...buildAirlineOptions(Object.keys(QANTAS_GRP_AIRLINES), 'Qantas Group Airlines'),
                   ...buildAirlineOptions(PARTNER_ONEWORLD_AIRLINES, 'oneworld Partner Airlines'),
                   ...buildAirlineOptions(PARTNER_NON_ONEWORLD_AIRLINES, 'Other Partner Airlines'),
                 ]}

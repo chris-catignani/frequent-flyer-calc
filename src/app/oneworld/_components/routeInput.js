@@ -1,9 +1,9 @@
 import { AdvancedInput } from '@/app/_shared/components/advancedInput';
 import { buildAirlineOptions, SegmentInputList } from '@/app/_shared/components/segmentInput';
-import { AIRLINES } from '@/app/_shared/models/constants';
 import { SegmentInput } from '@/app/_shared/models/segmentInput';
 import { getAirport } from '@/app/_shared/utils/airports';
 import { Button, Grid2 } from '@mui/material';
+import { SUPPORTED_AIRLINES } from '../_models/constants';
 
 export const RouteInput = ({ route, onRouteUpdate }) => {
   if (!route) {
@@ -51,7 +51,7 @@ export const RouteInput = ({ route, onRouteUpdate }) => {
       <SegmentInputList
         segmentInputs={route.segmentInputs}
         errors={[]} // TODO errors
-        airlineOptions={[...buildAirlineOptions(AIRLINES)]}
+        airlineOptions={[...buildAirlineOptions(SUPPORTED_AIRLINES)]}
         onDeleteSegmentPressed={deleteSegmentPressed}
         onSegmentInputChanged={segmentInputChanged}
         onSegmentsReordered={segmentsReordered}

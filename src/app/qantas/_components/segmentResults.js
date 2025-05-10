@@ -1,5 +1,4 @@
 import {
-  AIRLINES,
   EARN_CATEGORY_DISPLAY,
   EARN_CATEGORY_URLS,
   QANTAS_FARE_CLASS_DISPLAY,
@@ -22,6 +21,7 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import { Cancel, CheckCircle, Info, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
+import { ALL_AIRLINES } from '@/app/_shared/models/constants';
 
 export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
   if (!calculatedData) {
@@ -267,7 +267,7 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
           <Collapse in={expandRow} timeout="auto" unmountOnExit>
             <Grid2 container m={2} direction="column">
               <Grid2>
-                <Typography>Airline: {AIRLINES[segment.airline]}</Typography>
+                <Typography>Airline: {ALL_AIRLINES[segment.airline]}</Typography>
               </Grid2>
               <Grid2>
                 <Typography>Fare Class: {getFareClassDisplay(segment.fareClass)}</Typography>

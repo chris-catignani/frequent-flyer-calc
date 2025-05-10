@@ -1,4 +1,4 @@
-import { AIRLINES } from '../../models/constants';
+import { ALL_AIRLINES } from '../../models/constants';
 import { calcDistance } from '../../utils/airports';
 import { MALAYSIA_FARE_CLASSES, MALAYSIA_RULE_URLS } from './constants';
 
@@ -43,7 +43,7 @@ const calculateSegment = (segment) => {
   };
 
   return {
-    ruleName: AIRLINES[segment.airline],
+    ruleName: ALL_AIRLINES[segment.airline],
     ruleUrl: MALAYSIA_RULE_URLS[segment.airline],
     elitePoints: calculateElitePoints(segment),
     airlinePoints: airlinePointsBreakdown.totalEarned,
