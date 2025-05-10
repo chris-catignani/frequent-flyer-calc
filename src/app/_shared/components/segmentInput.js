@@ -296,7 +296,6 @@ const shouldClearFareClassForAirportChange = (airline, originalAirport, newAirpo
 const AirlineInput = ({ value, error, airlineOptions, onChange }) => {
   return (
     <Autocomplete
-      disablePortal
       disableClearable
       autoHighlight
       autoSelect
@@ -415,7 +414,6 @@ const JALFareClassInput = ({ segmentInput, error, onChange }) => {
 const GenericFareClassInput = ({ options, value, displayLookup, onChange, groupBy, error }) => {
   return (
     <Autocomplete
-      disablePortal
       disableClearable
       autoHighlight
       autoSelect

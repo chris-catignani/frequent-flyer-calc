@@ -3,7 +3,6 @@ import { Autocomplete, TextField } from '@mui/material';
 export const EliteStatusInput = ({ eliteStatus, onChange }) => {
   return (
     <Autocomplete
-      disablePortal
       disableClearable
       value={eliteStatus}
       options={['Bronze', 'Silver', 'Gold', 'Platinum', 'Platinum One']}

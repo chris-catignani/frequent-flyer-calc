@@ -3,7 +3,12 @@ import { buildAirlineOptions, SegmentInputList } from '@/app/_shared/components/
 import { SegmentInput } from '@/app/_shared/models/segmentInput';
 import { getAirport } from '@/app/_shared/utils/airports';
 import { Button, Grid2 } from '@mui/material';
-import { SUPPORTED_AIRLINES } from '../_models/constants';
+import {
+  NON_ALLIANCE_AIRLINES,
+  ONEWORLD_AIRLINES,
+  SKYTEAM_AIRLINES,
+  STAR_ALLIANCE_AIRLINES,
+} from '@/app/_shared/models/constants';
 
 export const RouteInput = ({ route, onRouteUpdate }) => {
   if (!route) {
@@ -51,7 +56,12 @@ export const RouteInput = ({ route, onRouteUpdate }) => {
       <SegmentInputList
         segmentInputs={route.segmentInputs}
         errors={[]} // TODO errors
-        airlineOptions={[...buildAirlineOptions(SUPPORTED_AIRLINES)]}
+        airlineOptions={[
+          ...buildAirlineOptions(Object.keys(ONEWORLD_AIRLINES), 'oneworld Airlines'),
+          ...buildAirlineOptions(Object.keys(SKYTEAM_AIRLINES), 'SkyTeam Airlines'),
+          ...buildAirlineOptions(Object.keys(STAR_ALLIANCE_AIRLINES), 'Star Alliance Airlines'),
+          ...buildAirlineOptions(Object.keys(NON_ALLIANCE_AIRLINES), 'Other Airlines'),
+        ]}
         onDeleteSegmentPressed={deleteSegmentPressed}
         onSegmentInputChanged={segmentInputChanged}
         onSegmentsReordered={segmentsReordered}

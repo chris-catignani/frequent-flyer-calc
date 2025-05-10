@@ -10,11 +10,11 @@ export const ONEWORLD_AIRLINES = {
   jl: 'Japan Airlines',
   nu: 'Japan Transocean Air',
   mh: 'Malaysia Airlines',
+  qf: 'Qantas',
   qr: 'Qatar Airways',
   at: 'Royal Air Maroc',
   rj: 'Royal Jordanian',
   ul: 'SriLankan Airlines',
-  qf: 'Qantas',
 };
 
 export const JETSTAR_AIRLINES = {
@@ -49,8 +49,10 @@ export const STAR_ALLIANCE_AIRLINES = {};
 
 // TODO more here
 export const NON_ALLIANCE_AIRLINES = {
-  ek: 'Emirates',
   ly: 'EL AL',
+  ek: 'Emirates',
+  ...JETSTAR_AIRLINES,
+  ...LATAM_AIRLINES,
   ws: 'WestJet',
 };
 
@@ -58,7 +60,5 @@ export const ALL_AIRLINES = {
   ...ONEWORLD_AIRLINES,
   ...SKYTEAM_AIRLINES,
   ...STAR_ALLIANCE_AIRLINES,
-  ...JETSTAR_AIRLINES,
-  ...LATAM_AIRLINES,
   ...NON_ALLIANCE_AIRLINES,
 };
