@@ -20,7 +20,11 @@ import { AdvancedInput } from '../_shared/components/advancedInput';
 import { ResultsSummary } from './_components/resultsSummary';
 import { SegmentResults } from './_components/segmentResults';
 import { Footer } from './_components/footer';
-import { buildAirlineOptions, SegmentInputList } from '../_shared/components/segmentInput';
+import {
+  buildAirlineOptions,
+  SegmentInputList,
+  validate,
+} from '../_shared/components/segmentInput';
 import { QANTAS_GRP_AIRLINES } from '../_shared/models/constants';
 import { PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES } from './_models/contants';
 
@@ -55,38 +59,7 @@ export default function Qantas() {
   }, []);
 
   const validateInput = () => {
-    const errors = {};
-
-    const addError = (segmentInputIdx, fieldName, error) => {
-      if (!errors[segmentInputIdx]) {
-        errors[segmentInputIdx] = {};
-      }
-      errors[segmentInputIdx][fieldName] = error;
-    };
-
-    segmentInputs.forEach((segmentInput, idx) => {
-      if (!segmentInput.airline) {
-        addError(idx, 'airline', 'Required');
-      }
-      if (!segmentInput.fromAirportText) {
-        addError(idx, 'fromAirportText', 'Required');
-      }
-      if (!segmentInput.toAirportText) {
-        addError(idx, 'toAirportText', 'Required');
-      }
-      if (!segmentInput.fareClass) {
-        addError(idx, 'fareClass', 'Required');
-      }
-
-      if (segmentInput.fromAirportText && !segmentInput.fromAirport) {
-        addError(idx, 'fromAirportText', 'Invalid IATA');
-      }
-      if (segmentInput.toAirportText && !segmentInput.toAirport) {
-        addError(idx, 'toAirportText', 'Invalid IATA');
-      }
-    });
-
-    return errors;
+    return validate(segmentInputs);
   };
 
   const doCalculation = async (

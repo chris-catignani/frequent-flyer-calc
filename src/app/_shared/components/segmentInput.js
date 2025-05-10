@@ -31,6 +31,41 @@ export const buildAirlineOptions = (airlines, groupName) => {
   });
 };
 
+export const validate = (segmentInputs) => {
+  const errors = {};
+
+  const addError = (segmentInputIdx, fieldName, error) => {
+    if (!errors[segmentInputIdx]) {
+      errors[segmentInputIdx] = {};
+    }
+    errors[segmentInputIdx][fieldName] = error;
+  };
+
+  segmentInputs.forEach((segmentInput, idx) => {
+    if (!segmentInput.airline) {
+      addError(idx, 'airline', 'Required');
+    }
+    if (!segmentInput.fromAirportText) {
+      addError(idx, 'fromAirportText', 'Required');
+    }
+    if (!segmentInput.toAirportText) {
+      addError(idx, 'toAirportText', 'Required');
+    }
+    if (!segmentInput.fareClass) {
+      addError(idx, 'fareClass', 'Required');
+    }
+
+    if (segmentInput.fromAirportText && !segmentInput.fromAirport) {
+      addError(idx, 'fromAirportText', 'Invalid IATA');
+    }
+    if (segmentInput.toAirportText && !segmentInput.toAirport) {
+      addError(idx, 'toAirportText', 'Invalid IATA');
+    }
+  });
+
+  return errors;
+};
+
 export const SegmentInputList = ({
   segmentInputs,
   errors,

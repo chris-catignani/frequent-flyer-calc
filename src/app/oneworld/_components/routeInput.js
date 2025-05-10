@@ -10,7 +10,7 @@ import {
   STAR_ALLIANCE_AIRLINES,
 } from '@/app/_shared/models/constants';
 
-export const RouteInput = ({ route, onRouteUpdate }) => {
+export const RouteInput = ({ route, errors, onRouteUpdate }) => {
   if (!route) {
     return <></>;
   }
@@ -55,7 +55,7 @@ export const RouteInput = ({ route, onRouteUpdate }) => {
     <Grid2 container spacing={1}>
       <SegmentInputList
         segmentInputs={route.segmentInputs}
-        errors={[]} // TODO errors
+        errors={errors}
         airlineOptions={[
           ...buildAirlineOptions(Object.keys(ONEWORLD_AIRLINES), 'oneworld Airlines'),
           ...buildAirlineOptions(Object.keys(SKYTEAM_AIRLINES), 'SkyTeam Airlines'),

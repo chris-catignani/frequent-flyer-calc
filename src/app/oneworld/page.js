@@ -25,6 +25,7 @@ import {
   getSupportedPrograms,
 } from './_models/eliteTiers';
 import { RouteInput } from './_components/routeInput';
+import { validate } from '../_shared/components/segmentInput';
 
 const calculator = new Calculator();
 
@@ -45,12 +46,12 @@ const ProgramSelect = ({ programs, onChange }) => {
   );
 };
 
-const RouteEntry = ({ title, route, onRouteUpdate, onSubmit, onCancel }) => {
+const RouteEntry = ({ title, route, errors, onRouteUpdate, onSubmit, onCancel }) => {
   return (
     <Dialog onClose={onCancel} open={route !== undefined} fullWidth={true} maxWidth="md">
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
-        <RouteInput route={route} onRouteUpdate={onRouteUpdate} />
+        <RouteInput route={route} errors={errors} onRouteUpdate={onRouteUpdate} />
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel}>Cancel</Button>
@@ -67,6 +68,7 @@ export default function Oneworld() {
   const [eliteTiers, setEliteTiers] = useState({});
   const [routeInEntry, setRouteInEntry] = useState();
   const [routes, setRoutes] = useState([]);
+  const [inputErrors, setInputErrors] = useState({});
   const [results, setResults] = useState({});
 
   // TODO temporarily seed test data
@@ -122,6 +124,12 @@ export default function Oneworld() {
   };
 
   const onRouteEntrySubmitClicked = () => {
+    const errors = validate(routeInEntry.segmentInputs);
+    if (Object.keys(errors).length > 0) {
+      setInputErrors(errors);
+      return;
+    }
+
     if (routeInEntry.uuid === defaultRoute.uuid) {
       routeInEntry.uuid = uuidv4();
       setRoutes([...routes, routeInEntry]);
@@ -136,6 +144,7 @@ export default function Oneworld() {
 
   const onRouteEntryCancelClicked = () => {
     setRouteInEntry(undefined);
+    setInputErrors({});
   };
 
   const onCalculateClicked = async () => {
@@ -174,6 +183,7 @@ export default function Oneworld() {
           programs={programs}
           eliteTiers={eliteTiers}
           results={results}
+          errors={inputErrors}
           onEliteTierChange={onEliteTierChange}
           updateRouteClicked={updateRouteClicked}
           deleteRouteClicked={deleteRouteClicked}
@@ -187,6 +197,7 @@ export default function Oneworld() {
         <RouteEntry
           title={routeInEntry?.uuid === defaultRoute.uuid ? 'Add Route' : 'Update Route'}
           route={routeInEntry}
+          errors={inputErrors}
           onRouteUpdate={setRouteInEntry}
           onSubmit={onRouteEntrySubmitClicked}
           onCancel={onRouteEntryCancelClicked}

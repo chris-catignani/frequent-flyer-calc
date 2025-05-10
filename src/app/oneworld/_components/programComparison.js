@@ -2,7 +2,6 @@ import { buildRouteDisplayString } from '@/app/_shared/utils/routes';
 import { Checkbox, FormControlLabel, FormGroup, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from '@mui/material'; // prettier-ignore
 import { calcPercentageOfEliteTier, getEliteTiersForProgram } from '../_models/eliteTiers';
 import { Delete, Edit } from '@mui/icons-material';
-import { formatAsPercentage } from '@/app/_shared/utils/display';
 
 const Header = ({ programs, eliteTiers, onEliteTierChange }) => {
   const level1Headers = [];
