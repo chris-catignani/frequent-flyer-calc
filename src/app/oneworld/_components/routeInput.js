@@ -1,9 +1,9 @@
+import { AdvancedInput } from '@/app/_shared/components/advancedInput';
 import { buildAirlineOptions, SegmentInputList } from '@/app/_shared/components/segmentInput';
 import { AIRLINES } from '@/app/_shared/models/constants';
-import { Route } from '@/app/_shared/models/route';
 import { SegmentInput } from '@/app/_shared/models/segmentInput';
 import { getAirport } from '@/app/_shared/utils/airports';
-import { Button } from '@mui/material';
+import { Button, Grid2 } from '@mui/material';
 
 export const RouteInput = ({ route, onRouteUpdate }) => {
   if (!route) {
@@ -47,7 +47,7 @@ export const RouteInput = ({ route, onRouteUpdate }) => {
   };
 
   return (
-    <>
+    <Grid2 container spacing={1}>
       <SegmentInputList
         segmentInputs={route.segmentInputs}
         errors={[]} // TODO errors
@@ -59,6 +59,7 @@ export const RouteInput = ({ route, onRouteUpdate }) => {
       <Button variant="contained" onClick={addSegmentPressed}>
         Add Segment
       </Button>
-    </>
+      <AdvancedInput setSegmentInputs={setAndHydrateSegmentInputs}></AdvancedInput>
+    </Grid2>
   );
 };
