@@ -52,14 +52,17 @@ const Header = ({ programs, eliteTiers, onEliteTierChange }) => {
       <TableRow>
         <TableCell></TableCell>
         <TableCell>Routes</TableCell>
+        <TableCell>Cost</TableCell>
         {level1Headers}
       </TableRow>
       <TableRow>
         <TableCell></TableCell>
         <TableCell></TableCell>
+        <TableCell></TableCell>
         {level2Headers}
       </TableRow>
       <TableRow>
+        <TableCell></TableCell>
         <TableCell></TableCell>
         <TableCell></TableCell>
         {level3Headers}
@@ -108,6 +111,8 @@ const Body = ({
       </TableCell>,
     );
     cells.push(<TableCell key={`${route.uuid}-route`}>{routeString}</TableCell>);
+
+    cells.push(<TableCell key={`${route.uuid}-route-cost`}>{route.subtotal}</TableCell>);
 
     if (results[route.uuid]) {
       programs.forEach((program) => {

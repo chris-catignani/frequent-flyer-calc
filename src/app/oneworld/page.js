@@ -31,7 +31,7 @@ const calculator = new Calculator();
 
 // hack to create a default route with a specific uuid
 // this is so nextjs doesn't get mad the initial emtpy segment has differing uuids on the client vs server
-export const defaultRoute = new Route([defaultSegmentInput], '00000000-0000-0000-0000-000000000000'); // prettier-ignore
+export const defaultRoute = new Route([defaultSegmentInput], undefined, '00000000-0000-0000-0000-000000000000'); // prettier-ignore
 
 const ProgramSelect = ({ programs, onChange }) => {
   return (
@@ -89,7 +89,10 @@ export default function Oneworld() {
       segmentInput.toAirport = getAirport(segmentInput.toAirportText);
     });
 
-    setRoutes([new Route([segmentInputs[0]]), new Route([segmentInputs[1], segmentInputs[2]])]);
+    setRoutes([
+      new Route([segmentInputs[0]], undefined),
+      new Route([segmentInputs[1], segmentInputs[2]], undefined),
+    ]);
   }, [setPrograms, setEliteTiers, setRoutes]);
 
   const onEliteTierChange = (program, eliteTier, include) => {

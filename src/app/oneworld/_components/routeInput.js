@@ -2,13 +2,29 @@ import { AdvancedInput } from '@/app/_shared/components/advancedInput';
 import { buildAirlineOptions, SegmentInputList } from '@/app/_shared/components/segmentInput';
 import { SegmentInput } from '@/app/_shared/models/segmentInput';
 import { getAirport } from '@/app/_shared/utils/airports';
-import { Button, Grid2 } from '@mui/material';
+import { Button, Grid2, TextField } from '@mui/material';
 import {
   NON_ALLIANCE_AIRLINES,
   ONEWORLD_AIRLINES,
   SKYTEAM_AIRLINES,
   STAR_ALLIANCE_AIRLINES,
 } from '@/app/_shared/models/constants';
+
+const CostField = ({ cost, errors, onCostChange }) => {
+  return (
+    <TextField
+      label={'Subtotal (including surcharges)'}
+      type="number"
+      value={cost}
+      error={errors && errors['subtotal']}
+      helperText={errors ? errors['subtotal'] : ' '}
+      sx={{ width: '100%' }}
+      onChange={(event) => {
+        onCostChange(event.target.value);
+      }}
+    />
+  );
+};
 
 export const RouteInput = ({ route, errors, onRouteUpdate }) => {
   if (!route) {
@@ -69,6 +85,7 @@ export const RouteInput = ({ route, errors, onRouteUpdate }) => {
       <Button variant="contained" onClick={addSegmentPressed}>
         Add Segment
       </Button>
+      <CostField cost={route.subtotal} onCostChange={(subtotal) => (route.subtotal = subtotal)} />
       <AdvancedInput setSegmentInputs={setAndHydrateSegmentInputs}></AdvancedInput>
     </Grid2>
   );

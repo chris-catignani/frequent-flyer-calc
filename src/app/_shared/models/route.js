@@ -1,15 +1,17 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export class Route {
-  constructor(segmentInputs, uuid = '') {
+  constructor(segmentInputs, subtotal, uuid = '') {
     this.uuid = uuid || uuidv4(); // this makes me feel uncomfortable
 
     this.segmentInputs = segmentInputs;
+    this.subtotal = subtotal;
   }
 
-  clone({ segmentInputs }) {
+  clone({ segmentInputs, subtotal }) {
     const clonedRoute = new Route(
       segmentInputs !== undefined ? segmentInputs : this.segmentInputs,
+      subtotal,
       this.uuid,
     );
 
