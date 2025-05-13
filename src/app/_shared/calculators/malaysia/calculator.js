@@ -1,6 +1,8 @@
-import { ALL_AIRLINES } from '../../models/constants';
+import { ALL_AIRLINES, ONEWORLD_AIRLINES } from '../../models/constants';
 import { calcDistance } from '../../utils/airports';
 import { MALAYSIA_FARE_CLASSES, MALAYSIA_RULE_URLS } from './constants';
+
+const supportedAirlines = new Set([...Object.keys(ONEWORLD_AIRLINES)]);
 
 export const calculate = (segments, eliteStatus = '') => {
   const retval = {
@@ -11,6 +13,15 @@ export const calculate = (segments, eliteStatus = '') => {
   };
 
   for (let segment of segments) {
+    if (!supportedAirlines.has(segment.airline)) {
+      retval.segmentResults.push({
+        segment,
+        error: new Error(`Malaysia airlines does not support earnings on ${segment.airline}`),
+      });
+      retval.containsErrors = true;
+      break;
+    }
+
     try {
       const segmentResult = calculateSegment(segment, eliteStatus.toLowerCase());
 

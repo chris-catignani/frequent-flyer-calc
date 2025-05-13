@@ -3,12 +3,28 @@ import { getPartnerRules } from './partner/partnerRules';
 import { getQantasEarnCategory } from './qantas/qantasEarnCategories';
 import { getQantasMinimumPoints, getQantasRules } from './qantas/qantasRules';
 import { getPartnerEarnCategory, qualifiesForElitePoints } from './partner/partnerEarnCategories';
+import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from '../../models/constants';
+import { JAL_AIRLINES, JETSTAR_AIRLINES } from '../../models/qantasConstants';
 
 // TODO make this a map of airline to rules?
 const partnerRules = getPartnerRules(); // this is a list
 const qantasRulesPreJuly2025 = getQantasRules(true); // this is a map of airlineCode -> rules[]
 const qantasRules = getQantasRules(false); // this is a map of airlineCode -> rules[]
 const qantasMinPoints = getQantasMinimumPoints();
+
+const supportedAirlines = new Set([
+  ...Object.keys(ONEWORLD_AIRLINES),
+  ...Object.keys(LATAM_AIRLINES),
+  ...JETSTAR_AIRLINES,
+  ...JAL_AIRLINES,
+  'af',
+  'nf',
+  'mu',
+  'ly',
+  'ek',
+  'kl',
+  'ws',
+]);
 
 const eliteStatusBonusAirlines = new Set(['aa', 'qf', 'jq', '3k', 'gk']);
 const eliteStatusBonusMultiples = {
@@ -32,6 +48,15 @@ export const calculate = async (
   };
 
   for (let segment of segments) {
+    if (!supportedAirlines.has(segment.airline)) {
+      retval.segmentResults.push({
+        segment,
+        error: new Error(`Qantas does not support earning on ${segment.airline}`),
+      });
+      retval.containsErrors = true;
+      break;
+    }
+
     try {
       const segmentResult = calculateSegment(segment, eliteStatus.toLowerCase(), preJuly2025);
 
