@@ -1,5 +1,5 @@
 import { buildSegment, buildSegmentFromString } from '../../test/testUtils';
-import { calcDistance } from '../../utils/airports';
+import { calcDistance, getAirport } from '../../utils/airports';
 import { calculate } from './calculator';
 
 describe('calculate - go path', () => {
@@ -107,8 +107,8 @@ describe('calculate - malaysia airlines cost based earnings', () => {
       SUBTOTAL_COST_USD,
     );
 
-    const KUL_PEN_DIST = 203;
-    const PEN_BKK_DIST = 579;
+    const KUL_PEN_DIST = calcDistance(getAirport('kul'), getAirport('pen'));
+    const PEN_BKK_DIST = calcDistance(getAirport('pen'), getAirport('bkk'));
 
     const malaysiaPortionDistanceRatio = KUL_PEN_DIST / (KUL_PEN_DIST + PEN_BKK_DIST);
     const malaysiaPortion = SUBTOTAL_COST_USD * USD_TO_MYR * malaysiaPortionDistanceRatio * 1.6;
