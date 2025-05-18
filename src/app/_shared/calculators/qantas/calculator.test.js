@@ -268,7 +268,13 @@ describe('calculate - qantas rules', () => {
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for post July 2025 Domestic Australia`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
-      const results = await calculate([buildSegmentFromString(segmentString)], '', false, false);
+      const results = await calculate(
+        [buildSegmentFromString(segmentString)],
+        '',
+        0.0,
+        false,
+        false,
+      );
       expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
@@ -454,6 +460,7 @@ describe('calculate - elite status levels', () => {
       const results = await calculate(
         [buildSegmentFromString(segmentString)],
         eliteStatus,
+        0.0,
         false,
         true,
       );
@@ -489,6 +496,7 @@ describe('calculate - elite status levels', () => {
       const results = await calculate(
         [buildSegmentFromString(segmentString)],
         eliteStatus,
+        0.0,
         false,
         false,
       );

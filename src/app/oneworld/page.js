@@ -163,7 +163,12 @@ export default function Oneworld() {
       for (const program of programs) {
         newResults[route.uuid][program] = {};
         for (const eliteTier of eliteTiers[program]) {
-          const calcResults = await calculator.calculate(program, route.segmentInputs, eliteTier);
+          const calcResults = await calculator.calculate(
+            program,
+            route.segmentInputs,
+            eliteTier,
+            route.subtotal,
+          );
           newResults[route.uuid][program][eliteTier] = calcResults;
         }
       }

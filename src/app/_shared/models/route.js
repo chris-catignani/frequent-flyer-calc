@@ -11,7 +11,7 @@ export class Route {
   clone({ segmentInputs, subtotal }) {
     const clonedRoute = new Route(
       segmentInputs !== undefined ? segmentInputs : this.segmentInputs,
-      subtotal,
+      subtotal !== undefined ? subtotal : this.subtotal,
       this.uuid,
     );
 

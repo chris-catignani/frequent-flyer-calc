@@ -1,16 +1,21 @@
 import { ALL_AIRLINES, ONEWORLD_AIRLINES } from '../../models/constants';
 import { calcDistance } from '../../utils/airports';
+import { calulateTotalDistance } from '../../utils/routes';
 import { MALAYSIA_FARE_CLASSES, MALAYSIA_RULE_URLS } from './constants';
 
 const supportedAirlines = new Set([...Object.keys(ONEWORLD_AIRLINES)]);
 
-export const calculate = (segments, eliteStatus = '') => {
+const USD_TO_MYR = 4.4;
+
+export const calculate = (segments, eliteStatus = '', priceLessTaxes = 0) => {
   const retval = {
     segmentResults: [],
     containsErrors: false,
     elitePoints: 0,
     airlinePoints: 0,
   };
+
+  const totalDistance = calulateTotalDistance(segments);
 
   for (let segment of segments) {
     if (!supportedAirlines.has(segment.airline)) {
@@ -23,7 +28,14 @@ export const calculate = (segments, eliteStatus = '') => {
     }
 
     try {
-      const segmentResult = calculateSegment(segment, eliteStatus.toLowerCase());
+      const segmentDistance = calcDistance(segment.fromAirport, segment.toAirport);
+      const segmentPriceLessTaxes = priceLessTaxes * USD_TO_MYR * (segmentDistance / totalDistance);
+
+      const segmentResult = calculateSegment(
+        segment,
+        eliteStatus.toLowerCase(),
+        segmentPriceLessTaxes,
+      );
 
       retval.segmentResults.push({
         segment,
@@ -40,17 +52,22 @@ export const calculate = (segments, eliteStatus = '') => {
     }
   }
 
+  // floor the points here (vs in each segment) so we better handle multi segment routes
+  if (retval.airlinePoints) {
+    retval.airlinePoints = Math.floor(retval.airlinePoints);
+  }
+
   return retval;
 };
 
-const calculateSegment = (segment) => {
-  const basePoints = calculateAirlinePoints(segment);
-  const eliteBonus = {};
+const calculateSegment = (segment, eliteStatus, priceLessTaxes) => {
+  const basePoints = calculateAirlinePoints(segment, priceLessTaxes);
+  const eliteBonus = calculateAirlinePointsEliteBonus(segment, eliteStatus, priceLessTaxes);
 
   const airlinePointsBreakdown = {
     basePoints,
-    eliteBonus,
-    totalEarned: Math.max(basePoints + (eliteBonus?.airlinePoints || 0)),
+    eliteBonus: { airlinePoints: eliteBonus },
+    totalEarned: Math.max(basePoints + (eliteBonus || 0)),
   };
 
   return {
@@ -62,7 +79,11 @@ const calculateSegment = (segment) => {
   };
 };
 
-const calculateAirlinePoints = (segment) => {
+const calculateAirlinePoints = (segment, priceLessTaxes) => {
+  if (segment.airline === 'mh') {
+    return priceLessTaxes * 1.5;
+  }
+
   const segmentDistance = calcDistance(segment.fromAirport, segment.toAirport);
 
   if (!MALAYSIA_FARE_CLASSES[segment.airline]) {
@@ -76,6 +97,20 @@ const calculateAirlinePoints = (segment) => {
   return Math.floor(
     MALAYSIA_FARE_CLASSES[segment.airline]['earning'][segment.fareClass] * segmentDistance,
   );
+};
+
+const calculateAirlinePointsEliteBonus = (segment, eliteStatus, priceLessTaxes) => {
+  if (segment.airline !== 'mh' || !eliteStatus || eliteStatus === 'blue') {
+    return 0;
+  } else if (eliteStatus === 'silver') {
+    return priceLessTaxes * (1.6 - 1.5);
+  } else if (eliteStatus === 'gold') {
+    return priceLessTaxes * (2.0 - 1.5);
+  } else if (eliteStatus === 'platinum') {
+    return priceLessTaxes * (2.2 - 1.5);
+  }
+
+  throw new Error(`Invalid Malaysia airlines elite status: ${eliteStatus}`);
 };
 
 const calculateElitePoints = (segment) => {

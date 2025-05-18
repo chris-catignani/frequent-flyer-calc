@@ -1,4 +1,5 @@
 import { buildSegment, buildSegmentFromString } from '../../test/testUtils';
+import { calcDistance } from '../../utils/airports';
 import { calculate } from './calculator';
 
 describe('calculate - go path', () => {
@@ -64,6 +65,57 @@ describe('calculate - go path', () => {
       elitePoints: 16,
       airlinePoints: 12453,
     });
+  });
+});
+
+describe('calculate - malaysia airlines cost based earnings', () => {
+  const USD_TO_MYR = 4.4;
+  const SUBTOTAL_COST_USD = 100;
+
+  test.each([
+    ['Blue', Math.floor(SUBTOTAL_COST_USD * USD_TO_MYR * 1.5)],
+    ['Silver', Math.floor(SUBTOTAL_COST_USD * USD_TO_MYR * 1.6)],
+    ['Gold', Math.floor(SUBTOTAL_COST_USD * USD_TO_MYR * 2.0)],
+    ['Platinum', Math.floor(SUBTOTAL_COST_USD * USD_TO_MYR * 2.2)],
+  ])(
+    `Testing earnings on Malaysia airlines with elite status %s`,
+    (eliteLevel, expectedAirlinePoints) => {
+      const results = calculate(
+        [buildSegmentFromString('mh z kul pen')],
+        eliteLevel,
+        SUBTOTAL_COST_USD,
+      );
+      expect(results.containsErrors).toBe(false);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+    },
+  );
+
+  test('multi segment all malaysian', () => {
+    const results = calculate(
+      [buildSegmentFromString('mh z kul pen'), buildSegmentFromString('mh z pen bkk')],
+      'Silver',
+      SUBTOTAL_COST_USD,
+    );
+    expect(results.containsErrors).toBe(false);
+    expect(results.airlinePoints).toBe(Math.floor(SUBTOTAL_COST_USD * USD_TO_MYR * 1.6));
+  });
+
+  test('multi segment some malaysian', () => {
+    const results = calculate(
+      [buildSegmentFromString('mh z kul pen'), buildSegmentFromString('aa i pen bkk')],
+      'Silver',
+      SUBTOTAL_COST_USD,
+    );
+
+    const KUL_PEN_DIST = 203;
+    const PEN_BKK_DIST = 579;
+
+    const malaysiaPortionDistanceRatio = KUL_PEN_DIST / (KUL_PEN_DIST + PEN_BKK_DIST);
+    const malaysiaPortion = SUBTOTAL_COST_USD * USD_TO_MYR * malaysiaPortionDistanceRatio * 1.6;
+    const nonMalaysiaPortion = PEN_BKK_DIST * 1.25;
+
+    expect(results.containsErrors).toBe(false);
+    expect(results.airlinePoints).toBe(Math.floor(malaysiaPortion + nonMalaysiaPortion));
   });
 });
 

@@ -37,6 +37,7 @@ const eliteStatusBonusMultiples = {
 export const calculate = async (
   segments,
   eliteStatus = '',
+  priceLessTaxes = 0, // eslint-disable-line
   compareWithQantasCalc = false,
   preJuly2025 = true,
 ) => {

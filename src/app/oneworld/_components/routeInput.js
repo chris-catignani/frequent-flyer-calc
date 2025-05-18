@@ -15,7 +15,7 @@ const CostField = ({ cost, errors, onCostChange }) => {
     <TextField
       label={'Subtotal (including surcharges)'}
       type="number"
-      value={cost}
+      value={cost || ''}
       error={errors && errors['subtotal']}
       helperText={errors ? errors['subtotal'] : ' '}
       sx={{ width: '100%' }}
@@ -30,6 +30,8 @@ export const RouteInput = ({ route, errors, onRouteUpdate }) => {
   if (!route) {
     return <></>;
   }
+
+  console.log(route);
 
   const setAndHydrateSegmentInputs = (theSegmentInputs) => {
     theSegmentInputs.forEach((segmentInput) => {
@@ -67,6 +69,10 @@ export const RouteInput = ({ route, errors, onRouteUpdate }) => {
     setAndHydrateSegmentInputs(newSegmentInputs);
   };
 
+  const costChanged = (subtotal) => {
+    onRouteUpdate(route.clone({ subtotal }));
+  };
+
   return (
     <Grid2 container spacing={1}>
       <SegmentInputList
@@ -85,7 +91,7 @@ export const RouteInput = ({ route, errors, onRouteUpdate }) => {
       <Button variant="contained" onClick={addSegmentPressed}>
         Add Segment
       </Button>
-      <CostField cost={route.subtotal} onCostChange={(subtotal) => (route.subtotal = subtotal)} />
+      <CostField cost={route.subtotal} onCostChange={costChanged} />
       <AdvancedInput setSegmentInputs={setAndHydrateSegmentInputs}></AdvancedInput>
     </Grid2>
   );

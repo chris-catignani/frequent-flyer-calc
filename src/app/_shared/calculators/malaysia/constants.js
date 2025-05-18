@@ -58,6 +58,19 @@ export const MALAYSIA_FARE_CLASSES = {
       ['H / K / M', 'economy', 0.5],
     ]),
   },
+  mh: {
+    ...buildFareClassObj([
+      ['F / A', 'first', 1.8],
+      ['P', 'first', 1.4],
+      ['J', 'business', 1.4],
+      ['C / D', 'business', 1.3],
+      ['Z', 'business', 1.1],
+      ['Y / B / H', 'economy', 1.0],
+      ['K / M / L / V', 'economy', 0.75],
+      ['S / N', 'economy', 0.5],
+      ['Q / O / G', 'economy', 0.25],
+    ]),
+  },
   qr: {
     ...buildFareClassObj([
       ['F / A', 'first', 1.5],
@@ -76,5 +89,6 @@ export const MALAYSIA_RULE_URLS = {
   ay: 'https://enrich.malaysiaairlines.com/enrich/partners/airlines/oneworld-alliances/finnair.html',
   ba: 'https://enrich.malaysiaairlines.com/enrich/partners/airlines/oneworld-alliances/british-airways.html',
   cx: 'https://enrich.malaysiaairlines.com/enrich/partners/airlines/oneworld-alliances/cathay-pacific.html',
+  mh: 'https://enrich.malaysiaairlines.com/enrich/partners/airlines/mag/malaysia-airlines.html',
   qr: 'https://enrich.malaysiaairlines.com/enrich/partners/airlines/oneworld-alliances/qatar-airways.html',
 };

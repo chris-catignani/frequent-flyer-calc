@@ -93,6 +93,7 @@ export default function Qantas() {
       theEliteStatus,
       theCompareWithQantasCalc,
       thePreJuly2025,
+      0.0, // priceLessTaxes ignored for qantas
     );
     setCalculationOutput(calculationResult);
 

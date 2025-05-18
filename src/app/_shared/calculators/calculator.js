@@ -7,9 +7,9 @@ const _calculators = {
 };
 
 export class Calculator {
-  async calculate(program, segments, eliteStatus) {
-    console.log('calculate', program, segments, eliteStatus);
-    const results = await _calculators[program](segments, eliteStatus);
+  async calculate(program, segments, eliteStatus, priceLessTaxes) {
+    console.log('calculate', program, segments, eliteStatus, priceLessTaxes);
+    const results = await _calculators[program](segments, eliteStatus, priceLessTaxes);
     console.log('results', results);
     return results;
   }

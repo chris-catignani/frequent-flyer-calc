@@ -1,3 +1,5 @@
+import { calcDistance } from './airports';
+
 /**
  * create an array of continuous route segments, not duplicating start and end airports
  * e.g. "jfk-dfw-phx, psp-lax"
@@ -25,4 +27,14 @@ export const buildRouteDisplayString = (segmentInputs) => {
   });
 
   return airportSegmentChainsString.join(', ');
+};
+
+export const calulateTotalDistance = (segments) => {
+  let distance = 0;
+
+  segments.forEach((segment) => {
+    distance += calcDistance(segment.fromAirport, segment.toAirport);
+  });
+
+  return distance;
 };
