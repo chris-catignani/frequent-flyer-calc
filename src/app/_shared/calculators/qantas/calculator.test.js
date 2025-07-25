@@ -248,25 +248,11 @@ describe('calculate - partner rules', () => {
 
 describe('calculate - qantas rules', () => {
   test.each([
-    ['qf i syd mel', 1400, 40],
-    ['qf i syd asp', 2100, 60],
-    ['qf i syd per', 3300, 80],
-  ])(
-    `Testing routing %s. Should earn %s qantas points and %s status credit for pre July 2025 Domestic Australia`,
-    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
-      const results = await calculate([buildSegmentFromString(segmentString)], '', false, true);
-      expect(results.containsErrors).toBe(false);
-      expect(results.airlinePoints).toBe(expectedAirlinePoints);
-      expect(results.elitePoints).toBe(expectedElitePoints);
-    },
-  );
-
-  test.each([
     ['qf i syd mel', 1750, 40],
     ['qf i syd asp', 2625, 60],
     ['qf i syd per', 4125, 80],
   ])(
-    `Testing routing %s. Should earn %s qantas points and %s status credit for post July 2025 Domestic Australia`,
+    `Testing routing %s. Should earn %s qantas points and %s status credit for Domestic Australia`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate(
         [buildSegmentFromString(segmentString)],
@@ -449,55 +435,18 @@ describe('calculate - elite status levels', () => {
     ['qf g syd sin', 'Platinum', 3900, 1 * 3900],
     ['qf g syd sin', 'Platinum One', 3900, 1 * 3900],
 
-    ['qf d syd sin', 'Bronze', 8450, 0 * 5200],
-    ['qf d syd sin', 'Silver', 8450, 0.5 * 5200],
-    ['qf d syd sin', 'Gold', 8450, 0.75 * 5200],
-    ['qf d syd sin', 'Platinum', 8450, 1 * 5200],
-    ['qf d syd sin', 'Platinum One', 8450, 1 * 5200],
-  ])(
-    `Testing elite status pre July 2025 is applied for %s %s level`,
-    async (segmentString, eliteStatus, expectedBaseAirlinePoints, expectedEliteBonus) => {
-      const results = await calculate(
-        [buildSegmentFromString(segmentString)],
-        eliteStatus,
-        0.0,
-        false,
-        true,
-      );
-      expect(results.containsErrors).toBe(false);
-      expect(results.segmentResults[0].airlinePointsBreakdown.basePoints).toBe(
-        expectedBaseAirlinePoints,
-      );
-      expect(results.airlinePoints).toBe(expectedBaseAirlinePoints + expectedEliteBonus);
-    },
-  );
-
-  test.each([
-    ['qf e syd sin', 'Bronze', 2600, 0 * 2600],
-    ['qf e syd sin', 'Silver', 2600, 0.5 * 2600],
-    ['qf e syd sin', 'Gold', 2600, 0.75 * 2600],
-    ['qf e syd sin', 'Platinum', 2600, 1 * 2600],
-    ['qf e syd sin', 'Platinum One', 2600, 1 * 2600],
-
-    ['qf g syd sin', 'Bronze', 3900, 0 * 3900],
-    ['qf g syd sin', 'Silver', 3900, 0.5 * 3900],
-    ['qf g syd sin', 'Gold', 3900, 0.75 * 3900],
-    ['qf g syd sin', 'Platinum', 3900, 1 * 3900],
-    ['qf g syd sin', 'Platinum One', 3900, 1 * 3900],
-
     ['qf d syd sin', 'Bronze', 8450, 0 * 8450],
     ['qf d syd sin', 'Silver', 8450, Math.floor(0.5 * 8450)],
     ['qf d syd sin', 'Gold', 8450, Math.floor(0.75 * 8450)],
     ['qf d syd sin', 'Platinum', 8450, 1 * 8450],
     ['qf d syd sin', 'Platinum One', 8450, 1 * 8450],
   ])(
-    `Testing elite status post July 2025 is applied for %s %s level`,
+    `Testing elite status is applied for %s %s level`,
     async (segmentString, eliteStatus, expectedBaseAirlinePoints, expectedEliteBonus) => {
       const results = await calculate(
         [buildSegmentFromString(segmentString)],
         eliteStatus,
         0.0,
-        false,
         false,
       );
       expect(results.containsErrors).toBe(false);
@@ -511,8 +460,8 @@ describe('calculate - elite status levels', () => {
 
 describe('calculate - elite status only applies to certain airlines', () => {
   test.each([
-    ['qf d syd sin', 'Silver', 8450, 0.5 * 5200],
-    ['aa d syd sin', 'Silver', 5000, 0.5 * 4000],
+    ['qf d syd sin', 'Silver', 8450, 0.5 * 8450],
+    ['aa d syd sin', 'Silver', 5000, 0.5 * 5000],
 
     ['jq Flex sin bkk', 'Silver', 850, 0.5 * 850],
     ['3k Flex sin bkk', 'Silver', 850, 0.5 * 850],

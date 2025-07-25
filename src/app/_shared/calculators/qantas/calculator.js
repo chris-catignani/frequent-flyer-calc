@@ -8,8 +8,7 @@ import { JAL_AIRLINES, JETSTAR_AIRLINES } from '../../models/qantasConstants';
 
 // TODO make this a map of airline to rules?
 const partnerRules = getPartnerRules(); // this is a list
-const qantasRulesPreJuly2025 = getQantasRules(true); // this is a map of airlineCode -> rules[]
-const qantasRules = getQantasRules(false); // this is a map of airlineCode -> rules[]
+const qantasRules = getQantasRules(); // this is a map of airlineCode -> rules[]
 const qantasMinPoints = getQantasMinimumPoints();
 
 const supportedAirlines = new Set([
@@ -39,7 +38,6 @@ export const calculate = async (
   eliteStatus = '',
   priceLessTaxes = 0, // eslint-disable-line
   compareWithQantasCalc = false,
-  preJuly2025 = true,
 ) => {
   const retval = {
     segmentResults: [],
@@ -59,7 +57,7 @@ export const calculate = async (
     }
 
     try {
-      const segmentResult = calculateSegment(segment, eliteStatus.toLowerCase(), preJuly2025);
+      const segmentResult = calculateSegment(segment, eliteStatus.toLowerCase());
 
       let qantasAPIResults = {};
       if (compareWithQantasCalc) {
@@ -96,11 +94,9 @@ const getDataFromQantasCalc = async (segment, eliteStatus) => {
   return await fetchDataFromQantas(segment, eliteStatus, fareEarnCategory);
 };
 
-const calculateSegment = (segment, eliteStatus, preJuly2025) => {
-  const { fareEarnCategory, rule, minPoints, earnsElitePoints } = getEarnCalculationRequirements(
-    segment,
-    preJuly2025,
-  );
+const calculateSegment = (segment, eliteStatus) => {
+  const { fareEarnCategory, rule, minPoints, earnsElitePoints } =
+    getEarnCalculationRequirements(segment);
 
   if (!rule) {
     throw new Error(`Could not find a rule to calculate earnings for segment: ${segment}`);
@@ -110,12 +106,7 @@ const calculateSegment = (segment, eliteStatus, preJuly2025) => {
 
   let eliteBonus = {};
 
-  if (preJuly2025) {
-    eliteBonus = calculateEliteBonusPoints(eliteStatus, segment, rule, fareEarnCategory);
-  } else if (
-    eliteStatusBonusMultiples[eliteStatus] &&
-    eliteStatusBonusAirlines.has(segment.airline)
-  ) {
+  if (eliteStatusBonusMultiples[eliteStatus] && eliteStatusBonusAirlines.has(segment.airline)) {
     eliteBonus = {
       eligibleFareCategory: fareEarnCategory,
       airlinePoints: Math.floor(calculation.airlinePoints * eliteStatusBonusMultiples[eliteStatus]),
@@ -144,20 +135,13 @@ const calculateSegment = (segment, eliteStatus, preJuly2025) => {
 };
 
 // TODO clean this up
-const getEarnCalculationRequirements = (segment, preJuly2025) => {
+const getEarnCalculationRequirements = (segment) => {
   if (segment.airline in qantasRules) {
     const fareEarnCategory = getQantasEarnCategory(segment);
 
-    let rule = undefined;
-    if (preJuly2025) {
-      rule = qantasRulesPreJuly2025[segment.airline].find((rule) => {
-        return rule.applies(segment, fareEarnCategory);
-      });
-    } else {
-      rule = qantasRules[segment.airline].find((rule) => {
-        return rule.applies(segment, fareEarnCategory);
-      });
-    }
+    const rule = qantasRules[segment.airline].find((rule) => {
+      return rule.applies(segment, fareEarnCategory);
+    });
 
     const minPoints = qantasMinPoints[segment.airline][fareEarnCategory];
 
@@ -173,22 +157,4 @@ const getEarnCalculationRequirements = (segment, preJuly2025) => {
 
     return { fareEarnCategory, rule, minPoints: undefined, earnsElitePoints };
   }
-};
-
-const calculateEliteBonusPoints = (eliteStatus, segment, rule, fareEarnCategory) => {
-  if (!(eliteStatusBonusMultiples[eliteStatus] && eliteStatusBonusAirlines.has(segment.airline))) {
-    return {};
-  }
-
-  // elite bonus is calculated off of the flexible economy earnings, unless the earn category is economy or discount economy
-  let fareEarnCategoryToUse = 'flexibleEconomy';
-  if (fareEarnCategory === 'discountEconomy' || fareEarnCategory === 'economy') {
-    fareEarnCategoryToUse = fareEarnCategory;
-  }
-
-  const result = rule.calculate(segment, fareEarnCategoryToUse);
-  return {
-    eligibleFareCategory: fareEarnCategoryToUse,
-    airlinePoints: Math.ceil(result.airlinePoints * eliteStatusBonusMultiples[eliteStatus]),
-  };
 };

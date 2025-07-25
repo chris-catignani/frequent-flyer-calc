@@ -38,7 +38,6 @@ export default function Qantas() {
   const [segmentInputs, setSegmentInputs] = useState([defaultSegmentInput]);
   const [tripType, setTripType] = useState('one way');
   const [compareWithQantasCalc, setCompareWithQantasCalc] = useState(false);
-  const [preJuly2025, setPreJuly2025] = useState(true);
 
   const [savedCalculations, setSavedCalculations] = useState([]);
 
@@ -62,12 +61,7 @@ export default function Qantas() {
     return validate(segmentInputs);
   };
 
-  const doCalculation = async (
-    theEliteStatus,
-    theTripType,
-    theCompareWithQantasCalc,
-    thePreJuly2025,
-  ) => {
+  const doCalculation = async (theEliteStatus, theTripType, theCompareWithQantasCalc) => {
     setIsCalculating(true);
     setCalculationOutput(null);
 
@@ -92,7 +86,6 @@ export default function Qantas() {
       segments,
       theEliteStatus,
       theCompareWithQantasCalc,
-      thePreJuly2025,
       0.0, // priceLessTaxes ignored for qantas
     );
     setCalculationOutput(calculationResult);
@@ -120,7 +113,7 @@ export default function Qantas() {
       setInputErrors(errors);
     } else {
       setInputErrors({});
-      doCalculation(eliteStatus, tripType, compareWithQantasCalc, preJuly2025);
+      doCalculation(eliteStatus, tripType, compareWithQantasCalc);
     }
   };
 
@@ -216,7 +209,7 @@ export default function Qantas() {
 
     // if we have calculated data, recalculate with new elite status level
     if (calculationOutput && validateInput()) {
-      doCalculation(newEliteStatus, tripType, compareWithQantasCalc, preJuly2025);
+      doCalculation(newEliteStatus, tripType, compareWithQantasCalc);
     }
   };
 
@@ -225,7 +218,7 @@ export default function Qantas() {
 
     // if we have calculated data, recalculate with new return/oneway status
     if (calculationOutput && validateInput()) {
-      doCalculation(eliteStatus, newTripType, compareWithQantasCalc, preJuly2025);
+      doCalculation(eliteStatus, newTripType, compareWithQantasCalc);
     }
   };
 
@@ -234,16 +227,7 @@ export default function Qantas() {
 
     // if we have calculated data, recalculate with new return/oneway status
     if (calculationOutput && validateInput()) {
-      doCalculation(eliteStatus, tripType, newCompareWithQantasCalc, preJuly2025);
-    }
-  };
-
-  const setPreJuly2025Toggled = (newPreJuly2025) => {
-    setPreJuly2025(newPreJuly2025);
-
-    // if we have calculated data, recalculate with new return/oneway status
-    if (calculationOutput && validateInput()) {
-      doCalculation(eliteStatus, tripType, compareWithQantasCalc, newPreJuly2025);
+      doCalculation(eliteStatus, tripType, newCompareWithQantasCalc);
     }
   };
 
@@ -279,26 +263,6 @@ export default function Qantas() {
           </Typography>
         </Grid2>
       </Dialog>
-    );
-  };
-
-  const UsePreJuly2025CalculationsToggle = () => {
-    return (
-      <Grid2
-        container
-        direction="row"
-        wrap="nowrap"
-        sx={{
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-        }}
-      >
-        <Switch
-          checked={preJuly2025}
-          onChange={(event) => setPreJuly2025Toggled(event.target.checked)}
-        />
-        <Typography>Trip Before 22 July 2025?</Typography>
-      </Grid2>
     );
   };
 
@@ -429,15 +393,6 @@ export default function Qantas() {
                   <ToggleButton value="one way">One Way</ToggleButton>
                   <ToggleButton value="return">Return</ToggleButton>
                 </ToggleButtonGroup>
-              </Grid2>
-              <Grid2
-                container
-                order={{ xs: 3, sm: 2 }}
-                sx={{
-                  justifyContent: 'center',
-                }}
-              >
-                <UsePreJuly2025CalculationsToggle />
               </Grid2>
               <Grid2 order={{ xs: 2, sm: 3 }}>
                 <EliteStatusInput
