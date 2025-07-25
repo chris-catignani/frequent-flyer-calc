@@ -1,4 +1,33 @@
 export const frequentFlyerPrograms = {
+  finnair: {
+    eliteTiers: {
+      basic: {
+        requirements: {
+          achieve: 0,
+        },
+      },
+      silver: {
+        requirements: {
+          achieve: 15000,
+        },
+      },
+      gold: {
+        requirements: {
+          achieve: 45000,
+        },
+      },
+      platinum: {
+        requirements: {
+          achieve: 80000,
+        },
+      },
+      'platinum lumo': {
+        requirements: {
+          achieve: 300000,
+        },
+      },
+    },
+  },
   malaysia: {
     eliteTiers: {
       blue: {

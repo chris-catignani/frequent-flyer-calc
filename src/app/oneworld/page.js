@@ -73,8 +73,9 @@ export default function Oneworld() {
 
   // TODO temporarily seed test data
   useEffect(() => {
-    setPrograms(['malaysia', 'qantas']);
+    setPrograms(['finnair', 'malaysia', 'qantas']);
     setEliteTiers({
+      finnair: getEliteTiersForProgram('finnair'),
       malaysia: getEliteTiersForProgram('malaysia'),
       qantas: getEliteTiersForProgram('qantas'),
     });
