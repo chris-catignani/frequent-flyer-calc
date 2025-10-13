@@ -85,8 +85,8 @@ export default function Qantas() {
     const calculationResult = await calculate(
       segments,
       theEliteStatus,
-      theCompareWithQantasCalc,
       0.0, // priceLessTaxes ignored for qantas
+      theCompareWithQantasCalc,
     );
     setCalculationOutput(calculationResult);
 
