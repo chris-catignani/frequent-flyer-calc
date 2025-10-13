@@ -138,12 +138,12 @@ describe('getPartnerEarnCategory', () => {
 
   describe('Malaysia Airlines special cases', () => {
     test.each([
-      ['mh j kul syd', 'flexibleEconomy'],
-      ['mh j syd kul', 'flexibleEconomy'],
-      ['mh j kul lhr', 'flexibleEconomy'],
-      ['mh j lhr kul', 'flexibleEconomy'],
-      ['mh j kul cdg', 'flexibleEconomy'],
-      ['mh j cdg kul', 'flexibleEconomy'],
+      ['mh a kul syd', 'business'],
+      ['mh a syd kul', 'business'],
+      ['mh a kul lhr', 'business'],
+      ['mh a lhr kul', 'business'],
+      ['mh a kul cdg', 'business'],
+      ['mh a cdg kul', 'business'],
     ])(
       'Flights between Australia and Malaysia, UK or Europe',
       (segmentString, expectedCategory) => {
@@ -153,12 +153,12 @@ describe('getPartnerEarnCategory', () => {
     );
 
     test.each([
-      ['mh j kul akl', 'flexibleEconomy'],
-      ['mh j akl kul', 'flexibleEconomy'],
-      ['mh j akl lhr', 'flexibleEconomy'],
-      ['mh j lhr akl', 'flexibleEconomy'],
-      ['mh j akl cdg', 'flexibleEconomy'],
-      ['mh j cdg akl', 'flexibleEconomy'],
+      ['mh a kul akl', 'business'],
+      ['mh a akl kul', 'business'],
+      ['mh a akl lhr', 'business'],
+      ['mh a lhr akl', 'business'],
+      ['mh a akl cdg', 'business'],
+      ['mh a cdg akl', 'business'],
     ])(
       'Flights between New Zealand and Malaysia, UK or Europe',
       (segmentString, expectedCategory) => {
@@ -168,12 +168,12 @@ describe('getPartnerEarnCategory', () => {
     );
 
     test.each([
-      ['mh j kul lhr', 'flexibleEconomy'],
-      ['mh j lhr kul', 'flexibleEconomy'],
-      ['mh j kul cdg', 'flexibleEconomy'],
-      ['mh j cdg kul', 'flexibleEconomy'],
-      ['mh j kul doh', 'flexibleEconomy'],
-      ['mh j doh kul', 'flexibleEconomy'],
+      ['mh a kul lhr', 'business'],
+      ['mh a lhr kul', 'business'],
+      ['mh a kul cdg', 'business'],
+      ['mh a cdg kul', 'business'],
+      ['mh a kul doh', 'business'],
+      ['mh a doh kul', 'business'],
     ])(
       'Flights between Malaysia and UK, Europe or Middle East',
       (segmentString, expectedCategory) => {
@@ -183,8 +183,8 @@ describe('getPartnerEarnCategory', () => {
     );
 
     test.each([
-      ['mh j kul tpe', 'business'],
-      ['mh j tpe kul', 'business'],
+      ['mh a kul tpe', 'first'],
+      ['mh a tpe kul', 'first'],
     ])('Non special case flights', (segmentString, expectedCategory) => {
       const segment = buildSegmentFromString(segmentString);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);

@@ -29,7 +29,6 @@ export const getQantasRules = () => {
 
   return {
     qf: [buildQantasIntraAustraliaRule(), ...standardRules],
-    '3k': [buildJetstarIntraAustraliaRule(), ...standardRules],
     gk: [buildJetstarIntraAustraliaRule(), ...standardRules],
     jq: [buildJetstarIntraNewZealandRule(), buildJetstarIntraAustraliaRule(), ...standardRules],
   };
@@ -51,7 +50,6 @@ export const getQantasMinimumPoints = () => {
 
   return {
     qf: minPoints,
-    '3k': minPoints,
     gk: minPoints,
     jq: minPoints,
   };

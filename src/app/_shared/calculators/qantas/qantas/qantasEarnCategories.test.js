@@ -116,23 +116,6 @@ describe('getQantasEarnCategory', () => {
     expect(getQantasEarnCategory(segment)).toBe(expectedCategory);
   });
 
-  // Jetstar 3k
-  test.each([
-    ['Starter', 'n/a'],
-    ['StarterPlus', 'n/a'],
-    ['Buisness', 'n/a'],
-
-    ['Flex', 'economy'],
-    ['FlexPlus', 'economy'],
-
-    ['StarterMax', 'flexibleEconomy'],
-
-    ['BusinessMax', 'business'],
-  ])('recognizes the Jetstar 3k %s fareclass is a %s categories', (fareClass, expectedCategory) => {
-    const segment = buildSegmentFromString(`3k ${fareClass} syd lax`);
-    expect(getQantasEarnCategory(segment)).toBe(expectedCategory);
-  });
-
   // Jetstar GK
   test.each([
     ['Starter', 'n/a'],

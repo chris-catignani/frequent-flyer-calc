@@ -192,6 +192,10 @@ const partnerEarnCategories = {
     earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.cx, PARTNER_FARE_CLASSES),
   },
+  wy: {
+    earnsElitePoints: true,
+    fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.wy, PARTNER_FARE_CLASSES),
+  },
   qr: {
     earnsElitePoints: true,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.qr, PARTNER_FARE_CLASSES),

@@ -77,9 +77,6 @@ const earnCategories = {
   jq: {
     fareBuckets: buildJetstarFareBuckets('jq'),
   },
-  '3k': {
-    fareBuckets: buildJetstarFareBuckets('3k'),
-  },
   gk: {
     fareBuckets: buildJetstarFareBuckets('gk'),
   },

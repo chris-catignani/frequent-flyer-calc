@@ -1,4 +1,4 @@
-export const JETSTAR_AIRLINES = new Set(['jq', '3k', 'gk']);
+export const JETSTAR_AIRLINES = new Set(['jq', 'gk']);
 
 export const JAL_AIRLINES = new Set(['jl', 'nu']);
 
@@ -11,7 +11,8 @@ export const WEBSITE_EARN_CATEGORIES = {
   ay: 'AZ	GLMNOQSV	BHKY	EPTW	CDIJR	-',
   ib: 'AFGNOQZ	KLMSV	BHY	ETW 	CDIJR	-',
   jl: 'GNOQZ^	HKLMSV	BY	EWPR	CDIJX	AF',
-  mh: ['BHKLMVY	-	ACDFIJZ~	-	-	-', 'KLMV	BH	IYZ	-	CDJ	AF'],
+  mh: ['KLMV	YBH	Z~ - AFCDJ -', 'KLMV	YBH	Z^ - CDJ AF'],
+  wy: 'NQORTE MLVS YBHK - JCDIP FA*',
   qr: 'KLMV	BH 	Y	-	CDIJP*R	AF',
   at: 'NOQRSTW	HKLMV	BY	-	CDIJ	-',
   rj: 'VSNQOPW	KML	BYH	IZ*	CDJ	-',
@@ -44,6 +45,7 @@ export const EARN_CATEGORY_URLS = {
   jl: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#japan-airlines',
   nu: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#japan-airlines',
   mh: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#malaysia-airlines',
+  wy: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#oman-air',
   qr: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#qatar-airways',
   at: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#royal-air-maroc',
   rj: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#royal-jordanian',
@@ -51,7 +53,6 @@ export const EARN_CATEGORY_URLS = {
 
   qf: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#qantas',
   jq: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar',
-  '3k': 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar',
   gk: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#jetstar',
 
   af: 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#air-france',

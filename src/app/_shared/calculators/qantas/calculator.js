@@ -25,7 +25,7 @@ const supportedAirlines = new Set([
   'ws',
 ]);
 
-const eliteStatusBonusAirlines = new Set(['aa', 'qf', 'jq', '3k', 'gk']);
+const eliteStatusBonusAirlines = new Set(['aa', 'qf', 'jq', 'gk']);
 const eliteStatusBonusMultiples = {
   silver: 0.5,
   gold: 0.75,

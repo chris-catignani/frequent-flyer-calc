@@ -464,7 +464,6 @@ describe('calculate - elite status only applies to certain airlines', () => {
     ['aa d syd sin', 'Silver', 5000, 0.5 * 5000],
 
     ['jq Flex sin bkk', 'Silver', 850, 0.5 * 850],
-    ['3k Flex sin bkk', 'Silver', 850, 0.5 * 850],
     ['gk Flex sin bkk', 'Silver', 850, 0.5 * 850],
 
     ['cx d syd sin', 'Silver', 5000, 0],

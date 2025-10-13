@@ -348,9 +348,9 @@ export default function Qantas() {
           )}
           <Typography>
             Qantas Points and Status Credits are not earned when travelling in the Economy Cabin on
-            flights with a Jetstar (JQ), Jetstar Asia (3K), or Jetstar Japan (GK) flight number as
-            part of a Qantas International fare or when a Jetstar flight voucher has been selected
-            in lieu of Points and Status Credits.
+            flights with a Jetstar (JQ) or Jetstar Japan (GK) flight number as part of a Qantas
+            International fare or when a Jetstar flight voucher has been selected in lieu of Points
+            and Status Credits.
           </Typography>
         </Alert>
       );

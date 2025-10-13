@@ -10,6 +10,7 @@ export const ONEWORLD_AIRLINES = {
   jl: 'Japan Airlines',
   nu: 'Japan Transocean Air',
   mh: 'Malaysia Airlines',
+  wy: 'Oman Air',
   qf: 'Qantas',
   qr: 'Qatar Airways',
   at: 'Royal Air Maroc',
@@ -19,7 +20,6 @@ export const ONEWORLD_AIRLINES = {
 
 export const JETSTAR_AIRLINES = {
   jq: 'Jetstar Airlines',
-  '3k': 'Jetstar Asia',
   gk: 'Jetstar Japan',
 };
 
