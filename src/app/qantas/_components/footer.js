@@ -32,7 +32,7 @@ export const Footer = () => {
             Partner
           </a>
         </Typography>
-        <Typography>&nbsp;earning tables as of May 2025.</Typography>
+        <Typography>&nbsp;earning tables as of October 2025.</Typography>
       </Grid2>
       <Typography textAlign="center">
         This webpage is not affiliated with Qantas Airlines.
