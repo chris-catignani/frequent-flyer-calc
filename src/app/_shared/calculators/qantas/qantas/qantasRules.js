@@ -227,6 +227,10 @@ const buildDarwinPerthRule = () => {
           '3,000	4,500	6,000	6,000	7,500	8,250	9,000	9,750	10,500	12,000',
           '35	45	70	70	75	80	140	150	160	210',
         ),
+        johannesburg: parseQantasEarningRates(
+          '3,000	4,500	6,000	6,000	7,500	8,250	9,000	9,750	10,500	12,000',
+          '35	45	70	70	70	80	140	150	160	210',
+        ),
       },
       region: {
         northeastAsia: parseQantasEarningRates(
