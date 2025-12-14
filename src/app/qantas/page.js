@@ -2,7 +2,7 @@
 
 import { calculate } from '@/app/_shared/calculators/qantas/calculator';
 import { useEffect, useState } from 'react';
-import { Alert, Box, Button, Container, Dialog, DialogTitle, Grid2, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'; // prettier-ignore
+import { Alert, Box, Button, Container, Dialog, DialogTitle, Grid, IconButton, Paper, Switch, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'; // prettier-ignore
 import { Info } from '@mui/icons-material';
 import { getAirport } from '@/app/_shared/utils/airports';
 import { Segment } from '@/app/_shared/models/segment';
@@ -254,14 +254,14 @@ export default function Qantas() {
     return (
       <Dialog onClose={onClose} open={open}>
         <DialogTitle>Compare with Qantas</DialogTitle>
-        <Grid2 container direction="column" mx={2} mb={2}>
+        <Grid container direction="column" mx={2} mb={2}>
           <Typography>
             This enables us to compare our results with Qantas&apos;s website calculator results.
           </Typography>
           <Typography>
             This makes an API call to Qantas&apos;s website, and as a result, can be slow.
           </Typography>
-        </Grid2>
+        </Grid>
       </Dialog>
     );
   };
@@ -278,7 +278,7 @@ export default function Qantas() {
     };
 
     return (
-      <Grid2
+      <Grid
         container
         direction="row"
         wrap="nowrap"
@@ -302,7 +302,7 @@ export default function Qantas() {
           <Info />
         </IconButton>
         <QantasApiDialog open={open} onClose={handleClose} />
-      </Grid2>
+      </Grid>
     );
   };
 
@@ -359,7 +359,7 @@ export default function Qantas() {
 
   return (
     <Container maxWidth="md" disableGutters>
-      <Grid2
+      <Grid
         container
         direction="column"
         justifyContent="center"
@@ -374,7 +374,7 @@ export default function Qantas() {
 
         <Box mt={3} width="100%">
           <Paper elevation={3}>
-            <Grid2
+            <Grid
               container
               direction="row"
               p={2}
@@ -382,7 +382,7 @@ export default function Qantas() {
                 justifyContent: 'space-between',
               }}
             >
-              <Grid2>
+              <Grid>
                 <ToggleButtonGroup
                   color="primary"
                   size="small"
@@ -393,14 +393,14 @@ export default function Qantas() {
                   <ToggleButton value="one way">One Way</ToggleButton>
                   <ToggleButton value="return">Return</ToggleButton>
                 </ToggleButtonGroup>
-              </Grid2>
-              <Grid2 order={{ xs: 2, sm: 3 }}>
+              </Grid>
+              <Grid order={{ xs: 2, sm: 3 }}>
                 <EliteStatusInput
                   eliteStatus={eliteStatus}
                   onChange={(value) => eliteStatusSelected(value)}
                 />
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
             <Box p={2}>
               <SegmentInputList
                 segmentInputs={segmentInputs}
@@ -415,7 +415,7 @@ export default function Qantas() {
                 onSegmentsReordered={segmentsReordered}
               />
 
-              <Grid2
+              <Grid
                 container
                 columns={{ xs: 8, sm: 12 }}
                 spacing={{ xs: 2, sm: 0 }}
@@ -424,12 +424,12 @@ export default function Qantas() {
                   alignItems: 'center',
                 }}
               >
-                <Grid2 size={4}>
+                <Grid size={4}>
                   <Button variant="contained" onClick={addSegmentPressed}>
                     Add Segment
                   </Button>
-                </Grid2>
-                <Grid2
+                </Grid>
+                <Grid
                   container
                   size={{ xs: 8, sm: 4 }}
                   order={{ xs: 3, sm: 2 }}
@@ -446,11 +446,11 @@ export default function Qantas() {
                   >
                     Calculate
                   </Button>
-                </Grid2>
-                <Grid2 size={4} order={{ xs: 2, sm: 3 }}>
+                </Grid>
+                <Grid size={4} order={{ xs: 2, sm: 3 }}>
                   <CompareWithQantasAPISwitch />
-                </Grid2>
-              </Grid2>
+                </Grid>
+              </Grid>
             </Box>
             {savedCalculations && savedCalculations.length > 0 && (
               <Box pt={0} pb={2} px={2}>
@@ -479,7 +479,7 @@ export default function Qantas() {
           calculatedData={calculationOutput}
           compareWithQantasCalc={compareWithQantasCalc}
         />
-      </Grid2>
+      </Grid>
       <Footer />
     </Container>
   );

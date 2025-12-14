@@ -1,9 +1,9 @@
 import { Favorite } from '@mui/icons-material';
-import { Grid2, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 
 export const Footer = () => {
   return (
-    <Grid2
+    <Grid
       mx={2}
       mt={5}
       mb={1}
@@ -13,7 +13,7 @@ export const Footer = () => {
       alignContent="center"
       spacing={2}
     >
-      <Grid2 container justifyContent="center" alignContent="center" spacing={0}>
+      <Grid container justifyContent="center" alignContent="center" spacing={0}>
         <Typography textAlign="center">Calculations based on&nbsp;</Typography>
         <Typography>
           <a
@@ -33,11 +33,11 @@ export const Footer = () => {
           </a>
         </Typography>
         <Typography>&nbsp;earning tables as of November 2025.</Typography>
-      </Grid2>
+      </Grid>
       <Typography textAlign="center">
         This webpage is not affiliated with Qantas Airlines.
       </Typography>
-      <Grid2 container justifyContent="center" alignContent="center" spacing={0}>
+      <Grid container justifyContent="center" alignContent="center" spacing={0}>
         <Typography>Made with&nbsp;</Typography>
         <Favorite fontSize="small" sx={{ color: 'red' }} />
         <Typography>&nbsp;from&nbsp;</Typography>
@@ -47,7 +47,7 @@ export const Footer = () => {
           </a>
         </Typography>
         <Typography>&nbsp;&#40;Feedback welcome!&#41;</Typography>
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };

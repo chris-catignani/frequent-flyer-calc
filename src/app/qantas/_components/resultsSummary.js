@@ -1,5 +1,5 @@
 import { Cancel, CheckCircle, Info } from '@mui/icons-material';
-import { Box, Dialog, DialogTitle, Grid2, IconButton, Tooltip, Typography } from '@mui/material';
+import { Box, Dialog, DialogTitle, Grid, IconButton, Tooltip, Typography } from '@mui/material';
 import { useState } from 'react';
 
 export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCalculating }) => {
@@ -11,10 +11,10 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
     return (
       <Dialog onClose={onClose} open={open}>
         <DialogTitle>Qantas Calculator failed to calculate at least one segment</DialogTitle>
-        <Grid2 container direction="column" mx={2} mb={2}>
+        <Grid container direction="column" mx={2} mb={2}>
           <Typography>{error.message}</Typography>
           <Typography mt={2}>See the results below to see details by segment</Typography>
-        </Grid2>
+        </Grid>
       </Dialog>
     );
   };
@@ -24,20 +24,20 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
     return (
       <Dialog onClose={onClose} open={open}>
         <DialogTitle>Qantas Calculator results do not match our results</DialogTitle>
-        <Grid2 container direction="column" mx={2} mb={2}>
+        <Grid container direction="column" mx={2} mb={2}>
           <Typography>Our Results:</Typography>
           <Typography>{fieldLabel + ': ' + expectedValue}</Typography>
           <Typography mt={2}>Qantas Calculator Results:</Typography>
           <Typography>{fieldLabel + ': ' + actualValue}</Typography>
           <Typography mt={2}>See the results below to see details by segment</Typography>
-        </Grid2>
+        </Grid>
       </Dialog>
     );
   };
 
   const TotalAirlinePointsEarned = () => {
     return (
-      <Grid2 container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
+      <Grid container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
         <Typography variant="h5">
           Qantas Points Earned: {calculationOutput?.airlinePoints?.toLocaleString()}
         </Typography>
@@ -45,13 +45,13 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
           expectedValue={calculationOutput?.airlinePoints}
           fieldToCheck={'airlinePoints'}
         />
-      </Grid2>
+      </Grid>
     );
   };
 
   const TotalElitePointsEarned = () => {
     return (
-      <Grid2 container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
+      <Grid container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
         <Typography variant="h5">
           Status Credits Earned: {calculationOutput?.elitePoints?.toLocaleString()}
         </Typography>
@@ -59,7 +59,7 @@ export const ResultsSummary = ({ calculationOutput, compareWithQantasCalc, isCal
           expectedValue={calculationOutput?.elitePoints}
           fieldToCheck={'elitePoints'}
         />
-      </Grid2>
+      </Grid>
     );
   };
 

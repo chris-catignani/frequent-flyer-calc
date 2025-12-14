@@ -9,7 +9,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Grid2,
+  Grid,
   TextField,
   Typography,
 } from '@mui/material';
@@ -182,7 +182,7 @@ export default function Oneworld() {
 
   return (
     <Container disableGutters>
-      <Grid2 container direction="column" justifyContent="center" alignItems="center" spacing={1}>
+      <Grid container direction="column" justifyContent="center" alignItems="center" spacing={1}>
         <Typography variant="h4" textAlign="center">
           oneworld Airlines Frequent Flyer Programs Comparer
         </Typography>
@@ -211,7 +211,7 @@ export default function Oneworld() {
           onSubmit={onRouteEntrySubmitClicked}
           onCancel={onRouteEntryCancelClicked}
         />
-      </Grid2>
+      </Grid>
     </Container>
   );
 }

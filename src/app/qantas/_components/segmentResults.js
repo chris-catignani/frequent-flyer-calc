@@ -6,7 +6,7 @@ import {
 import {
   TableRow,
   TableCell,
-  Grid2,
+  Grid,
   Typography,
   TableContainer,
   Table,
@@ -29,7 +29,7 @@ export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
   }
 
   return (
-    <Grid2
+    <Grid
       container
       direction="column"
       justifyContent="center"
@@ -53,7 +53,7 @@ export const SegmentResults = ({ calculatedData, compareWithQantasCalc }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Grid2>
+    </Grid>
   );
 };
 
@@ -86,7 +86,7 @@ const AirlinePointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Points Calculation Breakdown</DialogTitle>
-      <Grid2 container direction="column" justifyContent="center" alignItems="center" pb={2}>
+      <Grid container direction="column" justifyContent="center" alignItems="center" pb={2}>
         <Typography mb={3} sx={{ textDecoration: 'underline' }}>
           Total Points: {totalEarned?.toLocaleString()}
         </Typography>
@@ -97,7 +97,7 @@ const AirlinePointsBreakdownDialog = ({ open, onClose, segmentResult }) => {
         </Typography>
         <Typography my={2}>- or -</Typography>
         <Typography>Min Points: {minPoints?.toLocaleString() || 'n/a'}</Typography>
-      </Grid2>
+      </Grid>
     </Dialog>
   );
 };
@@ -114,7 +114,7 @@ const AirlinePointsDisplay = ({ segmentResult }) => {
   };
 
   return (
-    <Grid2 container justifyContent="flex-end">
+    <Grid container justifyContent="flex-end">
       <Typography>{segmentResult.airlinePoints?.toLocaleString()}</Typography>
       <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
         <Info />
@@ -124,7 +124,7 @@ const AirlinePointsDisplay = ({ segmentResult }) => {
         onClose={handleClose}
         segmentResult={segmentResult}
       />
-    </Grid2>
+    </Grid>
   );
 };
 
@@ -132,9 +132,9 @@ const MatchesQantasSegmentErrorDialog = ({ open, onClose, error }) => {
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Qantas Calculator failed to calculate segment</DialogTitle>
-      <Grid2 container direction="column" mx={2} mb={2}>
+      <Grid container direction="column" mx={2} mb={2}>
         <Typography>{error.message}</Typography>
-      </Grid2>
+      </Grid>
     </Dialog>
   );
 };
@@ -143,7 +143,7 @@ const MatchesQantasSegmentMisMatchDialog = ({ open, onClose, segmentResult }) =>
   return (
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Qantas Calculator results do not match our results for this segment</DialogTitle>
-      <Grid2 container direction="column" mx={2} mb={2}>
+      <Grid container direction="column" mx={2} mb={2}>
         <Typography>Our Results:</Typography>
         <Typography>Qantas Points: {segmentResult.airlinePoints}</Typography>
         <Typography>Status Credits: {segmentResult.elitePoints}</Typography>
@@ -154,7 +154,7 @@ const MatchesQantasSegmentMisMatchDialog = ({ open, onClose, segmentResult }) =>
         <Typography>
           Status Credits: {segmentResult.qantasAPIResults?.qantasData?.elitePoints}
         </Typography>
-      </Grid2>
+      </Grid>
     </Dialog>
   );
 };
@@ -265,42 +265,42 @@ const SegmentTableRow = ({ segmentResult, compareWithQantasCalc }) => {
           colSpan={compareWithQantasCalc ? 5 : 4}
         >
           <Collapse in={expandRow} timeout="auto" unmountOnExit>
-            <Grid2 container m={2} direction="column">
-              <Grid2>
+            <Grid container m={2} direction="column">
+              <Grid>
                 <Typography>Airline: {ALL_AIRLINES[segment.airline]}</Typography>
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 <Typography>Fare Class: {getFareClassDisplay(segment.fareClass)}</Typography>
-              </Grid2>
-              <Grid2 container direction="row" spacing={1}>
+              </Grid>
+              <Grid container direction="row" spacing={1}>
                 <Typography>Qantas Points:</Typography>
                 <AirlinePointsDisplay segmentResult={segmentResult} />
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 <Typography>
                   Status Credits: {segmentResult.elitePoints?.toLocaleString()}
                 </Typography>
-              </Grid2>
-              <Grid2 container direction="row" spacing={1}>
+              </Grid>
+              <Grid container direction="row" spacing={1}>
                 <Typography>Earn Category:</Typography>
                 <Typography>
                   <a href={EARN_CATEGORY_URLS[segment.airline]} target="_blank">
                     {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory]}
                   </a>
                 </Typography>
-              </Grid2>
-              <Grid2 container direction="row" spacing={1}>
+              </Grid>
+              <Grid container direction="row" spacing={1}>
                 <Typography>Earning Table:</Typography>
                 <Typography>
                   <a href={segmentResult.ruleUrl} target="_blank">
                     {segmentResult.ruleName}
                   </a>
                 </Typography>
-              </Grid2>
-              <Grid2>
+              </Grid>
+              <Grid>
                 <Typography>Calculation Notes: {segmentResult.notes}</Typography>
-              </Grid2>
-            </Grid2>
+              </Grid>
+            </Grid>
           </Collapse>
         </TableCell>
       </TableRow>

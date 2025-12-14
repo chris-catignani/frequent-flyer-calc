@@ -2,7 +2,7 @@ import { AdvancedInput } from '@/app/_shared/components/advancedInput';
 import { buildAirlineOptions, SegmentInputList } from '@/app/_shared/components/segmentInput';
 import { SegmentInput } from '@/app/_shared/models/segmentInput';
 import { getAirport } from '@/app/_shared/utils/airports';
-import { Button, Grid2, TextField } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
 import {
   NON_ALLIANCE_AIRLINES,
   ONEWORLD_AIRLINES,
@@ -74,7 +74,7 @@ export const RouteInput = ({ route, errors, onRouteUpdate }) => {
   };
 
   return (
-    <Grid2 container spacing={1}>
+    <Grid container spacing={1}>
       <SegmentInputList
         segmentInputs={route.segmentInputs}
         errors={errors}
@@ -93,6 +93,6 @@ export const RouteInput = ({ route, errors, onRouteUpdate }) => {
       </Button>
       <CostField cost={route.subtotal} onCostChange={costChanged} />
       <AdvancedInput setSegmentInputs={setAndHydrateSegmentInputs}></AdvancedInput>
-    </Grid2>
+    </Grid>
   );
 };

@@ -1,6 +1,6 @@
 import { buildRouteDisplayString } from '@/app/_shared/utils/routes';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Chip, Collapse, Grid2, Stack, Typography } from '@mui/material';
+import { Chip, Collapse, Grid, Stack, Typography } from '@mui/material';
 import { useState } from 'react';
 
 export const RecentCalculationSelection = ({
@@ -65,10 +65,10 @@ export const RecentCalculations = ({
   });
 
   return (
-    <Grid2 container spacing={1}>
+    <Grid container spacing={1}>
       {calcChips}
       <ClearAllChip onClick={onClearAllClick} />
-    </Grid2>
+    </Grid>
   );
 };
 

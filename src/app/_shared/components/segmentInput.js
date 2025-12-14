@@ -1,6 +1,6 @@
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { Clear, DragHandle } from '@mui/icons-material';
-import { Autocomplete, Divider, Grid2, IconButton, TextField } from '@mui/material';
+import { Autocomplete, Divider, Grid, IconButton, TextField } from '@mui/material';
 import {
   JAL_AIRLINES,
   JAL_DOMESTIC_FARE_CLASS_DISPLAY,
@@ -152,7 +152,7 @@ const SegmentInput = ({
   onDeleteClicked,
 }) => {
   return (
-    <Grid2
+    <Grid
       container
       spacing={1}
       columns={22}
@@ -161,15 +161,15 @@ const SegmentInput = ({
         alignItems: 'center',
       }}
     >
-      <Grid2
+      <Grid
         size={{ xs: 2, sm: 1 }}
         mb={2} // accommodate for the other fields that have "helper text" to display errors under them
         order={{ xs: 2, sm: 1 }}
         {...dragHandleProps}
       >
         <ReorderSegmentInputButton showReorderButton={showDeleteButton} />
-      </Grid2>
-      <Grid2 size={{ xs: 22, sm: 6 }} order={{ xs: 1, sm: 2 }}>
+      </Grid>
+      <Grid size={{ xs: 22, sm: 6 }} order={{ xs: 1, sm: 2 }}>
         <AirlineInput
           value={segmentInput.airline}
           error={errors['airline']}
@@ -182,8 +182,8 @@ const SegmentInput = ({
             onChange(newSegmentInput);
           }}
         />
-      </Grid2>
-      <Grid2 size={{ xs: 9, sm: 4 }} order={3}>
+      </Grid>
+      <Grid size={{ xs: 9, sm: 4 }} order={3}>
         <AirportInput
           label={'From (e.g. syd)'}
           value={segmentInput.fromAirportText}
@@ -204,8 +204,8 @@ const SegmentInput = ({
             onChange(newSegmentInput);
           }}
         />
-      </Grid2>
-      <Grid2 size={{ xs: 9, sm: 4 }} order={4}>
+      </Grid>
+      <Grid size={{ xs: 9, sm: 4 }} order={4}>
         <AirportInput
           label={'To (e.g. mel)'}
           value={segmentInput.toAirportText}
@@ -226,8 +226,8 @@ const SegmentInput = ({
             onChange(newSegmentInput);
           }}
         />
-      </Grid2>
-      <Grid2 size={{ xs: 22, sm: 6 }} order={{ xs: 6, sm: 5 }}>
+      </Grid>
+      <Grid size={{ xs: 22, sm: 6 }} order={{ xs: 6, sm: 5 }}>
         <FareClassInput
           segmentInput={segmentInput}
           error={errors['fareClass']}
@@ -235,8 +235,8 @@ const SegmentInput = ({
             onChange(segmentInput.clone({ fareClass: value }));
           }}
         />
-      </Grid2>
-      <Grid2
+      </Grid>
+      <Grid
         size={{ xs: 2, sm: 1 }}
         mb={2} // accommodate for the other fields that have "helper text" to display errors under them
         order={{ xs: 5, sm: 6 }}
@@ -245,8 +245,8 @@ const SegmentInput = ({
           showDeleteButton={showDeleteButton}
           onDeleteClicked={onDeleteClicked}
         />
-      </Grid2>
-    </Grid2>
+      </Grid>
+    </Grid>
   );
 };
 
