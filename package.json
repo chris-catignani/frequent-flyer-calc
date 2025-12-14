@@ -22,7 +22,7 @@
     "@nwpr/airport-codes": "^3.0.3",
     "@vercel/analytics": "^1.4.1",
     "great-circle": "^0.2.8",
-    "next": "15.1.4",
+    "next": "15.1.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.7.3",
