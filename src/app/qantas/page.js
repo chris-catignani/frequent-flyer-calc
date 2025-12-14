@@ -96,7 +96,7 @@ export default function Qantas() {
 
     // replace the URL query params with the current search params
     const params = new URLSearchParams(searchParams.toString());
-    const newParams = createUrlQueryParams(eliteStatus, segmentInputs, tripType);
+    const newParams = createUrlQueryParams(theEliteStatus, segmentInputs, theTripType);
     Object.entries(newParams).forEach(([k, v]) => {
       params.set(k, v);
     });
