@@ -123,19 +123,26 @@ export const JETSTAR_NEW_ZEALAND_FARE_CLASSES = {
   StarterMax: 'flexibleEconomy',
 };
 
-export const JETSTAR_FARE_CLASSES = {
+export const JETSTAR_DOMESTIC_FARE_CLASSES = {
   Starter: 'n/a',
   StarterPlus: 'n/a',
   Buisness: 'n/a',
+  More: 'n/a',
   Flex: 'economy',
   FlexPlus: 'economy',
   StarterMax: 'flexibleEconomy',
   BusinessMax: 'business',
+}
+
+export const JETSTAR_INTL_FARE_CLASSES = {
+  ...JETSTAR_DOMESTIC_FARE_CLASSES,
+  More: 'economy',
 };
 
 export const JETSTAR_FARE_CLASS_DISPLAY = {
   Starter: 'Starter',
   StarterFlexBiz: 'Starter FlexBiz Fare',
+  More: 'More',
   Flex: 'Flex',
   FlexPlus: 'Flex Plus',
   StarterPlus: 'Starter Plus',

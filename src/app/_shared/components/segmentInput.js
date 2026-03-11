@@ -6,8 +6,9 @@ import {
   JAL_DOMESTIC_FARE_CLASS_DISPLAY,
   JAL_DOMESTIC_FARE_CLASSES,
   JETSTAR_AIRLINES,
+  JETSTAR_DOMESTIC_FARE_CLASSES,
   JETSTAR_FARE_CLASS_DISPLAY,
-  JETSTAR_FARE_CLASSES,
+  JETSTAR_INTL_FARE_CLASSES,
   JETSTAR_NEW_ZEALAND_FARE_CLASSES,
   QANTAS_DOMESTIC_FARE_CLASSES,
   QANTAS_FARE_CLASS_DISPLAY,
@@ -416,8 +417,14 @@ const JetstarFareClassInput = ({ segmentInput, error, onChange }) => {
       segmentInput.toAirport.country === 'New Zealand'
     ) {
       fareClassOptions = Object.keys(JETSTAR_NEW_ZEALAND_FARE_CLASSES);
+    } else if (
+      segmentInput.airline === 'jq' &&
+      segmentInput.fromAirport.country === 'Australia' &&
+      segmentInput.toAirport.country === 'Australia'
+    ){
+      fareClassOptions = Object.keys(JETSTAR_DOMESTIC_FARE_CLASSES);
     } else {
-      fareClassOptions = Object.keys(JETSTAR_FARE_CLASSES);
+      fareClassOptions = Object.keys(JETSTAR_INTL_FARE_CLASSES);
     }
   }
 

@@ -1,5 +1,6 @@
 import {
-  JETSTAR_FARE_CLASSES,
+  JETSTAR_DOMESTIC_FARE_CLASSES,
+  JETSTAR_INTL_FARE_CLASSES,
   JETSTAR_NEW_ZEALAND_FARE_CLASSES,
   QANTAS_DOMESTIC_FARE_CLASSES,
   QANTAS_INTL_FARE_CLASSES,
@@ -52,16 +53,25 @@ const buildJetstarFareBuckets = (iata) => {
   const rules = [];
 
   if (iata === 'jq') {
+    // domestic New Zealand
     rules.push({
       origin: { country: new Set(['new zealand']) },
       destination: { country: new Set(['new zealand']) },
       categories: { ...JETSTAR_NEW_ZEALAND_FARE_CLASSES },
     });
+
+    // domestic Australia
+    rules.push({
+      origin: { country: new Set(['australia']) },
+      destination: { country: new Set(['australia']) },
+      categories: { ...JETSTAR_DOMESTIC_FARE_CLASSES },
+    });
   }
 
+  // international
   rules.push({
     all: true,
-    categories: { ...JETSTAR_FARE_CLASSES },
+    categories: { ...JETSTAR_INTL_FARE_CLASSES },
   });
 
   return { rules };
