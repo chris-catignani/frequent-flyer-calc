@@ -6,8 +6,7 @@ import { getPartnerEarnCategory, qualifiesForElitePoints } from './partner/partn
 import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from '../../models/constants';
 import { JAL_AIRLINES, JETSTAR_AIRLINES } from '../../models/qantasConstants';
 
-// TODO make this a map of airline to rules?
-const partnerRules = getPartnerRules(); // this is a list
+const partnerRules = getPartnerRules(); // this is a map of airlineCode -> rules[]
 const qantasRules = getQantasRules(); // this is a map of airlineCode -> rules[]
 const qantasMinPoints = getQantasMinimumPoints();
 
@@ -149,7 +148,7 @@ const getEarnCalculationRequirements = (segment) => {
   } else {
     const fareEarnCategory = getPartnerEarnCategory(segment);
 
-    const rule = partnerRules.find((rule) => {
+    const rule = partnerRules[segment.airline].find((rule) => {
       return rule.applies(segment, fareEarnCategory);
     });
 

@@ -1,8 +1,9 @@
 import { parseEarningRates, DistanceRule, GeographicalRule, IntraCountryRule } from '../rules';
 import { PARTNER_FARE_CLASSES } from './partnerEarnCategories';
+import { JAL_AIRLINES, PARTNER_AIRLINES } from '@/app/_shared/models/qantasConstants';
 
 export const getPartnerRules = () => {
-  return [
+  const standardRules = [
     buildSydMelBneGoldCoastRule(),
     buildPerthRule(),
     buildAdelaideRule(),
@@ -18,6 +19,17 @@ export const getPartnerRules = () => {
     buildNewZealandRule(),
     buildPartnerFallbackRule(),
   ];
+
+  const rules = {}
+  for (let airline of PARTNER_AIRLINES) {
+    rules[airline] = standardRules
+  }
+
+  for (let jalAirline of JAL_AIRLINES) {
+    rules[jalAirline] = [buildJapanAirlinesIntraJapanRule(), ...standardRules]
+  }
+
+  return rules
 };
 
 const _base_rule_url =
@@ -367,4 +379,20 @@ const buildPartnerFallbackRule = () => {
 
   const ruleUrl = _base_rule_url + '#all-other-flights';
   return new DistanceRule('All other flights', ruleUrl, distanceBands);
+};
+
+const buildJapanAirlinesIntraJapanRule = () => {
+  const ruleConfig = {
+    origin: {
+      country: new Set(['japan']),
+    },
+    destination: {
+      country: {
+        'japan': parsePartnerEarningRates('0 0 0 0 0 0', '0 0 0 0 0 0')
+      },
+    },
+  };
+
+  const ruleUrl = 'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/earn-category-tables.html#japan-airlines'
+  return new GeographicalRule('Domestic Japan', ruleUrl, ruleConfig);
 };

@@ -7,7 +7,7 @@ import { Info } from '@mui/icons-material';
 import { getAirport } from '@/app/_shared/utils/airports';
 import { Segment } from '@/app/_shared/models/segment';
 import { defaultSegmentInput, SegmentInput } from '@/app/_shared/models/segmentInput';
-import { JETSTAR_AIRLINES } from '@/app/_shared/models/qantasConstants';
+import { JAL_AIRLINES, JETSTAR_AIRLINES, PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES } from '@/app/_shared/models/qantasConstants';
 import {
   createUrlQueryParams,
   parseUrlQueryParams,
@@ -26,7 +26,6 @@ import {
   validate,
 } from '../_shared/components/segmentInput';
 import { QANTAS_GRP_AIRLINES } from '../_shared/models/constants';
-import { PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES } from './_models/contants';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
@@ -323,18 +322,21 @@ export default function Qantas() {
       return <></>;
     }
 
+    const infoAlerts = []
+
     const jetstarResults = calculationOutput.segmentResults.filter((segmentResult) => {
       return JETSTAR_AIRLINES.has(segmentResult.segment.airline);
     });
     const jetstarDiscountEconomyResults = jetstarResults.filter((jetstarResult) => {
       return jetstarResult.fareEarnCategory === 'discountEconomy';
     });
+    const jalResults = calculationOutput.segmentResults.filter((segmentResult) => {
+      return JAL_AIRLINES.has(segmentResult.segment.airline);
+    });
 
-    if (jetstarResults.length === 0) {
-      return <></>;
-    } else {
-      return (
-        <Alert severity="info">
+    if (jetstarResults.length !== 0) {
+      infoAlerts.push(
+        <Alert severity="info" key='jetstart-alerts'>
           {jetstarDiscountEconomyResults.length > 0 && (
             <>
               <Typography>
@@ -355,6 +357,22 @@ export default function Qantas() {
         </Alert>
       );
     }
+
+    if (jalResults.length !== 0) {
+      infoAlerts.push(
+        <Alert severity="info" key='jal-alerts'>
+          <Typography>
+            Japan Airlines flights within Japan are awarded points based on information provided by Japan Airlines.
+            Qantas does not define the earning rules for these flights
+          </Typography>
+        </Alert>
+      )
+    }
+
+    if (infoAlerts.length === 0) {
+      return <></>
+    }
+    return infoAlerts
   };
 
   return (

@@ -391,6 +391,22 @@ describe('calculate - jetstar rules', () => {
   );
 });
 
+describe('calculate - japan airlines rules', () => {
+  test.each([
+    ['jl EconomyplusFirstSurcharge hnd nrt', 0, 0], // domestic japan is 0
+    ['jl EconomyplusFirstSurcharge hnd cts', 0, 0], // domestic japan is 0
+    ['jl i hnd sin', 4000, 100],
+  ])(
+    `Testing Japan Airlines routing %s. Should earn %s qantas points and %s status credit for`,
+    async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
+      const results = await calculate([buildSegmentFromString(segmentString)]);
+      expect(results.containsErrors).toBe(false);
+      expect(results.airlinePoints).toBe(expectedAirlinePoints);
+      expect(results.elitePoints).toBe(expectedElitePoints);
+    },
+  );
+});
+
 describe('Test for non Status Credit earning airlines', () => {
   test.each([
     ['af i cdg jfk', 5250, 0],
