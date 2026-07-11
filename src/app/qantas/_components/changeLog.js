@@ -5,12 +5,17 @@ import { useState } from 'react';
 // Newest month first. Add a new { month, entries } entry at the top when shipping a change.
 export const CHANGE_LOG = [
   {
-    month: 'June 2026',
-    entries: [`Added autocomplete search for "from airport" and "to airport"`],
+    month: 'July 2026',
+    entries: [
+      `Added autocomplete search for "from airport" and "to airport".`,
+      'Fixed 4 incorrect Qantas, China Eastern, and KLM earning rates.',
+      'Added Oman Air Muscat routes to the partner earning tables.',
+      'Fixed the Jetstar Domestic New Zealand minimum points guarantee.',
+    ],
   },
   {
     month: 'March 2026',
-    entries: ['updated earnings rates for recent Jetstar Japan changes'],
+    entries: ['Updated earnings rates for recent Jetstar Japan changes.'],
   },
 ];
 
