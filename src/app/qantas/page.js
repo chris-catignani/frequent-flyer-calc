@@ -20,6 +20,7 @@ import { AdvancedInput } from '../_shared/components/advancedInput';
 import { ResultsSummary } from './_components/resultsSummary';
 import { SegmentResults } from './_components/segmentResults';
 import { Footer } from './_components/footer';
+import { ChangeLog } from './_components/changeLog';
 import {
   buildAirlineOptions,
   SegmentInputList,
@@ -497,6 +498,9 @@ export default function Qantas() {
           calculatedData={calculationOutput}
           compareWithQantasCalc={compareWithQantasCalc}
         />
+        <Box mt={5} width="100%" px={{ xs: 2, sm: 0 }}>
+          <ChangeLog />
+        </Box>
       </Grid>
       <Footer />
     </Container>
