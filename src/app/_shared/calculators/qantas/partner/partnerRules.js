@@ -154,6 +154,7 @@ const buildWesternEuropeRule = () => {
         singapore: parsePartnerEarningRates('1,625	3,250	6,500	7,150	8,125	9,750', '30	30	60	60	120	180'),
         dubai: parsePartnerEarningRates('800	1,600	3,200	3,520	4,000	4,800', '15	15	30	30	60	90'),
         doha: parsePartnerEarningRates('750	1,500	3,000	3,000	3,000	3,750', '15	15	30	30	60	90'),
+        muscat: parsePartnerEarningRates('900	1,800	3,600	4,000	5,000	6,000', '15	15	30	30	60	90'),
       },
       country: {
         thailand: parsePartnerEarningRates('1,450	2,950	5,900	6,500	7,400	8,900', '30	30	60	60	120	180'),
@@ -180,6 +181,7 @@ const buildNorthernEuropeRule = () => {
         singapore: parsePartnerEarningRates('1,425	2,850	5,700	6,300	7,125	8,550', '30	30	60	60	120	180'),
         dubai: parsePartnerEarningRates('750	1,500	3,000	3,300	3,750	4,500', '15	15	30	30	60	90'),
         doha: parsePartnerEarningRates('750	1,500	3,000	3,000	3,000	3,750', '15	15	30	30	60	90'),
+        muscat: parsePartnerEarningRates('800	1,600	3,200	3,800	4,500	5,550', '15	15	30	30	60	90'),
       },
       country: {
         thailand: parsePartnerEarningRates('1,225	2,450	4,900	5,400	6,125	7,350', '30	30	60	60	120	180'),
@@ -202,6 +204,7 @@ const buildSoutheastEuropeRule = () => {
       city: {
         dubai: parsePartnerEarningRates('500	1,000	2,000	2,200	2,500	3,000', '0 0 0 0 0 0'),
         doha: parsePartnerEarningRates('450	900	1,800	1,800	1,800	2,250', '10	10	25	25	50	75'),
+        muscat: parsePartnerEarningRates('520	1,030	2,050	2,300	3,000	3,600', '10	10	25	25	50	75'),
       },
     },
   };
@@ -229,7 +232,7 @@ const buildTelAvivRule = () => {
 const buildDubaiDohaRule = () => {
   const ruleConfig = {
     origin: {
-      city: new Set(['dubai', 'doha']),
+      city: new Set(['dubai', 'doha', 'muscat']),
     },
     destination: {
       region: {
@@ -243,7 +246,7 @@ const buildDubaiDohaRule = () => {
   };
 
   const ruleUrl = _base_rule_url + '#between-dubai-doha-and-';
-  return new GeographicalRule('Dubai and Doha', ruleUrl, ruleConfig);
+  return new GeographicalRule('Dubai, Doha and Muscat', ruleUrl, ruleConfig);
 };
 
 const buildUsaShorthaulRule = () => {

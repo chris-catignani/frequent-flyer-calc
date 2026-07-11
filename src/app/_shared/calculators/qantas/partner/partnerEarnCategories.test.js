@@ -269,6 +269,20 @@ describe('getPartnerEarnCategory', () => {
     });
   });
 
+  describe('KLM special cases', () => {
+    // long-haul (outside Europe) flights - the live table has a premiumEconomy
+    // bucket here that was previously missing from the transcribed data
+    test.each([
+      ['kl a cdg jfk', 'premiumEconomy'],
+      ['kl a jfk cdg', 'premiumEconomy'],
+      ['kl i cdg jfk', 'business'],
+      ['kl i jfk cdg', 'business'],
+    ])('Long haul flights', (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+  });
+
   describe('China Eastern special cases', () => {
     test.each([
       ['mu h pvg szx', 'discountEconomy'],
@@ -287,6 +301,8 @@ describe('getPartnerEarnCategory', () => {
     test.each([
       ['mu z pvg jfk', 'discountEconomy'],
       ['mu z jfk pvg', 'discountEconomy'],
+      ['mu h pvg jfk', 'flexibleEconomy'],
+      ['mu h jfk pvg', 'flexibleEconomy'],
       ['mu y pvg jfk', 'flexibleEconomy'],
       ['mu y jfk pvg', 'flexibleEconomy'],
       ['mu i pvg jfk', 'business'],
@@ -317,6 +333,8 @@ describe('getPartnerEarnCategory', () => {
     test.each([
       ['mu z pvg jfk', 'discountEconomy'],
       ['mu z jfk pvg', 'discountEconomy'],
+      ['mu h pvg jfk', 'flexibleEconomy'],
+      ['mu h jfk pvg', 'flexibleEconomy'],
       ['mu y pvg jfk', 'flexibleEconomy'],
       ['mu y jfk pvg', 'flexibleEconomy'],
       ['mu i pvg jfk', 'business'],

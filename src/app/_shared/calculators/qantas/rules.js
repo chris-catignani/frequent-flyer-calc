@@ -240,13 +240,20 @@ export class GeographicalRule extends Rule {
   }
 }
 
+// Qantas's own published tables occasionally use a '.' instead of ',' as the
+// thousands separator (a typo on their end, e.g. "1.450" meaning 1,450) - strip
+// both so a re-copy-paste of their data doesn't silently parse to the wrong number.
 export const parseEarningRates = (airlinePointsString, qantasCreditsString, fareClasses) => {
   const pointsPerFareclass = airlinePointsString
     .trim()
-    .replace(/\,/gm, '')
+    .replace(/[,.]/gm, '')
     .replace(/\s+/gm, ' ')
     .split(' ');
-  const creditsPerFareclass = qantasCreditsString.trim().replace(/\s+/gm, ' ').split(' ');
+  const creditsPerFareclass = qantasCreditsString
+    .trim()
+    .replace(/[,.]/gm, '')
+    .replace(/\s+/gm, ' ')
+    .split(' ');
   const retval = {};
 
   fareClasses.forEach((fareClass, index) => {

@@ -137,6 +137,7 @@ describe('calculate - partner rules', () => {
     ['ba i lhr kul', 8125, 120],
     ['jl i hnd cdg', 7400, 120],
     ['qr i mad doh', 3000, 60],
+    ['wy j lhr mct', 5000, 60],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Western Europe`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
@@ -152,6 +153,7 @@ describe('calculate - partner rules', () => {
     ['ba i hel bkk', 6125, 120],
     ['jl i hnd hel', 6125, 120],
     ['qr i hel doh', 3000, 60],
+    ['wy j hel mct', 4500, 60],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Northern Europe`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
@@ -162,7 +164,10 @@ describe('calculate - partner rules', () => {
     },
   );
 
-  test.each([['qr i doh ist', 1800, 50]])(
+  test.each([
+    ['qr i doh ist', 1800, 50],
+    ['wy j ist mct', 3000, 50],
+  ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Southern Europe`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
       const results = await calculate([buildSegmentFromString(segmentString)]);
@@ -186,6 +191,8 @@ describe('calculate - partner rules', () => {
     ['qr i doh bkk', 4250, 100],
     ['qr i doh sin', 4250, 100],
     ['qr i doh kul', 4250, 100],
+    ['wy j mct bkk', 4250, 100],
+    ['wy j mct akl', 9400, 80],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Dubai Doha`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
@@ -275,6 +282,8 @@ describe('calculate - qantas rules', () => {
     ['qf d adl dfw', 15950, 210],
     ['qf d bne lax', 14625, 190],
     ['qf d ool jfk', 20150, 295],
+    ['qf w syd lhr', 17000, 165],
+    ['qf w syd jfk', 17000, 165],
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Adelaide, Brisbane, Gold Coast, Melbourne, Sydney`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
@@ -287,6 +296,7 @@ describe('calculate - qantas rules', () => {
 
   test.each([
     ['qf d drw bkk', 4400, 100],
+    ['qf e drw bkk', 1450, 25],
     ['qf d per hnd', 8125, 125],
     ['qf d drw dxb', 9750, 150],
     ['qf d per lhr', 15300, 255],

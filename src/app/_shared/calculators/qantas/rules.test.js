@@ -1,8 +1,34 @@
-import { IntraCountryRule, DistanceRule, GeographicalRule } from './rules';
+import { IntraCountryRule, DistanceRule, GeographicalRule, parseEarningRates } from './rules';
 import { buildSegmentFromString } from '../../test/testUtils';
 import { Earnings } from '../../models/earnings';
 
 describe('rules', () => {
+  describe('parseEarningRates', () => {
+    test('parses comma thousand separators', () => {
+      expect(parseEarningRates('1,450	2,025', '25	50', ['discountEconomy', 'economy'])).toEqual({
+        discountEconomy: new Earnings(1450, 25),
+        economy: new Earnings(2025, 50),
+      });
+    });
+
+    // Qantas's own site sometimes typos '.' instead of ',' as a thousands
+    // separator when copy-pasted (e.g. Darwin/Perth to Southeast Asia discountEconomy).
+    test('parses period typos as thousand separators', () => {
+      expect(parseEarningRates('1.450	2,025', '25	50', ['discountEconomy', 'economy'])).toEqual({
+        discountEconomy: new Earnings(1450, 25),
+        economy: new Earnings(2025, 50),
+      });
+    });
+
+    test('parses "-" as zero earnings', () => {
+      expect(parseEarningRates('-	2,025', '-	50', ['discountEconomy', 'economy'])).toEqual({
+        discountEconomy: new Earnings(0, 0),
+        economy: new Earnings(2025, 50),
+      });
+    });
+  });
+
+
   describe('IntraCountryRule', () => {
     const distanceBands = [
       {
