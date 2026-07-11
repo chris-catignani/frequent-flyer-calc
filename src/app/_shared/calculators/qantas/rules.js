@@ -7,9 +7,17 @@ import { REGION_DISPLAY } from '@/app/_shared/models/qantasConstants';
  * All rules should implement these methods
  */
 class Rule {
-  constructor(name, ruleUrl) {
+  constructor(name, ruleUrl, minPoints = null) {
     this.name = name;
     this.ruleUrl = ruleUrl;
+    this.minPoints = minPoints;
+  }
+
+  // Some routes publish their own minimum points guarantee that overrides the
+  // airline's general one (e.g. Jetstar Domestic New Zealand). Returns
+  // undefined when this rule doesn't define a route-specific override.
+  getMinPoints(fareEarnCategory) {
+    return this.minPoints?.[fareEarnCategory];
   }
 
   // eslint-disable-next-line
@@ -134,8 +142,8 @@ export class FareClassRule extends Rule {
  * ...
  */
 export class GeographicalRule extends Rule {
-  constructor(name, ruleUrl, ruleConfig) {
-    super(name, ruleUrl);
+  constructor(name, ruleUrl, ruleConfig, minPoints = null) {
+    super(name, ruleUrl, minPoints);
     this.ruleConfig = ruleConfig;
   }
 

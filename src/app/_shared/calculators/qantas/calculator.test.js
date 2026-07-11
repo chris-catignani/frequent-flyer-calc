@@ -399,6 +399,27 @@ describe('calculate - jetstar rules', () => {
       expect(results.elitePoints).toBe(expectedElitePoints);
     },
   );
+
+  describe('New Zealand minimum points guarantee', () => {
+    // Jetstar Domestic New Zealand publishes its own (lower) minimum points
+    // guarantee than the general Qantas/Jetstar table: discountEconomy floors
+    // at 400, not 800. Base rate here is 300, so it should floor to 400.
+    test('discountEconomy floors to the route-specific minimum, not the general one', async () => {
+      const results = await calculate([buildSegmentFromString('jq Starter akl chc')]);
+      expect(results.containsErrors).toBe(false);
+      expect(results.segmentResults[0].airlinePointsBreakdown.basePoints).toBe(300);
+      expect(results.segmentResults[0].airlinePointsBreakdown.minPoints).toBe(400);
+      expect(results.airlinePoints).toBe(400);
+    });
+
+    // economy/flexibleEconomy match the general table exactly, so should be unaffected
+    test('economy still floors to the general minimum', async () => {
+      const results = await calculate([buildSegmentFromString('jq Flex akl chc')]);
+      expect(results.containsErrors).toBe(false);
+      expect(results.segmentResults[0].airlinePointsBreakdown.minPoints).toBe(800);
+      expect(results.airlinePoints).toBe(800);
+    });
+  });
 });
 
 describe('calculate - japan airlines rules', () => {

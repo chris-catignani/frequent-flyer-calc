@@ -71,8 +71,16 @@ const buildJetstarIntraNewZealandRule = () => {
     },
   };
 
+  // Jetstar Domestic New Zealand has its own (lower) minimum points guarantee
+  // than the general Qantas/Jetstar table returned by getQantasMinimumPoints().
+  const minPoints = {
+    discountEconomy: 400,
+    economy: 800,
+    flexibleEconomy: 1200,
+  };
+
   const ruleUrl = _base_rule_url + '#domestic-australia-and-new-zealand';
-  return new GeographicalRule('Domestic New Zealand', ruleUrl, ruleConfig);
+  return new GeographicalRule('Domestic New Zealand', ruleUrl, ruleConfig, minPoints);
 };
 
 const buildJetstarIntraAustraliaRule = () => {

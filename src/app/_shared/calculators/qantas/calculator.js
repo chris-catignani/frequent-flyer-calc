@@ -142,7 +142,8 @@ const getEarnCalculationRequirements = (segment) => {
       return rule.applies(segment, fareEarnCategory);
     });
 
-    const minPoints = qantasMinPoints[segment.airline][fareEarnCategory];
+    const minPoints =
+      rule?.getMinPoints(fareEarnCategory) ?? qantasMinPoints[segment.airline][fareEarnCategory];
 
     return { fareEarnCategory, rule, minPoints, earnsElitePoints: true };
   } else {

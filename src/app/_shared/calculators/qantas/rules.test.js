@@ -28,6 +28,24 @@ describe('rules', () => {
     });
   });
 
+  describe('Rule.getMinPoints', () => {
+    test('returns undefined when the rule has no minPoints override', () => {
+      const rule = new DistanceRule('distance rule', 'https://google.com', []);
+      expect(rule.getMinPoints('business')).toBeUndefined();
+    });
+
+    test('returns the route-specific override when one is configured', () => {
+      const rule = new GeographicalRule(
+        'geographical rule',
+        'https://google.com',
+        { origin: { city: new Set(['dallas']) }, destination: { city: {} } },
+        { discountEconomy: 400 },
+      );
+      expect(rule.getMinPoints('discountEconomy')).toBe(400);
+      expect(rule.getMinPoints('business')).toBeUndefined();
+    });
+  });
+
 
   describe('IntraCountryRule', () => {
     const distanceBands = [
