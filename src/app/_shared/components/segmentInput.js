@@ -1,6 +1,7 @@
+import { useMemo, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
 import { Clear, DragHandle } from '@mui/icons-material';
-import { Autocomplete, Divider, Grid, IconButton, TextField } from '@mui/material';
+import { Autocomplete, Box, Divider, Grid, IconButton, TextField, Typography } from '@mui/material';
 import {
   JAL_AIRLINES,
   JAL_DOMESTIC_FARE_CLASS_DISPLAY,
@@ -17,6 +18,7 @@ import {
 } from '../models/qantasConstants';
 import { GroupHeader, GroupItems } from './autocomplete';
 import { ALL_AIRLINES, QANTAS_GRP_AIRLINES } from '../models/constants';
+import { searchAirports } from '../utils/airports';
 
 /**
  * Helper function to bulild the options for the airline dropdown
@@ -355,16 +357,64 @@ const AirlineInput = ({ value, error, airlineOptions, onChange }) => {
 };
 
 const AirportInput = ({ label, value, error, onChange }) => {
+  const [focused, setFocused] = useState(false);
+  const [justSelected, setJustSelected] = useState(false);
+  const options = useMemo(() => searchAirports(value), [value]);
+
   return (
-    <TextField
-      label={label}
-      value={value}
-      error={error}
-      helperText={error ? error : ' '}
-      sx={{ width: '100%' }}
-      onChange={(event) => {
-        onChange(event.target.value?.toLowerCase()?.trim());
+    <Autocomplete
+      freeSolo
+      disableClearable
+      autoHighlight
+      options={options}
+      filterOptions={(presetOptions) => presetOptions}
+      inputValue={!focused || justSelected ? (value || '').toUpperCase() : value || ''}
+      onInputChange={(event, newInputValue, reason) => {
+        if (reason === 'input' || reason === 'selectOption') {
+          setJustSelected(reason === 'selectOption');
+          onChange(newInputValue.toLowerCase());
+        }
       }}
+      onChange={(event, newValue) => {
+        if (newValue && typeof newValue === 'object') {
+          setJustSelected(true);
+          onChange(newValue.iata.toLowerCase());
+        }
+      }}
+      getOptionLabel={(option) => (typeof option === 'string' ? option : option.iata.toLowerCase())}
+      renderOption={(props, option) => {
+        const { key, ...optionProps } = props;
+        return (
+          <li key={key} {...optionProps} onMouseDown={(event) => event.preventDefault()}>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Typography variant="body2" component="span">
+                {option.iata.toUpperCase()} — {option.name}
+              </Typography>
+              <Typography variant="caption" component="span" color="text.secondary">
+                {option.city}, {option.country}
+              </Typography>
+            </Box>
+          </li>
+        );
+      }}
+      slotProps={{
+        popper: { placement: 'bottom-start', style: { width: 'fit-content' } },
+        paper: { sx: { minWidth: 280, maxWidth: 400 } },
+      }}
+      sx={{ width: '100%' }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          error={error}
+          helperText={error ? error : ' '}
+          onFocus={() => {
+            setFocused(true);
+            setJustSelected(false);
+          }}
+          onBlur={() => setFocused(false)}
+        />
+      )}
     />
   );
 };
