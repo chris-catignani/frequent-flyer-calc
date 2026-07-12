@@ -1,6 +1,6 @@
-import { buildSegment, buildSegmentFromString } from '../../test/testUtils';
-import { calcDistance, getAirport } from '../../utils/airports';
-import { calculate } from './calculator';
+import { buildSegment, buildSegmentFromString } from '@/app/_shared/test/testUtils';
+import { calcDistance, getAirport } from '@/app/_shared/utils/airports';
+import { calculate } from '@/app/_shared/calculators/malaysia/calculator';
 
 describe('calculate - go path', () => {
   test('basic 1 segment test', () => {

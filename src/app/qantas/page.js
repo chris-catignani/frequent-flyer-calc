@@ -14,19 +14,19 @@ import {
 } from '@/app/_shared/utils/segmentInputUrlParser';
 import { useSearchParams } from 'next/navigation';
 import { deleteAllSavedCalculations, deleteSavedCalculationAtIdx, getSavedCalculations, saveCalculation } from '@/app/_shared/utils/recentCalculations'; // prettier-ignore
-import { EliteStatusInput } from './_components/input';
-import { RecentCalculationSelection } from './_components/recentCalculations';
-import { AdvancedInput } from '../_shared/components/advancedInput';
-import { ResultsSummary } from './_components/resultsSummary';
-import { SegmentResults } from './_components/segmentResults';
-import { Footer } from './_components/footer';
-import { ChangeLog } from './_components/changeLog';
+import { EliteStatusInput } from '@/app/qantas/_components/input';
+import { RecentCalculationSelection } from '@/app/qantas/_components/recentCalculations';
+import { AdvancedInput } from '@/app/_shared/components/advancedInput';
+import { ResultsSummary } from '@/app/qantas/_components/resultsSummary';
+import { SegmentResults } from '@/app/qantas/_components/segmentResults';
+import { Footer } from '@/app/qantas/_components/footer';
+import { ChangeLog } from '@/app/qantas/_components/changeLog';
 import {
   buildAirlineOptions,
   SegmentInputList,
   validate,
-} from '../_shared/components/segmentInput';
-import { QANTAS_GRP_AIRLINES } from '../_shared/models/constants';
+} from '@/app/_shared/components/segmentInput';
+import { QANTAS_GRP_AIRLINES } from '@/app/_shared/models/constants';
 
 const FLAG_ENABLE_QANTAS_API = true;
 

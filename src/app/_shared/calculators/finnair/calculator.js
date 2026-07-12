@@ -1,7 +1,7 @@
-import { ALL_AIRLINES, ONEWORLD_AIRLINES } from '../../models/constants';
-import { calcDistance } from '../../utils/airports';
-import { calulateTotalDistance } from '../../utils/routes';
-import { FINNAIR_FARE_CLASSES } from './constants';
+import { ALL_AIRLINES, ONEWORLD_AIRLINES } from '@/app/_shared/models/constants';
+import { calcDistance } from '@/app/_shared/utils/airports';
+import { calulateTotalDistance } from '@/app/_shared/utils/routes';
+import { FINNAIR_FARE_CLASSES } from '@/app/_shared/calculators/finnair/constants';
 
 // https://www.finnair.com/es-en/finnair-plus/collect-and-use-avios/collect-avios-and-tier-points-from-flights
 

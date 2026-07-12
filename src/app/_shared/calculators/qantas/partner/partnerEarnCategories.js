@@ -2,7 +2,11 @@ import {
   JAL_DOMESTIC_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
 } from '@/app/_shared/models/qantasConstants';
-import { buildFareBuckets, buildSimpleFareBuckets, getEarnCategory } from '../earnCategories';
+import {
+  buildFareBuckets,
+  buildSimpleFareBuckets,
+  getEarnCategory,
+} from '@/app/_shared/calculators/qantas/earnCategories';
 
 export const PARTNER_FARE_CLASSES = [
   'discountEconomy',

@@ -4,8 +4,8 @@ import {
   GeographicalRule,
   DistanceRule,
   FareClassRule,
-} from '../rules';
-import { QANTAS_FARE_CLASSES } from './qantasEarnCategories';
+} from '@/app/_shared/calculators/qantas/rules';
+import { QANTAS_FARE_CLASSES } from '@/app/_shared/calculators/qantas/qantas/qantasEarnCategories';
 
 const _base_rule_url =
   'https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html';

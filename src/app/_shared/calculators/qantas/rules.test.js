@@ -1,6 +1,11 @@
-import { IntraCountryRule, DistanceRule, GeographicalRule, parseEarningRates } from './rules';
-import { buildSegmentFromString } from '../../test/testUtils';
-import { Earnings } from '../../models/earnings';
+import {
+  IntraCountryRule,
+  DistanceRule,
+  GeographicalRule,
+  parseEarningRates,
+} from '@/app/_shared/calculators/qantas/rules';
+import { buildSegmentFromString } from '@/app/_shared/test/testUtils';
+import { Earnings } from '@/app/_shared/models/earnings';
 
 describe('rules', () => {
   describe('parseEarningRates', () => {
@@ -45,7 +50,6 @@ describe('rules', () => {
       expect(rule.getMinPoints('business')).toBeUndefined();
     });
   });
-
 
   describe('IntraCountryRule', () => {
     const distanceBands = [

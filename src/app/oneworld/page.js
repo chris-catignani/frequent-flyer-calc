@@ -14,18 +14,18 @@ import {
   Typography,
 } from '@mui/material';
 import { useState } from 'react';
-import { ProgramComparison } from './_components/programComparison';
-import { Calculator } from '../_shared/calculators/calculator';
-import { getAirport } from '../_shared/utils/airports';
-import { Route } from '../_shared/models/route';
-import { defaultSegmentInput, SegmentInput } from '../_shared/models/segmentInput';
+import { ProgramComparison } from '@/app/oneworld/_components/programComparison';
+import { Calculator } from '@/app/_shared/calculators/calculator';
+import { getAirport } from '@/app/_shared/utils/airports';
+import { Route } from '@/app/_shared/models/route';
+import { defaultSegmentInput, SegmentInput } from '@/app/_shared/models/segmentInput';
 import {
   getEliteTierLevel,
   getEliteTiersForProgram,
   getSupportedPrograms,
-} from './_models/eliteTiers';
-import { RouteInput } from './_components/routeInput';
-import { validate } from '../_shared/components/segmentInput';
+} from '@/app/oneworld/_models/eliteTiers';
+import { RouteInput } from '@/app/oneworld/_components/routeInput';
+import { validate } from '@/app/_shared/components/segmentInput';
 
 const calculator = new Calculator();
 

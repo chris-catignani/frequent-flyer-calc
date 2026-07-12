@@ -8,7 +8,7 @@ import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
 import { Analytics } from '@vercel/analytics/react';
 
-import theme from '../theme';
+import theme from '@/theme';
 
 import './globals.css';
 

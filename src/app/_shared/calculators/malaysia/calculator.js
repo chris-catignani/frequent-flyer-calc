@@ -1,7 +1,10 @@
-import { ALL_AIRLINES, ONEWORLD_AIRLINES } from '../../models/constants';
-import { calcDistance } from '../../utils/airports';
-import { calulateTotalDistance } from '../../utils/routes';
-import { MALAYSIA_FARE_CLASSES, MALAYSIA_RULE_URLS } from './constants';
+import { ALL_AIRLINES, ONEWORLD_AIRLINES } from '@/app/_shared/models/constants';
+import { calcDistance } from '@/app/_shared/utils/airports';
+import { calulateTotalDistance } from '@/app/_shared/utils/routes';
+import {
+  MALAYSIA_FARE_CLASSES,
+  MALAYSIA_RULE_URLS,
+} from '@/app/_shared/calculators/malaysia/constants';
 
 const supportedAirlines = new Set([...Object.keys(ONEWORLD_AIRLINES)]);
 

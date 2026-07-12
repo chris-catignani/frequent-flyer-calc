@@ -1,4 +1,4 @@
-import { getAirportsForCity, getAirportsForCountry } from '../../utils/airports';
+import { getAirportsForCity, getAirportsForCountry } from '@/app/_shared/utils/airports';
 
 export const isInRegion = (iata, region) => {
   return regions[region]?.has(iata);

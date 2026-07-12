@@ -1,5 +1,5 @@
-import { buildSegment, buildSegmentFromString } from '../../test/testUtils';
-import { calculate } from './calculator';
+import { buildSegment, buildSegmentFromString } from '@/app/_shared/test/testUtils';
+import { calculate } from '@/app/_shared/calculators/qantas/calculator';
 
 describe('calculate - go path', () => {
   test('basic 1 segment test', async () => {

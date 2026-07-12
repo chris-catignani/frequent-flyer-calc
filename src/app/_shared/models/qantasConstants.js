@@ -1,4 +1,4 @@
-import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from "./constants";
+import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from '@/app/_shared/models/constants';
 
 export const JETSTAR_AIRLINES = new Set(['jq', 'gk']);
 

@@ -1,5 +1,5 @@
 import { calcDistance } from '@/app/_shared/utils/airports';
-import { isInRegion } from './regions';
+import { isInRegion } from '@/app/_shared/calculators/qantas/regions';
 import { Earnings } from '@/app/_shared/models/earnings';
 import { REGION_DISPLAY } from '@/app/_shared/models/qantasConstants';
 

@@ -1,4 +1,4 @@
-import { searchAirports } from './airports';
+import { searchAirports } from '@/app/_shared/utils/airports';
 
 describe('searchAirports', () => {
   test('returns empty array for an empty query', () => {

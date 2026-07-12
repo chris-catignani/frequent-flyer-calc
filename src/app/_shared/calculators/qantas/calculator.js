@@ -1,10 +1,16 @@
-import { fetchDataFromQantas } from './qantasAPI/qantasAPIClient';
-import { getPartnerRules } from './partner/partnerRules';
-import { getQantasEarnCategory } from './qantas/qantasEarnCategories';
-import { getQantasMinimumPoints, getQantasRules } from './qantas/qantasRules';
-import { getPartnerEarnCategory, qualifiesForElitePoints } from './partner/partnerEarnCategories';
-import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from '../../models/constants';
-import { JAL_AIRLINES, JETSTAR_AIRLINES } from '../../models/qantasConstants';
+import { fetchDataFromQantas } from '@/app/_shared/calculators/qantas/qantasAPI/qantasAPIClient';
+import { getPartnerRules } from '@/app/_shared/calculators/qantas/partner/partnerRules';
+import { getQantasEarnCategory } from '@/app/_shared/calculators/qantas/qantas/qantasEarnCategories';
+import {
+  getQantasMinimumPoints,
+  getQantasRules,
+} from '@/app/_shared/calculators/qantas/qantas/qantasRules';
+import {
+  getPartnerEarnCategory,
+  qualifiesForElitePoints,
+} from '@/app/_shared/calculators/qantas/partner/partnerEarnCategories';
+import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from '@/app/_shared/models/constants';
+import { JAL_AIRLINES, JETSTAR_AIRLINES } from '@/app/_shared/models/qantasConstants';
 
 const partnerRules = getPartnerRules(); // this is a map of airlineCode -> rules[]
 const qantasRules = getQantasRules(); // this is a map of airlineCode -> rules[]

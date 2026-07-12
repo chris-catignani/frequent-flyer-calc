@@ -6,7 +6,7 @@ import {
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
 } from '@/app/_shared/models/qantasConstants';
-import { buildFareBuckets, getEarnCategory } from '../earnCategories';
+import { buildFareBuckets, getEarnCategory } from '@/app/_shared/calculators/qantas/earnCategories';
 
 export const QANTAS_FARE_CLASSES = [
   'discountEconomy',

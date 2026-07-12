@@ -1,4 +1,4 @@
-import { isInRegion } from './regions';
+import { isInRegion } from '@/app/_shared/calculators/qantas/regions';
 
 /**
  * Taking the copy/paste fare buckets from the Qantas website and parse them.

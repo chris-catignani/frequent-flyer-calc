@@ -1,5 +1,5 @@
 import { buildSegmentFromString } from '@/app/_shared/test/testUtils';
-import { getPartnerEarnCategory } from './partnerEarnCategories';
+import { getPartnerEarnCategory } from '@/app/_shared/calculators/qantas/partner/partnerEarnCategories';
 
 describe('getPartnerEarnCategory', () => {
   // basic case

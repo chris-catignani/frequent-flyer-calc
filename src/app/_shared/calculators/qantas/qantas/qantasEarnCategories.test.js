@@ -1,5 +1,5 @@
 import { buildSegmentFromString } from '@/app/_shared/test/testUtils';
-import { getQantasEarnCategory } from './qantasEarnCategories';
+import { getQantasEarnCategory } from '@/app/_shared/calculators/qantas/qantas/qantasEarnCategories';
 
 describe('getQantasEarnCategory', () => {
   // qantas domestic

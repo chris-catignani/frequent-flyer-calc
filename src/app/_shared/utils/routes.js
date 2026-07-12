@@ -1,4 +1,4 @@
-import { calcDistance } from './airports';
+import { calcDistance } from '@/app/_shared/utils/airports';
 
 /**
  * create an array of continuous route segments, not duplicating start and end airports

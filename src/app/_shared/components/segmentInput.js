@@ -15,10 +15,10 @@ import {
   QANTAS_FARE_CLASS_DISPLAY,
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
-} from '../models/qantasConstants';
-import { GroupHeader, GroupItems } from './autocomplete';
-import { ALL_AIRLINES, QANTAS_GRP_AIRLINES } from '../models/constants';
-import { searchAirports } from '../utils/airports';
+} from '@/app/_shared/models/qantasConstants';
+import { GroupHeader, GroupItems } from '@/app/_shared/components/autocomplete';
+import { ALL_AIRLINES, QANTAS_GRP_AIRLINES } from '@/app/_shared/models/constants';
+import { searchAirports } from '@/app/_shared/utils/airports';
 
 /**
  * Helper function to bulild the options for the airline dropdown
