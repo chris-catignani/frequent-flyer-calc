@@ -49,6 +49,10 @@ export default function Qantas() {
     const { eliteStatus, tripType, segmentInputs } = parseUrlQueryParams(searchParams);
 
     setAllInputParams(eliteStatus, tripType, segmentInputs);
+    // setAllInputParams is redefined every render but only calls stable setState
+    // setters, so it's intentionally left out here - adding it would re-run this
+    // hydration on every render instead of only when the URL's params change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   // fetch the saved calculations on page load

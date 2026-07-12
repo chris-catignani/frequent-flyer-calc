@@ -13,7 +13,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ProgramComparison } from './_components/programComparison';
 import { Calculator } from '../_shared/calculators/calculator';
 import { getAirport } from '../_shared/utils/airports';
@@ -63,38 +63,36 @@ const RouteEntry = ({ title, route, errors, onRouteUpdate, onSubmit, onCancel })
   );
 };
 
+// TODO temporarily seed test data
+const seedTestRoutes = () => {
+  const segmentInputs = [
+    new SegmentInput('aa', 'i', 'jfk', 'lhr'),
+    new SegmentInput('ay', 'i', 'lhr', 'hel'),
+    new SegmentInput('ay', 'i', 'hel', 'agp'),
+  ];
+  segmentInputs.forEach((segmentInput) => {
+    segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
+    segmentInput.toAirport = getAirport(segmentInput.toAirportText);
+  });
+
+  return [
+    new Route([segmentInputs[0]], undefined),
+    new Route([segmentInputs[1], segmentInputs[2]], undefined),
+  ];
+};
+
 export default function Oneworld() {
-  const [programs, setPrograms] = useState([]);
-  const [eliteTiers, setEliteTiers] = useState({});
+  // TODO temporarily seed test data
+  const [programs, setPrograms] = useState(['finnair', 'malaysia', 'qantas']);
+  const [eliteTiers, setEliteTiers] = useState(() => ({
+    finnair: getEliteTiersForProgram('finnair'),
+    malaysia: getEliteTiersForProgram('malaysia'),
+    qantas: getEliteTiersForProgram('qantas'),
+  }));
   const [routeInEntry, setRouteInEntry] = useState();
-  const [routes, setRoutes] = useState([]);
+  const [routes, setRoutes] = useState(seedTestRoutes);
   const [inputErrors, setInputErrors] = useState({});
   const [results, setResults] = useState({});
-
-  // TODO temporarily seed test data
-  useEffect(() => {
-    setPrograms(['finnair', 'malaysia', 'qantas']);
-    setEliteTiers({
-      finnair: getEliteTiersForProgram('finnair'),
-      malaysia: getEliteTiersForProgram('malaysia'),
-      qantas: getEliteTiersForProgram('qantas'),
-    });
-
-    const segmentInputs = [
-      new SegmentInput('aa', 'i', 'jfk', 'lhr'),
-      new SegmentInput('ay', 'i', 'lhr', 'hel'),
-      new SegmentInput('ay', 'i', 'hel', 'agp'),
-    ];
-    segmentInputs.forEach((segmentInput) => {
-      segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
-      segmentInput.toAirport = getAirport(segmentInput.toAirportText);
-    });
-
-    setRoutes([
-      new Route([segmentInputs[0]], undefined),
-      new Route([segmentInputs[1], segmentInputs[2]], undefined),
-    ]);
-  }, [setPrograms, setEliteTiers, setRoutes]);
 
   const onEliteTierChange = (program, eliteTier, include) => {
     const programEliteTiers = [...eliteTiers[program]];
@@ -135,8 +133,8 @@ export default function Oneworld() {
     }
 
     if (routeInEntry.uuid === defaultRoute.uuid) {
-      routeInEntry.uuid = uuidv4();
-      setRoutes([...routes, routeInEntry]);
+      const newRoute = new Route(routeInEntry.segmentInputs, routeInEntry.subtotal, uuidv4());
+      setRoutes([...routes, newRoute]);
     } else {
       const routeIdx = routes.findIndex((route) => route.uuid === routeInEntry.uuid);
       const newRoutes = [...routes];
