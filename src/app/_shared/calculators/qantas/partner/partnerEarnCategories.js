@@ -2,6 +2,7 @@ import {
   JAL_DOMESTIC_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
 } from '@/app/_shared/models/qantasConstants';
+import { LATAM_AIRLINES } from '@/app/_shared/models/constants';
 import {
   buildFareBuckets,
   buildSimpleFareBuckets,
@@ -266,30 +267,15 @@ const partnerEarnCategories = {
       WEBSITE_EARN_CATEGORIES.kl[2],
     ),
   },
-  la: {
-    earnsElitePoints: false,
-    fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
-  },
-  jj: {
-    earnsElitePoints: false,
-    fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
-  },
-  lu: {
-    earnsElitePoints: false,
-    fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
-  },
-  lp: {
-    earnsElitePoints: false,
-    fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
-  },
-  xl: {
-    earnsElitePoints: false,
-    fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
-  },
-  '4c': {
-    earnsElitePoints: false,
-    fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
-  },
+  ...Object.fromEntries(
+    Object.keys(LATAM_AIRLINES).map((code) => [
+      code,
+      {
+        earnsElitePoints: false,
+        fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.la, PARTNER_FARE_CLASSES),
+      },
+    ]),
+  ),
   ws: {
     earnsElitePoints: false,
     fareBuckets: buildSimpleFareBuckets(WEBSITE_EARN_CATEGORIES.ws, PARTNER_FARE_CLASSES),

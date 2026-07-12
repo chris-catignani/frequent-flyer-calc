@@ -70,7 +70,7 @@ const calculateSegment = (segment, eliteStatus, priceLessTaxes) => {
   const airlinePointsBreakdown = {
     basePoints,
     eliteBonus: { airlinePoints: eliteBonus },
-    totalEarned: Math.max(basePoints + (eliteBonus || 0)),
+    totalEarned: basePoints + (eliteBonus || 0),
   };
 
   return {
