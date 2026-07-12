@@ -471,7 +471,7 @@ const JetstarFareClassInput = ({ segmentInput, error, onChange }) => {
       segmentInput.airline === 'jq' &&
       segmentInput.fromAirport.country === 'Australia' &&
       segmentInput.toAirport.country === 'Australia'
-    ){
+    ) {
       fareClassOptions = Object.keys(JETSTAR_DOMESTIC_FARE_CLASSES);
     } else {
       fareClassOptions = Object.keys(JETSTAR_INTL_FARE_CLASSES);

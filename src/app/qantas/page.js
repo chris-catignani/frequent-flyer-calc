@@ -7,7 +7,12 @@ import { Info } from '@mui/icons-material';
 import { getAirport } from '@/app/_shared/utils/airports';
 import { Segment } from '@/app/_shared/models/segment';
 import { defaultSegmentInput, SegmentInput } from '@/app/_shared/models/segmentInput';
-import { JAL_AIRLINES, JETSTAR_AIRLINES, PARTNER_NON_ONEWORLD_AIRLINES, PARTNER_ONEWORLD_AIRLINES } from '@/app/_shared/models/qantasConstants';
+import {
+  JAL_AIRLINES,
+  JETSTAR_AIRLINES,
+  PARTNER_NON_ONEWORLD_AIRLINES,
+  PARTNER_ONEWORLD_AIRLINES,
+} from '@/app/_shared/models/qantasConstants';
 import {
   createUrlQueryParams,
   parseUrlQueryParams,
@@ -327,7 +332,7 @@ export default function Qantas() {
       return <></>;
     }
 
-    const infoAlerts = []
+    const infoAlerts = [];
 
     const jetstarResults = calculationOutput.segmentResults.filter((segmentResult) => {
       return JETSTAR_AIRLINES.has(segmentResult.segment.airline);
@@ -341,7 +346,7 @@ export default function Qantas() {
 
     if (jetstarResults.length !== 0) {
       infoAlerts.push(
-        <Alert severity="info" key='jetstart-alerts'>
+        <Alert severity="info" key="jetstart-alerts">
           {jetstarDiscountEconomyResults.length > 0 && (
             <>
               <Typography>
@@ -359,25 +364,25 @@ export default function Qantas() {
             International fare or when a Jetstar flight voucher has been selected in lieu of Points
             and Status Credits.
           </Typography>
-        </Alert>
+        </Alert>,
       );
     }
 
     if (jalResults.length !== 0) {
       infoAlerts.push(
-        <Alert severity="info" key='jal-alerts'>
+        <Alert severity="info" key="jal-alerts">
           <Typography>
-            Japan Airlines flights within Japan are awarded points based on information provided by Japan Airlines.
-            Qantas does not define the earning rules for these flights
+            Japan Airlines flights within Japan are awarded points based on information provided by
+            Japan Airlines. Qantas does not define the earning rules for these flights
           </Typography>
-        </Alert>
-      )
+        </Alert>,
+      );
     }
 
     if (infoAlerts.length === 0) {
-      return <></>
+      return <></>;
     }
-    return infoAlerts
+    return infoAlerts;
   };
 
   return (
