@@ -1,10 +1,7 @@
 ## What this is
 
-A Next.js (App Router) app that calculates frequent flyer points/status credit earnings for a given
-flight itinerary, primarily for the Qantas Frequent Flyer program (with partial support for Finnair
-and Malaysia Airlines programs). Live routes are `/qantas` (the main, actively developed calculator)
-and `/oneworld` (an in-progress multi-program comparison tool — still seeded with hardcoded test data,
-see the `TODO` in `src/app/oneworld/page.js`). `/` redirects to `/qantas`.
+A Next.js (App Router) app that calculates Qantas Frequent Flyer points/status credit earnings for a
+given flight itinerary. `/qantas` is the (only) live route; `/` redirects to it.
 
 ## Commands
 
@@ -23,18 +20,11 @@ part of the hook). There is no CI config in this repo — everything else is run
 
 ### Calculation pipeline
 
-`Calculator.calculate(program, segments, eliteStatus, priceLessTaxes)`
-(`src/app/_shared/calculators/calculator.js`) dispatches to one of three per-program calculators
-(`finnair`, `malaysia`, `qantas`, each with their own `calculator.js`). Every calculator takes an
-array of `Segment` (one flight leg: airline, fare class, from/to airport) and returns
-`{ segmentResults, containsErrors, elitePoints, airlinePoints }`. Each program calculator
-independently declares which airline codes it supports and throws/records a per-segment error for
-unsupported airlines rather than failing the whole calculation.
-
-### Qantas calculator (the core of the app)
-
-`src/app/_shared/calculators/qantas/calculator.js` is the most developed calculator and the one worth
-understanding in depth. For each segment it:
+`calculate(segments, eliteStatus, priceLessTaxes)` (`src/app/_shared/calculators/qantas/calculator.js`)
+is the calculation entry point, called directly from `src/app/qantas/page.js`. It takes an array of
+`Segment` (one flight leg: airline, fare class, from/to airport) and returns
+`{ segmentResults, containsErrors, elitePoints, airlinePoints }`, recording a per-segment error for
+unsupported airlines rather than failing the whole calculation. For each segment it:
 
 1. Determines a **fare earn category** (e.g. `discountEconomy`, `flexibleBusiness`) by mapping the
    segment's raw fare class letter through `qantasEarnCategories.js` (`qf`/`jq`/`gk`) or
@@ -83,8 +73,6 @@ known divergent routes. Airline groupings/constants live in `_shared/models/cons
   `validate()`/`buildAirlineOptions()`), `autocomplete.js`, `advancedInput.js` (bulk entry).
 - `src/app/_shared/models/` holds plain data classes (`Segment`, `Route`, `Earnings`, `SegmentInput`)
   — mutable JS classes with a `.clone({...})` pattern for partial updates, not immutable records.
-- `src/app/oneworld/` is a separate, less-developed page comparing multiple programs side-by-side;
-  `_models/eliteTiers.js` defines per-program elite tier lists/ordering.
 
 ### Path aliases and styling
 

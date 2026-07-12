@@ -38,17 +38,17 @@ export const QANTAS_GRP_AIRLINES = {
 };
 
 //TODO more here
-export const SKYTEAM_AIRLINES = {
+const SKYTEAM_AIRLINES = {
   af: 'Air France',
   mu: 'China Eastern',
   kl: 'KLM',
 };
 
 //TODO more here
-export const STAR_ALLIANCE_AIRLINES = {};
+const STAR_ALLIANCE_AIRLINES = {};
 
 // TODO more here
-export const NON_ALLIANCE_AIRLINES = {
+const NON_ALLIANCE_AIRLINES = {
   ly: 'EL AL',
   ek: 'Emirates',
   ...JETSTAR_AIRLINES,
