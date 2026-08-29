@@ -57,9 +57,9 @@ export function trackCalculationCompleted({
   });
 
   safeTrack('calculation_completed', {
-    route: routes.join(', '),
-    airports: Array.from(airportSet).join(', '),
-    airlines: Array.from(airlineSet).join(', '),
+    route: routes.join(', ').slice(0, 255),
+    airports: Array.from(airportSet).join(', ').slice(0, 255),
+    airlines: Array.from(airlineSet).join(', ').slice(0, 255),
     trip_type: tripType,
     elite_status: eliteStatus,
     segment_count: segmentResults.length,

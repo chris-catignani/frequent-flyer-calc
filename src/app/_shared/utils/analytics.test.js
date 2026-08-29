@@ -118,6 +118,28 @@ describe('analytics utility', () => {
       }).not.toThrow();
     });
 
+    it('truncates property strings exceeding 255 characters', () => {
+      const longSegments = Array.from({ length: 60 }, (_, i) => ({
+        segment: new Segment(
+          'qf',
+          'y',
+          { iata: `S${String(i).padStart(2, '0')}`, city: 'City A' },
+          { iata: `D${String(i).padStart(2, '0')}`, city: 'City B' },
+        ),
+        airlinePoints: 100,
+        elitePoints: 10,
+      }));
+
+      trackCalculationCompleted({
+        segmentResults: longSegments,
+      });
+
+      expect(track).toHaveBeenCalledTimes(1);
+      const callProps = track.mock.calls[0][1];
+      expect(callProps.route.length).toBeLessThanOrEqual(255);
+      expect(callProps.airports.length).toBeLessThanOrEqual(255);
+    });
+
     it('handles being called with no arguments', () => {
       expect(() => {
         trackCalculationCompleted();
