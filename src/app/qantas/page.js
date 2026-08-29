@@ -112,22 +112,40 @@ export default function Qantas() {
     });
 
     // track any Qantas API mismatches if comparison was active
+    // track any Qantas API mismatches or errors if comparison was active
     if (theCompareWithQantasCalc && calculationResult.segmentResults) {
       calculationResult.segmentResults.forEach((segmentResult) => {
         const qantasData = segmentResult.qantasAPIResults?.qantasData;
         const qantasError = segmentResult.qantasAPIResults?.error;
 
-        if (qantasData && !qantasError) {
-          const pointsMismatch = segmentResult.airlinePoints !== qantasData.airlinePoints;
-          const statusCreditsMismatch = segmentResult.elitePoints !== qantasData.elitePoints;
+        if (qantasError) {
+          trackQantasApiMismatch({
+            segment: segmentResult.segment,
+            ourPoints: Number(segmentResult.airlinePoints) || 0,
+            ourStatusCredits: Number(segmentResult.elitePoints) || 0,
+            qantasPoints: null,
+            qantasStatusCredits: null,
+            qantasError: qantasError.message || String(qantasError),
+            eliteStatus: theEliteStatus,
+            tripType: theTripType,
+          });
+        } else if (qantasData) {
+          const ourPoints = Number(segmentResult.airlinePoints) || 0;
+          const ourStatusCredits = Number(segmentResult.elitePoints) || 0;
+          const qantasPoints = Number(qantasData.airlinePoints) || 0;
+          const qantasStatusCredits = Number(qantasData.elitePoints) || 0;
+
+          const pointsMismatch = ourPoints !== qantasPoints;
+          const statusCreditsMismatch = ourStatusCredits !== qantasStatusCredits;
 
           if (pointsMismatch || statusCreditsMismatch) {
             trackQantasApiMismatch({
               segment: segmentResult.segment,
-              ourPoints: segmentResult.airlinePoints,
-              ourStatusCredits: segmentResult.elitePoints,
-              qantasPoints: qantasData.airlinePoints,
-              qantasStatusCredits: qantasData.elitePoints,
+              ourPoints,
+              ourStatusCredits,
+              qantasPoints,
+              qantasStatusCredits,
+              qantasError: null,
               eliteStatus: theEliteStatus,
               tripType: theTripType,
             });

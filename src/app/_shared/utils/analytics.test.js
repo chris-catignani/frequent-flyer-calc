@@ -161,7 +161,7 @@ describe('analytics utility', () => {
   });
 
   describe('trackQantasApiMismatch', () => {
-    it('dispatches qantas_api_mismatch with uppercase segment details', () => {
+    it('dispatches qantas_api_mismatch with uppercase segment details and numeric values', () => {
       const segment = new Segment(
         'ca',
         'y',
@@ -175,6 +175,7 @@ describe('analytics utility', () => {
         ourStatusCredits: 10,
         qantasPoints: 0,
         qantasStatusCredits: 0,
+        qantasError: null,
         eliteStatus: 'Bronze',
         tripType: 'one way',
       });
@@ -189,7 +190,65 @@ describe('analytics utility', () => {
         our_status_credits: 10,
         qantas_points: 0,
         qantas_status_credits: 0,
+        qantas_error: null,
       });
+    });
+
+    it('dispatches qantas_api_mismatch with qantas_error when Qantas API errors', () => {
+      const segment = new Segment(
+        'ca',
+        'y',
+        { iata: 'pvg', city: 'Shanghai' },
+        { iata: 'szx', city: 'Shenzhen' },
+      );
+
+      trackQantasApiMismatch({
+        segment,
+        ourPoints: 800,
+        ourStatusCredits: 10,
+        qantasPoints: null,
+        qantasStatusCredits: null,
+        qantasError: 'Failed to find a matching Qantas API result',
+        eliteStatus: 'Gold',
+        tripType: 'one way',
+      });
+
+      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+        route: 'PVG-SZX',
+        airline: 'CA',
+        fare_class: 'Y',
+        elite_status: 'Gold',
+        trip_type: 'one way',
+        our_points: 800,
+        our_status_credits: 10,
+        qantas_points: null,
+        qantas_status_credits: null,
+        qantas_error: 'Failed to find a matching Qantas API result',
+      });
+    });
+
+    it('handles numeric strings by coercing to numbers', () => {
+      const segment = new Segment('qf', 'y', { iata: 'SYD' }, { iata: 'MEL' });
+
+      trackQantasApiMismatch({
+        segment,
+        ourPoints: '1200',
+        ourStatusCredits: '40',
+        qantasPoints: '1000',
+        qantasStatusCredits: '30',
+        eliteStatus: 'Silver',
+      });
+
+      expect(track).toHaveBeenCalledWith(
+        'qantas_api_mismatch',
+        expect.objectContaining({
+          our_points: 1200,
+          our_status_credits: 40,
+          qantas_points: 1000,
+          qantas_status_credits: 30,
+          qantas_error: null,
+        }),
+      );
     });
 
     it('handles missing segment airport information gracefully', () => {
@@ -209,6 +268,7 @@ describe('analytics utility', () => {
           route: '',
           airline: 'QF',
           fare_class: 'K',
+          qantas_error: null,
         }),
       );
     });
@@ -226,8 +286,9 @@ describe('analytics utility', () => {
         trip_type: 'one way',
         our_points: 0,
         our_status_credits: 0,
-        qantas_points: 0,
-        qantas_status_credits: 0,
+        qantas_points: null,
+        qantas_status_credits: null,
+        qantas_error: null,
       });
     });
   });

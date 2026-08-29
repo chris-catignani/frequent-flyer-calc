@@ -60,24 +60,25 @@ export function trackCalculationCompleted({
     route: routes.join(', ').slice(0, 255),
     airports: Array.from(airportSet).join(', ').slice(0, 255),
     airlines: Array.from(airlineSet).join(', ').slice(0, 255),
-    trip_type: tripType,
-    elite_status: eliteStatus,
-    segment_count: segmentResults.length,
-    total_points: totalPoints,
-    total_status_credits: totalStatusCredits,
+    trip_type: tripType ? String(tripType) : 'one way',
+    elite_status: eliteStatus ? String(eliteStatus) : 'Bronze',
+    segment_count: Number(segmentResults.length) || 0,
+    total_points: Number(totalPoints) || 0,
+    total_status_credits: Number(totalStatusCredits) || 0,
     compare_with_qantas: Boolean(compareWithQantas),
     contains_errors: Boolean(containsErrors),
   });
 }
 
 /**
- * Tracks a mismatch between our calculation results and Qantas API results for a segment.
+ * Tracks a mismatch or error between our calculation results and Qantas API results for a segment.
  * @param {Object} [params={}]
  * @param {Object} [params.segment]
  * @param {number} [params.ourPoints=0]
  * @param {number} [params.ourStatusCredits=0]
- * @param {number} [params.qantasPoints=0]
- * @param {number} [params.qantasStatusCredits=0]
+ * @param {number|null} [params.qantasPoints=null]
+ * @param {number|null} [params.qantasStatusCredits=null]
+ * @param {string|null} [params.qantasError=null]
  * @param {string} [params.eliteStatus='Bronze']
  * @param {string} [params.tripType='one way']
  */
@@ -85,8 +86,9 @@ export function trackQantasApiMismatch({
   segment,
   ourPoints = 0,
   ourStatusCredits = 0,
-  qantasPoints = 0,
-  qantasStatusCredits = 0,
+  qantasPoints = null,
+  qantasStatusCredits = null,
+  qantasError = null,
   eliteStatus = 'Bronze',
   tripType = 'one way',
 } = {}) {
@@ -101,11 +103,16 @@ export function trackQantasApiMismatch({
     route,
     airline,
     fare_class: fareClass,
-    elite_status: eliteStatus,
-    trip_type: tripType,
-    our_points: ourPoints,
-    our_status_credits: ourStatusCredits,
-    qantas_points: qantasPoints,
-    qantas_status_credits: qantasStatusCredits,
+    elite_status: eliteStatus ? String(eliteStatus) : 'Bronze',
+    trip_type: tripType ? String(tripType) : 'one way',
+    our_points: Number(ourPoints) || 0,
+    our_status_credits: Number(ourStatusCredits) || 0,
+    qantas_points:
+      qantasPoints !== null && qantasPoints !== undefined ? Number(qantasPoints) : null,
+    qantas_status_credits:
+      qantasStatusCredits !== null && qantasStatusCredits !== undefined
+        ? Number(qantasStatusCredits)
+        : null,
+    qantas_error: qantasError ? String(qantasError).slice(0, 255) : null,
   });
 }
