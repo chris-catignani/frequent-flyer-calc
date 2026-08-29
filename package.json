@@ -24,6 +24,7 @@
     "@vercel/analytics": "^1.6.1",
     "great-circle": "^0.2.8",
     "next": "16.0.10",
+    "posthog-js": "^1.422.5",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "typescript": "^5.9.3",

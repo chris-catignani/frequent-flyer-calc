@@ -1,15 +1,14 @@
-import { track } from '@vercel/analytics';
+import posthog from 'posthog-js';
 
 /**
- * Safely dispatches a custom event to Vercel Analytics, ignoring any errors or rejections.
+ * Safely dispatches a custom event to PostHog, ignoring any errors or rejections.
  * @param {string} eventName
  * @param {Record<string, string | number | boolean | null | undefined>} properties
  */
 function safeTrack(eventName, properties) {
   try {
-    const res = track(eventName, properties);
-    if (res && typeof res.catch === 'function') {
-      res.catch(() => {});
+    if (typeof posthog?.capture === 'function') {
+      posthog.capture(eventName, properties);
     }
   } catch {
     // Suppress errors so telemetry never affects user application flow
