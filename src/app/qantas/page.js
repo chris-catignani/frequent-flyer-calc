@@ -32,6 +32,7 @@ import {
   validate,
 } from '@/app/_shared/components/segmentInput';
 import { QANTAS_GRP_AIRLINES } from '@/app/_shared/models/constants';
+import { trackCalculationCompleted, trackQantasApiMismatch } from '@/app/_shared/utils/analytics';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
@@ -98,6 +99,59 @@ export default function Qantas() {
       theCompareWithQantasCalc,
     );
     setCalculationOutput(calculationResult);
+
+    // track calculation completed event
+    trackCalculationCompleted({
+      segmentResults: calculationResult.segmentResults,
+      tripType: theTripType,
+      eliteStatus: theEliteStatus,
+      compareWithQantas: theCompareWithQantasCalc,
+      containsErrors: calculationResult.containsErrors,
+      totalPoints: calculationResult.airlinePoints,
+      totalStatusCredits: calculationResult.elitePoints,
+    });
+
+    // track any Qantas API mismatches or errors if comparison was active
+    if (theCompareWithQantasCalc && calculationResult.segmentResults) {
+      calculationResult.segmentResults.forEach((segmentResult) => {
+        const qantasData = segmentResult.qantasAPIResults?.qantasData;
+        const qantasError = segmentResult.qantasAPIResults?.error;
+
+        if (qantasError) {
+          trackQantasApiMismatch({
+            segment: segmentResult.segment,
+            ourPoints: Number(segmentResult.airlinePoints) || 0,
+            ourStatusCredits: Number(segmentResult.elitePoints) || 0,
+            qantasPoints: null,
+            qantasStatusCredits: null,
+            qantasError: qantasError.message || String(qantasError),
+            eliteStatus: theEliteStatus,
+            tripType: theTripType,
+          });
+        } else if (qantasData) {
+          const ourPoints = Number(segmentResult.airlinePoints) || 0;
+          const ourStatusCredits = Number(segmentResult.elitePoints) || 0;
+          const qantasPoints = Number(qantasData.airlinePoints) || 0;
+          const qantasStatusCredits = Number(qantasData.elitePoints) || 0;
+
+          const pointsMismatch = ourPoints !== qantasPoints;
+          const statusCreditsMismatch = ourStatusCredits !== qantasStatusCredits;
+
+          if (pointsMismatch || statusCreditsMismatch) {
+            trackQantasApiMismatch({
+              segment: segmentResult.segment,
+              ourPoints,
+              ourStatusCredits,
+              qantasPoints,
+              qantasStatusCredits,
+              qantasError: null,
+              eliteStatus: theEliteStatus,
+              tripType: theTripType,
+            });
+          }
+        }
+      });
+    }
 
     // save the calculation
     const theSavedCalculations = saveCalculation(segmentInputs, theTripType, theEliteStatus);

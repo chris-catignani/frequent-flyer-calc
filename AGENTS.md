@@ -1,7 +1,6 @@
 ## What this is
 
-A Next.js (App Router) app that calculates Qantas Frequent Flyer points/status credit earnings for a
-given flight itinerary. `/qantas` is the (only) live route; `/` redirects to it.
+A Next.js (App Router) app that calculates Qantas Frequent Flyer points/status credit earnings for a given flight itinerary. `/qantas` is the (only) live route; `/` redirects to it.
 
 ## Commands
 
@@ -13,8 +12,7 @@ given flight itinerary. `/qantas` is the (only) live route; `/` redirects to it.
 - Single test file: `npx jest path/to/file.test.js`
 - Single test by name: `npx jest -t "test name"`
 
-A husky pre-commit hook runs `eslint --fix` on staged JS/TS files via lint-staged (Prettier is not
-part of the hook). There is no CI config in this repo — everything else is run manually.
+A husky pre-commit hook runs `eslint --fix` and `prettier --write` on staged files via `lint-staged`. There is no CI config in this repo — checks run locally.
 
 ## Architecture
 
