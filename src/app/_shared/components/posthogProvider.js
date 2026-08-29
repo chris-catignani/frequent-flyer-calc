@@ -39,11 +39,12 @@ export function PostHogProvider({ children }) {
     }
 
     const posthogKey = getPostHogKey();
-    const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
+    const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || '/api/posthog';
 
     if (posthogKey && !posthog.__loaded) {
       posthog.init(posthogKey, {
         api_host: posthogHost,
+        ui_host: 'https://us.posthog.com',
         capture_pageview: false, // Pageviews tracked manually with Next.js router
         capture_pageleave: true,
         person_profiles: 'identified_only',
