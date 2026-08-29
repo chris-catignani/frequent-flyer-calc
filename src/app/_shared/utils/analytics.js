@@ -7,6 +7,9 @@ import posthog from 'posthog-js';
  */
 function safeTrack(eventName, properties) {
   try {
+    if (process.env.NODE_ENV === 'development') {
+      return;
+    }
     if (typeof posthog?.capture === 'function') {
       posthog.capture(eventName, properties);
     }

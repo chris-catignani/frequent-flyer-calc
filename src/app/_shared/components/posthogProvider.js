@@ -4,12 +4,21 @@ import posthog from 'posthog-js';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect, Suspense } from 'react';
 
+function getPostHogKey() {
+  return process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN || process.env.NEXT_PUBLIC_POSTHOG_KEY || '';
+}
+
 function PostHogPageViewTracker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (pathname && process.env.NEXT_PUBLIC_POSTHOG_KEY) {
+    if (process.env.NODE_ENV === 'development') {
+      return;
+    }
+
+    const posthogKey = getPostHogKey();
+    if (pathname && posthogKey) {
       let url = window.origin + pathname;
       if (searchParams && searchParams.toString()) {
         url = url + `?${searchParams.toString()}`;
@@ -25,7 +34,11 @@ function PostHogPageViewTracker() {
 
 export function PostHogProvider({ children }) {
   useEffect(() => {
-    const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+    if (process.env.NODE_ENV === 'development') {
+      return;
+    }
+
+    const posthogKey = getPostHogKey();
     const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
 
     if (posthogKey && !posthog.__loaded) {
