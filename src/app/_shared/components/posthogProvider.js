@@ -39,7 +39,7 @@ export function PostHogProvider({ children }) {
     }
 
     const posthogKey = getPostHogKey();
-    const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || '/ingest';
+    const posthogHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || '/api/posthog';
 
     if (posthogKey && !posthog.__loaded) {
       posthog.init(posthogKey, {
