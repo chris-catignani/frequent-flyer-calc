@@ -111,7 +111,6 @@ export default function Qantas() {
       totalStatusCredits: calculationResult.elitePoints,
     });
 
-    // track any Qantas API mismatches if comparison was active
     // track any Qantas API mismatches or errors if comparison was active
     if (theCompareWithQantasCalc && calculationResult.segmentResults) {
       calculationResult.segmentResults.forEach((segmentResult) => {

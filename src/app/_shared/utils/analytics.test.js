@@ -149,11 +149,11 @@ describe('analytics utility', () => {
         route: '',
         airports: '',
         airlines: '',
-        trip_type: 'one way',
-        elite_status: 'Bronze',
+        trip_type: undefined,
+        elite_status: undefined,
         segment_count: 0,
-        total_points: 0,
-        total_status_credits: 0,
+        total_points: undefined,
+        total_status_credits: undefined,
         compare_with_qantas: false,
         contains_errors: false,
       });
@@ -227,28 +227,31 @@ describe('analytics utility', () => {
       });
     });
 
-    it('handles numeric strings by coercing to numbers', () => {
+    it('passes through exact points and status credits values', () => {
       const segment = new Segment('qf', 'y', { iata: 'SYD' }, { iata: 'MEL' });
 
       trackQantasApiMismatch({
         segment,
-        ourPoints: '1200',
-        ourStatusCredits: '40',
-        qantasPoints: '1000',
-        qantasStatusCredits: '30',
+        ourPoints: 1200,
+        ourStatusCredits: 40,
+        qantasPoints: 1000,
+        qantasStatusCredits: 30,
         eliteStatus: 'Silver',
+        tripType: 'one way',
       });
 
-      expect(track).toHaveBeenCalledWith(
-        'qantas_api_mismatch',
-        expect.objectContaining({
-          our_points: 1200,
-          our_status_credits: 40,
-          qantas_points: 1000,
-          qantas_status_credits: 30,
-          qantas_error: null,
-        }),
-      );
+      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+        route: 'SYD-MEL',
+        airline: 'QF',
+        fare_class: 'Y',
+        elite_status: 'Silver',
+        trip_type: 'one way',
+        our_points: 1200,
+        our_status_credits: 40,
+        qantas_points: 1000,
+        qantas_status_credits: 30,
+        qantas_error: null,
+      });
     });
 
     it('handles missing segment airport information gracefully', () => {
@@ -259,18 +262,23 @@ describe('analytics utility', () => {
           ourStatusCredits: 10,
           qantasPoints: 120,
           qantasStatusCredits: 10,
+          eliteStatus: 'Platinum',
+          tripType: 'return',
         });
       }).not.toThrow();
 
-      expect(track).toHaveBeenCalledWith(
-        'qantas_api_mismatch',
-        expect.objectContaining({
-          route: '',
-          airline: 'QF',
-          fare_class: 'K',
-          qantas_error: null,
-        }),
-      );
+      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+        route: '',
+        airline: 'QF',
+        fare_class: 'K',
+        elite_status: 'Platinum',
+        trip_type: 'return',
+        our_points: 100,
+        our_status_credits: 10,
+        qantas_points: 120,
+        qantas_status_credits: 10,
+        qantas_error: null,
+      });
     });
 
     it('handles being called with no arguments', () => {
@@ -282,10 +290,10 @@ describe('analytics utility', () => {
         route: '',
         airline: '',
         fare_class: '',
-        elite_status: 'Bronze',
-        trip_type: 'one way',
-        our_points: 0,
-        our_status_credits: 0,
+        elite_status: undefined,
+        trip_type: undefined,
+        our_points: undefined,
+        our_status_credits: undefined,
         qantas_points: null,
         qantas_status_credits: null,
         qantas_error: null,

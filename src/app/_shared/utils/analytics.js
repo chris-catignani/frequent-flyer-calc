@@ -19,22 +19,22 @@ function safeTrack(eventName, properties) {
 /**
  * Tracks a completed calculation event.
  * @param {Object} params
- * @param {Array} [params.segmentResults=[]]
- * @param {string} [params.tripType='one way']
- * @param {string} [params.eliteStatus='Bronze']
- * @param {boolean} [params.compareWithQantas=false]
- * @param {boolean} [params.containsErrors=false]
- * @param {number} [params.totalPoints=0]
- * @param {number} [params.totalStatusCredits=0]
+ * @param {Array} [params.segmentResults]
+ * @param {string} params.tripType
+ * @param {string} params.eliteStatus
+ * @param {boolean} params.compareWithQantas
+ * @param {boolean} params.containsErrors
+ * @param {number} params.totalPoints
+ * @param {number} params.totalStatusCredits
  */
 export function trackCalculationCompleted({
   segmentResults = [],
-  tripType = 'one way',
-  eliteStatus = 'Bronze',
-  compareWithQantas = false,
-  containsErrors = false,
-  totalPoints = 0,
-  totalStatusCredits = 0,
+  tripType,
+  eliteStatus,
+  compareWithQantas,
+  containsErrors,
+  totalPoints,
+  totalStatusCredits,
 } = {}) {
   const routes = [];
   const airportSet = new Set();
@@ -60,11 +60,11 @@ export function trackCalculationCompleted({
     route: routes.join(', ').slice(0, 255),
     airports: Array.from(airportSet).join(', ').slice(0, 255),
     airlines: Array.from(airlineSet).join(', ').slice(0, 255),
-    trip_type: tripType ? String(tripType) : 'one way',
-    elite_status: eliteStatus ? String(eliteStatus) : 'Bronze',
-    segment_count: Number(segmentResults.length) || 0,
-    total_points: Number(totalPoints) || 0,
-    total_status_credits: Number(totalStatusCredits) || 0,
+    trip_type: tripType,
+    elite_status: eliteStatus,
+    segment_count: segmentResults.length,
+    total_points: totalPoints,
+    total_status_credits: totalStatusCredits,
     compare_with_qantas: Boolean(compareWithQantas),
     contains_errors: Boolean(containsErrors),
   });
@@ -72,25 +72,25 @@ export function trackCalculationCompleted({
 
 /**
  * Tracks a mismatch or error between our calculation results and Qantas API results for a segment.
- * @param {Object} [params={}]
- * @param {Object} [params.segment]
- * @param {number} [params.ourPoints=0]
- * @param {number} [params.ourStatusCredits=0]
- * @param {number|null} [params.qantasPoints=null]
- * @param {number|null} [params.qantasStatusCredits=null]
- * @param {string|null} [params.qantasError=null]
- * @param {string} [params.eliteStatus='Bronze']
- * @param {string} [params.tripType='one way']
+ * @param {Object} params
+ * @param {Object} params.segment
+ * @param {number} params.ourPoints
+ * @param {number} params.ourStatusCredits
+ * @param {number|null} [params.qantasPoints]
+ * @param {number|null} [params.qantasStatusCredits]
+ * @param {string|null} [params.qantasError]
+ * @param {string} params.eliteStatus
+ * @param {string} params.tripType
  */
 export function trackQantasApiMismatch({
   segment,
-  ourPoints = 0,
-  ourStatusCredits = 0,
+  ourPoints,
+  ourStatusCredits,
   qantasPoints = null,
   qantasStatusCredits = null,
   qantasError = null,
-  eliteStatus = 'Bronze',
-  tripType = 'one way',
+  eliteStatus,
+  tripType,
 } = {}) {
   const fromIata = segment?.fromAirport?.iata ? segment.fromAirport.iata.toUpperCase() : '';
   const toIata = segment?.toAirport?.iata ? segment.toAirport.iata.toUpperCase() : '';
@@ -103,16 +103,12 @@ export function trackQantasApiMismatch({
     route,
     airline,
     fare_class: fareClass,
-    elite_status: eliteStatus ? String(eliteStatus) : 'Bronze',
-    trip_type: tripType ? String(tripType) : 'one way',
-    our_points: Number(ourPoints) || 0,
-    our_status_credits: Number(ourStatusCredits) || 0,
-    qantas_points:
-      qantasPoints !== null && qantasPoints !== undefined ? Number(qantasPoints) : null,
-    qantas_status_credits:
-      qantasStatusCredits !== null && qantasStatusCredits !== undefined
-        ? Number(qantasStatusCredits)
-        : null,
-    qantas_error: qantasError ? String(qantasError).slice(0, 255) : null,
+    elite_status: eliteStatus,
+    trip_type: tripType,
+    our_points: ourPoints,
+    our_status_credits: ourStatusCredits,
+    qantas_points: qantasPoints,
+    qantas_status_credits: qantasStatusCredits,
+    qantas_error: qantasError,
   });
 }
