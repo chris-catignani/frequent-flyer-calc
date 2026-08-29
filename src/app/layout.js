@@ -7,6 +7,7 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { Roboto } from 'next/font/google';
 import { ThemeProvider } from '@mui/material/styles';
 import { Analytics } from '@vercel/analytics/react';
+import { PostHogProvider } from '@/app/_shared/components/posthogProvider';
 
 import theme from '@/theme';
 
@@ -28,10 +29,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={roboto.variable}>
-        <Analytics />
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </AppRouterCacheProvider>
+        <PostHogProvider>
+          <Analytics />
+          <AppRouterCacheProvider>
+            <ThemeProvider theme={theme}>{children}</ThemeProvider>
+          </AppRouterCacheProvider>
+        </PostHogProvider>
       </body>
     </html>
   );

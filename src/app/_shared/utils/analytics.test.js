@@ -1,9 +1,9 @@
-import { track } from '@vercel/analytics';
+import posthog from 'posthog-js';
 import { trackCalculationCompleted, trackQantasApiMismatch } from '@/app/_shared/utils/analytics';
 import { Segment } from '@/app/_shared/models/segment';
 
-jest.mock('@vercel/analytics', () => ({
-  track: jest.fn(),
+jest.mock('posthog-js', () => ({
+  capture: jest.fn(),
 }));
 
 describe('analytics utility', () => {
@@ -30,8 +30,8 @@ describe('analytics utility', () => {
         totalStatusCredits: 10,
       });
 
-      expect(track).toHaveBeenCalledTimes(1);
-      expect(track).toHaveBeenCalledWith('calculation_completed', {
+      expect(posthog.capture).toHaveBeenCalledTimes(1);
+      expect(posthog.capture).toHaveBeenCalledWith('calculation_completed', {
         route: 'SYD-MEL',
         airports: 'SYD, MEL',
         airlines: 'QF',
@@ -72,7 +72,7 @@ describe('analytics utility', () => {
         totalStatusCredits: 120,
       });
 
-      expect(track).toHaveBeenCalledWith('calculation_completed', {
+      expect(posthog.capture).toHaveBeenCalledWith('calculation_completed', {
         route: 'SYD-LAX, LAX-JFK',
         airports: 'SYD, LAX, JFK',
         airlines: 'QF, AA',
@@ -95,7 +95,7 @@ describe('analytics utility', () => {
         });
       }).not.toThrow();
 
-      expect(track).toHaveBeenCalledWith(
+      expect(posthog.capture).toHaveBeenCalledWith(
         'calculation_completed',
         expect.objectContaining({
           route: '',
@@ -106,8 +106,8 @@ describe('analytics utility', () => {
       );
     });
 
-    it('catches synchronous errors and rejected promises from track()', () => {
-      track.mockImplementationOnce(() => {
+    it('catches synchronous errors from posthog.capture()', () => {
+      posthog.capture.mockImplementationOnce(() => {
         throw new Error('Analytics blocked');
       });
 
@@ -134,8 +134,8 @@ describe('analytics utility', () => {
         segmentResults: longSegments,
       });
 
-      expect(track).toHaveBeenCalledTimes(1);
-      const callProps = track.mock.calls[0][1];
+      expect(posthog.capture).toHaveBeenCalledTimes(1);
+      const callProps = posthog.capture.mock.calls[0][1];
       expect(callProps.route.length).toBeLessThanOrEqual(255);
       expect(callProps.airports.length).toBeLessThanOrEqual(255);
     });
@@ -145,7 +145,7 @@ describe('analytics utility', () => {
         trackCalculationCompleted();
       }).not.toThrow();
 
-      expect(track).toHaveBeenCalledWith('calculation_completed', {
+      expect(posthog.capture).toHaveBeenCalledWith('calculation_completed', {
         route: '',
         airports: '',
         airlines: '',
@@ -180,7 +180,7 @@ describe('analytics utility', () => {
         tripType: 'one way',
       });
 
-      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+      expect(posthog.capture).toHaveBeenCalledWith('qantas_api_mismatch', {
         route: 'PVG-SZX',
         airline: 'CA',
         fare_class: 'Y',
@@ -213,7 +213,7 @@ describe('analytics utility', () => {
         tripType: 'one way',
       });
 
-      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+      expect(posthog.capture).toHaveBeenCalledWith('qantas_api_mismatch', {
         route: 'PVG-SZX',
         airline: 'CA',
         fare_class: 'Y',
@@ -240,7 +240,7 @@ describe('analytics utility', () => {
         tripType: 'one way',
       });
 
-      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+      expect(posthog.capture).toHaveBeenCalledWith('qantas_api_mismatch', {
         route: 'SYD-MEL',
         airline: 'QF',
         fare_class: 'Y',
@@ -267,7 +267,7 @@ describe('analytics utility', () => {
         });
       }).not.toThrow();
 
-      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+      expect(posthog.capture).toHaveBeenCalledWith('qantas_api_mismatch', {
         route: '',
         airline: 'QF',
         fare_class: 'K',
@@ -286,7 +286,7 @@ describe('analytics utility', () => {
         trackQantasApiMismatch();
       }).not.toThrow();
 
-      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+      expect(posthog.capture).toHaveBeenCalledWith('qantas_api_mismatch', {
         route: '',
         airline: '',
         fare_class: '',
