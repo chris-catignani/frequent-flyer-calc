@@ -72,6 +72,10 @@ known divergent routes. Airline groupings/constants live in `_shared/models/cons
 - `src/app/_shared/models/` holds plain data classes (`Segment`, `Route`, `Earnings`, `SegmentInput`)
   — mutable JS classes with a `.clone({...})` pattern for partial updates, not immutable records.
 
+### Analytics
+
+PostHog (`posthog-js`, initialized in `_shared/components/posthogProvider.js`) captures `$pageview`, `calculation_completed`, and `qantas_api_mismatch` (via `utils/analytics.js`). Next.js `rewrites()` in `next.config.mjs` reverse-proxies `/api/posthog/*` to avoid ad-blocker drops. Requires `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`; suppressed in `development`.
+
 ### Path aliases and styling
 
 `@/*` maps to `src/*` (see `jsconfig.json`). Styling is MUI (`@mui/material`) + Emotion with Roboto
