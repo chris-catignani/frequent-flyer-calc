@@ -72,21 +72,9 @@ known divergent routes. Airline groupings/constants live in `_shared/models/cons
 - `src/app/_shared/models/` holds plain data classes (`Segment`, `Route`, `Earnings`, `SegmentInput`)
   — mutable JS classes with a `.clone({...})` pattern for partial updates, not immutable records.
 
-### Analytics & Telemetry
+### Analytics
 
-- **Provider**: PostHog (`posthog-js`), initialized in `src/app/_shared/components/posthogProvider.js`
-  and mounted in `src/app/layout.js`.
-- **Environment Variables**:
-  - `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN` (or `NEXT_PUBLIC_POSTHOG_KEY`): Project API token.
-- **Reverse Proxy**: Next.js `rewrites()` in `next.config.mjs` proxy `/api/posthog/*` to PostHog's
-  ingest endpoints so browser ad blockers do not drop analytics requests.
-- **Development Mode**: Telemetry is automatically suppressed on `localhost` when `NODE_ENV === 'development'`.
-- **Events**:
-  - `$pageview`: Automatically captured on App Router route/searchParams changes via `posthogProvider.js`.
-  - `calculation_completed`: Dispatched via `trackCalculationCompleted` in `src/app/_shared/utils/analytics.js`
-    with route string, airports, airlines, trip type, elite status, total points, and total status credits.
-  - `qantas_api_mismatch`: Dispatched via `trackQantasApiMismatch` in `src/app/_shared/utils/analytics.js`
-    when comparison mode is active and results diverge or Qantas API returns an error.
+PostHog (`posthog-js`, initialized in `_shared/components/posthogProvider.js`) captures `$pageview`, `calculation_completed`, and `qantas_api_mismatch` (via `utils/analytics.js`). Next.js `rewrites()` in `next.config.mjs` reverse-proxies `/api/posthog/*` to avoid ad-blocker drops. Requires `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`; suppressed in `development`.
 
 ### Path aliases and styling
 
