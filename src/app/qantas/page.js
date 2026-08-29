@@ -32,6 +32,7 @@ import {
   validate,
 } from '@/app/_shared/components/segmentInput';
 import { QANTAS_GRP_AIRLINES } from '@/app/_shared/models/constants';
+import { trackCalculationCompleted, trackQantasApiMismatch } from '@/app/_shared/utils/analytics';
 
 const FLAG_ENABLE_QANTAS_API = true;
 
@@ -98,6 +99,42 @@ export default function Qantas() {
       theCompareWithQantasCalc,
     );
     setCalculationOutput(calculationResult);
+
+    // track calculation completed event
+    trackCalculationCompleted({
+      segmentResults: calculationResult.segmentResults,
+      tripType: theTripType,
+      eliteStatus: theEliteStatus,
+      compareWithQantas: theCompareWithQantasCalc,
+      containsErrors: calculationResult.containsErrors,
+      totalPoints: calculationResult.airlinePoints,
+      totalStatusCredits: calculationResult.elitePoints,
+    });
+
+    // track any Qantas API mismatches if comparison was active
+    if (theCompareWithQantasCalc && calculationResult.segmentResults) {
+      calculationResult.segmentResults.forEach((segmentResult) => {
+        const qantasData = segmentResult.qantasAPIResults?.qantasData;
+        const qantasError = segmentResult.qantasAPIResults?.error;
+
+        if (qantasData && !qantasError) {
+          const pointsMismatch = segmentResult.airlinePoints !== qantasData.airlinePoints;
+          const statusCreditsMismatch = segmentResult.elitePoints !== qantasData.elitePoints;
+
+          if (pointsMismatch || statusCreditsMismatch) {
+            trackQantasApiMismatch({
+              segment: segmentResult.segment,
+              ourPoints: segmentResult.airlinePoints,
+              ourStatusCredits: segmentResult.elitePoints,
+              qantasPoints: qantasData.airlinePoints,
+              qantasStatusCredits: qantasData.elitePoints,
+              eliteStatus: theEliteStatus,
+              tripType: theTripType,
+            });
+          }
+        }
+      });
+    }
 
     // save the calculation
     const theSavedCalculations = saveCalculation(segmentInputs, theTripType, theEliteStatus);

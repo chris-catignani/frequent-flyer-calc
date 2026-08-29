@@ -35,7 +35,7 @@ export function trackCalculationCompleted({
   containsErrors = false,
   totalPoints = 0,
   totalStatusCredits = 0,
-}) {
+} = {}) {
   const routes = [];
   const airportSet = new Set();
   const airlineSet = new Set();
@@ -72,8 +72,8 @@ export function trackCalculationCompleted({
 
 /**
  * Tracks a mismatch between our calculation results and Qantas API results for a segment.
- * @param {Object} params
- * @param {Object} params.segment
+ * @param {Object} [params={}]
+ * @param {Object} [params.segment]
  * @param {number} [params.ourPoints=0]
  * @param {number} [params.ourStatusCredits=0]
  * @param {number} [params.qantasPoints=0]
@@ -89,7 +89,7 @@ export function trackQantasApiMismatch({
   qantasStatusCredits = 0,
   eliteStatus = 'Bronze',
   tripType = 'one way',
-}) {
+} = {}) {
   const fromIata = segment?.fromAirport?.iata ? segment.fromAirport.iata.toUpperCase() : '';
   const toIata = segment?.toAirport?.iata ? segment.toAirport.iata.toUpperCase() : '';
   const airline = segment?.airline ? segment.airline.toUpperCase() : '';

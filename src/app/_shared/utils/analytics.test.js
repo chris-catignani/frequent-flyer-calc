@@ -117,6 +117,25 @@ describe('analytics utility', () => {
         });
       }).not.toThrow();
     });
+
+    it('handles being called with no arguments', () => {
+      expect(() => {
+        trackCalculationCompleted();
+      }).not.toThrow();
+
+      expect(track).toHaveBeenCalledWith('calculation_completed', {
+        route: '',
+        airports: '',
+        airlines: '',
+        trip_type: 'one way',
+        elite_status: 'Bronze',
+        segment_count: 0,
+        total_points: 0,
+        total_status_credits: 0,
+        compare_with_qantas: false,
+        contains_errors: false,
+      });
+    });
   });
 
   describe('trackQantasApiMismatch', () => {
@@ -170,6 +189,24 @@ describe('analytics utility', () => {
           fare_class: 'K',
         }),
       );
+    });
+
+    it('handles being called with no arguments', () => {
+      expect(() => {
+        trackQantasApiMismatch();
+      }).not.toThrow();
+
+      expect(track).toHaveBeenCalledWith('qantas_api_mismatch', {
+        route: '',
+        airline: '',
+        fare_class: '',
+        elite_status: 'Bronze',
+        trip_type: 'one way',
+        our_points: 0,
+        our_status_credits: 0,
+        qantas_points: 0,
+        qantas_status_credits: 0,
+      });
     });
   });
 });
