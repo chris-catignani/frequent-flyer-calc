@@ -169,6 +169,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
           />
           <SegmentInputRow
             segmentInput={segmentInput}
+            segmentInputIdx={segmentInputIdx}
             errors={errors}
             dragHandleProps={provided.dragHandleProps}
             showDeleteButton={showDeleteButton}
@@ -184,6 +185,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
 
 interface SegmentInputRowProps {
   segmentInput: SegmentInput;
+  segmentInputIdx: number;
   errors: Record<string, string>;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
   showDeleteButton: boolean;
@@ -194,6 +196,7 @@ interface SegmentInputRowProps {
 
 const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   segmentInput,
+  segmentInputIdx,
   errors,
   dragHandleProps,
   showDeleteButton,
@@ -203,6 +206,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
 }) => {
   return (
     <Grid
+      data-testid={`segment-row-${segmentInputIdx}`}
       container
       spacing={1}
       columns={22}
@@ -221,6 +225,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       </Grid>
       <Grid size={{ xs: 22, sm: 6 }} order={{ xs: 1, sm: 2 }}>
         <AirlineInput
+          segmentInputIdx={segmentInputIdx}
           value={segmentInput.airline}
           error={errors['airline']}
           airlineOptions={airlineOptions}
@@ -235,6 +240,8 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       </Grid>
       <Grid size={{ xs: 9, sm: 4 }} order={3}>
         <AirportInput
+          dataTestId={`segment-from-${segmentInputIdx}`}
+          errorTestId={`segment-error-from-${segmentInputIdx}`}
           label={'From (e.g. syd)'}
           value={segmentInput.fromAirportText}
           error={errors['fromAirportText']}
@@ -257,6 +264,8 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       </Grid>
       <Grid size={{ xs: 9, sm: 4 }} order={4}>
         <AirportInput
+          dataTestId={`segment-to-${segmentInputIdx}`}
+          errorTestId={`segment-error-to-${segmentInputIdx}`}
           label={'To (e.g. mel)'}
           value={segmentInput.toAirportText}
           error={errors['toAirportText']}
@@ -279,6 +288,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       </Grid>
       <Grid size={{ xs: 22, sm: 6 }} order={{ xs: 6, sm: 5 }}>
         <FareClassInput
+          segmentInputIdx={segmentInputIdx}
           segmentInput={segmentInput}
           error={errors['fareClass']}
           onChange={(value) => {
@@ -292,6 +302,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         order={{ xs: 5, sm: 6 }}
       >
         <RemoveSegmentInputButton
+          segmentInputIdx={segmentInputIdx}
           showDeleteButton={showDeleteButton}
           onDeleteClicked={onDeleteClicked}
         />
@@ -325,9 +336,10 @@ const ReorderSegmentInputButton: React.FC<{ showReorderButton: boolean }> = ({
 };
 
 const RemoveSegmentInputButton: React.FC<{
+  segmentInputIdx: number;
   showDeleteButton: boolean;
   onDeleteClicked: () => void;
-}> = ({ showDeleteButton, onDeleteClicked }) => {
+}> = ({ segmentInputIdx, showDeleteButton, onDeleteClicked }) => {
   if (!showDeleteButton) {
     return (
       // Dummy icon to maintain space for when we show icons
@@ -338,6 +350,7 @@ const RemoveSegmentInputButton: React.FC<{
   } else {
     return (
       <IconButton
+        data-testid={`segment-delete-${segmentInputIdx}`}
         sx={{
           p: 0,
           '&:hover': { backgroundColor: 'inherit', boxShadow: 'none' },
@@ -391,18 +404,26 @@ const shouldClearFareClassForAirportChange = (
 };
 
 interface AirlineInputProps {
+  segmentInputIdx: number;
   value: string;
   error?: string;
   airlineOptions: AirlineOption[];
   onChange: (value: string) => void;
 }
 
-const AirlineInput: React.FC<AirlineInputProps> = ({ value, error, airlineOptions, onChange }) => {
+const AirlineInput: React.FC<AirlineInputProps> = ({
+  segmentInputIdx,
+  value,
+  error,
+  airlineOptions,
+  onChange,
+}) => {
   const selectedOption =
     airlineOptions.find((airline) => airline.iata === value) ?? airlineOptions[0];
 
   return (
     <Autocomplete
+      data-testid={`segment-airline-${segmentInputIdx}`}
       disableClearable
       autoHighlight
       autoSelect
@@ -422,7 +443,11 @@ const AirlineInput: React.FC<AirlineInputProps> = ({ value, error, airlineOption
         <TextField
           {...params}
           error={Boolean(error)}
-          helperText={error ? error : ' '}
+          helperText={
+            <span data-testid={`segment-error-airline-${segmentInputIdx}`}>
+              {error ? error : ' '}
+            </span>
+          }
           label="Airline"
         />
       )}
@@ -437,19 +462,29 @@ const AirlineInput: React.FC<AirlineInputProps> = ({ value, error, airlineOption
 };
 
 interface AirportInputProps {
+  dataTestId: string;
+  errorTestId: string;
   label: string;
   value: string;
   error?: string;
   onChange: (value: string) => void;
 }
 
-const AirportInput: React.FC<AirportInputProps> = ({ label, value, error, onChange }) => {
+const AirportInput: React.FC<AirportInputProps> = ({
+  dataTestId,
+  errorTestId,
+  label,
+  value,
+  error,
+  onChange,
+}) => {
   const [focused, setFocused] = useState(false);
   const [justSelected, setJustSelected] = useState(false);
   const options = useMemo(() => searchAirports(value), [value]);
 
   return (
     <Autocomplete
+      data-testid={dataTestId}
       freeSolo
       disableClearable
       autoHighlight
@@ -497,7 +532,7 @@ const AirportInput: React.FC<AirportInputProps> = ({ label, value, error, onChan
           {...params}
           label={label}
           error={Boolean(error)}
-          helperText={error ? error : ' '}
+          helperText={<span data-testid={errorTestId}>{error ? error : ' '}</span>}
           onFocus={() => {
             setFocused(true);
             setJustSelected(false);
@@ -510,12 +545,14 @@ const AirportInput: React.FC<AirportInputProps> = ({ label, value, error, onChan
 };
 
 interface FareClassInputSubProps {
+  segmentInputIdx: number;
   segmentInput: SegmentInput;
   error?: string;
   onChange: (value: string) => void;
 }
 
 const QantasFareClassInput: React.FC<FareClassInputSubProps> = ({
+  segmentInputIdx,
   segmentInput,
   error,
   onChange,
@@ -549,6 +586,7 @@ const QantasFareClassInput: React.FC<FareClassInputSubProps> = ({
 
   return (
     <GenericFareClassInput
+      segmentInputIdx={segmentInputIdx}
       options={fareClassOptions}
       value={segmentInput.fareClass || ''}
       displayLookup={QANTAS_FARE_CLASS_DISPLAY}
@@ -560,6 +598,7 @@ const QantasFareClassInput: React.FC<FareClassInputSubProps> = ({
 };
 
 const JetstarFareClassInput: React.FC<FareClassInputSubProps> = ({
+  segmentInputIdx,
   segmentInput,
   error,
   onChange,
@@ -585,6 +624,7 @@ const JetstarFareClassInput: React.FC<FareClassInputSubProps> = ({
 
   return (
     <GenericFareClassInput
+      segmentInputIdx={segmentInputIdx}
       options={fareClassOptions}
       value={segmentInput.fareClass || ''}
       displayLookup={JETSTAR_FARE_CLASS_DISPLAY}
@@ -594,11 +634,17 @@ const JetstarFareClassInput: React.FC<FareClassInputSubProps> = ({
   );
 };
 
-const JALFareClassInput: React.FC<FareClassInputSubProps> = ({ segmentInput, error, onChange }) => {
+const JALFareClassInput: React.FC<FareClassInputSubProps> = ({
+  segmentInputIdx,
+  segmentInput,
+  error,
+  onChange,
+}) => {
   const fareClassOptions = Object.keys(JAL_DOMESTIC_FARE_CLASSES);
 
   return (
     <GenericFareClassInput
+      segmentInputIdx={segmentInputIdx}
       options={fareClassOptions}
       value={segmentInput.fareClass || ''}
       displayLookup={JAL_DOMESTIC_FARE_CLASS_DISPLAY}
@@ -609,6 +655,7 @@ const JALFareClassInput: React.FC<FareClassInputSubProps> = ({ segmentInput, err
 };
 
 interface GenericFareClassInputProps {
+  segmentInputIdx: number;
   options: string[];
   value: string;
   displayLookup: Record<string, string>;
@@ -618,6 +665,7 @@ interface GenericFareClassInputProps {
 }
 
 const GenericFareClassInput: React.FC<GenericFareClassInputProps> = ({
+  segmentInputIdx,
   options,
   value,
   displayLookup,
@@ -627,6 +675,7 @@ const GenericFareClassInput: React.FC<GenericFareClassInputProps> = ({
 }) => {
   return (
     <Autocomplete
+      data-testid={`segment-fare-class-${segmentInputIdx}`}
       disableClearable
       autoHighlight
       autoSelect
@@ -640,7 +689,11 @@ const GenericFareClassInput: React.FC<GenericFareClassInputProps> = ({
         <TextField
           {...params}
           error={Boolean(error)}
-          helperText={error ? error : ' '}
+          helperText={
+            <span data-testid={`segment-error-fare-class-${segmentInputIdx}`}>
+              {error ? error : ' '}
+            </span>
+          }
           label="Fare Class"
         />
       )}
@@ -654,24 +707,55 @@ const GenericFareClassInput: React.FC<GenericFareClassInputProps> = ({
   );
 };
 
-const FareClassInput: React.FC<FareClassInputSubProps> = ({ segmentInput, error, onChange }) => {
+const FareClassInput: React.FC<FareClassInputSubProps> = ({
+  segmentInputIdx,
+  segmentInput,
+  error,
+  onChange,
+}) => {
   if (segmentInput.airline === 'qf') {
-    return <QantasFareClassInput segmentInput={segmentInput} error={error} onChange={onChange} />;
+    return (
+      <QantasFareClassInput
+        segmentInputIdx={segmentInputIdx}
+        segmentInput={segmentInput}
+        error={error}
+        onChange={onChange}
+      />
+    );
   } else if (JETSTAR_AIRLINES.has(segmentInput.airline)) {
-    return <JetstarFareClassInput segmentInput={segmentInput} error={error} onChange={onChange} />;
+    return (
+      <JetstarFareClassInput
+        segmentInputIdx={segmentInputIdx}
+        segmentInput={segmentInput}
+        error={error}
+        onChange={onChange}
+      />
+    );
   } else if (
     JAL_AIRLINES.has(segmentInput.airline) &&
     segmentInput.fromAirport?.country === 'Japan' &&
     segmentInput.toAirport?.country === 'Japan'
   ) {
-    return <JALFareClassInput segmentInput={segmentInput} error={error} onChange={onChange} />;
+    return (
+      <JALFareClassInput
+        segmentInputIdx={segmentInputIdx}
+        segmentInput={segmentInput}
+        error={error}
+        onChange={onChange}
+      />
+    );
   }
 
   return (
     <TextField
+      data-testid={`segment-fare-class-${segmentInputIdx}`}
       value={segmentInput.fareClass}
       error={Boolean(error)}
-      helperText={error ? error : ' '}
+      helperText={
+        <span data-testid={`segment-error-fare-class-${segmentInputIdx}`}>
+          {error ? error : ' '}
+        </span>
+      }
       onChange={(event) => {
         onChange(event.target.value?.trim()?.toLowerCase());
       }}

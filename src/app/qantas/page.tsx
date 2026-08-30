@@ -395,6 +395,7 @@ export default function Qantas() {
         }}
       >
         <Switch
+          data-testid="compare-with-qantas-switch"
           checked={compareWithQantasCalc}
           onChange={(event) => setCompareWithQantasCalcToggled(event.target.checked)}
           disabled={!FLAG_ENABLE_QANTAS_API}
@@ -513,6 +514,7 @@ export default function Qantas() {
             >
               <Grid>
                 <ToggleButtonGroup
+                  data-testid="trip-type-toggle"
                   color="primary"
                   size="small"
                   value={tripType}
@@ -521,8 +523,12 @@ export default function Qantas() {
                     if (value) tripTypeToggled(value);
                   }}
                 >
-                  <ToggleButton value="one way">One Way</ToggleButton>
-                  <ToggleButton value="return">Return</ToggleButton>
+                  <ToggleButton data-testid="trip-type-oneway" value="one way">
+                    One Way
+                  </ToggleButton>
+                  <ToggleButton data-testid="trip-type-return" value="return">
+                    Return
+                  </ToggleButton>
                 </ToggleButtonGroup>
               </Grid>
               <Grid order={{ xs: 2, sm: 3 }}>
@@ -556,7 +562,11 @@ export default function Qantas() {
                 }}
               >
                 <Grid size={4}>
-                  <Button variant="contained" onClick={addSegmentPressed}>
+                  <Button
+                    data-testid="add-segment-button"
+                    variant="contained"
+                    onClick={addSegmentPressed}
+                  >
                     Add Segment
                   </Button>
                 </Grid>
@@ -569,6 +579,7 @@ export default function Qantas() {
                   }}
                 >
                   <Button
+                    data-testid="calculate-button"
                     variant="contained"
                     size="large"
                     onClick={calculatePressed}

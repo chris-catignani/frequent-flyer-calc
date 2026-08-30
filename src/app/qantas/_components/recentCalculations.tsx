@@ -22,6 +22,7 @@ export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProp
   return (
     <Stack spacing={1}>
       <Stack
+        data-testid="recent-calculations-toggle"
         direction="row"
         spacing={1}
         onClick={() => setOpen(!isOpen)}
@@ -70,6 +71,7 @@ export const RecentCalculations: React.FC<RecentCalculationsProps> = ({
   const calcChips = recentCalculations.map((recentCalculation, idx) => {
     return (
       <Chip
+        data-testid={`recent-calculation-chip-${idx}`}
         size="small"
         key={idx}
         label={buildChipLabel(recentCalculation)}
@@ -88,5 +90,13 @@ export const RecentCalculations: React.FC<RecentCalculationsProps> = ({
 };
 
 const ClearAllChip: React.FC<{ onClick: () => void }> = ({ onClick }) => {
-  return <Chip size="small" color="primary" label={'Clear All'} onClick={onClick} />;
+  return (
+    <Chip
+      data-testid="recent-calculations-clear-all"
+      size="small"
+      color="primary"
+      label={'Clear All'}
+      onClick={onClick}
+    />
+  );
 };

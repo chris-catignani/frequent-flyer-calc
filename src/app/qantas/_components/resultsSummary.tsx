@@ -59,7 +59,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   const TotalAirlinePointsEarned: React.FC = () => {
     return (
       <Grid container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
-        <Typography variant="h5">
+        <Typography variant="h5" data-testid="total-points-earned">
           Qantas Points Earned: {calculationOutput?.airlinePoints?.toLocaleString()}
         </Typography>
         <MatchesQantasAPIIcon
@@ -73,7 +73,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   const TotalElitePointsEarned: React.FC = () => {
     return (
       <Grid container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
-        <Typography variant="h5">
+        <Typography variant="h5" data-testid="total-status-credits-earned">
           Status Credits Earned: {calculationOutput?.elitePoints?.toLocaleString()}
         </Typography>
         <MatchesQantasAPIIcon
@@ -151,7 +151,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   };
 
   return (
-    <Box mt={5}>
+    <Box mt={5} data-testid="results-summary">
       <TotalAirlinePointsEarned />
       <TotalElitePointsEarned />
     </Box>
