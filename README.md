@@ -23,5 +23,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## Known Discrepancies
 
 Flights where this calc and Qantas official calculator are not in sync:
+
 - China Airlines PVG-SZX
 - American Airlines DFW-LAX
