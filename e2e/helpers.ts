@@ -44,7 +44,7 @@ export async function setEliteStatus(page: Page, status: string) {
   const container = page.getByTestId('elite-status-input');
   const input = container.locator('input');
   await input.click();
-  await page.getByRole('option', { name: status }).click();
+  await page.getByRole('option', { name: status, exact: true }).click();
 }
 
 export async function clickCalculate(page: Page) {
