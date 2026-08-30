@@ -54,7 +54,7 @@ export class SegmentInput {
 }
 
 export const defaultSegmentInput = new SegmentInput(
-  '',
+  'qf',
   '',
   '',
   '',
