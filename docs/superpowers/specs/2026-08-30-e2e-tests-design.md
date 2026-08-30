@@ -53,7 +53,7 @@ Follows the runner pattern from `hotel-tracker`:
 
 ---
 
-## 3. UI Instrumentation (`data-testid` Contract)
+## 3. UI Instrumentation (`data-testid` Contract) & Test Helpers
 
 To ensure reliable, non-brittle test selectors, components will be instrumented with the following `data-testid` attributes:
 
@@ -102,6 +102,13 @@ To ensure reliable, non-brittle test selectors, components will be instrumented 
 - `recent-calculation-chip-{index}`: Chip for recent calculation at `index`.
 - `recent-calculations-clear-all`: "Clear All" Chip.
 
+### 3.6 Interaction Helpers (`e2e/helpers.ts`)
+To handle MUI's Autocomplete popover portals cleanly without test flakiness:
+- `selectAirline(page, index, airlineLabelOrIata)`: Types the airline into `segment-airline-{index}` input and selects the item from the MUI Popper dropdown.
+- `setAirport(page, type: 'from' | 'to', index, iata)`: Fills the freeSolo airport input with the 3-letter IATA code.
+- `setFareClass(page, index, fareClassOrName)`: Handles both dropdown select (for QF/JQ) and text input (for partner airlines like AA).
+- `setEliteStatus(page, status)`: Selects the elite status tier from the Autocomplete dropdown.
+
 ---
 
 ## 4. Test Scenarios
@@ -110,7 +117,7 @@ To ensure reliable, non-brittle test selectors, components will be instrumented 
 - **Non-Qantas Route**:
   - Input: Airline `AA` (American Airlines), From `LAX`, To `JFK`, Fare Class `F` (First).
   - Action: Click Calculate.
-  - Assertions: Total Qantas Points = `3,750`, Status Credits = `120`.
+  - Assertions: Total Qantas Points = `3,750`, Status Credits = `150`.
 - **Qantas Domestic Route**:
   - Input: Airline `QF` (Qantas), From `SYD`, To `MEL`, Fare Class `Discount Economy` (`E` / `Discount Economy`).
   - Action: Click Calculate.
@@ -122,9 +129,11 @@ To ensure reliable, non-brittle test selectors, components will be instrumented 
   - Click "Add Segment".
   - Verify Segment 1 inherits previous destination as origin (`MEL`).
   - Fill Segment 1: `QF`, `MEL` $\rightarrow$ `BNE`, `Flexible Economy`.
-  - Calculate $\rightarrow$ verify 2 segment result rows and aggregate points/credits.
+  - Calculate $\rightarrow$ verify 2 segment result rows and aggregate totals:
+    - Points: `2,575` (`1,200` for SYD-MEL + `1,375` for MEL-BNE)
+    - Status Credits: `50` (`20` for SYD-MEL + `30` for MEL-BNE)
   - Delete Segment 0 $\rightarrow$ verify only 1 segment remains (`MEL` $\rightarrow$ `BNE`).
-  - Calculate $\rightarrow$ verify updated totals.
+  - Calculate $\rightarrow$ verify updated totals (`1,375` points, `30` status credits).
 
 ### 4.3 Advanced Inputs (`e2e/advanced-input.spec.ts`)
 - **Free Form Text Itinerary**:
@@ -138,7 +147,10 @@ To ensure reliable, non-brittle test selectors, components will be instrumented 
   - Click "Apply".
   - Verify form inputs populate with 2 segments (`QF SYD-MEL Y`, `QF MEL-BNE Y`).
   - Click "Calculate".
-  - Verify results summary and table display matching calculations for both legs.
+  - Verify results summary displays:
+    - Total Qantas Points: `2,575`
+    - Total Status Credits: `50`
+    - 2 result rows in the breakdown table with accurate individual earnings.
 
 ### 4.4 Controls, Dynamic Recalculation & URL Hydration (`e2e/features.spec.ts`)
 - **Trip Type Return Toggle**:
@@ -147,10 +159,10 @@ To ensure reliable, non-brittle test selectors, components will be instrumented 
   - Verify auto-recalculation triggers with doubled results (Points: `2,400`, SC: `40`) and 2 result rows (`syd - mel`, `mel - syd`).
 - **Elite Status Recalculation**:
   - Calculate `QF SYD-MEL` in Flexible Economy with Bronze status (Points: `1,200`).
-  - Change Elite Status dropdown to `Platinum` (100% bonus).
-  - Verify points automatically update to reflect Platinum tier earnings (Points: `2,050`).
+  - Change Elite Status dropdown to `Platinum` (100% bonus on 750 base points = 1,500).
+  - Verify points automatically update to reflect Platinum tier earnings (Points: `1,500`, SC: `20`).
 - **Deep-linking & URL Hydration**:
-  - Navigate directly to `/qantas?s=qf-syd-mel-y&t=return&status=Gold`.
+  - Navigate directly to `/qantas?segmentInputs=qf_syd_mel_y&tripType=return&eliteStatus=Gold`.
   - Verify inputs hydrate: Airline `QF`, From `SYD`, To `MEL`, Fare Class `Flexible Economy`, Trip Type `Return`, Elite Status `Gold`.
 - **Recent Calculations History**:
   - Perform a calculation.
