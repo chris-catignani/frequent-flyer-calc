@@ -1,0 +1,60 @@
+import React from 'react';
+import { Favorite } from '@mui/icons-material';
+import { Grid, Typography } from '@mui/material';
+
+export const Footer: React.FC = () => {
+  return (
+    <Grid
+      mx={2}
+      mt={5}
+      mb={1}
+      container
+      direction="column"
+      justifyContent="center"
+      alignContent="center"
+      spacing={2}
+    >
+      <Grid container justifyContent="center" alignContent="center" spacing={0}>
+        <Typography textAlign="center">Calculations based on&nbsp;</Typography>
+        <Typography>
+          <a
+            href="https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Qantas/Jetstar
+          </a>
+        </Typography>
+        <Typography>&nbsp;and&nbsp;</Typography>
+        <Typography>
+          <a
+            href="https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Partner
+          </a>
+        </Typography>
+        <Typography>&nbsp;earning tables as of March 2026.</Typography>
+      </Grid>
+      <Typography textAlign="center">
+        This webpage is not affiliated with Qantas Airlines.
+      </Typography>
+      <Grid container justifyContent="center" alignContent="center" spacing={0}>
+        <Typography>Made with&nbsp;</Typography>
+        <Favorite fontSize="small" sx={{ color: 'red' }} />
+        <Typography>&nbsp;from&nbsp;</Typography>
+        <Typography>
+          <a
+            href="https://www.flyertalk.com/forum/members/delighted5153.html"
+            target="_blank"
+            rel="noreferrer"
+          >
+            delighted5153
+          </a>
+        </Typography>
+        <Typography>&nbsp;&#40;Feedback welcome!&#41;</Typography>
+      </Grid>
+    </Grid>
+  );
+};
