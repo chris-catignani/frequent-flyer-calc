@@ -9,6 +9,7 @@ export interface EliteStatusInputProps {
 export const EliteStatusInput: React.FC<EliteStatusInputProps> = ({ eliteStatus, onChange }) => {
   return (
     <Autocomplete
+      data-testid="elite-status-input"
       disableClearable
       value={eliteStatus}
       options={['Bronze', 'Silver', 'Gold', 'Platinum', 'Platinum One']}

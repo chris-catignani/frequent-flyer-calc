@@ -30,6 +30,7 @@ export const AdvancedInput: React.FC<AdvancedInputProps> = ({ setSegmentInputs }
   return (
     <Stack spacing={1}>
       <Stack
+        data-testid="advanced-input-toggle"
         direction="row"
         spacing={1}
         onClick={() => setOpen(!isOpen)}
@@ -88,7 +89,11 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
 
   return (
     <Box>
-      <Accordion expanded={expanded === 'text-itin'} onChange={handleAccordionChange('text-itin')}>
+      <Accordion
+        data-testid="advanced-input-text-accordion"
+        expanded={expanded === 'text-itin'}
+        onChange={handleAccordionChange('text-itin')}
+      >
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>Free Form Text Itinerary</Typography>
         </AccordionSummary>
@@ -100,10 +105,13 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
           />
         </AccordionDetails>
         <AccordionActions sx={{ pt: 0 }}>
-          <Button onClick={applyTextItinInput}>Apply</Button>
+          <Button data-testid="advanced-input-text-apply-button" onClick={applyTextItinInput}>
+            Apply
+          </Button>
         </AccordionActions>
       </Accordion>
       <Accordion
+        data-testid="advanced-input-ita-accordion"
         expanded={expanded === 'ita-matrix'}
         onChange={handleAccordionChange('ita-matrix')}
       >
@@ -118,7 +126,9 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
           />
         </AccordionDetails>
         <AccordionActions sx={{ pt: 0 }}>
-          <Button onClick={applyItaMatrixInput}>Apply</Button>
+          <Button data-testid="advanced-input-ita-apply-button" onClick={applyItaMatrixInput}>
+            Apply
+          </Button>
         </AccordionActions>
       </Accordion>
     </Box>
@@ -159,6 +169,7 @@ const FreeFormTextItinerary: React.FC<FreeFormTextItineraryProps> = ({
         </ul>
       </Box>
       <TextField
+        data-testid="advanced-input-text-field"
         fullWidth
         multiline
         maxRows={10}
@@ -194,6 +205,7 @@ const ItaMatrixItinerary: React.FC<ItaMatrixItineraryProps> = ({
         calculate.
       </Typography>
       <TextField
+        data-testid="advanced-input-ita-field"
         fullWidth
         multiline
         maxRows={10}

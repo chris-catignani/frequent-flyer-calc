@@ -46,7 +46,7 @@ export const SegmentResults: React.FC<SegmentResultsProps> = ({
       width="100%"
       maxWidth="sm"
     >
-      <TableContainer>
+      <TableContainer data-testid="segment-results-table">
         <Table>
           <TableHead>
             <SegmentTableHeader compareWithQantasCalc={compareWithQantasCalc} />
@@ -55,6 +55,7 @@ export const SegmentResults: React.FC<SegmentResultsProps> = ({
             {calculatedData.segmentResults.map((segmentResult, segmentIdx) => (
               <SegmentTableRow
                 key={segmentIdx}
+                segmentIdx={segmentIdx}
                 segmentResult={segmentResult}
                 compareWithQantasCalc={compareWithQantasCalc}
               />
@@ -219,9 +220,10 @@ const MatchesQantasSegmentIcon: React.FC<{
 };
 
 const SegmentTableRow: React.FC<{
+  segmentIdx: number;
   segmentResult: SegmentResult;
   compareWithQantasCalc: boolean;
-}> = ({ segmentResult, compareWithQantasCalc }) => {
+}> = ({ segmentIdx, segmentResult, compareWithQantasCalc }) => {
   const { segment, error } = segmentResult;
 
   const [expandRow, setExpandRow] = useState(false);
@@ -231,8 +233,8 @@ const SegmentTableRow: React.FC<{
     const errorColSpan = compareWithQantasCalc ? 4 : 3;
     const errorMsg = error instanceof Error ? error.message : String(error);
     return (
-      <TableRow>
-        <TableCell component="th" scope="row">
+      <TableRow data-testid={`segment-result-row-${segmentIdx}`}>
+        <TableCell component="th" scope="row" data-testid={`segment-result-route-${segmentIdx}`}>
           {segment.fromAirport?.iata?.toLowerCase()} - {segment.toAirport?.iata?.toLowerCase()}
         </TableCell>
         <TableCell align="right" colSpan={errorColSpan}>
@@ -250,14 +252,27 @@ const SegmentTableRow: React.FC<{
 
   return (
     <>
-      <TableRow sx={{ cursor: 'pointer' }}>
-        <TableCell component="th" scope="row" onClick={() => setExpandRow(!expandRow)}>
+      <TableRow sx={{ cursor: 'pointer' }} data-testid={`segment-result-row-${segmentIdx}`}>
+        <TableCell
+          component="th"
+          scope="row"
+          data-testid={`segment-result-route-${segmentIdx}`}
+          onClick={() => setExpandRow(!expandRow)}
+        >
           {segment.fromAirport?.iata?.toLowerCase()} - {segment.toAirport?.iata?.toLowerCase()}
         </TableCell>
-        <TableCell align="right" onClick={() => setExpandRow(!expandRow)}>
+        <TableCell
+          align="right"
+          data-testid={`segment-result-points-${segmentIdx}`}
+          onClick={() => setExpandRow(!expandRow)}
+        >
           {segmentResult.airlinePoints?.toLocaleString()}
         </TableCell>
-        <TableCell align="right" onClick={() => setExpandRow(!expandRow)}>
+        <TableCell
+          align="right"
+          data-testid={`segment-result-status-credits-${segmentIdx}`}
+          onClick={() => setExpandRow(!expandRow)}
+        >
           {segmentResult.elitePoints?.toLocaleString()}
         </TableCell>
         {compareWithQantasCalc && (
