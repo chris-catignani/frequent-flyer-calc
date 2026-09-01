@@ -20,7 +20,7 @@ export const ONEWORLD_AIRLINES: AirlineMap = {
   ul: "SriLankan Airlines",
 };
 
-export const JETSTAR_AIRLINES: AirlineMap = {
+const JETSTAR_AIRLINES: AirlineMap = {
   jq: "Jetstar Airlines",
   gk: "Jetstar Japan",
 };
@@ -32,11 +32,6 @@ export const LATAM_AIRLINES: AirlineMap = {
   xl: "LATAM Ecuador",
   lu: "LATAM Express",
   lp: "LATAM Peru",
-};
-
-export const QANTAS_GRP_AIRLINES: AirlineMap = {
-  qf: "Qantas",
-  ...JETSTAR_AIRLINES,
 };
 
 //TODO more here

@@ -1,6 +1,12 @@
-import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from "@/app/_shared/models/constants";
+import { AirlineMap, LATAM_AIRLINES, ONEWORLD_AIRLINES } from "@/app/_shared/models/constants";
 
 export const JETSTAR_AIRLINES: Set<string> = new Set(["jq", "gk"]);
+
+export const QANTAS_GRP_AIRLINES: AirlineMap = {
+  qf: "Qantas",
+  jq: "Jetstar Airlines",
+  gk: "Jetstar Japan",
+};
 
 export const JAL_AIRLINES: Set<string> = new Set(["jl", "nu"]);
 

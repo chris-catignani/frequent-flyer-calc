@@ -18,13 +18,14 @@ import type {
   EliteBonus,
   QantasApiResults,
 } from "@/types/calculator";
+import type { CalculationOptions } from "@/types/program";
 import type { Rule } from "@/app/_shared/calculators/qantas/rules";
 
 const partnerRules = getPartnerRules(); // this is a map of airlineCode -> rules[]
 const qantasRules = getQantasRules(); // this is a map of airlineCode -> rules[]
 const qantasMinPoints = getQantasMinimumPoints();
 
-const supportedAirlines = new Set([
+export const supportedAirlines = new Set([
   ...Object.keys(ONEWORLD_AIRLINES),
   ...Object.keys(LATAM_AIRLINES),
   ...JETSTAR_AIRLINES,
@@ -38,8 +39,8 @@ const supportedAirlines = new Set([
   "ws",
 ]);
 
-const eliteStatusBonusAirlines = new Set(["aa", "qf", "jq", "gk"]);
-const eliteStatusBonusMultiples: Record<string, number> = {
+export const eliteStatusBonusAirlines = new Set(["aa", "qf", "jq", "gk"]);
+export const eliteStatusBonusMultiples: Record<string, number> = {
   silver: 0.5,
   gold: 0.75,
   platinum: 1.0,
@@ -50,8 +51,16 @@ export const calculate = async (
   segments: Segment[],
   eliteStatus: string = "",
   priceLessTaxes: number = 0, // eslint-disable-line @typescript-eslint/no-unused-vars
-  compareWithQantasCalc: boolean = false
+  compareWithQantasCalcOrOptions: CalculationOptions | boolean = false
 ): Promise<CalculationResult> => {
+  const compareWithQantasCalc =
+    typeof compareWithQantasCalcOrOptions === "boolean"
+      ? compareWithQantasCalcOrOptions
+      : Boolean(
+          compareWithQantasCalcOrOptions?.compareWithProgramApi ??
+          compareWithQantasCalcOrOptions?.compareWithQantasCalc
+        );
+
   const retval: CalculationResult = {
     segmentResults: [],
     containsErrors: false,

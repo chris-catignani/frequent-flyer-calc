@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { calculate } from "@/app/_shared/calculators/qantas/calculator";
 import {
   Alert,
   Box,
@@ -21,12 +20,7 @@ import { Info } from "@mui/icons-material";
 import { getAirport } from "@/app/_shared/utils/airports";
 import { Segment } from "@/app/_shared/models/segment";
 import { defaultSegmentInput, SegmentInput } from "@/app/_shared/models/segmentInput";
-import {
-  JAL_AIRLINES,
-  JETSTAR_AIRLINES,
-  PARTNER_NON_ONEWORLD_AIRLINES,
-  PARTNER_ONEWORLD_AIRLINES,
-} from "@/app/_shared/models/qantasConstants";
+import { JAL_AIRLINES, JETSTAR_AIRLINES } from "@/app/_shared/models/qantasConstants";
 import {
   createUrlQueryParams,
   parseUrlQueryParams,
@@ -46,14 +40,12 @@ import { ResultsSummary } from "@/app/qantas/_components/resultsSummary";
 import { SegmentResults } from "@/app/qantas/_components/segmentResults";
 import { Footer } from "@/app/qantas/_components/footer";
 import { ChangeLog } from "@/app/qantas/_components/changeLog";
-import { qantasSegmentInputAdapter } from "@/app/qantas/_components/fareClassInput";
+import { qantasProgram } from "@/app/_shared/calculators/qantas";
 import {
-  buildAirlineOptions,
   SegmentInputList,
   validate,
   type SegmentErrors,
 } from "@/app/_shared/components/segmentInput";
-import { QANTAS_GRP_AIRLINES } from "@/app/_shared/models/constants";
 import { trackCalculationCompleted, trackQantasApiMismatch } from "@/app/_shared/utils/analytics";
 import { isAirlinePointsMatch, isElitePointsMatch } from "@/app/_shared/utils/comparison";
 import type { CalculationResult } from "@/types/calculator";
@@ -96,7 +88,7 @@ export default function Qantas() {
   }, []);
 
   const validateInput = () => {
-    return validate(segmentInputs, qantasSegmentInputAdapter);
+    return validate(segmentInputs, qantasProgram.segmentInputAdapter);
   };
 
   const doCalculation = async (
@@ -124,7 +116,7 @@ export default function Qantas() {
       }
     }
 
-    const calculationResult = await calculate(
+    const calculationResult = await qantasProgram.calculate(
       segments,
       theEliteStatus,
       0.0, // priceLessTaxes ignored for qantas
@@ -542,12 +534,8 @@ export default function Qantas() {
               <SegmentInputList
                 segmentInputs={segmentInputs}
                 errors={inputErrors}
-                adapter={qantasSegmentInputAdapter}
-                airlineOptions={[
-                  ...buildAirlineOptions(Object.keys(QANTAS_GRP_AIRLINES), "Qantas Group Airlines"),
-                  ...buildAirlineOptions(PARTNER_ONEWORLD_AIRLINES, "oneworld Partner Airlines"),
-                  ...buildAirlineOptions(PARTNER_NON_ONEWORLD_AIRLINES, "Other Partner Airlines"),
-                ]}
+                adapter={qantasProgram.segmentInputAdapter}
+                airlineOptions={qantasProgram.airlineOptions}
                 onDeleteSegmentPressed={deleteSegmentPressed}
                 onSegmentInputChanged={segmentInputChanged}
                 onSegmentsReordered={segmentsReordered}

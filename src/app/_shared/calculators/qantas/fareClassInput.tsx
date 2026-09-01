@@ -4,7 +4,6 @@ import {
   type FareClassInputRenderProps,
   type SegmentInputAdapter,
 } from "@/app/_shared/components/segmentInput";
-import { QANTAS_GRP_AIRLINES } from "@/app/_shared/models/constants";
 import {
   JAL_AIRLINES,
   JAL_DOMESTIC_FARE_CLASSES,
@@ -16,6 +15,7 @@ import {
   JETSTAR_NEW_ZEALAND_FARE_CLASSES,
   QANTAS_DOMESTIC_FARE_CLASSES,
   QANTAS_FARE_CLASS_DISPLAY,
+  QANTAS_GRP_AIRLINES,
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
 } from "@/app/_shared/models/qantasConstants";
