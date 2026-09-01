@@ -1,6 +1,6 @@
-import React from 'react';
-import { Favorite } from '@mui/icons-material';
-import { Grid, Typography } from '@mui/material';
+import React from "react";
+import { Favorite } from "@mui/icons-material";
+import { Grid, Typography } from "@mui/material";
 
 export const Footer: React.FC = () => {
   return (
@@ -42,7 +42,7 @@ export const Footer: React.FC = () => {
       </Typography>
       <Grid container justifyContent="center" alignContent="center" spacing={0}>
         <Typography>Made with&nbsp;</Typography>
-        <Favorite fontSize="small" sx={{ color: 'red' }} />
+        <Favorite fontSize="small" sx={{ color: "red" }} />
         <Typography>&nbsp;from&nbsp;</Typography>
         <Typography>
           <a

@@ -1,13 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState } from "react";
 import {
   DragDropContext,
   Draggable,
   Droppable,
   type DraggableProvidedDragHandleProps,
   type DropResult,
-} from '@hello-pangea/dnd';
-import { Clear, DragHandle } from '@mui/icons-material';
-import { Autocomplete, Box, Divider, Grid, IconButton, TextField, Typography } from '@mui/material';
+} from "@hello-pangea/dnd";
+import { Clear, DragHandle } from "@mui/icons-material";
+import { Autocomplete, Box, Divider, Grid, IconButton, TextField, Typography } from "@mui/material";
 import {
   JAL_AIRLINES,
   JAL_DOMESTIC_FARE_CLASS_DISPLAY,
@@ -21,12 +21,12 @@ import {
   QANTAS_FARE_CLASS_DISPLAY,
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
-} from '@/app/_shared/models/qantasConstants';
-import { GroupHeader, GroupItems } from '@/app/_shared/components/autocomplete';
-import { ALL_AIRLINES, QANTAS_GRP_AIRLINES } from '@/app/_shared/models/constants';
-import { searchAirports } from '@/app/_shared/utils/airports';
-import { SegmentInput } from '@/app/_shared/models/segmentInput';
-import type { Airport } from '@/types/airport';
+} from "@/app/_shared/models/qantasConstants";
+import { GroupHeader, GroupItems } from "@/app/_shared/components/autocomplete";
+import { ALL_AIRLINES, QANTAS_GRP_AIRLINES } from "@/app/_shared/models/constants";
+import { searchAirports } from "@/app/_shared/utils/airports";
+import { SegmentInput } from "@/app/_shared/models/segmentInput";
+import type { Airport } from "@/types/airport";
 
 export interface AirlineOption {
   airlineLabel: string;
@@ -63,23 +63,23 @@ export const validate = (segmentInputs: SegmentInput[]): SegmentErrors => {
 
   segmentInputs.forEach((segmentInput, idx) => {
     if (!segmentInput.airline) {
-      addError(idx, 'airline', 'Required');
+      addError(idx, "airline", "Required");
     }
     if (!segmentInput.fromAirportText) {
-      addError(idx, 'fromAirportText', 'Required');
+      addError(idx, "fromAirportText", "Required");
     }
     if (!segmentInput.toAirportText) {
-      addError(idx, 'toAirportText', 'Required');
+      addError(idx, "toAirportText", "Required");
     }
     if (!segmentInput.fareClass) {
-      addError(idx, 'fareClass', 'Required');
+      addError(idx, "fareClass", "Required");
     }
 
     if (segmentInput.fromAirportText && !segmentInput.fromAirport) {
-      addError(idx, 'fromAirportText', 'Invalid IATA');
+      addError(idx, "fromAirportText", "Invalid IATA");
     }
     if (segmentInput.toAirportText && !segmentInput.toAirport) {
-      addError(idx, 'toAirportText', 'Invalid IATA');
+      addError(idx, "toAirportText", "Invalid IATA");
     }
   });
 
@@ -164,7 +164,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
           <Divider
             sx={{
               mb: { xs: 3, sm: 0 },
-              visibility: { sm: 'hidden' },
+              visibility: { sm: "hidden" },
             }}
           />
           <SegmentInputRow
@@ -211,8 +211,8 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       spacing={1}
       columns={22}
       sx={{
-        justifyContent: 'flex-start',
-        alignItems: 'center',
+        justifyContent: "flex-start",
+        alignItems: "center",
       }}
     >
       <Grid
@@ -227,12 +227,12 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         <AirlineInput
           segmentInputIdx={segmentInputIdx}
           value={segmentInput.airline}
-          error={errors['airline']}
+          error={errors["airline"]}
           airlineOptions={airlineOptions}
           onChange={(value) => {
             const newSegmentInput = segmentInput.clone({ airline: value });
             if (shouldClearFareClassForAirlineChange(segmentInput, value)) {
-              newSegmentInput.fareClass = '';
+              newSegmentInput.fareClass = "";
             }
             onChange(newSegmentInput);
           }}
@@ -242,9 +242,9 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         <AirportInput
           dataTestId={`segment-from-${segmentInputIdx}`}
           errorTestId={`segment-error-from-${segmentInputIdx}`}
-          label={'From (e.g. syd)'}
+          label={"From (e.g. syd)"}
           value={segmentInput.fromAirportText}
-          error={errors['fromAirportText']}
+          error={errors["fromAirportText"]}
           onChange={(value) => {
             const newSegmentInput = segmentInput.clone({
               fromAirportText: value,
@@ -253,10 +253,10 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
               shouldClearFareClassForAirportChange(
                 segmentInput.airline,
                 segmentInput.fromAirportText,
-                value,
+                value
               )
             ) {
-              newSegmentInput.fareClass = '';
+              newSegmentInput.fareClass = "";
             }
             onChange(newSegmentInput);
           }}
@@ -266,9 +266,9 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         <AirportInput
           dataTestId={`segment-to-${segmentInputIdx}`}
           errorTestId={`segment-error-to-${segmentInputIdx}`}
-          label={'To (e.g. mel)'}
+          label={"To (e.g. mel)"}
           value={segmentInput.toAirportText}
-          error={errors['toAirportText']}
+          error={errors["toAirportText"]}
           onChange={(value) => {
             const newSegmentInput = segmentInput.clone({
               toAirportText: value,
@@ -277,10 +277,10 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
               shouldClearFareClassForAirportChange(
                 segmentInput.airline,
                 segmentInput.toAirportText,
-                value,
+                value
               )
             ) {
-              newSegmentInput.fareClass = '';
+              newSegmentInput.fareClass = "";
             }
             onChange(newSegmentInput);
           }}
@@ -290,7 +290,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         <FareClassInput
           segmentInputIdx={segmentInputIdx}
           segmentInput={segmentInput}
-          error={errors['fareClass']}
+          error={errors["fareClass"]}
           onChange={(value) => {
             onChange(segmentInput.clone({ fareClass: value }));
           }}
@@ -317,7 +317,7 @@ const ReorderSegmentInputButton: React.FC<{ showReorderButton: boolean }> = ({
   if (!showReorderButton) {
     return (
       // Dummy icon to maintain space for when we show icons
-      <IconButton disabled sx={{ visibility: 'hidden', p: 0 }}>
+      <IconButton disabled sx={{ visibility: "hidden", p: 0 }}>
         <DragHandle />
       </IconButton>
     );
@@ -326,7 +326,7 @@ const ReorderSegmentInputButton: React.FC<{ showReorderButton: boolean }> = ({
       <IconButton
         sx={{
           p: 0,
-          cursor: 'grab',
+          cursor: "grab",
         }}
       >
         <DragHandle />
@@ -343,7 +343,7 @@ const RemoveSegmentInputButton: React.FC<{
   if (!showDeleteButton) {
     return (
       // Dummy icon to maintain space for when we show icons
-      <IconButton disabled sx={{ visibility: 'hidden', p: 0 }}>
+      <IconButton disabled sx={{ visibility: "hidden", p: 0 }}>
         <Clear />
       </IconButton>
     );
@@ -353,7 +353,7 @@ const RemoveSegmentInputButton: React.FC<{
         data-testid={`segment-delete-${segmentInputIdx}`}
         sx={{
           p: 0,
-          '&:hover': { backgroundColor: 'inherit', boxShadow: 'none' },
+          "&:hover": { backgroundColor: "inherit", boxShadow: "none" },
         }}
         onClick={onDeleteClicked}
       >
@@ -365,7 +365,7 @@ const RemoveSegmentInputButton: React.FC<{
 
 const shouldClearFareClassForAirlineChange = (
   segmentInput: SegmentInput | undefined,
-  airline: string,
+  airline: string
 ): boolean => {
   // if the airline did not change
   if (airline === segmentInput?.airline) {
@@ -387,7 +387,7 @@ const shouldClearFareClassForAirlineChange = (
 const shouldClearFareClassForAirportChange = (
   airline: string,
   _originalAirport: string,
-  newAirport: string,
+  newAirport: string
 ): boolean => {
   // Because JAL's fare class can toggle between a drop down or free form text, just clear it on any airport change
   if (JAL_AIRLINES.has(airline)) {
@@ -429,23 +429,23 @@ const AirlineInput: React.FC<AirlineInputProps> = ({
       autoSelect
       options={airlineOptions}
       getOptionLabel={(airline) =>
-        typeof airline === 'string' ? airline : airline.airlineLabel || ''
+        typeof airline === "string" ? airline : airline.airlineLabel || ""
       }
       value={selectedOption}
       groupBy={(option) => option.groupName}
       onChange={(_, newValue) => {
-        if (newValue && typeof newValue === 'object') {
+        if (newValue && typeof newValue === "object") {
           onChange(newValue.iata);
         }
       }}
-      sx={{ width: '100%' }}
+      sx={{ width: "100%" }}
       renderInput={(params) => (
         <TextField
           {...params}
           error={Boolean(error)}
           helperText={
             <span data-testid={`segment-error-airline-${segmentInputIdx}`}>
-              {error ? error : ' '}
+              {error ? error : " "}
             </span>
           }
           label="Airline"
@@ -490,28 +490,28 @@ const AirportInput: React.FC<AirportInputProps> = ({
       autoHighlight
       options={options}
       filterOptions={(presetOptions) => presetOptions}
-      inputValue={!focused || justSelected ? (value || '').toUpperCase() : value || ''}
+      inputValue={!focused || justSelected ? (value || "").toUpperCase() : value || ""}
       onInputChange={(_event, newInputValue, reason) => {
-        if (reason === 'input' || reason === 'selectOption') {
-          setJustSelected(reason === 'selectOption');
+        if (reason === "input" || reason === "selectOption") {
+          setJustSelected(reason === "selectOption");
           onChange(newInputValue.toLowerCase());
         }
       }}
       onChange={(_event, newValue) => {
-        if (newValue && typeof newValue === 'object') {
+        if (newValue && typeof newValue === "object") {
           setJustSelected(true);
           onChange((newValue as Airport).iata.toLowerCase());
         }
       }}
       getOptionLabel={(option) =>
-        typeof option === 'string' ? option : option.iata ? option.iata.toLowerCase() : ''
+        typeof option === "string" ? option : option.iata ? option.iata.toLowerCase() : ""
       }
       renderOption={(props, option) => {
         const { key, ...optionProps } = props;
         const airport = option as Airport;
         return (
           <li key={key} {...optionProps} onMouseDown={(event) => event.preventDefault()}>
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
               <Typography variant="body2" component="span">
                 {airport.iata?.toUpperCase()} — {airport.name}
               </Typography>
@@ -523,16 +523,16 @@ const AirportInput: React.FC<AirportInputProps> = ({
         );
       }}
       slotProps={{
-        popper: { placement: 'bottom-start', style: { width: 'fit-content' } },
+        popper: { placement: "bottom-start", style: { width: "fit-content" } },
         paper: { sx: { minWidth: 280, maxWidth: 400 } },
       }}
-      sx={{ width: '100%' }}
+      sx={{ width: "100%" }}
       renderInput={(params) => (
         <TextField
           {...params}
           label={label}
           error={Boolean(error)}
-          helperText={<span data-testid={errorTestId}>{error ? error : ' '}</span>}
+          helperText={<span data-testid={errorTestId}>{error ? error : " "}</span>}
           onFocus={() => {
             setFocused(true);
             setJustSelected(false);
@@ -561,25 +561,25 @@ const QantasFareClassInput: React.FC<FareClassInputSubProps> = ({
   const qfWebCategories = WEBSITE_EARN_CATEGORIES.qf as string[];
   if (segmentInput.fromAirport && segmentInput.toAirport) {
     if (
-      segmentInput.fromAirport.country === 'Australia' &&
-      segmentInput.toAirport.country === 'Australia'
+      segmentInput.fromAirport.country === "Australia" &&
+      segmentInput.toAirport.country === "Australia"
     ) {
       fareClassOptions = Object.keys(QANTAS_DOMESTIC_FARE_CLASSES);
       fareClassOptions.push(
         ...qfWebCategories[0]
-          .replace(/\W/g, '')
-          .split('')
+          .replace(/\W/g, "")
+          .split("")
           .map((letter) => letter.toLowerCase())
-          .sort(),
+          .sort()
       );
     } else {
       fareClassOptions = Object.keys(QANTAS_INTL_FARE_CLASSES);
       fareClassOptions.push(
         ...qfWebCategories[1]
-          .replace(/\W/g, '')
-          .split('')
+          .replace(/\W/g, "")
+          .split("")
           .map((letter) => letter.toLowerCase())
-          .sort(),
+          .sort()
       );
     }
   }
@@ -588,10 +588,10 @@ const QantasFareClassInput: React.FC<FareClassInputSubProps> = ({
     <GenericFareClassInput
       segmentInputIdx={segmentInputIdx}
       options={fareClassOptions}
-      value={segmentInput.fareClass || ''}
+      value={segmentInput.fareClass || ""}
       displayLookup={QANTAS_FARE_CLASS_DISPLAY}
       onChange={onChange}
-      groupBy={(option) => (option.length === 1 ? 'Booking Class' : 'Fare Type')}
+      groupBy={(option) => (option.length === 1 ? "Booking Class" : "Fare Type")}
       error={error}
     />
   );
@@ -606,15 +606,15 @@ const JetstarFareClassInput: React.FC<FareClassInputSubProps> = ({
   let fareClassOptions: string[] = [];
   if (segmentInput.fromAirport && segmentInput.toAirport) {
     if (
-      segmentInput.airline === 'jq' &&
-      segmentInput.fromAirport.country === 'New Zealand' &&
-      segmentInput.toAirport.country === 'New Zealand'
+      segmentInput.airline === "jq" &&
+      segmentInput.fromAirport.country === "New Zealand" &&
+      segmentInput.toAirport.country === "New Zealand"
     ) {
       fareClassOptions = Object.keys(JETSTAR_NEW_ZEALAND_FARE_CLASSES);
     } else if (
-      segmentInput.airline === 'jq' &&
-      segmentInput.fromAirport.country === 'Australia' &&
-      segmentInput.toAirport.country === 'Australia'
+      segmentInput.airline === "jq" &&
+      segmentInput.fromAirport.country === "Australia" &&
+      segmentInput.toAirport.country === "Australia"
     ) {
       fareClassOptions = Object.keys(JETSTAR_DOMESTIC_FARE_CLASSES);
     } else {
@@ -626,7 +626,7 @@ const JetstarFareClassInput: React.FC<FareClassInputSubProps> = ({
     <GenericFareClassInput
       segmentInputIdx={segmentInputIdx}
       options={fareClassOptions}
-      value={segmentInput.fareClass || ''}
+      value={segmentInput.fareClass || ""}
       displayLookup={JETSTAR_FARE_CLASS_DISPLAY}
       onChange={onChange}
       error={error}
@@ -646,7 +646,7 @@ const JALFareClassInput: React.FC<FareClassInputSubProps> = ({
     <GenericFareClassInput
       segmentInputIdx={segmentInputIdx}
       options={fareClassOptions}
-      value={segmentInput.fareClass || ''}
+      value={segmentInput.fareClass || ""}
       displayLookup={JAL_DOMESTIC_FARE_CLASS_DISPLAY}
       onChange={onChange}
       error={error}
@@ -681,17 +681,17 @@ const GenericFareClassInput: React.FC<GenericFareClassInputProps> = ({
       autoSelect
       options={options}
       getOptionLabel={(option) => displayLookup[option] || option}
-      value={options.find((option) => option === value) || ''}
-      onChange={(_event, newValue) => onChange(newValue || '')}
+      value={options.find((option) => option === value) || ""}
+      onChange={(_event, newValue) => onChange(newValue || "")}
       groupBy={groupBy}
-      sx={{ width: '100%' }}
+      sx={{ width: "100%" }}
       renderInput={(params) => (
         <TextField
           {...params}
           error={Boolean(error)}
           helperText={
             <span data-testid={`segment-error-fare-class-${segmentInputIdx}`}>
-              {error ? error : ' '}
+              {error ? error : " "}
             </span>
           }
           label="Fare Class"
@@ -713,7 +713,7 @@ const FareClassInput: React.FC<FareClassInputSubProps> = ({
   error,
   onChange,
 }) => {
-  if (segmentInput.airline === 'qf') {
+  if (segmentInput.airline === "qf") {
     return (
       <QantasFareClassInput
         segmentInputIdx={segmentInputIdx}
@@ -733,8 +733,8 @@ const FareClassInput: React.FC<FareClassInputSubProps> = ({
     );
   } else if (
     JAL_AIRLINES.has(segmentInput.airline) &&
-    segmentInput.fromAirport?.country === 'Japan' &&
-    segmentInput.toAirport?.country === 'Japan'
+    segmentInput.fromAirport?.country === "Japan" &&
+    segmentInput.toAirport?.country === "Japan"
   ) {
     return (
       <JALFareClassInput
@@ -753,14 +753,14 @@ const FareClassInput: React.FC<FareClassInputSubProps> = ({
       error={Boolean(error)}
       helperText={
         <span data-testid={`segment-error-fare-class-${segmentInputIdx}`}>
-          {error ? error : ' '}
+          {error ? error : " "}
         </span>
       }
       onChange={(event) => {
         onChange(event.target.value?.trim()?.toLowerCase());
       }}
       label='Fare Class (e.g. "y" or "i")'
-      sx={{ width: '100%' }}
+      sx={{ width: "100%" }}
     />
   );
 };

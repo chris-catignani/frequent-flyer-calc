@@ -1,15 +1,15 @@
-import type { Segment } from '@/app/_shared/models/segment';
+import type { Segment } from "@/app/_shared/models/segment";
 
 export type FareEarnCategory =
-  | 'discountEconomy'
-  | 'economy'
-  | 'flexibleEconomy'
-  | 'premiumEconomy'
-  | 'flexiblePremiumEconomy'
-  | 'business'
-  | 'flexibleBusiness'
-  | 'first'
-  | 'none'
+  | "discountEconomy"
+  | "economy"
+  | "flexibleEconomy"
+  | "premiumEconomy"
+  | "flexiblePremiumEconomy"
+  | "business"
+  | "flexibleBusiness"
+  | "first"
+  | "none"
   | string;
 
 export interface EliteBonus {

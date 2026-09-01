@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from 'uuid';
-import type { Airport } from '@/types/airport';
+import { v4 as uuidv4 } from "uuid";
+import type { Airport } from "@/types/airport";
 
 export interface SegmentInputProps {
   airline?: string;
@@ -22,7 +22,7 @@ export class SegmentInput {
     fareClass: string,
     fromAirportText: string,
     toAirportText: string,
-    uuid: string = '',
+    uuid: string = ""
   ) {
     this.uuid = uuid || uuidv4();
     this.airline = airline;
@@ -43,7 +43,7 @@ export class SegmentInput {
       fareClass !== undefined ? fareClass : this.fareClass,
       fromAirportText !== undefined ? fromAirportText : this.fromAirportText,
       toAirportText !== undefined ? toAirportText : this.toAirportText,
-      this.uuid,
+      this.uuid
     );
 
     clonedSegment.fromAirport = this.fromAirport;
@@ -54,9 +54,9 @@ export class SegmentInput {
 }
 
 export const defaultSegmentInput = new SegmentInput(
-  'qf',
-  '',
-  '',
-  '',
-  '00000000-0000-0000-0000-000000000000',
+  "qf",
+  "",
+  "",
+  "",
+  "00000000-0000-0000-0000-000000000000"
 );

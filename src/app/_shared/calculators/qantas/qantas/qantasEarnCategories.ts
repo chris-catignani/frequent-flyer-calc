@@ -5,26 +5,26 @@ import {
   QANTAS_DOMESTIC_FARE_CLASSES,
   QANTAS_INTL_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
-} from '@/app/_shared/models/qantasConstants';
+} from "@/app/_shared/models/qantasConstants";
 import {
   buildFareBuckets,
   getEarnCategory,
   type EarnCategoryMap,
   type FareBucketRule,
-} from '@/app/_shared/calculators/qantas/earnCategories';
-import type { Segment } from '@/app/_shared/models/segment';
+} from "@/app/_shared/calculators/qantas/earnCategories";
+import type { Segment } from "@/app/_shared/models/segment";
 
 export const QANTAS_FARE_CLASSES: string[] = [
-  'discountEconomy',
-  'economy',
-  'flexibleEconomy',
-  'discountPremiumEconomy',
-  'premiumEconomy',
-  'flexiblePremiumEconomy',
-  'discountBusiness',
-  'business',
-  'flexibleBusiness',
-  'first',
+  "discountEconomy",
+  "economy",
+  "flexibleEconomy",
+  "discountPremiumEconomy",
+  "premiumEconomy",
+  "flexiblePremiumEconomy",
+  "discountBusiness",
+  "business",
+  "flexibleBusiness",
+  "first",
 ];
 
 export const getQantasEarnCategory = (segment: Segment): string => {
@@ -33,14 +33,14 @@ export const getQantasEarnCategory = (segment: Segment): string => {
 
 const buildQantasFareBuckets = (
   domesticQantasString: string,
-  internationalQantasString: string,
+  internationalQantasString: string
 ): { rules: FareBucketRule[] } => {
   return {
     rules: [
       // domestic
       {
-        origin: { country: new Set(['australia']) },
-        destination: { country: new Set(['australia']) },
+        origin: { country: new Set(["australia"]) },
+        destination: { country: new Set(["australia"]) },
         categories: {
           ...buildFareBuckets(domesticQantasString, QANTAS_FARE_CLASSES),
           ...QANTAS_DOMESTIC_FARE_CLASSES,
@@ -61,18 +61,18 @@ const buildQantasFareBuckets = (
 const buildJetstarFareBuckets = (iata: string): { rules: FareBucketRule[] } => {
   const rules: FareBucketRule[] = [];
 
-  if (iata === 'jq') {
+  if (iata === "jq") {
     // domestic New Zealand
     rules.push({
-      origin: { country: new Set(['new zealand']) },
-      destination: { country: new Set(['new zealand']) },
+      origin: { country: new Set(["new zealand"]) },
+      destination: { country: new Set(["new zealand"]) },
       categories: { ...JETSTAR_NEW_ZEALAND_FARE_CLASSES },
     });
 
     // domestic Australia
     rules.push({
-      origin: { country: new Set(['australia']) },
-      destination: { country: new Set(['australia']) },
+      origin: { country: new Set(["australia"]) },
+      destination: { country: new Set(["australia"]) },
       categories: { ...JETSTAR_DOMESTIC_FARE_CLASSES },
     });
   }
@@ -93,9 +93,9 @@ const earnCategories: EarnCategoryMap = {
     fareBuckets: buildQantasFareBuckets(qfEarnCategories[0], qfEarnCategories[1]),
   },
   jq: {
-    fareBuckets: buildJetstarFareBuckets('jq'),
+    fareBuckets: buildJetstarFareBuckets("jq"),
   },
   gk: {
-    fareBuckets: buildJetstarFareBuckets('gk'),
+    fareBuckets: buildJetstarFareBuckets("gk"),
   },
 };

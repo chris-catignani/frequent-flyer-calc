@@ -1,6 +1,6 @@
-import posthog from 'posthog-js';
-import type { SegmentResult } from '@/types/calculator';
-import type { Segment } from '@/app/_shared/models/segment';
+import posthog from "posthog-js";
+import type { SegmentResult } from "@/types/calculator";
+import type { Segment } from "@/app/_shared/models/segment";
 
 export interface CalculationCompletedParams {
   segmentResults?: SegmentResult[];
@@ -28,13 +28,13 @@ export interface QantasApiMismatchParams {
  */
 function safeTrack(
   eventName: string,
-  properties: Record<string, string | number | boolean | null | undefined>,
+  properties: Record<string, string | number | boolean | null | undefined>
 ): void {
   try {
-    if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === "development") {
       return;
     }
-    if (typeof posthog?.capture === 'function') {
+    if (typeof posthog?.capture === "function") {
       posthog.capture(eventName, properties);
     }
   } catch {
@@ -47,8 +47,8 @@ function safeTrack(
  */
 export function trackCalculationCompleted({
   segmentResults = [],
-  tripType = '',
-  eliteStatus = '',
+  tripType = "",
+  eliteStatus = "",
   compareWithQantas = false,
   containsErrors = false,
   totalPoints = 0,
@@ -62,9 +62,9 @@ export function trackCalculationCompleted({
     const segment = result?.segment;
     if (!segment) return;
 
-    const fromIata = segment.fromAirport?.iata ? segment.fromAirport.iata.toUpperCase() : '';
-    const toIata = segment.toAirport?.iata ? segment.toAirport.iata.toUpperCase() : '';
-    const airline = segment.airline ? segment.airline.toUpperCase() : '';
+    const fromIata = segment.fromAirport?.iata ? segment.fromAirport.iata.toUpperCase() : "";
+    const toIata = segment.toAirport?.iata ? segment.toAirport.iata.toUpperCase() : "";
+    const airline = segment.airline ? segment.airline.toUpperCase() : "";
 
     if (fromIata && toIata) {
       routes.push(`${fromIata}-${toIata}`);
@@ -74,10 +74,10 @@ export function trackCalculationCompleted({
     if (airline) airlineSet.add(airline);
   });
 
-  safeTrack('calculation_completed', {
-    route: routes.join(', ').slice(0, 255),
-    airports: Array.from(airportSet).join(', ').slice(0, 255),
-    airlines: Array.from(airlineSet).join(', ').slice(0, 255),
+  safeTrack("calculation_completed", {
+    route: routes.join(", ").slice(0, 255),
+    airports: Array.from(airportSet).join(", ").slice(0, 255),
+    airlines: Array.from(airlineSet).join(", ").slice(0, 255),
     trip_type: tripType,
     elite_status: eliteStatus,
     segment_count: segmentResults.length,
@@ -98,17 +98,17 @@ export function trackQantasApiMismatch({
   qantasPoints = null,
   qantasStatusCredits = null,
   qantasError = null,
-  eliteStatus = '',
-  tripType = '',
+  eliteStatus = "",
+  tripType = "",
 }: QantasApiMismatchParams = {}): void {
-  const fromIata = segment?.fromAirport?.iata ? segment.fromAirport.iata.toUpperCase() : '';
-  const toIata = segment?.toAirport?.iata ? segment.toAirport.iata.toUpperCase() : '';
-  const airline = segment?.airline ? segment.airline.toUpperCase() : '';
-  const fareClass = segment?.fareClass ? segment.fareClass.toUpperCase() : '';
+  const fromIata = segment?.fromAirport?.iata ? segment.fromAirport.iata.toUpperCase() : "";
+  const toIata = segment?.toAirport?.iata ? segment.toAirport.iata.toUpperCase() : "";
+  const airline = segment?.airline ? segment.airline.toUpperCase() : "";
+  const fareClass = segment?.fareClass ? segment.fareClass.toUpperCase() : "";
 
-  const route = fromIata && toIata ? `${fromIata}-${toIata}` : '';
+  const route = fromIata && toIata ? `${fromIata}-${toIata}` : "";
 
-  safeTrack('qantas_api_mismatch', {
+  safeTrack("qantas_api_mismatch", {
     route,
     airline,
     fare_class: fareClass,

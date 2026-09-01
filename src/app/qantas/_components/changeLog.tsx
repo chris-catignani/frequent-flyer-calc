@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Collapse, Stack, Typography } from '@mui/material';
+import React, { useState } from "react";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Collapse, Stack, Typography } from "@mui/material";
 
 export interface ChangeLogEntry {
   month: string;
@@ -10,17 +10,17 @@ export interface ChangeLogEntry {
 // Newest month first. Add a new { month, entries } entry at the top when shipping a change.
 export const CHANGE_LOG: ChangeLogEntry[] = [
   {
-    month: 'July 2026',
+    month: "July 2026",
     entries: [
       `Added autocomplete search for "from airport" and "to airport".`,
-      'Fixed 4 incorrect Qantas, China Eastern, and KLM earning rates.',
-      'Added Oman Air Muscat routes to the partner earning tables.',
-      'Fixed the Jetstar Domestic New Zealand minimum points guarantee.',
+      "Fixed 4 incorrect Qantas, China Eastern, and KLM earning rates.",
+      "Added Oman Air Muscat routes to the partner earning tables.",
+      "Fixed the Jetstar Domestic New Zealand minimum points guarantee.",
     ],
   },
   {
-    month: 'March 2026',
-    entries: ['Updated earnings rates for recent Jetstar Japan changes.'],
+    month: "March 2026",
+    entries: ["Updated earnings rates for recent Jetstar Japan changes."],
   },
 ];
 
@@ -33,7 +33,7 @@ export const ChangeLog: React.FC = () => {
         direction="row"
         spacing={1}
         onClick={() => setOpen(!isOpen)}
-        sx={{ cursor: 'pointer' }}
+        sx={{ cursor: "pointer" }}
       >
         <Typography>Recent Updates</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}

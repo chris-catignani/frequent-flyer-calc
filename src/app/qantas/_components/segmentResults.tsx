@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   EARN_CATEGORY_DISPLAY,
   EARN_CATEGORY_URLS,
   QANTAS_FARE_CLASS_DISPLAY,
-} from '@/app/_shared/models/qantasConstants';
+} from "@/app/_shared/models/qantasConstants";
 import {
   TableRow,
   TableCell,
@@ -19,10 +19,10 @@ import {
   Alert,
   Tooltip,
   Collapse,
-} from '@mui/material';
-import { Cancel, CheckCircle, Info, KeyboardArrowDown, KeyboardArrowUp } from '@mui/icons-material';
-import { ALL_AIRLINES } from '@/app/_shared/models/constants';
-import type { CalculationResult, SegmentResult } from '@/types/calculator';
+} from "@mui/material";
+import { Cancel, CheckCircle, Info, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { ALL_AIRLINES } from "@/app/_shared/models/constants";
+import type { CalculationResult, SegmentResult } from "@/types/calculator";
 
 export interface SegmentResultsProps {
   calculatedData?: CalculationResult | null;
@@ -102,16 +102,16 @@ const AirlinePointsBreakdownDialog: React.FC<{
     <Dialog onClose={onClose} open={open}>
       <DialogTitle>Points Calculation Breakdown</DialogTitle>
       <Grid container direction="column" justifyContent="center" alignItems="center" pb={2}>
-        <Typography mb={3} sx={{ textDecoration: 'underline' }}>
+        <Typography mb={3} sx={{ textDecoration: "underline" }}>
           Total Points: {totalEarned?.toLocaleString()}
         </Typography>
         <Typography lineHeight={1}>Base Points: {basePoints?.toLocaleString()}</Typography>
         <Typography lineHeight={1}>+</Typography>
         <Typography lineHeight={1}>
-          Elite Bonus: {eliteBonus?.airlinePoints?.toLocaleString() || 'n/a'}
+          Elite Bonus: {eliteBonus?.airlinePoints?.toLocaleString() || "n/a"}
         </Typography>
         <Typography my={2}>- or -</Typography>
-        <Typography>Min Points: {minPoints?.toLocaleString() || 'n/a'}</Typography>
+        <Typography>Min Points: {minPoints?.toLocaleString() || "n/a"}</Typography>
       </Grid>
     </Dialog>
   );
@@ -252,7 +252,7 @@ const SegmentTableRow: React.FC<{
 
   return (
     <>
-      <TableRow sx={{ cursor: 'pointer' }} data-testid={`segment-result-row-${segmentIdx}`}>
+      <TableRow sx={{ cursor: "pointer" }} data-testid={`segment-result-row-${segmentIdx}`}>
         <TableCell
           component="th"
           scope="row"
@@ -326,7 +326,7 @@ const SegmentTableRow: React.FC<{
                 <Typography>Earn Category:</Typography>
                 <Typography>
                   <a href={EARN_CATEGORY_URLS[segment.airline]} target="_blank" rel="noreferrer">
-                    {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory || '']}
+                    {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory || ""]}
                   </a>
                 </Typography>
               </Grid>

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { buildRouteDisplayString } from '@/app/_shared/utils/routes';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Chip, Collapse, Grid, Stack, Typography } from '@mui/material';
-import type { SavedCalculation } from '@/app/_shared/utils/recentCalculations';
+import React, { useState } from "react";
+import { buildRouteDisplayString } from "@/app/_shared/utils/routes";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import { Chip, Collapse, Grid, Stack, Typography } from "@mui/material";
+import type { SavedCalculation } from "@/app/_shared/utils/recentCalculations";
 
 export interface RecentCalculationSelectionProps {
   recentCalculations: SavedCalculation[];
@@ -26,7 +26,7 @@ export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProp
         direction="row"
         spacing={1}
         onClick={() => setOpen(!isOpen)}
-        sx={{ cursor: 'pointer' }}
+        sx={{ cursor: "pointer" }}
       >
         <Typography>Recent Calculations</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
@@ -61,7 +61,7 @@ export const RecentCalculations: React.FC<RecentCalculationsProps> = ({
   }
 
   const buildChipLabel = (recentCalculation: SavedCalculation) => {
-    const tripType = recentCalculation.tripType === 'one way' ? 'o/w' : 'r/t';
+    const tripType = recentCalculation.tripType === "one way" ? "o/w" : "r/t";
 
     const routeDisplayString = buildRouteDisplayString(recentCalculation.segmentInputs);
 
@@ -95,7 +95,7 @@ const ClearAllChip: React.FC<{ onClick: () => void }> = ({ onClick }) => {
       data-testid="recent-calculations-clear-all"
       size="small"
       color="primary"
-      label={'Clear All'}
+      label={"Clear All"}
       onClick={onClick}
     />
   );

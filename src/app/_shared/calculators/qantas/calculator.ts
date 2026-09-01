@@ -1,24 +1,24 @@
-import { fetchDataFromQantas } from '@/app/_shared/calculators/qantas/qantasAPI/qantasAPIClient';
-import { getPartnerRules } from '@/app/_shared/calculators/qantas/partner/partnerRules';
-import { getQantasEarnCategory } from '@/app/_shared/calculators/qantas/qantas/qantasEarnCategories';
+import { fetchDataFromQantas } from "@/app/_shared/calculators/qantas/qantasAPI/qantasAPIClient";
+import { getPartnerRules } from "@/app/_shared/calculators/qantas/partner/partnerRules";
+import { getQantasEarnCategory } from "@/app/_shared/calculators/qantas/qantas/qantasEarnCategories";
 import {
   getQantasMinimumPoints,
   getQantasRules,
-} from '@/app/_shared/calculators/qantas/qantas/qantasRules';
+} from "@/app/_shared/calculators/qantas/qantas/qantasRules";
 import {
   getPartnerEarnCategory,
   qualifiesForElitePoints,
-} from '@/app/_shared/calculators/qantas/partner/partnerEarnCategories';
-import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from '@/app/_shared/models/constants';
-import { JAL_AIRLINES, JETSTAR_AIRLINES } from '@/app/_shared/models/qantasConstants';
-import type { Segment } from '@/app/_shared/models/segment';
+} from "@/app/_shared/calculators/qantas/partner/partnerEarnCategories";
+import { LATAM_AIRLINES, ONEWORLD_AIRLINES } from "@/app/_shared/models/constants";
+import { JAL_AIRLINES, JETSTAR_AIRLINES } from "@/app/_shared/models/qantasConstants";
+import type { Segment } from "@/app/_shared/models/segment";
 import type {
   AirlinePointsBreakdown,
   CalculationResult,
   EliteBonus,
   QantasApiResults,
-} from '@/types/calculator';
-import type { Rule } from '@/app/_shared/calculators/qantas/rules';
+} from "@/types/calculator";
+import type { Rule } from "@/app/_shared/calculators/qantas/rules";
 
 const partnerRules = getPartnerRules(); // this is a map of airlineCode -> rules[]
 const qantasRules = getQantasRules(); // this is a map of airlineCode -> rules[]
@@ -29,28 +29,28 @@ const supportedAirlines = new Set([
   ...Object.keys(LATAM_AIRLINES),
   ...JETSTAR_AIRLINES,
   ...JAL_AIRLINES,
-  'af',
-  'nf',
-  'mu',
-  'ly',
-  'ek',
-  'kl',
-  'ws',
+  "af",
+  "nf",
+  "mu",
+  "ly",
+  "ek",
+  "kl",
+  "ws",
 ]);
 
-const eliteStatusBonusAirlines = new Set(['aa', 'qf', 'jq', 'gk']);
+const eliteStatusBonusAirlines = new Set(["aa", "qf", "jq", "gk"]);
 const eliteStatusBonusMultiples: Record<string, number> = {
   silver: 0.5,
   gold: 0.75,
   platinum: 1.0,
-  'platinum one': 1.0,
+  "platinum one": 1.0,
 };
 
 export const calculate = async (
   segments: Segment[],
-  eliteStatus: string = '',
+  eliteStatus: string = "",
   priceLessTaxes: number = 0, // eslint-disable-line @typescript-eslint/no-unused-vars
-  compareWithQantasCalc: boolean = false,
+  compareWithQantasCalc: boolean = false
 ): Promise<CalculationResult> => {
   const retval: CalculationResult = {
     segmentResults: [],
@@ -98,7 +98,7 @@ export const calculate = async (
 
 const getDataFromQantasCalc = async (
   segment: Segment,
-  eliteStatus: string,
+  eliteStatus: string
 ): Promise<QantasApiResults> => {
   let fareEarnCategory: string | null = null;
   if (segment.airline in qantasRules) {
@@ -145,13 +145,13 @@ const calculateSegment = (segment: Segment, eliteStatus: string): SegmentCalcula
     minPoints,
     totalEarned: Math.max(
       calculation.airlinePoints + (eliteBonus?.airlinePoints || 0),
-      minPoints || 0,
+      minPoints || 0
     ),
   };
 
   return {
     ruleName: rule.name,
-    ruleUrl: calculation.ruleUrl || '',
+    ruleUrl: calculation.ruleUrl || "",
     fareEarnCategory,
     notes: calculation.notes,
     elitePoints: earnsElitePoints ? calculation.elitePoints : 0,

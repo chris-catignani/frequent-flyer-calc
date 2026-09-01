@@ -1,9 +1,9 @@
-import React, { Suspense } from 'react';
-import type { Metadata } from 'next';
+import React, { Suspense } from "react";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'Qantas Points and Status Credits Calculator',
-  description: 'Calculate Qantas Points and Status Credits for multi segment itineraries',
+  title: "Qantas Points and Status Credits Calculator",
+  description: "Calculate Qantas Points and Status Credits for multi segment itineraries",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

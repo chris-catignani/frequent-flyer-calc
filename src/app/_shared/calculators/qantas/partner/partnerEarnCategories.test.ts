@@ -1,356 +1,356 @@
-import { buildSegmentFromString } from '@/app/_shared/test/testUtils';
-import { getPartnerEarnCategory } from '@/app/_shared/calculators/qantas/partner/partnerEarnCategories';
+import { buildSegmentFromString } from "@/app/_shared/test/testUtils";
+import { getPartnerEarnCategory } from "@/app/_shared/calculators/qantas/partner/partnerEarnCategories";
 
-describe('getPartnerEarnCategory', () => {
+describe("getPartnerEarnCategory", () => {
   // basic case
   test.each([
-    ['n', 'discountEconomy'],
-    ['o', 'discountEconomy'],
-    ['q', 'discountEconomy'],
+    ["n", "discountEconomy"],
+    ["o", "discountEconomy"],
+    ["q", "discountEconomy"],
 
-    ['g', 'economy'],
-    ['k', 'economy'],
-    ['l', 'economy'],
-    ['m', 'economy'],
-    ['s', 'economy'],
-    ['v', 'economy'],
+    ["g", "economy"],
+    ["k", "economy"],
+    ["l", "economy"],
+    ["m", "economy"],
+    ["s", "economy"],
+    ["v", "economy"],
 
-    ['h', 'flexibleEconomy'],
-    ['y', 'flexibleEconomy'],
+    ["h", "flexibleEconomy"],
+    ["y", "flexibleEconomy"],
 
-    ['p', 'premiumEconomy'],
-    ['w', 'premiumEconomy'],
+    ["p", "premiumEconomy"],
+    ["w", "premiumEconomy"],
 
-    ['c', 'business'],
-    ['d', 'business'],
-    ['i', 'business'],
-    ['j', 'business'],
-    ['r', 'business'],
+    ["c", "business"],
+    ["d", "business"],
+    ["i", "business"],
+    ["j", "business"],
+    ["r", "business"],
 
-    ['a', 'first'],
-    ['f', 'first'],
+    ["a", "first"],
+    ["f", "first"],
   ])(
-    'recognizes the American Airlines %s fareclass is a %s categories',
+    "recognizes the American Airlines %s fareclass is a %s categories",
     (fareClass, expectedCategory) => {
       const segment = buildSegmentFromString(`aa ${fareClass} jfk lax`);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-    },
+    }
   );
 
   // alaska has a special character in the Qantas website
   test.each([
-    ['g', 'discountEconomy'],
-    ['o', 'discountEconomy'],
-    ['q', 'discountEconomy'],
-    ['x', 'discountEconomy'],
+    ["g", "discountEconomy"],
+    ["o", "discountEconomy"],
+    ["q", "discountEconomy"],
+    ["x", "discountEconomy"],
 
-    ['k', 'economy'],
-    ['l', 'economy'],
-    ['m', 'economy'],
-    ['n', 'economy'],
-    ['s', 'economy'],
-    ['v', 'economy'],
+    ["k", "economy"],
+    ["l", "economy"],
+    ["m", "economy"],
+    ["n", "economy"],
+    ["s", "economy"],
+    ["v", "economy"],
 
-    ['b', 'flexibleEconomy'],
-    ['h', 'flexibleEconomy'],
-    ['y', 'flexibleEconomy'],
+    ["b", "flexibleEconomy"],
+    ["h", "flexibleEconomy"],
+    ["y", "flexibleEconomy"],
 
-    ['c', 'business'],
-    ['d', 'business'],
-    ['i', 'business'],
-    ['j', 'business'],
+    ["c", "business"],
+    ["d", "business"],
+    ["i", "business"],
+    ["j", "business"],
 
-    ['a', 'first'],
-    ['f', 'first'],
+    ["a", "first"],
+    ["f", "first"],
   ])(
-    'recognizes the Alaska Airline %s fareclass is a %s categories',
+    "recognizes the Alaska Airline %s fareclass is a %s categories",
     (fareClass, expectedCategory) => {
       const segment = buildSegmentFromString(`as ${fareClass} jfk lax`);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-    },
+    }
   );
 
   // Qatar does not have Premium Economy
   test.each([
-    ['k', 'discountEconomy'],
-    ['l', 'discountEconomy'],
-    ['m', 'discountEconomy'],
-    ['v', 'discountEconomy'],
+    ["k", "discountEconomy"],
+    ["l", "discountEconomy"],
+    ["m", "discountEconomy"],
+    ["v", "discountEconomy"],
 
-    ['b', 'economy'],
-    ['h', 'economy'],
+    ["b", "economy"],
+    ["h", "economy"],
 
-    ['y', 'flexibleEconomy'],
+    ["y", "flexibleEconomy"],
 
-    ['c', 'business'],
-    ['d', 'business'],
-    ['i', 'business'],
-    ['j', 'business'],
-    ['p', 'business'],
-    ['r', 'business'],
+    ["c", "business"],
+    ["d", "business"],
+    ["i", "business"],
+    ["j", "business"],
+    ["p", "business"],
+    ["r", "business"],
 
-    ['a', 'first'],
-    ['f', 'first'],
+    ["a", "first"],
+    ["f", "first"],
   ])(
-    'recognizes the Qatar Airlines %s fareclass is a %s categories',
+    "recognizes the Qatar Airlines %s fareclass is a %s categories",
     (fareClass, expectedCategory) => {
       const segment = buildSegmentFromString(`qr ${fareClass} jfk lax`);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-    },
+    }
   );
 
-  describe('Japan Airlines special cases', () => {
+  describe("Japan Airlines special cases", () => {
     test.each([
-      ['DiscountEconomy', 'economy'],
-      ['DiscountEconomyplusPremiumSurcharge', 'economy'],
+      ["DiscountEconomy", "economy"],
+      ["DiscountEconomyplusPremiumSurcharge", "economy"],
 
-      ['Economy', 'flexibleEconomy'],
-      ['DiscountEconomyplusFirstSurcharge', 'flexibleEconomy'],
+      ["Economy", "flexibleEconomy"],
+      ["DiscountEconomyplusFirstSurcharge", "flexibleEconomy"],
 
-      ['EconomyplusPremiumSurcharge', 'premiumEconomy'],
+      ["EconomyplusPremiumSurcharge", "premiumEconomy"],
 
-      ['EconomyplusFirstSurcharge', 'first'],
-    ])('recognizes the JAL (jl) %s fareclass is a %s categories', (fareClass, expectedCategory) => {
+      ["EconomyplusFirstSurcharge", "first"],
+    ])("recognizes the JAL (jl) %s fareclass is a %s categories", (fareClass, expectedCategory) => {
       const segment = buildSegmentFromString(`jl ${fareClass} hnd cts`);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     });
 
     test.each([
-      ['DiscountEconomy', 'economy'],
-      ['DiscountEconomyplusPremiumSurcharge', 'economy'],
+      ["DiscountEconomy", "economy"],
+      ["DiscountEconomyplusPremiumSurcharge", "economy"],
 
-      ['Economy', 'flexibleEconomy'],
-      ['DiscountEconomyplusFirstSurcharge', 'flexibleEconomy'],
+      ["Economy", "flexibleEconomy"],
+      ["DiscountEconomyplusFirstSurcharge", "flexibleEconomy"],
 
-      ['EconomyplusPremiumSurcharge', 'premiumEconomy'],
+      ["EconomyplusPremiumSurcharge", "premiumEconomy"],
 
-      ['EconomyplusFirstSurcharge', 'first'],
-    ])('recognizes the JAL (nu) %s fareclass is a %s categories', (fareClass, expectedCategory) => {
+      ["EconomyplusFirstSurcharge", "first"],
+    ])("recognizes the JAL (nu) %s fareclass is a %s categories", (fareClass, expectedCategory) => {
       const segment = buildSegmentFromString(`nu ${fareClass} hnd cts`);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     });
 
-    test('non intra-Japan flights succeed', () => {
+    test("non intra-Japan flights succeed", () => {
       const segment = buildSegmentFromString(`jl i hnd tpe`);
-      expect(getPartnerEarnCategory(segment)).toBe('business');
+      expect(getPartnerEarnCategory(segment)).toBe("business");
     });
   });
 
-  describe('Malaysia Airlines special cases', () => {
+  describe("Malaysia Airlines special cases", () => {
     test.each([
-      ['mh a kul syd', 'business'],
-      ['mh a syd kul', 'business'],
-      ['mh a kul lhr', 'business'],
-      ['mh a lhr kul', 'business'],
-      ['mh a kul cdg', 'business'],
-      ['mh a cdg kul', 'business'],
+      ["mh a kul syd", "business"],
+      ["mh a syd kul", "business"],
+      ["mh a kul lhr", "business"],
+      ["mh a lhr kul", "business"],
+      ["mh a kul cdg", "business"],
+      ["mh a cdg kul", "business"],
     ])(
-      'Flights between Australia and Malaysia, UK or Europe',
+      "Flights between Australia and Malaysia, UK or Europe",
       (segmentString, expectedCategory) => {
         const segment = buildSegmentFromString(segmentString);
         expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-      },
+      }
     );
 
     test.each([
-      ['mh a kul akl', 'business'],
-      ['mh a akl kul', 'business'],
-      ['mh a akl lhr', 'business'],
-      ['mh a lhr akl', 'business'],
-      ['mh a akl cdg', 'business'],
-      ['mh a cdg akl', 'business'],
+      ["mh a kul akl", "business"],
+      ["mh a akl kul", "business"],
+      ["mh a akl lhr", "business"],
+      ["mh a lhr akl", "business"],
+      ["mh a akl cdg", "business"],
+      ["mh a cdg akl", "business"],
     ])(
-      'Flights between New Zealand and Malaysia, UK or Europe',
+      "Flights between New Zealand and Malaysia, UK or Europe",
       (segmentString, expectedCategory) => {
         const segment = buildSegmentFromString(segmentString);
         expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-      },
+      }
     );
 
     test.each([
-      ['mh a kul lhr', 'business'],
-      ['mh a lhr kul', 'business'],
-      ['mh a kul cdg', 'business'],
-      ['mh a cdg kul', 'business'],
-      ['mh a kul doh', 'business'],
-      ['mh a doh kul', 'business'],
+      ["mh a kul lhr", "business"],
+      ["mh a lhr kul", "business"],
+      ["mh a kul cdg", "business"],
+      ["mh a cdg kul", "business"],
+      ["mh a kul doh", "business"],
+      ["mh a doh kul", "business"],
     ])(
-      'Flights between Malaysia and UK, Europe or Middle East',
+      "Flights between Malaysia and UK, Europe or Middle East",
       (segmentString, expectedCategory) => {
         const segment = buildSegmentFromString(segmentString);
         expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-      },
+      }
     );
 
     test.each([
-      ['mh a kul tpe', 'first'],
-      ['mh a tpe kul', 'first'],
-    ])('Non special case flights', (segmentString, expectedCategory) => {
-      const segment = buildSegmentFromString(segmentString);
-      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-    });
-  });
-
-  describe('SriLanka Airlines special cases', () => {
-    test.each([
-      ['ul p syd kul', 'economy'],
-      ['ul p kul syd', 'economy'],
-      ['ul p syd cmb', 'economy'],
-      ['ul p cmb syd', 'economy'],
-      ['ul p per kul', 'flexibleEconomy'],
-      ['ul p kul per', 'flexibleEconomy'],
-    ])(
-      'Flights between Southeast Australia and Malaysia or Sri Lanka',
-      (segmentString, expectedCategory) => {
-        const segment = buildSegmentFromString(segmentString);
-        expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-      },
-    );
-
-    test.each([
-      ['ul p cdg kul', 'economy'],
-      ['ul p kul cdg', 'economy'],
-      ['ul p ist kul', 'economy'],
-      ['ul p kul ist', 'economy'],
-      ['ul p cdg cmb', 'economy'],
-      ['ul p cmb cdg', 'economy'],
-      ['ul p ist cmb', 'economy'],
-      ['ul p cmb ist', 'economy'],
-    ])('Flights between Europe and Malaysia or Sri Lanka', (segmentString, expectedCategory) => {
-      const segment = buildSegmentFromString(segmentString);
-      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-    });
-
-    test.each([
-      ['ul p doh cmb', 'flexibleEconomy'],
-      ['ul p cmb doh', 'flexibleEconomy'],
-    ])('Non special case flights', (segmentString, expectedCategory) => {
+      ["mh a kul tpe", "first"],
+      ["mh a tpe kul", "first"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
       const segment = buildSegmentFromString(segmentString);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     });
   });
 
-  describe('Air France special cases', () => {
+  describe("SriLanka Airlines special cases", () => {
     test.each([
-      ['af r cdg ory', 'discountEconomy'],
-      ['af r ory cdg', 'discountEconomy'],
-      ['af a cdg ory', 'flexibleEconomy'],
-      ['af a ory cdg', 'flexibleEconomy'],
-    ])('Domestic flights within France', (segmentString, expectedCategory) => {
+      ["ul p syd kul", "economy"],
+      ["ul p kul syd", "economy"],
+      ["ul p syd cmb", "economy"],
+      ["ul p cmb syd", "economy"],
+      ["ul p per kul", "flexibleEconomy"],
+      ["ul p kul per", "flexibleEconomy"],
+    ])(
+      "Flights between Southeast Australia and Malaysia or Sri Lanka",
+      (segmentString, expectedCategory) => {
+        const segment = buildSegmentFromString(segmentString);
+        expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+      }
+    );
+
+    test.each([
+      ["ul p cdg kul", "economy"],
+      ["ul p kul cdg", "economy"],
+      ["ul p ist kul", "economy"],
+      ["ul p kul ist", "economy"],
+      ["ul p cdg cmb", "economy"],
+      ["ul p cmb cdg", "economy"],
+      ["ul p ist cmb", "economy"],
+      ["ul p cmb ist", "economy"],
+    ])("Flights between Europe and Malaysia or Sri Lanka", (segmentString, expectedCategory) => {
       const segment = buildSegmentFromString(segmentString);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     });
 
     test.each([
-      ['af r cdg mad', 'discountEconomy'],
-      ['af r mad cdg', 'discountEconomy'],
-      ['af a cdg mad', 'economy'],
-      ['af a mad cdg', 'economy'],
-      ['af i cdg mad', 'business'],
-      ['af i mad cdg', 'business'],
-      ['af a cdg waw', 'economy'],
-      ['af a waw cdg', 'economy'],
-    ])(
-      'Flights Intra Europe or flights between Europe and other European-esc countries',
-      (segmentString, expectedCategory) => {
-        const segment = buildSegmentFromString(segmentString);
-        expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-      },
-    );
-
-    test.each([
-      ['af a cdg jfk', 'premiumEconomy'],
-      ['af a jfk cdg', 'premiumEconomy'],
-      ['af i cdg jfk', 'business'],
-      ['af i jfk cdg', 'business'],
-    ])('Non special case flights', (segmentString, expectedCategory) => {
+      ["ul p doh cmb", "flexibleEconomy"],
+      ["ul p cmb doh", "flexibleEconomy"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
       const segment = buildSegmentFromString(segmentString);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     });
   });
 
-  describe('KLM special cases', () => {
+  describe("Air France special cases", () => {
+    test.each([
+      ["af r cdg ory", "discountEconomy"],
+      ["af r ory cdg", "discountEconomy"],
+      ["af a cdg ory", "flexibleEconomy"],
+      ["af a ory cdg", "flexibleEconomy"],
+    ])("Domestic flights within France", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+
+    test.each([
+      ["af r cdg mad", "discountEconomy"],
+      ["af r mad cdg", "discountEconomy"],
+      ["af a cdg mad", "economy"],
+      ["af a mad cdg", "economy"],
+      ["af i cdg mad", "business"],
+      ["af i mad cdg", "business"],
+      ["af a cdg waw", "economy"],
+      ["af a waw cdg", "economy"],
+    ])(
+      "Flights Intra Europe or flights between Europe and other European-esc countries",
+      (segmentString, expectedCategory) => {
+        const segment = buildSegmentFromString(segmentString);
+        expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+      }
+    );
+
+    test.each([
+      ["af a cdg jfk", "premiumEconomy"],
+      ["af a jfk cdg", "premiumEconomy"],
+      ["af i cdg jfk", "business"],
+      ["af i jfk cdg", "business"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+  });
+
+  describe("KLM special cases", () => {
     // long-haul (outside Europe) flights - the live table has a premiumEconomy
     // bucket here that was previously missing from the transcribed data
     test.each([
-      ['kl a cdg jfk', 'premiumEconomy'],
-      ['kl a jfk cdg', 'premiumEconomy'],
-      ['kl i cdg jfk', 'business'],
-      ['kl i jfk cdg', 'business'],
-    ])('Long haul flights', (segmentString, expectedCategory) => {
+      ["kl a cdg jfk", "premiumEconomy"],
+      ["kl a jfk cdg", "premiumEconomy"],
+      ["kl i cdg jfk", "business"],
+      ["kl i jfk cdg", "business"],
+    ])("Long haul flights", (segmentString, expectedCategory) => {
       const segment = buildSegmentFromString(segmentString);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     });
   });
 
-  describe('China Eastern special cases', () => {
+  describe("China Eastern special cases", () => {
     test.each([
-      ['mu h pvg szx', 'discountEconomy'],
-      ['mu h szx pvg', 'discountEconomy'],
-      ['mu y pvg szx', 'flexibleEconomy'],
-      ['mu y szx pvg', 'flexibleEconomy'],
-      ['mu i pvg szx', 'business'],
-      ['mu i szx pvg', 'business'],
-      ['mu u pvg szx', 'first'],
-      ['mu u szx pvg', 'first'],
-    ])('Domestic flights within China', (segmentString, expectedCategory) => {
+      ["mu h pvg szx", "discountEconomy"],
+      ["mu h szx pvg", "discountEconomy"],
+      ["mu y pvg szx", "flexibleEconomy"],
+      ["mu y szx pvg", "flexibleEconomy"],
+      ["mu i pvg szx", "business"],
+      ["mu i szx pvg", "business"],
+      ["mu u pvg szx", "first"],
+      ["mu u szx pvg", "first"],
+    ])("Domestic flights within China", (segmentString, expectedCategory) => {
       const segment = buildSegmentFromString(segmentString);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     });
 
     test.each([
-      ['mu z pvg jfk', 'discountEconomy'],
-      ['mu z jfk pvg', 'discountEconomy'],
-      ['mu h pvg jfk', 'flexibleEconomy'],
-      ['mu h jfk pvg', 'flexibleEconomy'],
-      ['mu y pvg jfk', 'flexibleEconomy'],
-      ['mu y jfk pvg', 'flexibleEconomy'],
-      ['mu i pvg jfk', 'business'],
-      ['mu i jfk pvg', 'business'],
-      ['mu u pvg jfk', 'first'],
-      ['mu u jfk pvg', 'first'],
-    ])('Non special case flights', (segmentString, expectedCategory) => {
-      const segment = buildSegmentFromString(segmentString);
-      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-    });
-  });
-
-  describe('Fiji Airways special cases', () => {
-    test.each([
-      ['fj h nan lbs', 'flexibleEconomy'],
-      ['fj h lbs nan', 'flexibleEconomy'],
-      ['fj l nan lbs', 'flexibleEconomy'],
-      ['fj l lbs nan', 'flexibleEconomy'],
-      ['fj y nan lbs', 'flexibleEconomy'],
-      ['fj y lbs nan', 'flexibleEconomy'],
-    ])('Domestic flights within Fiji', (segmentString, expectedCategory) => {
-      const segment = buildSegmentFromString(segmentString);
-      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
-    });
-
-    test.each([
-      ['fj g nan syd', 'discountEconomy'],
-      ['fj g syd nan', 'discountEconomy'],
-      ['fj l nan syd', 'economy'],
-      ['fj l syd nan', 'economy'],
-      ['fj i nan syd', 'business'],
-      ['fj i syd nan', 'business'],
-    ])('Non special case flights', (segmentString, expectedCategory) => {
+      ["mu z pvg jfk", "discountEconomy"],
+      ["mu z jfk pvg", "discountEconomy"],
+      ["mu h pvg jfk", "flexibleEconomy"],
+      ["mu h jfk pvg", "flexibleEconomy"],
+      ["mu y pvg jfk", "flexibleEconomy"],
+      ["mu y jfk pvg", "flexibleEconomy"],
+      ["mu i pvg jfk", "business"],
+      ["mu i jfk pvg", "business"],
+      ["mu u pvg jfk", "first"],
+      ["mu u jfk pvg", "first"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
       const segment = buildSegmentFromString(segmentString);
       expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
     });
   });
 
-  describe('Edge cases', () => {
-    test('invalid airline code', () => {
+  describe("Fiji Airways special cases", () => {
+    test.each([
+      ["fj h nan lbs", "flexibleEconomy"],
+      ["fj h lbs nan", "flexibleEconomy"],
+      ["fj l nan lbs", "flexibleEconomy"],
+      ["fj l lbs nan", "flexibleEconomy"],
+      ["fj y nan lbs", "flexibleEconomy"],
+      ["fj y lbs nan", "flexibleEconomy"],
+    ])("Domestic flights within Fiji", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+
+    test.each([
+      ["fj g nan syd", "discountEconomy"],
+      ["fj g syd nan", "discountEconomy"],
+      ["fj l nan syd", "economy"],
+      ["fj l syd nan", "economy"],
+      ["fj i nan syd", "business"],
+      ["fj i syd nan", "business"],
+    ])("Non special case flights", (segmentString, expectedCategory) => {
+      const segment = buildSegmentFromString(segmentString);
+      expect(getPartnerEarnCategory(segment)).toBe(expectedCategory);
+    });
+  });
+
+  describe("Edge cases", () => {
+    test("invalid airline code", () => {
       const segment = buildSegmentFromString(`xx i hnd cts`);
-      expect(() => getPartnerEarnCategory(segment)).toThrow('No airline configured for xx');
+      expect(() => getPartnerEarnCategory(segment)).toThrow("No airline configured for xx");
     });
 
-    test('invalid fare code', () => {
+    test("invalid fare code", () => {
       const segment = buildSegmentFromString(`aa x hnd cts`);
       expect(() => getPartnerEarnCategory(segment)).toThrow(
-        'Airline aa is not configured for fare class x',
+        "Airline aa is not configured for fare class x"
       );
     });
   });

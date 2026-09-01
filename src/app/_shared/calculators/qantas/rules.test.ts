@@ -3,14 +3,14 @@ import {
   DistanceRule,
   GeographicalRule,
   parseEarningRates,
-} from '@/app/_shared/calculators/qantas/rules';
-import { buildSegmentFromString } from '@/app/_shared/test/testUtils';
-import { Earnings } from '@/app/_shared/models/earnings';
+} from "@/app/_shared/calculators/qantas/rules";
+import { buildSegmentFromString } from "@/app/_shared/test/testUtils";
+import { Earnings } from "@/app/_shared/models/earnings";
 
-describe('rules', () => {
-  describe('parseEarningRates', () => {
-    test('parses comma thousand separators', () => {
-      expect(parseEarningRates('1,450\t2,025', '25\t50', ['discountEconomy', 'economy'])).toEqual({
+describe("rules", () => {
+  describe("parseEarningRates", () => {
+    test("parses comma thousand separators", () => {
+      expect(parseEarningRates("1,450\t2,025", "25\t50", ["discountEconomy", "economy"])).toEqual({
         discountEconomy: new Earnings(1450, 25),
         economy: new Earnings(2025, 50),
       });
@@ -18,40 +18,40 @@ describe('rules', () => {
 
     // Qantas's own site sometimes typos '.' instead of ',' as a thousands
     // separator when copy-pasted (e.g. Darwin/Perth to Southeast Asia discountEconomy).
-    test('parses period typos as thousand separators', () => {
-      expect(parseEarningRates('1.450\t2,025', '25\t50', ['discountEconomy', 'economy'])).toEqual({
+    test("parses period typos as thousand separators", () => {
+      expect(parseEarningRates("1.450\t2,025", "25\t50", ["discountEconomy", "economy"])).toEqual({
         discountEconomy: new Earnings(1450, 25),
         economy: new Earnings(2025, 50),
       });
     });
 
     test('parses "-" as zero earnings', () => {
-      expect(parseEarningRates('-\t2,025', '-\t50', ['discountEconomy', 'economy'])).toEqual({
+      expect(parseEarningRates("-\t2,025", "-\t50", ["discountEconomy", "economy"])).toEqual({
         discountEconomy: new Earnings(0, 0),
         economy: new Earnings(2025, 50),
       });
     });
   });
 
-  describe('Rule.getMinPoints', () => {
-    test('returns undefined when the rule has no minPoints override', () => {
-      const rule = new DistanceRule('distance rule', 'https://google.com', []);
-      expect(rule.getMinPoints('business')).toBeUndefined();
+  describe("Rule.getMinPoints", () => {
+    test("returns undefined when the rule has no minPoints override", () => {
+      const rule = new DistanceRule("distance rule", "https://google.com", []);
+      expect(rule.getMinPoints("business")).toBeUndefined();
     });
 
-    test('returns the route-specific override when one is configured', () => {
+    test("returns the route-specific override when one is configured", () => {
       const rule = new GeographicalRule(
-        'geographical rule',
-        'https://google.com',
-        { origin: { city: new Set(['dallas']) }, destination: { city: {} } },
-        { discountEconomy: 400 },
+        "geographical rule",
+        "https://google.com",
+        { origin: { city: new Set(["dallas"]) }, destination: { city: {} } },
+        { discountEconomy: 400 }
       );
-      expect(rule.getMinPoints('discountEconomy')).toBe(400);
-      expect(rule.getMinPoints('business')).toBeUndefined();
+      expect(rule.getMinPoints("discountEconomy")).toBe(400);
+      expect(rule.getMinPoints("business")).toBeUndefined();
     });
   });
 
-  describe('IntraCountryRule', () => {
+  describe("IntraCountryRule", () => {
     const distanceBands = [
       {
         minDistance: 0,
@@ -66,16 +66,16 @@ describe('rules', () => {
     ];
     // eslint-disable-next-line
     const intraCountryRule = new IntraCountryRule(
-      'distance rule',
-      'https://google.com',
-      'United States',
-      distanceBands,
+      "distance rule",
+      "https://google.com",
+      "United States",
+      distanceBands
     );
     //TODO mock airports to specify distances?
     expect(true).toBe(true);
   });
 
-  describe('DistanceRule', () => {
+  describe("DistanceRule", () => {
     const distanceBands = [
       {
         minDistance: 0,
@@ -89,11 +89,11 @@ describe('rules', () => {
       },
     ];
     // eslint-disable-next-line
-    const distanceRule = new DistanceRule('distance rule', 'https://google.com', distanceBands);
+    const distanceRule = new DistanceRule("distance rule", "https://google.com", distanceBands);
     //TODO mock airports to specify distances?
     expect(true).toBe(true);
 
-    test('Handles no max distance specified', () => {
+    test("Handles no max distance specified", () => {
       const distanceBands = [
         {
           minDistance: 0,
@@ -105,10 +105,10 @@ describe('rules', () => {
           earnings: { business: new Earnings(200, 20) },
         },
       ];
-      const distanceRule = new DistanceRule('distance rule', 'https://google.com', distanceBands);
-      expect(distanceRule.applies(buildSegmentFromString('aa i jfk lax'), 'business')).toBe(true);
+      const distanceRule = new DistanceRule("distance rule", "https://google.com", distanceBands);
+      expect(distanceRule.applies(buildSegmentFromString("aa i jfk lax"), "business")).toBe(true);
       expect(
-        distanceRule.calculate(buildSegmentFromString('aa i jfk lax'), 'business'),
+        distanceRule.calculate(buildSegmentFromString("aa i jfk lax"), "business")
       ).toMatchObject({
         airlinePoints: 200,
         elitePoints: 20,
@@ -116,168 +116,168 @@ describe('rules', () => {
     });
   });
 
-  describe('GeographicalRule', () => {
-    describe('City to City', () => {
-      const geographicalRule = new GeographicalRule('geographical rule', 'https://google.com', {
-        origin: { city: new Set(['dallas', 'houston']) },
+  describe("GeographicalRule", () => {
+    describe("City to City", () => {
+      const geographicalRule = new GeographicalRule("geographical rule", "https://google.com", {
+        origin: { city: new Set(["dallas", "houston"]) },
         destination: {
           city: {
-            'san francisco': { business: new Earnings(100, 10) },
+            "san francisco": { business: new Earnings(100, 10) },
             boston: { business: new Earnings(200, 20) },
           },
         },
       });
 
-      test('Go Path - applies', () => {
-        expect(geographicalRule.applies(buildSegmentFromString('aa i dfw sfo'), 'business')).toBe(
-          true,
+      test("Go Path - applies", () => {
+        expect(geographicalRule.applies(buildSegmentFromString("aa i dfw sfo"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i sfo dfw'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i sfo dfw"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i dfw bos'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i dfw bos"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i bos dfw'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i bos dfw"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i iah bos'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i iah bos"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i bos iah'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i bos iah"), "business")).toBe(
+          true
         );
       });
 
       test.each([
-        ['aa i dfw sfo', 100, 10],
-        ['aa i sfo dfw', 100, 10],
-        ['aa i dfw bos', 200, 20],
-        ['aa i bos dfw', 200, 20],
+        ["aa i dfw sfo", 100, 10],
+        ["aa i sfo dfw", 100, 10],
+        ["aa i dfw bos", 200, 20],
+        ["aa i bos dfw", 200, 20],
       ])(
         `Go path - calculate - %s should yield %s and %s`,
         (segmentString, expectedAirlinePoints, expectedElitePoints) => {
           expect(
-            geographicalRule.calculate(buildSegmentFromString(segmentString), 'business'),
+            geographicalRule.calculate(buildSegmentFromString(segmentString), "business")
           ).toMatchObject({
             airlinePoints: expectedAirlinePoints,
             elitePoints: expectedElitePoints,
           });
-        },
+        }
       );
 
-      test('Rule does not apply', () => {
+      test("Rule does not apply", () => {
         // use same airports but invalid combination
-        expect(geographicalRule.applies(buildSegmentFromString('aa i dfw iah'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i dfw iah"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i sfo bos'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i sfo bos"), "business")).toBe(
+          false
         );
 
         // use 1 valid and 1 not valid airports
-        expect(geographicalRule.applies(buildSegmentFromString('aa i dfw lax'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i dfw lax"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i lax dfw'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i lax dfw"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i sfo lax'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i sfo lax"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i lax sfo'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i lax sfo"), "business")).toBe(
+          false
         );
 
         // use 2 invalid airports
-        expect(geographicalRule.applies(buildSegmentFromString('aa i lax lga'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i lax lga"), "business")).toBe(
+          false
         );
       });
     });
 
-    describe('Country to Country', () => {
-      const geographicalRule = new GeographicalRule('geographical rule', 'https://google.com', {
-        origin: { country: new Set(['united states', 'canada']) },
+    describe("Country to Country", () => {
+      const geographicalRule = new GeographicalRule("geographical rule", "https://google.com", {
+        origin: { country: new Set(["united states", "canada"]) },
         destination: {
           country: {
-            'united kingdom': { business: new Earnings(300, 30) },
+            "united kingdom": { business: new Earnings(300, 30) },
             france: { business: new Earnings(400, 40) },
           },
         },
       });
 
-      test('Go Path - applies', () => {
-        expect(geographicalRule.applies(buildSegmentFromString('aa i jfk lhr'), 'business')).toBe(
-          true,
+      test("Go Path - applies", () => {
+        expect(geographicalRule.applies(buildSegmentFromString("aa i jfk lhr"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i lhr jfk'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i lhr jfk"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i jfk cdg'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i jfk cdg"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i cdg jfk'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i cdg jfk"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i yyz cdg'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i yyz cdg"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i cdg yyz'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i cdg yyz"), "business")).toBe(
+          true
         );
       });
 
       test.each([
-        ['aa i jfk lhr', 300, 30],
-        ['aa i lhr jfk', 300, 30],
-        ['aa i yyz cdg', 400, 40],
-        ['aa i cdg yyz', 400, 40],
+        ["aa i jfk lhr", 300, 30],
+        ["aa i lhr jfk", 300, 30],
+        ["aa i yyz cdg", 400, 40],
+        ["aa i cdg yyz", 400, 40],
       ])(
         `Go path - calculate - %s should yield %s and %s`,
         (segmentString, expectedAirlinePoints, expectedElitePoints) => {
           expect(
-            geographicalRule.calculate(buildSegmentFromString(segmentString), 'business'),
+            geographicalRule.calculate(buildSegmentFromString(segmentString), "business")
           ).toMatchObject({
             airlinePoints: expectedAirlinePoints,
             elitePoints: expectedElitePoints,
           });
-        },
+        }
       );
 
-      test('Rule does not apply', () => {
+      test("Rule does not apply", () => {
         // use same regions but invalid combination
-        expect(geographicalRule.applies(buildSegmentFromString('aa i jfk lax'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i jfk lax"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i yyz yvr'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i yyz yvr"), "business")).toBe(
+          false
         );
 
         // use 1 valid and 1 not valid region
-        expect(geographicalRule.applies(buildSegmentFromString('aa i jfk ams'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i jfk ams"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i ams jfk'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i ams jfk"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i yyz mad'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i yyz mad"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i mad yyz'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i mad yyz"), "business")).toBe(
+          false
         );
 
         // use 2 invalid airports
-        expect(geographicalRule.applies(buildSegmentFromString('aa i mex mad'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i mex mad"), "business")).toBe(
+          false
         );
       });
     });
 
-    describe('Region to Region', () => {
-      const geographicalRule = new GeographicalRule('geographical rule', 'https://google.com', {
-        origin: { region: new Set(['usaEastCoast', 'northernEurope']) },
+    describe("Region to Region", () => {
+      const geographicalRule = new GeographicalRule("geographical rule", "https://google.com", {
+        origin: { region: new Set(["usaEastCoast", "northernEurope"]) },
         destination: {
           region: {
             westernEurope: { business: new Earnings(500, 50) },
@@ -286,70 +286,70 @@ describe('rules', () => {
         },
       });
 
-      test('Go Path - applies', () => {
-        expect(geographicalRule.applies(buildSegmentFromString('aa i jfk lhr'), 'business')).toBe(
-          true,
+      test("Go Path - applies", () => {
+        expect(geographicalRule.applies(buildSegmentFromString("aa i jfk lhr"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i lhr jfk'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i lhr jfk"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i jfk bkk'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i jfk bkk"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i bkk jfk'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i bkk jfk"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i hel bkk'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i hel bkk"), "business")).toBe(
+          true
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i bkk hel'), 'business')).toBe(
-          true,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i bkk hel"), "business")).toBe(
+          true
         );
       });
 
       test.each([
-        ['aa i jfk lhr', 500, 50],
-        ['aa i lhr jfk', 500, 50],
-        ['aa i hel bkk', 600, 60],
-        ['aa i bkk hel', 600, 60],
+        ["aa i jfk lhr", 500, 50],
+        ["aa i lhr jfk", 500, 50],
+        ["aa i hel bkk", 600, 60],
+        ["aa i bkk hel", 600, 60],
       ])(
         `Go path - calculate - %s should yield %s and %s`,
         (segmentString, expectedAirlinePoints, expectedElitePoints) => {
           expect(
-            geographicalRule.calculate(buildSegmentFromString(segmentString), 'business'),
+            geographicalRule.calculate(buildSegmentFromString(segmentString), "business")
           ).toMatchObject({
             airlinePoints: expectedAirlinePoints,
             elitePoints: expectedElitePoints,
           });
-        },
+        }
       );
 
-      test('Rule does not apply', () => {
+      test("Rule does not apply", () => {
         // use same regions but invalid combination
-        expect(geographicalRule.applies(buildSegmentFromString('aa i jfk hel'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i jfk hel"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i hel jfk'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i hel jfk"), "business")).toBe(
+          false
         );
 
         // use 1 valid and 1 not valid region
-        expect(geographicalRule.applies(buildSegmentFromString('aa i jfk lax'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i jfk lax"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i lax jfk'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i lax jfk"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i hel lax'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i hel lax"), "business")).toBe(
+          false
         );
-        expect(geographicalRule.applies(buildSegmentFromString('aa i lax hnd'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i lax hnd"), "business")).toBe(
+          false
         );
 
         // use 2 invalid airports
-        expect(geographicalRule.applies(buildSegmentFromString('aa i mex eze'), 'business')).toBe(
-          false,
+        expect(geographicalRule.applies(buildSegmentFromString("aa i mex eze"), "business")).toBe(
+          false
         );
       });
     });
