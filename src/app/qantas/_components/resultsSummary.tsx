@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import { Cancel, CheckCircle, Info } from "@mui/icons-material";
 import { Box, Dialog, DialogTitle, Grid, IconButton, Tooltip, Typography } from "@mui/material";
 import type { CalculationResult } from "@/types/calculator";
+import {
+  isAirlinePointsMatch,
+  isClosePointsMatch,
+  isElitePointsMatch,
+  POINTS_TOLERANCE_PER_SEGMENT,
+} from "@/app/_shared/utils/comparison";
 
 export interface ResultsSummaryProps {
   calculationOutput?: CalculationResult | null;
@@ -113,6 +119,24 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
       }
     });
 
+    const numSegments = calculationOutput.segmentResults.length;
+    const allowedTolerance =
+      fieldToCheck === "airlinePoints" ? numSegments * POINTS_TOLERANCE_PER_SEGMENT : 0;
+
+    const isMatch =
+      fieldToCheck === "airlinePoints"
+        ? isAirlinePointsMatch(expectedValue ?? 0, sumOfQantasAPICalc, allowedTolerance)
+        : isElitePointsMatch(expectedValue ?? 0, sumOfQantasAPICalc);
+
+    const isCloseMatch =
+      isMatch &&
+      fieldToCheck === "airlinePoints" &&
+      isClosePointsMatch(expectedValue ?? 0, sumOfQantasAPICalc, allowedTolerance);
+
+    const matchTooltip = isCloseMatch
+      ? "Matches Qantas Calculator results (within rounding difference)"
+      : "Matches Qantas Calculator results";
+
     if (qantasAPICalcError) {
       return (
         <Box>
@@ -122,10 +146,10 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
           <MatchesQantasErrorDialog open={open} onClose={handleClose} error={qantasAPICalcError} />
         </Box>
       );
-    } else if (expectedValue === sumOfQantasAPICalc) {
+    } else if (isMatch) {
       return (
         <Box>
-          <Tooltip title="Matches Qantas Calculator results">
+          <Tooltip title={matchTooltip}>
             <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
               <CheckCircle color="success" />
             </IconButton>
