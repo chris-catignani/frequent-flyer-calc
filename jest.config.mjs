@@ -8,4 +8,12 @@ const customJestConfig = {
   testEnvironment: "jest-environment-jsdom",
   testPathIgnorePatterns: ["<rootDir>/node_modules/", "<rootDir>/e2e/"],
 };
-export default createJestConfig(customJestConfig);
+const asyncConfig = createJestConfig(customJestConfig);
+
+const createCustomJestConfig = async () => {
+  const config = await asyncConfig();
+  config.transformIgnorePatterns = ["^.+\\.module\\.(css|sass|scss)$", "/node_modules/(?!(uuid)/)"];
+  return config;
+};
+
+export default createCustomJestConfig;
