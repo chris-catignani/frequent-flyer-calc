@@ -51,8 +51,11 @@ export const SegmentResults: React.FC<SegmentResultsProps> = ({
       width="100%"
       maxWidth="sm"
     >
-      <TableContainer data-testid="segment-results-table">
-        <Table>
+      <TableContainer
+        data-testid="segment-results-table"
+        sx={{ width: "100%", maxWidth: "100%", overflowX: "auto" }}
+      >
+        <Table size="small">
           <TableHead>
             <SegmentTableHeader compareWithQantasCalc={compareWithQantasCalc} />
           </TableHead>
@@ -77,11 +80,19 @@ const SegmentTableHeader: React.FC<{ compareWithQantasCalc: boolean }> = ({
 }) => {
   return (
     <TableRow>
-      <TableCell>Segment Route</TableCell>
-      <TableCell align="right">Qantas Points</TableCell>
-      <TableCell align="right">Status Credits</TableCell>
-      {compareWithQantasCalc && <TableCell align="right">Matches Qantas</TableCell>}
-      <TableCell />
+      <TableCell sx={{ px: { xs: 1, sm: 2 } }}>Segment Route</TableCell>
+      <TableCell align="right" sx={{ px: { xs: 1, sm: 2 }, whiteSpace: "nowrap" }}>
+        Qantas Points
+      </TableCell>
+      <TableCell align="right" sx={{ px: { xs: 1, sm: 2 }, whiteSpace: "nowrap" }}>
+        Status Credits
+      </TableCell>
+      {compareWithQantasCalc && (
+        <TableCell align="right" sx={{ px: { xs: 1, sm: 2 }, whiteSpace: "nowrap" }}>
+          Matches Qantas
+        </TableCell>
+      )}
+      <TableCell sx={{ px: { xs: 0.5, sm: 2 } }} />
     </TableRow>
   );
 };
@@ -279,6 +290,7 @@ const SegmentTableRow: React.FC<{
           scope="row"
           data-testid={`segment-result-route-${segmentIdx}`}
           onClick={() => setExpandRow(!expandRow)}
+          sx={{ px: { xs: 1, sm: 2 }, whiteSpace: "nowrap" }}
         >
           {segment.fromAirport?.iata?.toLowerCase()} - {segment.toAirport?.iata?.toLowerCase()}
         </TableCell>
@@ -286,6 +298,7 @@ const SegmentTableRow: React.FC<{
           align="right"
           data-testid={`segment-result-points-${segmentIdx}`}
           onClick={() => setExpandRow(!expandRow)}
+          sx={{ px: { xs: 1, sm: 2 } }}
         >
           {segmentResult.airlinePoints?.toLocaleString()}
         </TableCell>
@@ -293,6 +306,7 @@ const SegmentTableRow: React.FC<{
           align="right"
           data-testid={`segment-result-status-credits-${segmentIdx}`}
           onClick={() => setExpandRow(!expandRow)}
+          sx={{ px: { xs: 1, sm: 2 } }}
         >
           {segmentResult.elitePoints?.toLocaleString()}
         </TableCell>
@@ -306,6 +320,7 @@ const SegmentTableRow: React.FC<{
                 setOpenModal(true);
               }
             }}
+            sx={{ px: { xs: 1, sm: 2 } }}
           >
             <MatchesQantasSegmentIcon
               segmentResult={segmentResult}
@@ -315,7 +330,7 @@ const SegmentTableRow: React.FC<{
             />
           </TableCell>
         )}
-        <TableCell onClick={() => setExpandRow(!expandRow)}>
+        <TableCell onClick={() => setExpandRow(!expandRow)} sx={{ px: { xs: 0.5, sm: 2 } }}>
           <IconButton size="small">
             {expandRow ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
@@ -327,7 +342,7 @@ const SegmentTableRow: React.FC<{
           colSpan={compareWithQantasCalc ? 5 : 4}
         >
           <Collapse in={expandRow} timeout="auto" unmountOnExit>
-            <Grid container m={2} direction="column">
+            <Grid container m={2} direction="column" sx={{ wordBreak: "break-word" }}>
               <Grid>
                 <Typography>Airline: {ALL_AIRLINES[segment.airline]}</Typography>
               </Grid>
