@@ -46,6 +46,7 @@ import { ResultsSummary } from "@/app/qantas/_components/resultsSummary";
 import { SegmentResults } from "@/app/qantas/_components/segmentResults";
 import { Footer } from "@/app/qantas/_components/footer";
 import { ChangeLog } from "@/app/qantas/_components/changeLog";
+import { qantasSegmentInputAdapter } from "@/app/qantas/_components/fareClassInput";
 import {
   buildAirlineOptions,
   SegmentInputList,
@@ -541,6 +542,7 @@ export default function Qantas() {
               <SegmentInputList
                 segmentInputs={segmentInputs}
                 errors={inputErrors}
+                adapter={qantasSegmentInputAdapter}
                 airlineOptions={[
                   ...buildAirlineOptions(Object.keys(QANTAS_GRP_AIRLINES), "Qantas Group Airlines"),
                   ...buildAirlineOptions(PARTNER_ONEWORLD_AIRLINES, "oneworld Partner Airlines"),
