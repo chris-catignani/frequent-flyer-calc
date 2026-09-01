@@ -25,6 +25,7 @@ import { ResultsSummary } from "@/app/qantas/_components/resultsSummary";
 import { SegmentResults } from "@/app/qantas/_components/segmentResults";
 import { Footer } from "@/app/qantas/_components/footer";
 import { ChangeLog } from "@/app/qantas/_components/changeLog";
+import { FaqAndInfo } from "@/app/qantas/_components/faqAndInfo";
 import { qantasProgram } from "@/app/_shared/calculators/qantas";
 import { SegmentInputList } from "@/app/_shared/components/segmentInput";
 import { useCalculator } from "@/app/_shared/hooks/useCalculator";
@@ -70,13 +71,19 @@ const CompareWithQantasAPISwitch: React.FC<{
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
         disabled={!FLAG_ENABLE_QANTAS_API}
+        inputProps={{ "aria-label": "Compare with Qantas website calculator" }}
       />
       <Typography variant="body2" sx={{ lineHeight: 1.2 }}>
         Compare With
         <br />
         Qantas&apos;s Calculator
       </Typography>
-      <IconButton size="small" sx={{ py: 0 }} onClick={() => setOpen(true)}>
+      <IconButton
+        size="small"
+        sx={{ py: 0 }}
+        onClick={() => setOpen(true)}
+        aria-label="Learn more about comparing with Qantas calculator"
+      >
         <Info fontSize="small" />
       </IconButton>
       <QantasApiDialog open={open} onClose={() => setOpen(false)} />
@@ -194,7 +201,7 @@ export default function Qantas() {
           gap: 1,
         }}
       >
-        <Typography variant="h4" textAlign="center">
+        <Typography variant="h4" component="h1" textAlign="center">
           Qantas Points and Status Credits Calculator
         </Typography>
 
@@ -218,14 +225,23 @@ export default function Qantas() {
                   size="small"
                   value={tripType}
                   exclusive
+                  aria-label="Trip type selection"
                   onChange={(_event, value) => {
                     if (value) setTripType(value);
                   }}
                 >
-                  <ToggleButton data-testid="trip-type-oneway" value="one way">
+                  <ToggleButton
+                    data-testid="trip-type-oneway"
+                    value="one way"
+                    aria-label="One way flight"
+                  >
                     One Way
                   </ToggleButton>
-                  <ToggleButton data-testid="trip-type-return" value="return">
+                  <ToggleButton
+                    data-testid="trip-type-return"
+                    value="return"
+                    aria-label="Return flight"
+                  >
                     Return
                   </ToggleButton>
                 </ToggleButtonGroup>
@@ -317,6 +333,7 @@ export default function Qantas() {
           calculatedData={calculationOutput}
           compareWithQantasCalc={compareWithQantasCalc}
         />
+        <FaqAndInfo />
         <Box mt={5} sx={{ width: "100%" }}>
           <ChangeLog />
         </Box>

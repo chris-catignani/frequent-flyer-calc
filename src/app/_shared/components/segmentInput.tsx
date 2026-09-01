@@ -313,7 +313,10 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         }}
         {...dragHandleProps}
       >
-        <ReorderSegmentInputButton showReorderButton={showDeleteButton} />
+        <ReorderSegmentInputButton
+          showReorderButton={showDeleteButton}
+          segmentInputIdx={segmentInputIdx}
+        />
         <Typography
           variant="subtitle2"
           color="text.secondary"
@@ -422,13 +425,14 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   );
 };
 
-const ReorderSegmentInputButton: React.FC<{ showReorderButton: boolean }> = ({
-  showReorderButton,
-}) => {
+const ReorderSegmentInputButton: React.FC<{
+  showReorderButton: boolean;
+  segmentInputIdx: number;
+}> = ({ showReorderButton, segmentInputIdx }) => {
   if (!showReorderButton) {
     return (
       // Dummy icon to maintain space for when we show icons
-      <IconButton disabled sx={{ visibility: "hidden", p: 0 }}>
+      <IconButton disabled sx={{ visibility: "hidden", p: 0 }} aria-hidden="true">
         <DragHandle />
       </IconButton>
     );
@@ -439,6 +443,7 @@ const ReorderSegmentInputButton: React.FC<{ showReorderButton: boolean }> = ({
           p: 0,
           cursor: "grab",
         }}
+        aria-label={`Reorder segment ${segmentInputIdx + 1}`}
       >
         <DragHandle />
       </IconButton>
@@ -454,7 +459,7 @@ const RemoveSegmentInputButton: React.FC<{
   if (!showDeleteButton) {
     return (
       // Dummy icon to maintain space for when we show icons
-      <IconButton disabled sx={{ visibility: "hidden", p: 0 }}>
+      <IconButton disabled sx={{ visibility: "hidden", p: 0 }} aria-hidden="true">
         <Clear />
       </IconButton>
     );
@@ -467,6 +472,7 @@ const RemoveSegmentInputButton: React.FC<{
           "&:hover": { backgroundColor: "inherit", boxShadow: "none" },
         }}
         onClick={onDeleteClicked}
+        aria-label={`Remove segment ${segmentInputIdx + 1}`}
       >
         <Clear />
       </IconButton>

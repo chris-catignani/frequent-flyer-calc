@@ -38,7 +38,8 @@ export const Footer: React.FC = () => {
         earning tables as of March 2026.
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        This webpage is not affiliated with Qantas Airlines.
+        This website is an independent community tool and is not affiliated with, sponsored by, or
+        endorsed by Qantas Airways, Jetstar Airways, or any partner airlines.
       </Typography>
       <Typography
         variant="body2"

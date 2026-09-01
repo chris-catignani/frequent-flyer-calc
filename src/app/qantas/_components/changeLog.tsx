@@ -12,8 +12,9 @@ export const CHANGE_LOG: ChangeLogEntry[] = [
   {
     month: "September 2026",
     entries: [
-      "Allowed minor rounding tolerance and added disclaimers when comparing calculations to Qantas.",
-      "General improvements.",
+      "Added FAQ and earning rules guide.",
+      "Improved official Qantas calculator comparison tolerance.",
+      "Mobile UI and accessibility enhancements.",
     ],
   },
   {
