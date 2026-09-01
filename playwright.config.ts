@@ -17,6 +17,9 @@ export default defineConfig({
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
+        // On local macOS the bundled chromium headless shell frequently fails to
+        // install; use the installed Google Chrome instead. CI keeps the pinned
+        // chromium build.
         ...(process.env.CI ? {} : { channel: "chrome" }),
       },
     },

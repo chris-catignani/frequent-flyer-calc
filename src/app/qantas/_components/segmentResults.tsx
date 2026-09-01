@@ -147,7 +147,12 @@ const AirlinePointsDisplay: React.FC<{ segmentResult: SegmentResult }> = ({ segm
   return (
     <Grid container justifyContent="flex-end">
       <Typography>{segmentResult.airlinePoints?.toLocaleString()}</Typography>
-      <IconButton size="small" sx={{ py: 0 }} onClick={handleClickOpen}>
+      <IconButton
+        size="small"
+        sx={{ py: 0 }}
+        onClick={handleClickOpen}
+        aria-label="View points calculation breakdown"
+      >
         <Info />
       </IconButton>
       <AirlinePointsBreakdownDialog
@@ -222,7 +227,10 @@ const MatchesQantasSegmentIcon: React.FC<{
   if (qantasAPIError) {
     return (
       <Tooltip title="Qantas Calculator Failed to Calculate">
-        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+        <IconButton
+          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
+          aria-label="Qantas Calculator Failed to Calculate segment"
+        >
           <Info color="warning" />
         </IconButton>
       </Tooltip>
@@ -230,7 +238,7 @@ const MatchesQantasSegmentIcon: React.FC<{
   } else if (matchesAirlinePoints && matchesElitePoints) {
     return (
       <Tooltip title={matchTooltip}>
-        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }} aria-label={matchTooltip}>
           <CheckCircle color="success" />
         </IconButton>
       </Tooltip>
@@ -238,7 +246,10 @@ const MatchesQantasSegmentIcon: React.FC<{
   } else {
     return (
       <Tooltip title="Does not match Qantas Calculator">
-        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+        <IconButton
+          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
+          aria-label="Does not match Qantas Calculator for this segment"
+        >
           <Cancel color="error" />
         </IconButton>
       </Tooltip>
@@ -331,7 +342,15 @@ const SegmentTableRow: React.FC<{
           </TableCell>
         )}
         <TableCell onClick={() => setExpandRow(!expandRow)} sx={{ px: { xs: 0.5, sm: 2 } }}>
-          <IconButton size="small">
+          <IconButton
+            size="small"
+            aria-expanded={expandRow}
+            aria-label={
+              expandRow
+                ? `Hide calculation breakdown for segment ${segmentIdx + 1}`
+                : `Show calculation breakdown for segment ${segmentIdx + 1}`
+            }
+          >
             {expandRow ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </TableCell>

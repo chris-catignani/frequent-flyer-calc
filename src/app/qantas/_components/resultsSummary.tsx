@@ -140,7 +140,11 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
     if (qantasAPICalcError) {
       return (
         <Box>
-          <IconButton onClick={handleClickOpen} sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+          <IconButton
+            onClick={handleClickOpen}
+            sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
+            aria-label="View Qantas API calculation error details"
+          >
             <Info color="warning" />
           </IconButton>
           <MatchesQantasErrorDialog open={open} onClose={handleClose} error={qantasAPICalcError} />
@@ -150,7 +154,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
       return (
         <Box>
           <Tooltip title={matchTooltip}>
-            <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+            <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }} aria-label={matchTooltip}>
               <CheckCircle color="success" />
             </IconButton>
           </Tooltip>
@@ -159,7 +163,11 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
     } else {
       return (
         <Box>
-          <IconButton onClick={handleClickOpen} sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
+          <IconButton
+            onClick={handleClickOpen}
+            sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
+            aria-label="View Qantas API calculation mismatch details"
+          >
             <Cancel color="error" />
           </IconButton>
           <MatchesQantasMisMatchDialog
