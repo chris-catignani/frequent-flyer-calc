@@ -249,6 +249,7 @@ export default function Qantas() {
                 columns={{ xs: 8, sm: 12 }}
                 spacing={{ xs: 2, sm: 0 }}
                 sx={{
+                  mt: 2,
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}

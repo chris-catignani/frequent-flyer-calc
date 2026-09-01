@@ -74,7 +74,13 @@ export function useCalculator({
   );
   const [priceLessTaxes] = useState<number>(initialPriceLessTaxes);
   const [segmentInputs, setSegmentInputs] = useState<SegmentInput[]>([
-    new SegmentInput(program.defaultAirline, program.defaultFareClass ?? "", "", ""),
+    new SegmentInput(
+      program.defaultAirline,
+      program.defaultFareClass ?? "",
+      "",
+      "",
+      "00000000-0000-0000-0000-000000000000"
+    ),
   ]);
 
   const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]);
