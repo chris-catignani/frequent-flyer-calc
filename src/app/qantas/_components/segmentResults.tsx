@@ -22,6 +22,11 @@ import {
 } from "@mui/material";
 import { Cancel, CheckCircle, Info, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { ALL_AIRLINES } from "@/app/_shared/models/constants";
+import {
+  isAirlinePointsMatch,
+  isElitePointsMatch,
+  isClosePointsMatch,
+} from "@/app/_shared/utils/comparison";
 import type { CalculationResult, SegmentResult } from "@/types/calculator";
 
 export interface SegmentResultsProps {
@@ -192,6 +197,17 @@ const MatchesQantasSegmentIcon: React.FC<{
     return <></>;
   }
 
+  const qantasAirlinePoints = segmentResult.qantasAPIResults?.qantasData?.airlinePoints;
+  const isCloseMatch =
+    matchesAirlinePoints &&
+    matchesElitePoints &&
+    qantasAirlinePoints !== undefined &&
+    isClosePointsMatch(segmentResult.airlinePoints ?? 0, qantasAirlinePoints);
+
+  const matchTooltip = isCloseMatch
+    ? "Matches Qantas Calculator (within 1 point difference due to rounding)"
+    : "Matches Qantas Calculator";
+
   if (qantasAPIError) {
     return (
       <Tooltip title="Qantas Calculator Failed to Calculate">
@@ -202,7 +218,7 @@ const MatchesQantasSegmentIcon: React.FC<{
     );
   } else if (matchesAirlinePoints && matchesElitePoints) {
     return (
-      <Tooltip title="Matches Qantas Calculator">
+      <Tooltip title={matchTooltip}>
         <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }}>
           <CheckCircle color="success" />
         </IconButton>
@@ -245,10 +261,15 @@ const SegmentTableRow: React.FC<{
   }
 
   const qantasAPIError = segmentResult.qantasAPIResults?.error;
+  const qantasAirlinePoints = segmentResult.qantasAPIResults?.qantasData?.airlinePoints;
+  const qantasElitePoints = segmentResult.qantasAPIResults?.qantasData?.elitePoints;
+
   const matchesAirlinePoints =
-    segmentResult.airlinePoints === segmentResult.qantasAPIResults?.qantasData?.airlinePoints;
+    qantasAirlinePoints !== undefined &&
+    isAirlinePointsMatch(segmentResult.airlinePoints ?? 0, qantasAirlinePoints);
   const matchesElitePoints =
-    segmentResult.elitePoints === segmentResult.qantasAPIResults?.qantasData?.elitePoints;
+    qantasElitePoints !== undefined &&
+    isElitePointsMatch(segmentResult.elitePoints ?? 0, qantasElitePoints);
 
   return (
     <>
