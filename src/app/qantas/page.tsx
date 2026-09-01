@@ -96,7 +96,7 @@ export default function Qantas() {
   }, []);
 
   const validateInput = () => {
-    return validate(segmentInputs);
+    return validate(segmentInputs, qantasSegmentInputAdapter);
   };
 
   const doCalculation = async (

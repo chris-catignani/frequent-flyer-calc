@@ -185,6 +185,6 @@ export const qantasSegmentInputAdapter: SegmentInputAdapter = {
       return false;
     }
 
-    return segmentInput.airline in QANTAS_GRP_AIRLINES || JAL_AIRLINES.has(segmentInput.airline);
+    return segmentInput.airline in QANTAS_GRP_AIRLINES;
   },
 };
