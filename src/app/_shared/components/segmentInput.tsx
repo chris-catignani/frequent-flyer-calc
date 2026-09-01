@@ -295,26 +295,50 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       data-testid={`segment-row-${segmentInputIdx}`}
       container
       spacing={1}
-      columns={22}
+      columns={{ xs: 12, sm: 22 }}
       sx={{
         justifyContent: "flex-start",
         alignItems: "flex-start",
       }}
     >
       <Grid
-        size={{ xs: 2, sm: 1 }}
-        order={{ xs: 2, sm: 1 }}
+        size={{ xs: 8, sm: 1 }}
+        order={{ xs: 1, sm: 1 }}
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
-          height: "56px",
+          justifyContent: { xs: "flex-start", sm: "center" },
+          height: { xs: "40px", sm: "56px" },
+          gap: 1,
         }}
         {...dragHandleProps}
       >
         <ReorderSegmentInputButton showReorderButton={showDeleteButton} />
+        <Typography
+          variant="subtitle2"
+          color="text.secondary"
+          sx={{ display: { xs: "inline", sm: "none" }, fontWeight: 500 }}
+        >
+          Segment {segmentInputIdx + 1}
+        </Typography>
       </Grid>
-      <Grid size={{ xs: 22, sm: 6 }} order={{ xs: 1, sm: 2 }}>
+      <Grid
+        size={{ xs: 4, sm: 1 }}
+        order={{ xs: 2, sm: 6 }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: { xs: "flex-end", sm: "center" },
+          height: { xs: "40px", sm: "56px" },
+        }}
+      >
+        <RemoveSegmentInputButton
+          segmentInputIdx={segmentInputIdx}
+          showDeleteButton={showDeleteButton}
+          onDeleteClicked={onDeleteClicked}
+        />
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6 }} order={{ xs: 3, sm: 2 }}>
         <AirlineInput
           segmentInputIdx={segmentInputIdx}
           value={segmentInput.airline}
@@ -331,7 +355,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           }}
         />
       </Grid>
-      <Grid size={{ xs: 9, sm: 4 }} order={3}>
+      <Grid size={{ xs: 6, sm: 4 }} order={{ xs: 4, sm: 3 }}>
         <AirportInput
           dataTestId={`segment-from-${segmentInputIdx}`}
           errorTestId={`segment-error-from-${segmentInputIdx}`}
@@ -351,7 +375,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           }}
         />
       </Grid>
-      <Grid size={{ xs: 9, sm: 4 }} order={4}>
+      <Grid size={{ xs: 6, sm: 4 }} order={{ xs: 5, sm: 4 }}>
         <AirportInput
           dataTestId={`segment-to-${segmentInputIdx}`}
           errorTestId={`segment-error-to-${segmentInputIdx}`}
@@ -371,7 +395,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           }}
         />
       </Grid>
-      <Grid size={{ xs: 22, sm: 6 }} order={{ xs: 6, sm: 5 }}>
+      <Grid size={{ xs: 12, sm: 6 }} order={{ xs: 6, sm: 5 }}>
         {customFareClassInput != null ? (
           customFareClassInput
         ) : (
@@ -393,22 +417,6 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
             sx={{ width: "100%" }}
           />
         )}
-      </Grid>
-      <Grid
-        size={{ xs: 2, sm: 1 }}
-        order={{ xs: 5, sm: 6 }}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "56px",
-        }}
-      >
-        <RemoveSegmentInputButton
-          segmentInputIdx={segmentInputIdx}
-          showDeleteButton={showDeleteButton}
-          onDeleteClicked={onDeleteClicked}
-        />
       </Grid>
     </Grid>
   );
@@ -587,7 +595,9 @@ const AirportInput: React.FC<AirportInputProps> = ({
       }}
       slotProps={{
         popper: { placement: "bottom-start", style: { width: "fit-content" } },
-        paper: { sx: { minWidth: 280, maxWidth: 400 } },
+        paper: {
+          sx: { minWidth: { xs: 240, sm: 280 }, maxWidth: { xs: "calc(100vw - 32px)", sm: 400 } },
+        },
       }}
       sx={{ width: "100%" }}
       renderInput={(params) => (
