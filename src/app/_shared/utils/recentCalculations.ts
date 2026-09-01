@@ -21,7 +21,8 @@ interface RawSavedCalculation {
 export const saveCalculation = (
   segmentInputs: SegmentInput[],
   theTripType: string,
-  theEliteStatus: string
+  theEliteStatus: string,
+  storageKey: string = "saved-calculations"
 ): SavedCalculation[] => {
   const calculationToSave: SavedCalculation = {
     segmentInputs: segmentInputs.map(
@@ -40,7 +41,7 @@ export const saveCalculation = (
 
   // get the current saved calculations and remove and matching calc's so we don't create duplicates
   // max number of saved calculations will be 10
-  const savedCalculations = getSavedCalculations()
+  const savedCalculations = getSavedCalculations(storageKey)
     .filter((savedCalculation) => {
       return !isEqualSavedCalculations(savedCalculation, calculationToSave);
     })
@@ -49,17 +50,19 @@ export const saveCalculation = (
   // prepend the new saved calculation
   savedCalculations.unshift(calculationToSave);
 
-  setSavedCalculations(savedCalculations);
+  setSavedCalculations(savedCalculations, storageKey);
 
   return savedCalculations;
 };
 
-export const getSavedCalculations = (): SavedCalculation[] => {
+export const getSavedCalculations = (
+  storageKey: string = "saved-calculations"
+): SavedCalculation[] => {
   if (typeof window === "undefined") {
     return [];
   }
   const savedCalculations: RawSavedCalculation[] = JSON.parse(
-    localStorage.getItem("saved-calculations") || "[]"
+    localStorage.getItem(storageKey) || "[]"
   );
   return savedCalculations.map((savedCalculation) => {
     return {
@@ -77,12 +80,15 @@ export const getSavedCalculations = (): SavedCalculation[] => {
   });
 };
 
-export const setSavedCalculations = (savedCalculations: SavedCalculation[]): void => {
+export const setSavedCalculations = (
+  savedCalculations: SavedCalculation[],
+  storageKey: string = "saved-calculations"
+): void => {
   if (typeof window === "undefined") {
     return;
   }
   localStorage.setItem(
-    "saved-calculations",
+    storageKey,
     JSON.stringify(
       savedCalculations.map((savedCalculation) => {
         return {
@@ -102,15 +108,20 @@ export const setSavedCalculations = (savedCalculations: SavedCalculation[]): voi
   );
 };
 
-export const deleteAllSavedCalculations = (): SavedCalculation[] => {
+export const deleteAllSavedCalculations = (
+  storageKey: string = "saved-calculations"
+): SavedCalculation[] => {
   if (typeof window !== "undefined") {
-    localStorage.removeItem("saved-calculations");
+    localStorage.removeItem(storageKey);
   }
   return [];
 };
 
-export const deleteSavedCalculationAtIdx = (idx: number): SavedCalculation[] => {
-  const savedCalculations = getSavedCalculations();
+export const deleteSavedCalculationAtIdx = (
+  idx: number,
+  storageKey: string = "saved-calculations"
+): SavedCalculation[] => {
+  const savedCalculations = getSavedCalculations(storageKey);
 
   if (idx < 0 || idx > savedCalculations.length - 1) {
     return savedCalculations;
@@ -118,7 +129,7 @@ export const deleteSavedCalculationAtIdx = (idx: number): SavedCalculation[] => 
 
   savedCalculations.splice(idx, 1);
 
-  setSavedCalculations(savedCalculations);
+  setSavedCalculations(savedCalculations, storageKey);
   return savedCalculations;
 };
 
