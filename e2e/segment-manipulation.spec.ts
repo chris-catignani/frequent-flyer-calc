@@ -46,4 +46,33 @@ test.describe("Segment Manipulation", () => {
     await expect(page.locator('[data-testid^="segment-result-row-"]')).toHaveCount(1);
     await expect(page.getByTestId("segment-result-route-0")).toContainText("mel - bne");
   });
+
+  test("renders properly on mobile viewport without horizontal scroll", async ({ page }) => {
+    for (const width of [375, 320]) {
+      await page.setViewportSize({ width, height: 667 });
+      await page.goto("/qantas");
+
+      await selectAirline(page, 0, "Qantas", "Qantas (qf)");
+      await setAirport(page, "from", 0, "syd");
+      await setAirport(page, "to", 0, "mel");
+      await setFareClass(page, 0, "Flex", true);
+
+      // Add a segment to verify multi-segment mobile headers
+      await page.getByTestId("add-segment-button").click();
+      await expect(page.getByText("Segment 1")).toBeVisible();
+      await expect(page.getByText("Segment 2")).toBeVisible();
+
+      await setAirport(page, "to", 1, "bne");
+      await setFareClass(page, 1, "Flex", true);
+
+      await clickCalculate(page);
+      await expect(page.getByTestId("total-points-earned")).toBeVisible();
+      await expect(page.getByTestId("segment-results-table")).toBeVisible();
+
+      const hasHorizontalScroll = await page.evaluate(() => {
+        return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      });
+      expect(hasHorizontalScroll).toBe(false);
+    }
+  });
 });

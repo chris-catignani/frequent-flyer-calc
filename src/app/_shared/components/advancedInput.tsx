@@ -36,7 +36,7 @@ export const AdvancedInput: React.FC<AdvancedInputProps> = ({ setSegmentInputs }
         onClick={() => setOpen(!isOpen)}
         sx={{ cursor: "pointer" }}
       >
-        <Typography pl={{ xs: 2, sm: 0 }}>Advanced Input</Typography>
+        <Typography>Advanced Input</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </Stack>
       <Collapse in={isOpen} timeout="auto">

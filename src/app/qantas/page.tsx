@@ -61,7 +61,7 @@ const CompareWithQantasAPISwitch: React.FC<{
       wrap="nowrap"
       sx={{
         alignItems: "center",
-        justifyContent: "flex-end",
+        justifyContent: { xs: "center", sm: "flex-end" },
         visibility: FLAG_ENABLE_QANTAS_API ? "" : "hidden",
       }}
     >
@@ -71,13 +71,13 @@ const CompareWithQantasAPISwitch: React.FC<{
         onChange={(event) => onChange(event.target.checked)}
         disabled={!FLAG_ENABLE_QANTAS_API}
       />
-      <Typography>
+      <Typography variant="body2" sx={{ lineHeight: 1.2 }}>
         Compare With
         <br />
         Qantas&apos;s Calculator
       </Typography>
       <IconButton size="small" sx={{ py: 0 }} onClick={() => setOpen(true)}>
-        <Info />
+        <Info fontSize="small" />
       </IconButton>
       <QantasApiDialog open={open} onClose={() => setOpen(false)} />
     </Grid>
@@ -183,31 +183,35 @@ export default function Qantas() {
   } = useCalculator({ program: qantasProgram });
 
   return (
-    <Container maxWidth="md" disableGutters>
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        spacing={1}
-        my={2}
-        mx={{ xs: 0, sm: 2 }}
+    <Container maxWidth="md" sx={{ px: { xs: 2, sm: 3 } }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%",
+          my: 2,
+          gap: 1,
+        }}
       >
         <Typography variant="h4" textAlign="center">
           Qantas Points and Status Credits Calculator
         </Typography>
 
-        <Box mt={3} width="100%">
+        <Box mt={3} sx={{ width: "100%" }}>
           <Paper elevation={3}>
-            <Grid
-              container
-              direction="row"
+            <Box
               p={2}
               sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
                 justifyContent: "space-between",
+                alignItems: { xs: "stretch", sm: "center" },
+                gap: { xs: 2, sm: 0 },
+                pb: { xs: 0.5, sm: 2 },
               }}
             >
-              <Grid>
+              <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-start" } }}>
                 <ToggleButtonGroup
                   data-testid="trip-type-toggle"
                   color="primary"
@@ -225,15 +229,15 @@ export default function Qantas() {
                     Return
                   </ToggleButton>
                 </ToggleButtonGroup>
-              </Grid>
-              <Grid order={{ xs: 2, sm: 3 }}>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-end" } }}>
                 <EliteStatusInput
                   eliteStatus={eliteStatus}
                   onChange={(value) => setEliteStatus(value)}
                 />
-              </Grid>
-            </Grid>
-            <Box p={2}>
+              </Box>
+            </Box>
+            <Box p={2} sx={{ pt: { xs: 0.5, sm: 2 } }}>
               <SegmentInputList
                 segmentInputs={segmentInputs}
                 errors={inputErrors}
@@ -247,14 +251,14 @@ export default function Qantas() {
               <Grid
                 container
                 columns={{ xs: 8, sm: 12 }}
-                spacing={{ xs: 2, sm: 0 }}
+                spacing={1}
                 sx={{
                   mt: 2,
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
               >
-                <Grid size={4}>
+                <Grid size={{ xs: 4, sm: 4 }}>
                   <Button data-testid="add-segment-button" variant="contained" onClick={addSegment}>
                     Add Segment
                   </Button>
@@ -265,6 +269,7 @@ export default function Qantas() {
                   order={{ xs: 3, sm: 2 }}
                   sx={{
                     justifyContent: "center",
+                    mt: { xs: 1, sm: 0 },
                   }}
                 >
                   <Button
@@ -278,7 +283,7 @@ export default function Qantas() {
                     Calculate
                   </Button>
                 </Grid>
-                <Grid size={4} order={{ xs: 2, sm: 3 }}>
+                <Grid size={{ xs: 4, sm: 4 }} order={{ xs: 2, sm: 3 }}>
                   <CompareWithQantasAPISwitch
                     checked={compareWithQantasCalc}
                     onChange={setCompareWithQantasCalc}
@@ -296,7 +301,7 @@ export default function Qantas() {
                 />
               </Box>
             )}
-            <Box pt={0} pb={2} px={{ xs: 0, sm: 2 }}>
+            <Box pt={0} pb={2} px={2}>
               <AdvancedInput setSegmentInputs={setAllSegmentInputs} />
             </Box>
           </Paper>
@@ -312,11 +317,11 @@ export default function Qantas() {
           calculatedData={calculationOutput}
           compareWithQantasCalc={compareWithQantasCalc}
         />
-        <Box mt={5} width="100%" px={{ xs: 2, sm: 0 }}>
+        <Box mt={5} sx={{ width: "100%" }}>
           <ChangeLog />
         </Box>
-      </Grid>
-      <Footer />
+        <Footer />
+      </Box>
     </Container>
   );
 }

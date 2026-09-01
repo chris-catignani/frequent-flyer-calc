@@ -356,4 +356,27 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
       expect(screen.getByTestId("segment-error-fare-class-0")).toHaveTextContent("Required");
     });
   });
+
+  describe("Responsive rendering & unique DOM elements", () => {
+    it("renders single delete button and segment row with correct responsive test IDs", () => {
+      const secondSegment = new SegmentInput("qf", "j", "syd", "mel", "test-uuid-2");
+      render(
+        <SegmentInputList
+          segmentInputs={[defaultSegment, secondSegment]}
+          errors={{}}
+          airlineOptions={airlineOptions}
+          onDeleteSegmentPressed={jest.fn()}
+          onSegmentInputChanged={jest.fn()}
+          onSegmentsReordered={jest.fn()}
+        />
+      );
+
+      const deleteButtons0 = screen.getAllByTestId("segment-delete-0");
+      expect(deleteButtons0).toHaveLength(1);
+      const deleteButtons1 = screen.getAllByTestId("segment-delete-1");
+      expect(deleteButtons1).toHaveLength(1);
+      expect(screen.getByText("Segment 1")).toBeInTheDocument();
+      expect(screen.getByText("Segment 2")).toBeInTheDocument();
+    });
+  });
 });
