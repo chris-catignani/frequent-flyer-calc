@@ -235,12 +235,14 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
     <Draggable draggableId={segmentInput.uuid} index={segmentInputIdx} isDragDisabled={!enableDrag}>
       {(provided) => (
         <div {...provided.draggableProps} ref={provided.innerRef}>
-          <Divider
-            sx={{
-              mb: { xs: 3, sm: 0 },
-              visibility: { sm: "hidden" },
-            }}
-          />
+          {segmentInputIdx > 0 && (
+            <Divider
+              sx={{
+                my: { xs: 2.5, sm: 1.5 },
+                visibility: { sm: "hidden" },
+              }}
+            />
+          )}
           <SegmentInputRow
             segmentInput={segmentInput}
             segmentInputIdx={segmentInputIdx}
@@ -296,13 +298,18 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       columns={22}
       sx={{
         justifyContent: "flex-start",
-        alignItems: "center",
+        alignItems: "flex-start",
       }}
     >
       <Grid
         size={{ xs: 2, sm: 1 }}
-        mb={2} // accommodate for the other fields that have "helper text" to display errors under them
         order={{ xs: 2, sm: 1 }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "56px",
+        }}
         {...dragHandleProps}
       >
         <ReorderSegmentInputButton showReorderButton={showDeleteButton} />
@@ -389,8 +396,13 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       </Grid>
       <Grid
         size={{ xs: 2, sm: 1 }}
-        mb={2} // accommodate for the other fields that have "helper text" to display errors under them
         order={{ xs: 5, sm: 6 }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "56px",
+        }}
       >
         <RemoveSegmentInputButton
           segmentInputIdx={segmentInputIdx}
