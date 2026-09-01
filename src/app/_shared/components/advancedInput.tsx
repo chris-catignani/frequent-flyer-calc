@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { parseEncodedTextItin, parseItaMatrixInput } from '@/app/_shared/utils/segmentInputParser';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import React, { useState } from "react";
+import { parseEncodedTextItin, parseItaMatrixInput } from "@/app/_shared/utils/segmentInputParser";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
   AccordionActions,
@@ -12,8 +12,8 @@ import {
   Stack,
   TextField,
   Typography,
-} from '@mui/material';
-import type { SegmentInput } from '@/app/_shared/models/segmentInput';
+} from "@mui/material";
+import type { SegmentInput } from "@/app/_shared/models/segmentInput";
 
 export interface AdvancedInputProps {
   setSegmentInputs: (segmentInputs: SegmentInput[]) => void;
@@ -34,7 +34,7 @@ export const AdvancedInput: React.FC<AdvancedInputProps> = ({ setSegmentInputs }
         direction="row"
         spacing={1}
         onClick={() => setOpen(!isOpen)}
-        sx={{ cursor: 'pointer' }}
+        sx={{ cursor: "pointer" }}
       >
         <Typography pl={{ xs: 2, sm: 0 }}>Advanced Input</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
@@ -53,8 +53,8 @@ interface AdvancedInputSelectionProps {
 const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApplyClicked }) => {
   const [expanded, setExpanded] = useState<string | false>(false);
   const [inputError, setInputError] = useState<Record<string, string>>({});
-  const [textItin, setTextItin] = useState<string>('');
-  const [itaMatrixJson, setItaMatrixJson] = useState<string>('');
+  const [textItin, setTextItin] = useState<string>("");
+  const [itaMatrixJson, setItaMatrixJson] = useState<string>("");
 
   const handleAccordionChange =
     (accordionPanel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -62,11 +62,11 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
     };
 
   const applyTextItinInput = () => {
-    const { segmentInputs, parsingError } = parseEncodedTextItin(textItin, '\n', ' ');
+    const { segmentInputs, parsingError } = parseEncodedTextItin(textItin, "\n", " ");
 
     if (parsingError) {
-      setExpanded('text-itin');
-      setInputError({ 'text-itin': parsingError });
+      setExpanded("text-itin");
+      setInputError({ "text-itin": parsingError });
     } else {
       setExpanded(false);
       setInputError({});
@@ -78,8 +78,8 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
     const { segmentInputs, parsingError } = parseItaMatrixInput(itaMatrixJson);
 
     if (parsingError) {
-      setExpanded('ita-matrix');
-      setInputError({ 'ita-matrix': parsingError });
+      setExpanded("ita-matrix");
+      setInputError({ "ita-matrix": parsingError });
     } else {
       setExpanded(false);
       setInputError({});
@@ -91,8 +91,8 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
     <Box>
       <Accordion
         data-testid="advanced-input-text-accordion"
-        expanded={expanded === 'text-itin'}
-        onChange={handleAccordionChange('text-itin')}
+        expanded={expanded === "text-itin"}
+        onChange={handleAccordionChange("text-itin")}
       >
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>Free Form Text Itinerary</Typography>
@@ -101,7 +101,7 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
           <FreeFormTextItinerary
             textItin={textItin}
             textItinChanged={setTextItin}
-            error={inputError['text-itin']}
+            error={inputError["text-itin"]}
           />
         </AccordionDetails>
         <AccordionActions sx={{ pt: 0 }}>
@@ -112,8 +112,8 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
       </Accordion>
       <Accordion
         data-testid="advanced-input-ita-accordion"
-        expanded={expanded === 'ita-matrix'}
-        onChange={handleAccordionChange('ita-matrix')}
+        expanded={expanded === "ita-matrix"}
+        onChange={handleAccordionChange("ita-matrix")}
       >
         <AccordionSummary expandIcon={<ExpandMore />}>
           <Typography>ITA Matrix Itinerary</Typography>
@@ -122,7 +122,7 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
           <ItaMatrixItinerary
             itaMatrixJson={itaMatrixJson}
             itaMatrixJsonChanged={setItaMatrixJson}
-            error={inputError['ita-matrix']}
+            error={inputError["ita-matrix"]}
           />
         </AccordionDetails>
         <AccordionActions sx={{ pt: 0 }}>
@@ -177,7 +177,7 @@ const FreeFormTextItinerary: React.FC<FreeFormTextItineraryProps> = ({
         placeholder="Text Itinerary here"
         value={textItin}
         error={Boolean(error)}
-        helperText={error ? error : ' '}
+        helperText={error ? error : " "}
         onChange={(event) => textItinChanged(event.target.value)}
       />
     </Stack>
@@ -213,7 +213,7 @@ const ItaMatrixItinerary: React.FC<ItaMatrixItineraryProps> = ({
         placeholder="Paste ITA Matrix JSON here"
         value={itaMatrixJson}
         error={Boolean(error)}
-        helperText={error ? error : ' '}
+        helperText={error ? error : " "}
         onChange={(event) => itaMatrixJsonChanged(event.target.value)}
       />
     </Stack>

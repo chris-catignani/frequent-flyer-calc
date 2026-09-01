@@ -1,8 +1,8 @@
 import {
   JETSTAR_AIRLINES,
   JETSTAR_LETTER_FARE_CLASSES,
-} from '@/app/_shared/models/qantasConstants';
-import { SegmentInput } from '@/app/_shared/models/segmentInput';
+} from "@/app/_shared/models/qantasConstants";
+import { SegmentInput } from "@/app/_shared/models/segmentInput";
 
 export interface ParseResult {
   segmentInputs: SegmentInput[];
@@ -12,12 +12,12 @@ export interface ParseResult {
 export const parseEncodedTextItin = (
   textItin: string,
   segmentSeparator: string,
-  segmentItemSeparator: string,
+  segmentItemSeparator: string
 ): ParseResult => {
   const segmentInputs: SegmentInput[] = [];
 
-  if (!textItin || textItin === '') {
-    const parsingError = 'Text itinerary is required';
+  if (!textItin || textItin === "") {
+    const parsingError = "Text itinerary is required";
     return { segmentInputs, parsingError };
   }
 
@@ -69,8 +69,8 @@ interface ItaMatrixObject {
 export const parseItaMatrixInput = (itaMatrixJson: string): ParseResult => {
   const segmentInputs: SegmentInput[] = [];
 
-  if (!itaMatrixJson || itaMatrixJson === '') {
-    const parsingError = 'ITA Matrix JSON required';
+  if (!itaMatrixJson || itaMatrixJson === "") {
+    const parsingError = "ITA Matrix JSON required";
     return { segmentInputs, parsingError };
   }
 
@@ -80,12 +80,12 @@ export const parseItaMatrixInput = (itaMatrixJson: string): ParseResult => {
     itaMatrixObj = JSON.parse(itaMatrixJson);
   } catch (err) {
     console.log(err);
-    const parsingError = 'Invalid JSON format';
+    const parsingError = "Invalid JSON format";
     return { segmentInputs, parsingError };
   }
 
   if (!itaMatrixObj?.itinerary?.slices) {
-    const parsingError = 'ITA Matrix JSON missing itinerary, or slices';
+    const parsingError = "ITA Matrix JSON missing itinerary, or slices";
     return { segmentInputs, parsingError };
   }
 

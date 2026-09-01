@@ -1,10 +1,10 @@
-import { calcDistance } from '@/app/_shared/utils/airports';
-import { isInRegion } from '@/app/_shared/calculators/qantas/regions';
-import { Earnings } from '@/app/_shared/models/earnings';
-import { REGION_DISPLAY } from '@/app/_shared/models/qantasConstants';
-import type { Segment } from '@/app/_shared/models/segment';
-import type { Airport } from '@/types/airport';
-import type { RuleCalculationReturn } from '@/types/calculator';
+import { calcDistance } from "@/app/_shared/utils/airports";
+import { isInRegion } from "@/app/_shared/calculators/qantas/regions";
+import { Earnings } from "@/app/_shared/models/earnings";
+import { REGION_DISPLAY } from "@/app/_shared/models/qantasConstants";
+import type { Segment } from "@/app/_shared/models/segment";
+import type { Airport } from "@/types/airport";
+import type { RuleCalculationReturn } from "@/types/calculator";
 
 export interface DistanceBand {
   minDistance: number;
@@ -21,7 +21,7 @@ export interface FareClassEarningDetail {
 export type FareClassEarnings = Record<string, FareClassEarningDetail>;
 
 export interface GeographicalLocation {
-  type: 'airport' | 'city' | 'country' | 'region';
+  type: "airport" | "city" | "country" | "region";
   value: string;
 }
 
@@ -66,14 +66,14 @@ export class Rule {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   calculate(segment: Segment, fareEarnCategory: string): RuleCalculationReturn {
-    return this.buildCalculationReturn('', '', 0, 0);
+    return this.buildCalculationReturn("", "", 0, 0);
   }
 
   buildCalculationReturn(
     fareEarnCategory: string,
     notes: string,
     airlinePoints: number,
-    elitePoints: number,
+    elitePoints: number
   ): RuleCalculationReturn {
     return {
       rule: this.name,
@@ -127,7 +127,7 @@ export class DistanceRule extends Rule {
     return this.distanceBands.find((distanceBand) => {
       return (
         distanceBand.minDistance < distance &&
-        (!('maxDistance' in distanceBand) || distance <= distanceBand.maxDistance!)
+        (!("maxDistance" in distanceBand) || distance <= distanceBand.maxDistance!)
       );
     });
   }
@@ -147,11 +147,11 @@ export class DistanceRule extends Rule {
 
     const distanceBand = this._getDistanceBand(distance);
     if (!distanceBand) {
-      throw new Error('No applicable distance band to calculate with for rule: ' + this.name);
+      throw new Error("No applicable distance band to calculate with for rule: " + this.name);
     }
 
     const notesForDistance =
-      'maxDistance' in distanceBand
+      "maxDistance" in distanceBand
         ? `using band ${distanceBand.minDistance} - ${distanceBand.maxDistance}`
         : `using band ${distanceBand.minDistance} and over`;
 
@@ -159,7 +159,7 @@ export class DistanceRule extends Rule {
       fareEarnCategory,
       `Distance calculated to ${distance} miles, ${notesForDistance}`,
       distanceBand.earnings[fareEarnCategory].airlinePoints,
-      distanceBand.earnings[fareEarnCategory].elitePoints,
+      distanceBand.earnings[fareEarnCategory].elitePoints
     );
   }
 }
@@ -181,7 +181,7 @@ export class FareClassRule extends Rule {
       fareEarnCategory,
       this.fareClassEarnings[fareEarnCategory].calculationNotes,
       this.fareClassEarnings[fareEarnCategory].airlinePoints,
-      this.fareClassEarnings[fareEarnCategory].elitePoints,
+      this.fareClassEarnings[fareEarnCategory].elitePoints
     );
   }
 }
@@ -196,7 +196,7 @@ export class GeographicalRule extends Rule {
     name: string,
     ruleUrl: string,
     ruleConfig: GeographicalRuleConfig,
-    minPoints: Record<string, number> | null = null,
+    minPoints: Record<string, number> | null = null
   ) {
     super(name, ruleUrl, minPoints);
     this.ruleConfig = ruleConfig;
@@ -205,20 +205,20 @@ export class GeographicalRule extends Rule {
   _getOrigin(airport: Airport): GeographicalLocation | null {
     if (this.ruleConfig.origin.city) {
       if (this.ruleConfig.origin.city.has(airport.city.toLowerCase())) {
-        return { type: 'city', value: airport.city.toLowerCase() };
+        return { type: "city", value: airport.city.toLowerCase() };
       }
     }
 
     if (this.ruleConfig.origin.country) {
       if (this.ruleConfig.origin.country.has(airport.country.toLowerCase())) {
-        return { type: 'country', value: airport.country.toLowerCase() };
+        return { type: "country", value: airport.country.toLowerCase() };
       }
     }
 
     if (this.ruleConfig.origin.region) {
       for (const region of this.ruleConfig.origin.region.values()) {
         if (isInRegion(airport.iata.toLowerCase(), region)) {
-          return { type: 'region', value: region };
+          return { type: "region", value: region };
         }
       }
     }
@@ -229,20 +229,20 @@ export class GeographicalRule extends Rule {
   _getDestination(airport: Airport): GeographicalLocation | null {
     if (this.ruleConfig.destination.city) {
       if (airport.city.toLowerCase() in this.ruleConfig.destination.city) {
-        return { type: 'city', value: airport.city.toLowerCase() };
+        return { type: "city", value: airport.city.toLowerCase() };
       }
     }
 
     if (this.ruleConfig.destination.country) {
       if (airport.country.toLowerCase() in this.ruleConfig.destination.country) {
-        return { type: 'country', value: airport.country.toLowerCase() };
+        return { type: "country", value: airport.country.toLowerCase() };
       }
     }
 
     if (this.ruleConfig.destination.region) {
       for (const region of Object.keys(this.ruleConfig.destination.region)) {
         if (isInRegion(airport.iata.toLowerCase(), region)) {
-          return { type: 'region', value: region };
+          return { type: "region", value: region };
         }
       }
     }
@@ -267,22 +267,22 @@ export class GeographicalRule extends Rule {
 
   _buildCalculationNotes(origin: GeographicalLocation, destination: GeographicalLocation): string {
     const _buildCalculationNotesInner = (location: GeographicalLocation): string => {
-      if (location.type === 'airport') {
+      if (location.type === "airport") {
         return `${location.value} airport`;
-      } else if (location.type === 'city') {
+      } else if (location.type === "city") {
         return location.value;
-      } else if (location.type === 'country') {
+      } else if (location.type === "country") {
         return location.value;
-      } else if (location.type === 'region') {
+      } else if (location.type === "region") {
         return REGION_DISPLAY[location.value] || location.value;
       } else {
         throw new Error(
-          `Cannot create calcluation notes for unknown type ${(location as GeographicalLocation).type}`,
+          `Cannot create calcluation notes for unknown type ${(location as GeographicalLocation).type}`
         );
       }
     };
 
-    return _buildCalculationNotesInner(origin) + ' to ' + _buildCalculationNotesInner(destination);
+    return _buildCalculationNotesInner(origin) + " to " + _buildCalculationNotesInner(destination);
   }
 
   applies(segment: Segment, fareEarnCategory: string): boolean {
@@ -292,7 +292,7 @@ export class GeographicalRule extends Rule {
     }
 
     const earningsMap =
-      this.ruleConfig.destination[destination.type as 'city' | 'country' | 'region'];
+      this.ruleConfig.destination[destination.type as "city" | "country" | "region"];
     const earnings = earningsMap?.[destination.value];
     return Boolean(earnings && fareEarnCategory in earnings);
   }
@@ -301,11 +301,11 @@ export class GeographicalRule extends Rule {
     const { origin, destination } = this._getOriginAndDestination(segment);
     if (!origin || !destination) {
       throw new Error(
-        `Cannot calculate geographical rule without origin and destination for ${this.name}`,
+        `Cannot calculate geographical rule without origin and destination for ${this.name}`
       );
     }
     const earningsMap =
-      this.ruleConfig.destination[destination.type as 'city' | 'country' | 'region'];
+      this.ruleConfig.destination[destination.type as "city" | "country" | "region"];
     const earnings = earningsMap?.[destination.value];
 
     if (!earnings || !earnings[fareEarnCategory]) {
@@ -316,7 +316,7 @@ export class GeographicalRule extends Rule {
       fareEarnCategory,
       this._buildCalculationNotes(origin, destination),
       earnings[fareEarnCategory].airlinePoints,
-      earnings[fareEarnCategory].elitePoints,
+      earnings[fareEarnCategory].elitePoints
     );
   }
 }
@@ -327,24 +327,24 @@ export class GeographicalRule extends Rule {
 export const parseEarningRates = (
   airlinePointsString: string,
   qantasCreditsString: string,
-  fareClasses: string[],
+  fareClasses: string[]
 ): Record<string, Earnings> => {
   const pointsPerFareclass = airlinePointsString
     .trim()
-    .replace(/[,.]/gm, '')
-    .replace(/\s+/gm, ' ')
-    .split(' ');
+    .replace(/[,.]/gm, "")
+    .replace(/\s+/gm, " ")
+    .split(" ");
   const creditsPerFareclass = qantasCreditsString
     .trim()
-    .replace(/[,.]/gm, '')
-    .replace(/\s+/gm, ' ')
-    .split(' ');
+    .replace(/[,.]/gm, "")
+    .replace(/\s+/gm, " ")
+    .split(" ");
   const retval: Record<string, Earnings> = {};
 
   fareClasses.forEach((fareClass, index) => {
     retval[fareClass] = new Earnings(
       parseInt(pointsPerFareclass[index]) || 0,
-      parseInt(creditsPerFareclass[index]) || 0,
+      parseInt(creditsPerFareclass[index]) || 0
     );
   });
 

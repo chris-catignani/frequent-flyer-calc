@@ -1,10 +1,10 @@
-import { airports } from '@nwpr/airport-codes';
-import GreatCircle from 'great-circle';
-import type { Airport } from '@/types/airport';
+import { airports } from "@nwpr/airport-codes";
+import GreatCircle from "great-circle";
+import type { Airport } from "@/types/airport";
 
 const airportFixes: { city: Record<string, string> } = {
   city: {
-    'Dallas-Fort Worth': 'Dallas',
+    "Dallas-Fort Worth": "Dallas",
   },
 };
 
@@ -26,7 +26,7 @@ const standardizeAirport = (airport?: Airport | null): Airport | null => {
 
 export const getAirport = (iata: string): Airport | null => {
   const airport = (airports as unknown as Airport[]).find(
-    (airport) => airport.iata === iata.toUpperCase(),
+    (airport) => airport.iata === iata.toUpperCase()
   );
   return standardizeAirport(airport);
 };
@@ -58,8 +58,8 @@ export const calcDistance = (airport1: Airport, airport2: Airport): number => {
       airport1.longitude,
       airport2.latitude,
       airport2.longitude,
-      'MI',
-    ),
+      "MI"
+    )
   );
 };
 

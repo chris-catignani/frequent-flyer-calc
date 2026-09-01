@@ -1,6 +1,6 @@
-import { calcDistance } from '@/app/_shared/utils/airports';
-import type { SegmentInput } from '@/app/_shared/models/segmentInput';
-import type { Segment } from '@/app/_shared/models/segment';
+import { calcDistance } from "@/app/_shared/utils/airports";
+import type { SegmentInput } from "@/app/_shared/models/segmentInput";
+import type { Segment } from "@/app/_shared/models/segment";
 
 /**
  * create an array of continuous route segments, not duplicating start and end airports
@@ -25,10 +25,10 @@ export const buildRouteDisplayString = (segmentInputs: SegmentInput[]): string =
   }, []);
 
   const airportSegmentChainsString = airportSegmentChains.map((airportSegmentChain) => {
-    return airportSegmentChain.join('-');
+    return airportSegmentChain.join("-");
   });
 
-  return airportSegmentChainsString.join(', ');
+  return airportSegmentChainsString.join(", ");
 };
 
 export const calculateTotalDistance = (segments: Segment[]): number => {

@@ -7,8 +7,8 @@ A Next.js (App Router) app that calculates Qantas Frequent Flyer points/status c
 - `npm run dev` — start dev server (Turbopack) at localhost:3000
 - `npm run build` / `npm run start` — production build / serve
 - `npm run typecheck` — TypeScript typecheck (`tsc --noEmit`)
-- `npm run lint` — ESLint, flat config in `eslint.config.mjs` (`eslint-config-next` + `eslint-config-prettier`)
-- `npm run format` — Prettier write across `src/**/*.{js,jsx,ts,tsx,css,html}`
+- `npm run lint` — ESLint with cache, flat config in `eslint.config.mjs` (`eslint-config-next` + `eslint-config-prettier`)
+- `npm run format` — Prettier write across repository
 - `npm test` — Jest unit tests (jsdom environment, via `next/jest`)
 - `npm run test:e2e` — Playwright E2E tests (Chromium, runs against port 3001)
 - `npm run test:e2e:ui` — Playwright interactive UI mode
@@ -16,7 +16,7 @@ A Next.js (App Router) app that calculates Qantas Frequent Flyer points/status c
 - Single unit test file: `npx jest path/to/file.test.ts`
 - Single test by name: `npx jest -t "test name"`
 
-A husky pre-commit hook runs `eslint --fix` and `prettier --write` on staged files via `lint-staged`. PR checks (`lint-and-test`, `e2e`) run via GitHub Actions on self-hosted Docker runners (`.github/workflows/ci.yml`).
+A husky pre-commit hook runs `prettier --write` and `eslint --cache` on staged files via `lint-staged`. PR checks (`lint-and-test`, `e2e`) run via GitHub Actions on self-hosted Docker runners (`.github/workflows/ci.yml`).
 
 ## Architecture
 

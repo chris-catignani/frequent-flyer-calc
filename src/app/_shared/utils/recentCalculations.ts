@@ -1,4 +1,4 @@
-import { SegmentInput } from '@/app/_shared/models/segmentInput';
+import { SegmentInput } from "@/app/_shared/models/segmentInput";
 
 export interface SavedCalculation {
   segmentInputs: SegmentInput[];
@@ -21,7 +21,7 @@ interface RawSavedCalculation {
 export const saveCalculation = (
   segmentInputs: SegmentInput[],
   theTripType: string,
-  theEliteStatus: string,
+  theEliteStatus: string
 ): SavedCalculation[] => {
   const calculationToSave: SavedCalculation = {
     segmentInputs: segmentInputs.map(
@@ -31,8 +31,8 @@ export const saveCalculation = (
           segmentInput.fareClass,
           segmentInput.fromAirportText,
           segmentInput.toAirportText,
-          segmentInput.uuid,
-        ),
+          segmentInput.uuid
+        )
     ),
     tripType: theTripType,
     eliteStatus: theEliteStatus,
@@ -55,11 +55,11 @@ export const saveCalculation = (
 };
 
 export const getSavedCalculations = (): SavedCalculation[] => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return [];
   }
   const savedCalculations: RawSavedCalculation[] = JSON.parse(
-    localStorage.getItem('saved-calculations') || '[]',
+    localStorage.getItem("saved-calculations") || "[]"
   );
   return savedCalculations.map((savedCalculation) => {
     return {
@@ -68,7 +68,7 @@ export const getSavedCalculations = (): SavedCalculation[] => {
           segmentInput.airline,
           segmentInput.fareClass,
           segmentInput.fromAirportText,
-          segmentInput.toAirportText,
+          segmentInput.toAirportText
         );
       }),
       tripType: savedCalculation.tripType,
@@ -78,11 +78,11 @@ export const getSavedCalculations = (): SavedCalculation[] => {
 };
 
 export const setSavedCalculations = (savedCalculations: SavedCalculation[]): void => {
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     return;
   }
   localStorage.setItem(
-    'saved-calculations',
+    "saved-calculations",
     JSON.stringify(
       savedCalculations.map((savedCalculation) => {
         return {
@@ -97,14 +97,14 @@ export const setSavedCalculations = (savedCalculations: SavedCalculation[]): voi
           tripType: savedCalculation.tripType,
           eliteStatus: savedCalculation.eliteStatus,
         };
-      }),
-    ),
+      })
+    )
   );
 };
 
 export const deleteAllSavedCalculations = (): SavedCalculation[] => {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('saved-calculations');
+  if (typeof window !== "undefined") {
+    localStorage.removeItem("saved-calculations");
   }
   return [];
 };

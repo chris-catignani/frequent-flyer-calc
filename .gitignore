@@ -26,8 +26,13 @@
 .DS_Store
 *.pem
 .playwright-mcp
+.eslintcache
+
+# Superpowers planning artifacts (local scratch space only, not committed)
+docs/superpowers/
+
+# Superpowers brainstorming sessions
 .superpowers/
-/docs/superpowers/
 
 # debug
 npm-debug.log*

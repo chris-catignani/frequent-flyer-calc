@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Cancel, CheckCircle, Info } from '@mui/icons-material';
-import { Box, Dialog, DialogTitle, Grid, IconButton, Tooltip, Typography } from '@mui/material';
-import type { CalculationResult } from '@/types/calculator';
+import React, { useState } from "react";
+import { Cancel, CheckCircle, Info } from "@mui/icons-material";
+import { Box, Dialog, DialogTitle, Grid, IconButton, Tooltip, Typography } from "@mui/material";
+import type { CalculationResult } from "@/types/calculator";
 
 export interface ResultsSummaryProps {
   calculationOutput?: CalculationResult | null;
@@ -37,19 +37,19 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   const MatchesQantasMisMatchDialog: React.FC<{
     open: boolean;
     onClose: () => void;
-    field: 'airlinePoints' | 'elitePoints';
+    field: "airlinePoints" | "elitePoints";
     expectedValue?: number;
     actualValue?: number;
   }> = ({ open, onClose, field, expectedValue, actualValue }) => {
-    const fieldLabel = field === 'airlinePoints' ? 'Qantas Points' : 'Status Credits';
+    const fieldLabel = field === "airlinePoints" ? "Qantas Points" : "Status Credits";
     return (
       <Dialog onClose={onClose} open={open}>
         <DialogTitle>Qantas Calculator results do not match our results</DialogTitle>
         <Grid container direction="column" mx={2} mb={2}>
           <Typography>Our Results:</Typography>
-          <Typography>{fieldLabel + ': ' + expectedValue}</Typography>
+          <Typography>{fieldLabel + ": " + expectedValue}</Typography>
           <Typography mt={2}>Qantas Calculator Results:</Typography>
-          <Typography>{fieldLabel + ': ' + actualValue}</Typography>
+          <Typography>{fieldLabel + ": " + actualValue}</Typography>
           <Typography mt={2}>See the results below to see details by segment</Typography>
         </Grid>
       </Dialog>
@@ -58,13 +58,13 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
 
   const TotalAirlinePointsEarned: React.FC = () => {
     return (
-      <Grid container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
+      <Grid container justifyContent="center" alignItems="center" spacing={1} direction={"row"}>
         <Typography variant="h5" data-testid="total-points-earned">
           Qantas Points Earned: {calculationOutput?.airlinePoints?.toLocaleString()}
         </Typography>
         <MatchesQantasAPIIcon
           expectedValue={calculationOutput?.airlinePoints}
-          fieldToCheck={'airlinePoints'}
+          fieldToCheck={"airlinePoints"}
         />
       </Grid>
     );
@@ -72,13 +72,13 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
 
   const TotalElitePointsEarned: React.FC = () => {
     return (
-      <Grid container justifyContent="center" alignItems="center" spacing={1} direction={'row'}>
+      <Grid container justifyContent="center" alignItems="center" spacing={1} direction={"row"}>
         <Typography variant="h5" data-testid="total-status-credits-earned">
           Status Credits Earned: {calculationOutput?.elitePoints?.toLocaleString()}
         </Typography>
         <MatchesQantasAPIIcon
           expectedValue={calculationOutput?.elitePoints}
-          fieldToCheck={'elitePoints'}
+          fieldToCheck={"elitePoints"}
         />
       </Grid>
     );
@@ -86,7 +86,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
 
   const MatchesQantasAPIIcon: React.FC<{
     expectedValue?: number;
-    fieldToCheck: 'airlinePoints' | 'elitePoints';
+    fieldToCheck: "airlinePoints" | "elitePoints";
   }> = ({ expectedValue, fieldToCheck }) => {
     const [open, setOpen] = useState(false);
 

@@ -1,4 +1,4 @@
-import { SegmentInput } from '@/app/_shared/models/segmentInput';
+import { SegmentInput } from "@/app/_shared/models/segmentInput";
 
 export interface ParsedUrlParams {
   eliteStatus: string | null;
@@ -9,7 +9,7 @@ export interface ParsedUrlParams {
 export const createUrlQueryParams = (
   eliteStatus: string,
   segmentInputs: SegmentInput[],
-  tripType: string,
+  tripType: string
 ): { eliteStatus: string; tripType: string; segmentInputs: string } => {
   return {
     eliteStatus,
@@ -19,7 +19,7 @@ export const createUrlQueryParams = (
 };
 
 export const parseUrlQueryParams = (
-  searchParams?: { get: (key: string) => string | null } | null,
+  searchParams?: { get: (key: string) => string | null } | null
 ): ParsedUrlParams => {
   if (!searchParams) {
     return {
@@ -29,9 +29,9 @@ export const parseUrlQueryParams = (
     };
   }
 
-  const eliteStatus = searchParams.get('eliteStatus');
-  const tripType = searchParams.get('tripType');
-  const segmentInputs = decodeSegmentInputs(searchParams.get('segmentInputs'));
+  const eliteStatus = searchParams.get("eliteStatus");
+  const tripType = searchParams.get("tripType");
+  const segmentInputs = decodeSegmentInputs(searchParams.get("segmentInputs"));
 
   return {
     eliteStatus,
@@ -49,11 +49,11 @@ const encodeSegmentInputs = (segmentInputs: SegmentInput[]): string => {
         segmentInput.fromAirportText,
         segmentInput.toAirportText,
         segmentInput.fareClass,
-      ].join('_'),
+      ].join("_")
     );
   }
 
-  return encodedSegments.join('-');
+  return encodedSegments.join("-");
 };
 
 const decodeSegmentInputs = (segmentInputsString: string | null): SegmentInput[] | undefined => {
@@ -62,10 +62,10 @@ const decodeSegmentInputs = (segmentInputsString: string | null): SegmentInput[]
   }
 
   const segmentInputs: SegmentInput[] = [];
-  for (const segmentString of segmentInputsString.split('-')) {
-    const segmentParts = segmentString.split('_');
+  for (const segmentString of segmentInputsString.split("-")) {
+    const segmentParts = segmentString.split("_");
     segmentInputs.push(
-      new SegmentInput(segmentParts[0], segmentParts[3], segmentParts[1], segmentParts[2]),
+      new SegmentInput(segmentParts[0], segmentParts[3], segmentParts[1], segmentParts[2])
     );
   }
   return segmentInputs;

@@ -1,6 +1,6 @@
-import { isInRegion } from '@/app/_shared/calculators/qantas/regions';
-import type { Segment } from '@/app/_shared/models/segment';
-import type { Airport } from '@/types/airport';
+import { isInRegion } from "@/app/_shared/calculators/qantas/regions";
+import type { Segment } from "@/app/_shared/models/segment";
+import type { Airport } from "@/types/airport";
 
 export interface FareBucketRule {
   all?: boolean;
@@ -29,24 +29,24 @@ export type EarnCategoryMap = Record<string, EarnCategoryConfig>;
  */
 export const buildFareBuckets = (
   qantasString: string,
-  fareClasses: string[],
+  fareClasses: string[]
 ): Record<string, string> => {
   // remove all '*', replace whitespace with single space, split on that single space
   const fareBuckets = qantasString
     .trim()
-    .replace(/[*~^#]/gm, '')
-    .replace(/\s+/gm, ' ')
+    .replace(/[*~^#]/gm, "")
+    .replace(/\s+/gm, " ")
     .toLowerCase()
-    .split(' ');
+    .split(" ");
   const retval: Record<string, string> = {};
 
   fareClasses.forEach((fareClass, index) => {
-    if (fareBuckets[index] === '-') {
+    if (fareBuckets[index] === "-") {
       return;
     }
 
     // iterate over each single fareClass character, putting that character and fare category into the map
-    fareBuckets[index]?.split('').forEach((fareBucket) => (retval[fareBucket] = fareClass));
+    fareBuckets[index]?.split("").forEach((fareBucket) => (retval[fareBucket] = fareClass));
   });
 
   return retval;
@@ -54,7 +54,7 @@ export const buildFareBuckets = (
 
 export const buildSimpleFareBuckets = (
   qantasString: string,
-  fareClasses: string[],
+  fareClasses: string[]
 ): { rules: FareBucketRule[] } => {
   return {
     rules: [
@@ -82,7 +82,7 @@ export const getEarnCategory = (segment: Segment, earnCategories: EarnCategoryMa
 
     if (!rule.categories[segment.fareClass]) {
       throw new Error(
-        `Airline ${segment.airline} is not configured for fare class ${segment.fareClass}`,
+        `Airline ${segment.airline} is not configured for fare class ${segment.fareClass}`
       );
     }
 
@@ -90,7 +90,7 @@ export const getEarnCategory = (segment: Segment, earnCategories: EarnCategoryMa
   }
 
   throw new Error(
-    `No applicable earn category rule found for ${segment.airline} ${segment.fareClass}`,
+    `No applicable earn category rule found for ${segment.airline} ${segment.fareClass}`
   );
 };
 
@@ -98,7 +98,7 @@ const isApplicableRule = (segment: Segment, rule: FareBucketRule): boolean => {
   const check = (
     originAirport: Airport,
     destinationAirport: Airport,
-    rule: FareBucketRule,
+    rule: FareBucketRule
   ): boolean => {
     if (rule.all) {
       return true;

@@ -1,24 +1,24 @@
 import {
   JAL_DOMESTIC_FARE_CLASSES,
   WEBSITE_EARN_CATEGORIES,
-} from '@/app/_shared/models/qantasConstants';
-import { LATAM_AIRLINES } from '@/app/_shared/models/constants';
+} from "@/app/_shared/models/qantasConstants";
+import { LATAM_AIRLINES } from "@/app/_shared/models/constants";
 import {
   buildFareBuckets,
   buildSimpleFareBuckets,
   getEarnCategory,
   type EarnCategoryConfig,
   type FareBucketRule,
-} from '@/app/_shared/calculators/qantas/earnCategories';
-import type { Segment } from '@/app/_shared/models/segment';
+} from "@/app/_shared/calculators/qantas/earnCategories";
+import type { Segment } from "@/app/_shared/models/segment";
 
 export const PARTNER_FARE_CLASSES: string[] = [
-  'discountEconomy',
-  'economy',
-  'flexibleEconomy',
-  'premiumEconomy',
-  'business',
-  'first',
+  "discountEconomy",
+  "economy",
+  "flexibleEconomy",
+  "premiumEconomy",
+  "business",
+  "first",
 ];
 
 export interface PartnerEarnCategoryConfig extends EarnCategoryConfig {
@@ -39,8 +39,8 @@ const buildJapanAirlinesFareBuckets = (qantasString: string): { rules: FareBucke
   return {
     rules: [
       {
-        origin: { country: new Set(['japan']) },
-        destination: { country: new Set(['japan']) },
+        origin: { country: new Set(["japan"]) },
+        destination: { country: new Set(["japan"]) },
         categories: { ...JAL_DOMESTIC_FARE_CLASSES },
       },
       {
@@ -53,23 +53,23 @@ const buildJapanAirlinesFareBuckets = (qantasString: string): { rules: FareBucke
 
 const buildMalaysiaAirlinesFareBuckets = (
   longHaulQantasString: string,
-  allOtherQantasString: string,
+  allOtherQantasString: string
 ): { rules: FareBucketRule[] } => {
   return {
     rules: [
       {
-        origin: { country: new Set(['australia', 'new zealand']) },
+        origin: { country: new Set(["australia", "new zealand"]) },
         destination: {
-          country: new Set(['malaysia', 'united kingdom']),
-          region: new Set(['europe']),
+          country: new Set(["malaysia", "united kingdom"]),
+          region: new Set(["europe"]),
         },
         categories: buildFareBuckets(longHaulQantasString, PARTNER_FARE_CLASSES),
       },
       {
-        origin: { country: new Set(['malaysia']) },
+        origin: { country: new Set(["malaysia"]) },
         destination: {
-          country: new Set(['united kingdom']),
-          region: new Set(['europe', 'middleEast']),
+          country: new Set(["united kingdom"]),
+          region: new Set(["europe", "middleEast"]),
         },
         categories: buildFareBuckets(longHaulQantasString, PARTNER_FARE_CLASSES),
       },
@@ -83,14 +83,14 @@ const buildMalaysiaAirlinesFareBuckets = (
 
 const buildSriLankairlinesFareBuckets = (
   longHaulQantasString: string,
-  allOtherQantasString: string,
+  allOtherQantasString: string
 ): { rules: FareBucketRule[] } => {
   return {
     rules: [
       {
-        origin: { country: new Set(['sri lanka', 'malaysia']) },
+        origin: { country: new Set(["sri lanka", "malaysia"]) },
         destination: {
-          region: new Set(['europe', 'southeastAustralia']),
+          region: new Set(["europe", "southeastAustralia"]),
         },
         categories: buildFareBuckets(longHaulQantasString, PARTNER_FARE_CLASSES),
       },
@@ -105,34 +105,34 @@ const buildSriLankairlinesFareBuckets = (
 const buildAirFranceKLMFareBuckets = (
   domesticQantasString: string,
   shortHaulQantasString: string,
-  longHaulQantasString: string,
+  longHaulQantasString: string
 ): { rules: FareBucketRule[] } => {
   return {
     rules: [
       {
-        origin: { country: new Set(['france']) },
-        destination: { country: new Set(['france']) },
+        origin: { country: new Set(["france"]) },
+        destination: { country: new Set(["france"]) },
         categories: buildFareBuckets(domesticQantasString, PARTNER_FARE_CLASSES),
       },
       {
-        origin: { region: new Set(['europe']) },
+        origin: { region: new Set(["europe"]) },
         destination: {
           country: new Set([
-            'algeria',
-            'armenia',
-            'bulgaria',
-            'croatia',
-            'georgia',
-            'hungary',
-            'morocco',
-            'poland',
-            'romania',
-            'russia',
-            'serbia',
-            'slovenia',
-            'tunisia',
+            "algeria",
+            "armenia",
+            "bulgaria",
+            "croatia",
+            "georgia",
+            "hungary",
+            "morocco",
+            "poland",
+            "romania",
+            "russia",
+            "serbia",
+            "slovenia",
+            "tunisia",
           ]),
-          region: new Set(['europe']),
+          region: new Set(["europe"]),
         },
         categories: buildFareBuckets(shortHaulQantasString, PARTNER_FARE_CLASSES),
       },
@@ -146,13 +146,13 @@ const buildAirFranceKLMFareBuckets = (
 
 const buildChinaEasternFareBuckets = (
   domesticQantasString: string,
-  allOtherQantasString: string,
+  allOtherQantasString: string
 ): { rules: FareBucketRule[] } => {
   return {
     rules: [
       {
-        origin: { country: new Set(['china']) },
-        destination: { country: new Set(['china']) },
+        origin: { country: new Set(["china"]) },
+        destination: { country: new Set(["china"]) },
         categories: buildFareBuckets(domesticQantasString, PARTNER_FARE_CLASSES),
       },
       {
@@ -165,13 +165,13 @@ const buildChinaEasternFareBuckets = (
 
 const buildFijiAirwaysFareBuckets = (
   domesticQantasString: string,
-  allOtherQantasString: string,
+  allOtherQantasString: string
 ): { rules: FareBucketRule[] } => {
   return {
     rules: [
       {
-        origin: { country: new Set(['fiji']) },
-        destination: { country: new Set(['fiji']) },
+        origin: { country: new Set(["fiji"]) },
+        destination: { country: new Set(["fiji"]) },
         categories: buildFareBuckets(domesticQantasString, PARTNER_FARE_CLASSES),
       },
       {
@@ -282,10 +282,10 @@ const partnerEarnCategories: PartnerEarnCategoryMap = {
         earnsElitePoints: false,
         fareBuckets: buildSimpleFareBuckets(
           WEBSITE_EARN_CATEGORIES.la as string,
-          PARTNER_FARE_CLASSES,
+          PARTNER_FARE_CLASSES
         ),
       },
-    ]),
+    ])
   ),
   ws: {
     earnsElitePoints: false,

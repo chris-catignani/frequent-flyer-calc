@@ -1,5 +1,5 @@
-import React from 'react';
-import { Autocomplete, TextField } from '@mui/material';
+import React from "react";
+import { Autocomplete, TextField } from "@mui/material";
 
 export interface EliteStatusInputProps {
   eliteStatus: string;
@@ -12,10 +12,10 @@ export const EliteStatusInput: React.FC<EliteStatusInputProps> = ({ eliteStatus,
       data-testid="elite-status-input"
       disableClearable
       value={eliteStatus}
-      options={['Bronze', 'Silver', 'Gold', 'Platinum', 'Platinum One']}
+      options={["Bronze", "Silver", "Gold", "Platinum", "Platinum One"]}
       sx={{ width: 175 }}
       size="small"
-      onChange={(_event, value) => onChange(value || '')}
+      onChange={(_event, value) => onChange(value || "")}
       renderInput={(params) => <TextField {...params} label="Elite Status" />}
     />
   );

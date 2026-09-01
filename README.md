@@ -17,7 +17,7 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Testing
- 
+
 - `npm test`: Run Jest unit tests
 - `npm run test:e2e`: Run Playwright E2E tests (Chromium, runs against dedicated test server on port 3001)
 - `npm run test:e2e:ui`: Run Playwright tests with interactive UI

@@ -1,17 +1,17 @@
-import type { Segment } from '@/app/_shared/models/segment';
-import type { QantasApiResults } from '@/types/calculator';
+import type { Segment } from "@/app/_shared/models/segment";
+import type { QantasApiResults } from "@/types/calculator";
 
 const EARN_CATEGORY_MAP: Record<string, string> = {
-  discountEconomy: 'Discount Economy',
-  economy: 'Economy',
-  flexibleEconomy: 'Flexible Economy',
-  discountPremiumEconomy: 'Discount Premium Economy',
-  premiumEconomy: 'Premium Economy',
-  flexiblePremiumEconomy: 'Flexible Premium Economy',
-  discountBusiness: 'Discount Business',
-  business: 'Business',
-  flexibleBusiness: 'Flexible Business',
-  first: 'First',
+  discountEconomy: "Discount Economy",
+  economy: "Economy",
+  flexibleEconomy: "Flexible Economy",
+  discountPremiumEconomy: "Discount Premium Economy",
+  premiumEconomy: "Premium Economy",
+  flexiblePremiumEconomy: "Flexible Premium Economy",
+  discountBusiness: "Discount Business",
+  business: "Business",
+  flexibleBusiness: "Flexible Business",
+  first: "First",
 };
 
 interface QantasRewardEntry {
@@ -30,13 +30,13 @@ interface QantasApiResponse {
 export const fetchDataFromQantas = async (
   segment: Segment,
   eliteStatus: string,
-  fareEarnCategory: string,
+  fareEarnCategory: string
 ): Promise<QantasApiResults> => {
   const retval: QantasApiResults = {};
 
   try {
     const url =
-      '/api/qantas?' +
+      "/api/qantas?" +
       new URLSearchParams({
         airline: segment.airline,
         fromIata: segment.fromAirport.iata,
@@ -60,13 +60,13 @@ export const fetchDataFromQantas = async (
 
     if (!result) {
       console.log(
-        'Failed to find a matching Qantas API result',
+        "Failed to find a matching Qantas API result",
         segment,
         eliteStatus,
         fareEarnCategory,
-        qantasJson,
+        qantasJson
       );
-      retval.error = new Error('Failed to find a matching Qantas API result');
+      retval.error = new Error("Failed to find a matching Qantas API result");
     } else {
       retval.qantasData = {
         airlinePoints: result.earn,

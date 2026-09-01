@@ -1,4 +1,4 @@
-import type { Airport } from '@/types/airport';
+import type { Airport } from "@/types/airport";
 
 export interface SegmentProps {
   airline?: string;
@@ -21,7 +21,7 @@ export class Segment {
   }
 
   toString(): string {
-    return `${this.airline} ${this.fareClass} ${this.fromAirport?.iata || ''} ${this.toAirport?.iata || ''}`;
+    return `${this.airline} ${this.fareClass} ${this.fromAirport?.iata || ""} ${this.toAirport?.iata || ""}`;
   }
 
   clone({ airline, fareClass, fromAirport, toAirport }: SegmentProps): Segment {
@@ -29,7 +29,7 @@ export class Segment {
       airline !== undefined ? airline : this.airline,
       fareClass !== undefined ? fareClass : this.fareClass,
       fromAirport !== undefined && fromAirport !== null ? fromAirport : this.fromAirport,
-      toAirport !== undefined && toAirport !== null ? toAirport : this.toAirport,
+      toAirport !== undefined && toAirport !== null ? toAirport : this.toAirport
     );
   }
 }

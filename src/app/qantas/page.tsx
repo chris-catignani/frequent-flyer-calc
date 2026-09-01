@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { calculate } from '@/app/_shared/calculators/qantas/calculator';
+import React, { useEffect, useState } from "react";
+import { calculate } from "@/app/_shared/calculators/qantas/calculator";
 import {
   Alert,
   Box,
@@ -16,45 +16,45 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
-} from '@mui/material';
-import { Info } from '@mui/icons-material';
-import { getAirport } from '@/app/_shared/utils/airports';
-import { Segment } from '@/app/_shared/models/segment';
-import { defaultSegmentInput, SegmentInput } from '@/app/_shared/models/segmentInput';
+} from "@mui/material";
+import { Info } from "@mui/icons-material";
+import { getAirport } from "@/app/_shared/utils/airports";
+import { Segment } from "@/app/_shared/models/segment";
+import { defaultSegmentInput, SegmentInput } from "@/app/_shared/models/segmentInput";
 import {
   JAL_AIRLINES,
   JETSTAR_AIRLINES,
   PARTNER_NON_ONEWORLD_AIRLINES,
   PARTNER_ONEWORLD_AIRLINES,
-} from '@/app/_shared/models/qantasConstants';
+} from "@/app/_shared/models/qantasConstants";
 import {
   createUrlQueryParams,
   parseUrlQueryParams,
-} from '@/app/_shared/utils/segmentInputUrlParser';
-import { useSearchParams } from 'next/navigation';
+} from "@/app/_shared/utils/segmentInputUrlParser";
+import { useSearchParams } from "next/navigation";
 import {
   deleteAllSavedCalculations,
   deleteSavedCalculationAtIdx,
   getSavedCalculations,
   saveCalculation,
   type SavedCalculation,
-} from '@/app/_shared/utils/recentCalculations';
-import { EliteStatusInput } from '@/app/qantas/_components/input';
-import { RecentCalculationSelection } from '@/app/qantas/_components/recentCalculations';
-import { AdvancedInput } from '@/app/_shared/components/advancedInput';
-import { ResultsSummary } from '@/app/qantas/_components/resultsSummary';
-import { SegmentResults } from '@/app/qantas/_components/segmentResults';
-import { Footer } from '@/app/qantas/_components/footer';
-import { ChangeLog } from '@/app/qantas/_components/changeLog';
+} from "@/app/_shared/utils/recentCalculations";
+import { EliteStatusInput } from "@/app/qantas/_components/input";
+import { RecentCalculationSelection } from "@/app/qantas/_components/recentCalculations";
+import { AdvancedInput } from "@/app/_shared/components/advancedInput";
+import { ResultsSummary } from "@/app/qantas/_components/resultsSummary";
+import { SegmentResults } from "@/app/qantas/_components/segmentResults";
+import { Footer } from "@/app/qantas/_components/footer";
+import { ChangeLog } from "@/app/qantas/_components/changeLog";
 import {
   buildAirlineOptions,
   SegmentInputList,
   validate,
   type SegmentErrors,
-} from '@/app/_shared/components/segmentInput';
-import { QANTAS_GRP_AIRLINES } from '@/app/_shared/models/constants';
-import { trackCalculationCompleted, trackQantasApiMismatch } from '@/app/_shared/utils/analytics';
-import type { CalculationResult } from '@/types/calculator';
+} from "@/app/_shared/components/segmentInput";
+import { QANTAS_GRP_AIRLINES } from "@/app/_shared/models/constants";
+import { trackCalculationCompleted, trackQantasApiMismatch } from "@/app/_shared/utils/analytics";
+import type { CalculationResult } from "@/types/calculator";
 
 const FLAG_ENABLE_QANTAS_API = true;
 
@@ -62,9 +62,9 @@ export default function Qantas() {
   const searchParams = useSearchParams();
 
   const [inputErrors, setInputErrors] = useState<SegmentErrors>({});
-  const [eliteStatus, setEliteStatus] = useState<string>('Bronze');
+  const [eliteStatus, setEliteStatus] = useState<string>("Bronze");
   const [segmentInputs, setSegmentInputs] = useState<SegmentInput[]>([defaultSegmentInput]);
-  const [tripType, setTripType] = useState<string>('one way');
+  const [tripType, setTripType] = useState<string>("one way");
   const [compareWithQantasCalc, setCompareWithQantasCalc] = useState<boolean>(false);
 
   const [savedCalculations, setSavedCalculations] = useState<SavedCalculation[]>([]);
@@ -100,7 +100,7 @@ export default function Qantas() {
   const doCalculation = async (
     theEliteStatus: string,
     theTripType: string,
-    theCompareWithQantasCalc: boolean,
+    theCompareWithQantasCalc: boolean
   ) => {
     setIsCalculating(true);
     setCalculationOutput(null);
@@ -110,11 +110,11 @@ export default function Qantas() {
         segmentInput.airline,
         segmentInput.fareClass,
         segmentInput.fromAirport!,
-        segmentInput.toAirport!,
+        segmentInput.toAirport!
       );
     });
 
-    if (theTripType === 'return') {
+    if (theTripType === "return") {
       // add the segments in reverse, with from/to airports flipped
       for (let i = segments.length - 1; i >= 0; i--) {
         const { fromAirport, toAirport } = segments[i];
@@ -126,7 +126,7 @@ export default function Qantas() {
       segments,
       theEliteStatus,
       0.0, // priceLessTaxes ignored for qantas
-      theCompareWithQantasCalc,
+      theCompareWithQantasCalc
     );
 
     setCalculationOutput(calculationResult);
@@ -147,9 +147,7 @@ export default function Qantas() {
       calculationResult.segmentResults.forEach((segmentResult) => {
         const qantasData = segmentResult.qantasAPIResults?.qantasData;
         const qantasError = segmentResult.qantasAPIResults?.error as
-          | Error
-          | { message?: string }
-          | undefined;
+          Error | { message?: string } | undefined;
 
         if (qantasError) {
           trackQantasApiMismatch({
@@ -192,13 +190,13 @@ export default function Qantas() {
     setSavedCalculations(theSavedCalculations);
 
     // replace the URL query params with the current search params
-    const params = new URLSearchParams(searchParams ? searchParams.toString() : '');
+    const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
     const newParams = createUrlQueryParams(theEliteStatus, segmentInputs, theTripType);
     Object.entries(newParams).forEach(([k, v]) => {
       params.set(k, v);
     });
     if (!searchParams || searchParams.toString() !== params.toString()) {
-      window.history.pushState(null, '', `?${params.toString()}`);
+      window.history.pushState(null, "", `?${params.toString()}`);
     }
 
     setIsCalculating(false);
@@ -217,7 +215,7 @@ export default function Qantas() {
   const setAllInputParams = (
     urlEliteStatus?: string | null,
     urlTripType?: string | null,
-    urlSegmentInputs?: SegmentInput[],
+    urlSegmentInputs?: SegmentInput[]
   ) => {
     if (urlEliteStatus) {
       setEliteStatus(urlEliteStatus);
@@ -244,10 +242,10 @@ export default function Qantas() {
     } else {
       for (let i = 0; i < theSegmentInputs.length; i++) {
         for (const property of [
-          'airline',
-          'fromAirportText',
-          'toAirportText',
-          'fareClass',
+          "airline",
+          "fromAirportText",
+          "toAirportText",
+          "fareClass",
         ] as const) {
           if (theSegmentInputs[i][property] !== segmentInputs[i][property]) {
             clearCalculation = true;
@@ -266,7 +264,7 @@ export default function Qantas() {
     const previousSegment = segmentInputs[segmentInputs.length - 1];
     setAllSegmentInputs([
       ...segmentInputs,
-      new SegmentInput(previousSegment.airline, '', previousSegment.toAirportText, ''),
+      new SegmentInput(previousSegment.airline, "", previousSegment.toAirportText, ""),
     ]);
   };
 
@@ -342,7 +340,7 @@ export default function Qantas() {
     setAllInputParams(
       savedCalculation.eliteStatus,
       savedCalculation.tripType,
-      savedCalculation.segmentInputs,
+      savedCalculation.segmentInputs
     );
   };
 
@@ -389,9 +387,9 @@ export default function Qantas() {
         direction="row"
         wrap="nowrap"
         sx={{
-          alignItems: 'center',
-          justifyContent: 'flex-end',
-          visibility: FLAG_ENABLE_QANTAS_API ? '' : 'hidden',
+          alignItems: "center",
+          justifyContent: "flex-end",
+          visibility: FLAG_ENABLE_QANTAS_API ? "" : "hidden",
         }}
       >
         <Switch
@@ -440,7 +438,7 @@ export default function Qantas() {
       return JETSTAR_AIRLINES.has(segmentResult.segment.airline);
     });
     const jetstarDiscountEconomyResults = jetstarResults.filter((jetstarResult) => {
-      return jetstarResult.fareEarnCategory === 'discountEconomy';
+      return jetstarResult.fareEarnCategory === "discountEconomy";
     });
     const jalResults = calculationOutput.segmentResults.filter((segmentResult) => {
       return JAL_AIRLINES.has(segmentResult.segment.airline);
@@ -466,7 +464,7 @@ export default function Qantas() {
             International fare or when a Jetstar flight voucher has been selected in lieu of Points
             and Status Credits.
           </Typography>
-        </Alert>,
+        </Alert>
       );
     }
 
@@ -477,7 +475,7 @@ export default function Qantas() {
             Japan Airlines flights within Japan are awarded points based on information provided by
             Japan Airlines. Qantas does not define the earning rules for these flights
           </Typography>
-        </Alert>,
+        </Alert>
       );
     }
 
@@ -509,7 +507,7 @@ export default function Qantas() {
               direction="row"
               p={2}
               sx={{
-                justifyContent: 'space-between',
+                justifyContent: "space-between",
               }}
             >
               <Grid>
@@ -543,9 +541,9 @@ export default function Qantas() {
                 segmentInputs={segmentInputs}
                 errors={inputErrors}
                 airlineOptions={[
-                  ...buildAirlineOptions(Object.keys(QANTAS_GRP_AIRLINES), 'Qantas Group Airlines'),
-                  ...buildAirlineOptions(PARTNER_ONEWORLD_AIRLINES, 'oneworld Partner Airlines'),
-                  ...buildAirlineOptions(PARTNER_NON_ONEWORLD_AIRLINES, 'Other Partner Airlines'),
+                  ...buildAirlineOptions(Object.keys(QANTAS_GRP_AIRLINES), "Qantas Group Airlines"),
+                  ...buildAirlineOptions(PARTNER_ONEWORLD_AIRLINES, "oneworld Partner Airlines"),
+                  ...buildAirlineOptions(PARTNER_NON_ONEWORLD_AIRLINES, "Other Partner Airlines"),
                 ]}
                 onDeleteSegmentPressed={deleteSegmentPressed}
                 onSegmentInputChanged={segmentInputChanged}
@@ -557,8 +555,8 @@ export default function Qantas() {
                 columns={{ xs: 8, sm: 12 }}
                 spacing={{ xs: 2, sm: 0 }}
                 sx={{
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
                 <Grid size={4}>
@@ -575,7 +573,7 @@ export default function Qantas() {
                   size={{ xs: 8, sm: 4 }}
                   order={{ xs: 3, sm: 2 }}
                   sx={{
-                    justifyContent: 'center',
+                    justifyContent: "center",
                   }}
                 >
                   <Button
@@ -584,7 +582,7 @@ export default function Qantas() {
                     size="large"
                     onClick={calculatePressed}
                     loading={isCalculating}
-                    sx={{ borderRadius: '28px' }}
+                    sx={{ borderRadius: "28px" }}
                   >
                     Calculate
                   </Button>

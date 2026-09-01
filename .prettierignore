@@ -1,0 +1,10 @@
+.next/
+node_modules/
+public/
+package-lock.json
+dist/
+build/
+playwright-report/
+test-results/
+.superpowers/
+docs/superpowers/
