@@ -13,7 +13,7 @@ export const EliteStatusInput: React.FC<EliteStatusInputProps> = ({ eliteStatus,
       disableClearable
       value={eliteStatus}
       options={["Bronze", "Silver", "Gold", "Platinum", "Platinum One"]}
-      sx={{ width: 175 }}
+      sx={{ width: { xs: "100%", sm: 175 } }}
       size="small"
       onChange={(_event, value) => onChange(value || "")}
       renderInput={(params) => <TextField {...params} label="Elite Status" />}

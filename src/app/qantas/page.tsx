@@ -61,7 +61,7 @@ const CompareWithQantasAPISwitch: React.FC<{
       wrap="nowrap"
       sx={{
         alignItems: "center",
-        justifyContent: "flex-end",
+        justifyContent: { xs: "center", sm: "flex-end" },
         visibility: FLAG_ENABLE_QANTAS_API ? "" : "hidden",
       }}
     >
@@ -71,13 +71,13 @@ const CompareWithQantasAPISwitch: React.FC<{
         onChange={(event) => onChange(event.target.checked)}
         disabled={!FLAG_ENABLE_QANTAS_API}
       />
-      <Typography>
+      <Typography variant="body2" sx={{ lineHeight: 1.2 }}>
         Compare With
         <br />
         Qantas&apos;s Calculator
       </Typography>
       <IconButton size="small" sx={{ py: 0 }} onClick={() => setOpen(true)}>
-        <Info />
+        <Info fontSize="small" />
       </IconButton>
       <QantasApiDialog open={open} onClose={() => setOpen(false)} />
     </Grid>
@@ -183,7 +183,7 @@ export default function Qantas() {
   } = useCalculator({ program: qantasProgram });
 
   return (
-    <Container maxWidth="md" disableGutters>
+    <Container maxWidth="md" sx={{ px: { xs: 1.5, sm: 2 } }}>
       <Grid
         container
         direction="column"
@@ -191,7 +191,7 @@ export default function Qantas() {
         alignItems="center"
         spacing={1}
         my={2}
-        mx={{ xs: 0, sm: 2 }}
+        width="100%"
       >
         <Typography variant="h4" textAlign="center">
           Qantas Points and Status Credits Calculator
@@ -199,15 +199,17 @@ export default function Qantas() {
 
         <Box mt={3} width="100%">
           <Paper elevation={3}>
-            <Grid
-              container
-              direction="row"
+            <Box
               p={2}
               sx={{
+                display: "flex",
+                flexDirection: { xs: "column", sm: "row" },
                 justifyContent: "space-between",
+                alignItems: { xs: "stretch", sm: "center" },
+                gap: { xs: 2, sm: 0 },
               }}
             >
-              <Grid>
+              <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-start" } }}>
                 <ToggleButtonGroup
                   data-testid="trip-type-toggle"
                   color="primary"
@@ -225,14 +227,14 @@ export default function Qantas() {
                     Return
                   </ToggleButton>
                 </ToggleButtonGroup>
-              </Grid>
-              <Grid order={{ xs: 2, sm: 3 }}>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-end" } }}>
                 <EliteStatusInput
                   eliteStatus={eliteStatus}
                   onChange={(value) => setEliteStatus(value)}
                 />
-              </Grid>
-            </Grid>
+              </Box>
+            </Box>
             <Box p={2}>
               <SegmentInputList
                 segmentInputs={segmentInputs}
@@ -246,23 +248,28 @@ export default function Qantas() {
 
               <Grid
                 container
-                columns={{ xs: 8, sm: 12 }}
-                spacing={{ xs: 2, sm: 0 }}
+                columns={{ xs: 12, sm: 12 }}
+                spacing={{ xs: 1.5, sm: 0 }}
                 sx={{
                   mt: 2,
                   justifyContent: "space-between",
                   alignItems: "center",
                 }}
               >
-                <Grid size={4}>
-                  <Button data-testid="add-segment-button" variant="contained" onClick={addSegment}>
+                <Grid size={{ xs: 12, sm: 4 }} order={{ xs: 2, sm: 1 }}>
+                  <Button
+                    data-testid="add-segment-button"
+                    variant="contained"
+                    sx={{ width: { xs: "100%", sm: "auto" } }}
+                    onClick={addSegment}
+                  >
                     Add Segment
                   </Button>
                 </Grid>
                 <Grid
                   container
-                  size={{ xs: 8, sm: 4 }}
-                  order={{ xs: 3, sm: 2 }}
+                  size={{ xs: 12, sm: 4 }}
+                  order={{ xs: 1, sm: 2 }}
                   sx={{
                     justifyContent: "center",
                   }}
@@ -273,12 +280,19 @@ export default function Qantas() {
                     size="large"
                     onClick={calculate}
                     loading={isCalculating}
-                    sx={{ borderRadius: "28px" }}
+                    sx={{ borderRadius: "28px", width: { xs: "100%", sm: "auto" }, px: { sm: 4 } }}
                   >
                     Calculate
                   </Button>
                 </Grid>
-                <Grid size={4} order={{ xs: 2, sm: 3 }}>
+                <Grid
+                  size={{ xs: 12, sm: 4 }}
+                  order={{ xs: 3, sm: 3 }}
+                  sx={{
+                    display: "flex",
+                    justifyContent: { xs: "center", sm: "flex-end" },
+                  }}
+                >
                   <CompareWithQantasAPISwitch
                     checked={compareWithQantasCalc}
                     onChange={setCompareWithQantasCalc}
