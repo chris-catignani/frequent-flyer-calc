@@ -10,6 +10,13 @@ export interface ChangeLogEntry {
 // Newest month first. Add a new { month, entries } entry at the top when shipping a change.
 export const CHANGE_LOG: ChangeLogEntry[] = [
   {
+    month: "September 2026",
+    entries: [
+      "Allowed minor rounding tolerance and added disclaimers when comparing calculations to Qantas.",
+      "General improvements.",
+    ],
+  },
+  {
     month: "July 2026",
     entries: [
       `Added autocomplete search for "from airport" and "to airport".`,
