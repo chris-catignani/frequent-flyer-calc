@@ -308,7 +308,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: { xs: "flex-start", sm: "center" },
-          height: { xs: "40px", sm: "56px" },
+          height: { xs: "32px", sm: "56px" },
           gap: 1,
         }}
         {...dragHandleProps}
@@ -329,7 +329,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           display: "flex",
           alignItems: "center",
           justifyContent: { xs: "flex-end", sm: "center" },
-          height: { xs: "40px", sm: "56px" },
+          height: { xs: "32px", sm: "56px" },
         }}
       >
         <RemoveSegmentInputButton
