@@ -54,6 +54,7 @@ import {
 } from "@/app/_shared/components/segmentInput";
 import { QANTAS_GRP_AIRLINES } from "@/app/_shared/models/constants";
 import { trackCalculationCompleted, trackQantasApiMismatch } from "@/app/_shared/utils/analytics";
+import { isAirlinePointsMatch, isElitePointsMatch } from "@/app/_shared/utils/comparison";
 import type { CalculationResult } from "@/types/calculator";
 
 const FLAG_ENABLE_QANTAS_API = true;
@@ -166,8 +167,8 @@ export default function Qantas() {
           const qantasPoints = Number(qantasData.airlinePoints) || 0;
           const qantasStatusCredits = Number(qantasData.elitePoints) || 0;
 
-          const pointsMismatch = ourPoints !== qantasPoints;
-          const statusCreditsMismatch = ourStatusCredits !== qantasStatusCredits;
+          const pointsMismatch = !isAirlinePointsMatch(ourPoints, qantasPoints);
+          const statusCreditsMismatch = !isElitePointsMatch(ourStatusCredits, qantasStatusCredits);
 
           if (pointsMismatch || statusCreditsMismatch) {
             trackQantasApiMismatch({
