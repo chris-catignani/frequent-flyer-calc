@@ -7,8 +7,8 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { Roboto } from "next/font/google";
 import { ThemeProvider } from "@mui/material/styles";
 import { Analytics } from "@vercel/analytics/react";
-import { PostHogProvider } from "@/app/_shared/components/posthogProvider";
-import { StructuredData } from "@/app/_shared/components/structuredData";
+import { PostHogProvider } from "@/components/common/posthogProvider";
+import { StructuredData } from "@/components/common/structuredData";
 import type { Metadata } from "next";
 import React from "react";
 

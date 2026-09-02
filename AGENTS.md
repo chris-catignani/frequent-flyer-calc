@@ -22,32 +22,32 @@ A husky pre-commit hook runs `prettier --write` and `eslint --cache` on staged f
 
 ### Calculation pipeline
 
-`calculate(segments, eliteStatus, priceLessTaxes)` (`src/app/_shared/calculators/qantas/calculator.ts`)
+`calculate(segments, eliteStatus, priceLessTaxes)` (`src/calculators/qantas/calculator.ts`)
 is the calculation entry point, called directly from `src/app/qantas/page.tsx`. It takes an array of
 `Segment` (one flight leg: airline, fare class, from/to airport) and returns
 `{ segmentResults, containsErrors, elitePoints, airlinePoints }`, recording a per-segment error for
 unsupported airlines rather than failing the whole calculation. For each segment it:
 
 1. Determines a **fare earn category** (e.g. `discountEconomy`, `flexibleBusiness`) by mapping the
-   segment's raw fare class letter through `qantasEarnCategories.ts` (`qf`/`jq`/`gk`) or
-   `partnerEarnCategories.ts` (oneworld/other partners), driven by data tables copy-pasted from the
-   Qantas website and parsed by `buildFareBuckets` in `earnCategories.ts`.
-2. Finds the first matching **rule** for that airline from `qantasRules.ts` or `partnerRules.ts` (maps
+   segment's raw fare class letter through `src/calculators/qantas/earnCategories/qantasEarnCategories.ts` (`qf`/`jq`/`gk`) or
+   `src/calculators/qantas/earnCategories/partnerEarnCategories.ts` (oneworld/other partners), driven by data tables copy-pasted from the
+   Qantas website and parsed by `buildFareBuckets` in `src/calculators/qantas/earnCategories.ts`.
+2. Finds the first matching **rule** for that airline from `src/calculators/qantas/rules/qantasRules.ts` or `src/calculators/qantas/rules/partnerRules.ts` (maps
    of `airlineCode -> Rule[]`) via `rule.applies(segment, fareEarnCategory)`, then calls
    `rule.calculate(...)` on the match.
 3. Applies elite-status earning bonuses (`aa`, `qf`, `jq`, `gk` only) and enforces per-fare-class
    minimum points floors (Qantas Group only; a `Rule` can override the floor for its own route, e.g.
    Jetstar Domestic New Zealand).
 
-Rules extend base classes in `rules.ts`: `DistanceRule` (great-circle distance bands, see
-`calcDistance` in `utils/airports.ts`), `IntraCountryRule` (a `DistanceRule` scoped to one country),
-`GeographicalRule` (city/country/region pairs, see `regions.ts`, checked in both directions), and
+Rules extend base classes in `src/calculators/qantas/rules.ts`: `DistanceRule` (great-circle distance bands, see
+`calcDistance` in `src/utils/airports.ts`), `IntraCountryRule` (a `DistanceRule` scoped to one country),
+`GeographicalRule` (city/country/region pairs, see `src/calculators/qantas/regions.ts`, checked in both directions), and
 `FareClassRule` (flat per-fare-class, no geography). Each `*Rules.ts` file hand-authors `build*Rule()`
 factories pasting Qantas's earn-rate tables via `parseEarningRates`/`parsePartnerEarningRates`
 (whitespace-delimited points-per-fare-class strings, parsed positionally against `QANTAS_FARE_CLASSES`).
 Rules are evaluated in declaration order per airline with a distance-banded fallback last, so rule
 order matters. `rules.test.ts`, `qantasEarnCategories.test.ts`, `partnerEarnCategories.test.ts` and
-`calculator.test.ts` are the tests to extend when touching this logic; `testUtils.ts` (`buildSegment`,
+`calculator.test.ts` are the tests to extend when touching this logic; `src/test/testUtils.ts` (`buildSegment`,
 `buildSegmentFromString`) builds test segments.
 
 These data strings are a faithful copy of Qantas's own tables, quirks included — if the live site has
@@ -58,27 +58,27 @@ partner-airline-earning-tables pages on qantas.com when earnings look off.
 
 An optional live comparison mode (`compareWithQantasCalc`) calls `/api/qantas`, a thin proxy to
 Qantas's own public `earnquote` API, to diff results against Qantas's own calculator; the README notes
-known divergent routes. Airline groupings/constants live in `_shared/models/constants.ts`
+known divergent routes. Airline groupings/constants live in `src/constants/airlines.ts`
 (alliance-level: `ONEWORLD_AIRLINES`, `SKYTEAM_AIRLINES`, etc.) and
-`_shared/models/qantasConstants.ts` (Qantas-specific: fare class tables per sub-fleet, `JAL_AIRLINES`,
+`src/calculators/qantas/constants.ts` (Qantas-specific: fare class tables per sub-fleet, `JAL_AIRLINES`,
 `JETSTAR_AIRLINES`, `PARTNER_AIRLINES`, region display names).
 
 ### Page/component structure
 
 - `src/app/qantas/page.tsx` is the main calculator UI (client component), owning all form state
   (segments, elite status, trip type). Input state round-trips through query params
-  (`utils/segmentInputUrlParser.ts`) for deep-linking, hydrated via `useSearchParams`. Recent
-  calculations persist client-side via `utils/recentCalculations.ts` (localStorage). `_components/`
+  (`src/utils/segmentInputUrlParser.ts`) for deep-linking, hydrated via `useSearchParams`. Recent
+  calculations persist client-side via `src/utils/recentCalculations.ts` (localStorage). `src/components/qantas/`
   holds page-specific pieces (`input.tsx`, `resultsSummary.tsx`, `segmentResults.tsx`,
-  `recentCalculations.tsx`, `footer.tsx`).
-- `src/app/_shared/components/` holds cross-page input widgets: `segmentInput.tsx` (list/validation,
-  `validate()`/`buildAirlineOptions()`), `autocomplete.tsx`, `advancedInput.tsx` (bulk entry).
-- `src/app/_shared/models/` holds plain data classes (`Segment`, `Route`, `Earnings`, `SegmentInput`)
+  `recentCalculations.tsx`, `footer.tsx`, `fareClassInput.tsx`).
+- `src/components/form/` and `src/components/common/` hold cross-page input widgets: `src/components/form/segmentInput.tsx` (list/presentation),
+  `autocomplete.tsx`, `advancedInput.tsx` (bulk entry). Validation logic lives in `src/utils/segmentValidation.ts` and airline dropdown helpers in `src/constants/airlines.ts`.
+- `src/models/` holds plain data classes (`Segment`, `Earnings`, `SegmentInput`)
   — mutable JS classes with a `.clone({...})` pattern for partial updates, not immutable records.
 
 ### Analytics
 
-PostHog (`posthog-js`, initialized in `_shared/components/posthogProvider.tsx`) captures `$pageview`, `calculation_completed`, and `qantas_api_mismatch` (via `utils/analytics.ts`). Next.js `rewrites()` in `next.config.mjs` reverse-proxies `/api/posthog/*` to avoid ad-blocker drops. Requires `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`; suppressed in `development`.
+PostHog (`posthog-js`, initialized in `src/components/common/posthogProvider.tsx`) captures `$pageview`, `calculation_completed`, and `qantas_api_mismatch` (via `src/utils/analytics.ts`). Next.js `rewrites()` in `next.config.mjs` reverse-proxies `/api/posthog/*` to avoid ad-blocker drops. Requires `NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN`; suppressed in `development`.
 
 ### Path aliases and styling
 

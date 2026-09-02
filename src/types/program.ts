@@ -1,5 +1,5 @@
-import type { Segment } from "@/app/_shared/models/segment";
-import type { AirlineOption, SegmentInputAdapter } from "@/app/_shared/components/segmentInput";
+import type { Segment } from "@/models/segment";
+import type { AirlineOption, SegmentInputAdapter } from "@/types/segmentInput";
 import type { CalculationResult } from "@/types/calculator";
 
 export interface CurrencyDefinition {
