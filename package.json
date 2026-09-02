@@ -9,6 +9,7 @@
     "lint": "eslint --cache .",
     "format": "prettier --write .",
     "test": "jest",
+    "test:scripts": "node scripts/clean-port.test.mjs",
     "test:e2e": "playwright test --project=chromium",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:show": "playwright show-report",

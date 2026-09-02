@@ -19,7 +19,8 @@ if (
       { stdio: "inherit" }
     );
   } catch {
-    // clean-port.mjs prints errors and exits with 1 on unrecoverable EPERM
+    // clean-port.mjs prints actionable error messages before exiting with 1
+    process.exit(1);
   }
   process.env.__E2E_PORT_CLEANED = "1";
 }
