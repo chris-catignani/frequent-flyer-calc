@@ -1,4 +1,4 @@
-import type { Segment } from "@/app/_shared/models/segment";
+import type { Segment } from "@/models/segment";
 
 export type FareEarnCategory =
   | "discountEconomy"

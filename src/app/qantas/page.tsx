@@ -17,18 +17,18 @@ import {
   Typography,
 } from "@mui/material";
 import { Info } from "@mui/icons-material";
-import { JAL_AIRLINES, JETSTAR_AIRLINES } from "@/app/_shared/models/qantasConstants";
-import { EliteStatusInput } from "@/app/qantas/_components/input";
-import { RecentCalculationSelection } from "@/app/qantas/_components/recentCalculations";
-import { AdvancedInput } from "@/app/_shared/components/advancedInput";
-import { ResultsSummary } from "@/app/qantas/_components/resultsSummary";
-import { SegmentResults } from "@/app/qantas/_components/segmentResults";
-import { Footer } from "@/app/qantas/_components/footer";
-import { ChangeLog } from "@/app/qantas/_components/changeLog";
-import { FaqAndInfo } from "@/app/qantas/_components/faqAndInfo";
-import { qantasProgram } from "@/app/_shared/calculators/qantas";
-import { SegmentInputList } from "@/app/_shared/components/segmentInput";
-import { useCalculator } from "@/app/_shared/hooks/useCalculator";
+import { JAL_AIRLINES, JETSTAR_AIRLINES } from "@/calculators/qantas/constants";
+import { EliteStatusInput } from "@/components/qantas/input";
+import { RecentCalculationSelection } from "@/components/qantas/recentCalculations";
+import { AdvancedInput } from "@/components/form/advancedInput";
+import { ResultsSummary } from "@/components/qantas/resultsSummary";
+import { SegmentResults } from "@/components/qantas/segmentResults";
+import { Footer } from "@/components/qantas/footer";
+import { ChangeLog } from "@/components/qantas/changeLog";
+import { FaqAndInfo } from "@/components/qantas/faqAndInfo";
+import { qantasProgram } from "@/calculators/qantas";
+import { SegmentInputList } from "@/components/form/segmentInput";
+import { useCalculator } from "@/hooks/useCalculator";
 import type { CalculationResult } from "@/types/calculator";
 
 const FLAG_ENABLE_QANTAS_API = true;
