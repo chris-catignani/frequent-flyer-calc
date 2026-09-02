@@ -89,7 +89,7 @@ export function cleanPortSync(targetPort) {
   process.exit(1);
 }
 
-const targetPort = Number(process.env.E2E_PORT || process.argv[2] || 3001);
+const targetPort = Number(process.argv[2] || process.env.E2E_PORT || 3001);
 if (process.argv[1]?.endsWith("clean-port.mjs")) {
   cleanPortSync(targetPort);
 }
