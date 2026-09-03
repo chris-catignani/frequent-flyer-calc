@@ -131,6 +131,22 @@ describe("immutability", () => {
       (getAirport("SYD") as any).city = "Mutated";
     }).toThrow();
   });
+
+  test("returns frozen airport arrays for city and country lookups", () => {
+    const cityAirports = getAirportsForCity("Sydney");
+    expect(Object.isFrozen(cityAirports)).toBe(true);
+    expect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (cityAirports as any).push({} as any);
+    }).toThrow();
+
+    const countryAirports = getAirportsForCountry("Australia");
+    expect(Object.isFrozen(countryAirports)).toBe(true);
+    expect(() => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (countryAirports as any).push({} as any);
+    }).toThrow();
+  });
 });
 
 describe("calcDistance", () => {

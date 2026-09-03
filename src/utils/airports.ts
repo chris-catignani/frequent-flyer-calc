@@ -39,6 +39,13 @@ for (const airport of airports) {
   }
 }
 
+for (const list of cityMap.values()) {
+  Object.freeze(list);
+}
+for (const list of countryMap.values()) {
+  Object.freeze(list);
+}
+
 export const getAirport = (iata: string): Airport | null => {
   const key = iata?.trim().toUpperCase();
   return key ? (iataMap.get(key) ?? null) : null;
