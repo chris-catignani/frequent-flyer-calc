@@ -52,4 +52,25 @@ describe("Segment model", () => {
     expect(updated.fareClass).toBe("j");
     expect(updated.airline).toBe("qf");
   });
+
+  it("is a plain object and not an instance of a class", () => {
+    const segment = createSegment("qf", "y", mockAirport1, mockAirport2);
+    expect(Object.getPrototypeOf(segment)).toBe(Object.prototype);
+  });
+
+  it("isolates known properties and does not retain excess properties in options object", () => {
+    const segment = createSegment({
+      airline: "va",
+      fareClass: "j",
+      fromAirport: mockAirport1,
+      toAirport: mockAirport2,
+      ...({ extraProperty: "ignored" } as unknown as object),
+    } as unknown as {
+      airline: string;
+      fareClass: string;
+      fromAirport: Airport;
+      toAirport: Airport;
+    });
+    expect((segment as unknown as Record<string, unknown>).extraProperty).toBeUndefined();
+  });
 });

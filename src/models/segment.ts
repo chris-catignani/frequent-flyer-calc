@@ -28,7 +28,12 @@ export function createSegment(
   toAirport?: Airport
 ): Segment {
   if (typeof airlineOrOptions === "object" && airlineOrOptions !== null) {
-    return { ...airlineOrOptions };
+    return {
+      airline: airlineOrOptions.airline,
+      fareClass: airlineOrOptions.fareClass,
+      fromAirport: airlineOrOptions.fromAirport,
+      toAirport: airlineOrOptions.toAirport,
+    };
   }
   return {
     airline: airlineOrOptions,
