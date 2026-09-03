@@ -224,7 +224,7 @@ const buildAdlBneGoldCoastSydMelRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-adl-bne-ool-mel-syd-and-";
+  const ruleUrl = _base_rule_url + "#between-adelaide-brisbane-gold-coast-melbourne-sydney-and";
   return new GeographicalRule(
     "Adelaide, Brisbane, Gold Coast, Melbourne, Sydney",
     ruleUrl,
@@ -294,7 +294,7 @@ const buildNewZealandRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-new-zealand-and";
+  const ruleUrl = _base_rule_url + "#between-new-zealand";
   return new GeographicalRule("New Zealand", ruleUrl, ruleConfig);
 };
 
@@ -317,7 +317,7 @@ const buildDallasRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-dallas-and";
+  const ruleUrl = _base_rule_url + "#between-dallas";
   return new GeographicalRule("Dallas", ruleUrl, ruleConfig);
 };
 
@@ -336,7 +336,7 @@ const buildUsaEastCoastRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-east-coast-usacanada-and";
+  const ruleUrl = _base_rule_url + "#between-east-coast-usa-canada";
   return new GeographicalRule("East Coast USA/Canada", ruleUrl, ruleConfig);
 };
 
@@ -405,7 +405,7 @@ const buildTelAvivRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-tel-aviv-and";
+  const ruleUrl = _base_rule_url + "#between-tel-aviv";
   return new GeographicalRule("Tel Aviv", ruleUrl, ruleConfig);
 };
 
@@ -468,7 +468,7 @@ const buildFallbackRule = (): DistanceRule => {
     },
   ];
 
-  const ruleUrl = _base_rule_url + "#all-other-flights";
+  const ruleUrl = _base_rule_url + "#all-other";
   return new DistanceRule("All other flights", ruleUrl, distanceBands);
 };
 
