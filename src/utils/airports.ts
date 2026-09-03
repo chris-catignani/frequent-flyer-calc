@@ -1,12 +1,6 @@
-import { airports } from "@nwpr/airport-codes";
+import rawAirports from "@/data/airports.json";
 import GreatCircle from "great-circle";
 import type { Airport } from "@/types/airport";
-
-const airportFixes: { city: Record<string, string> } = {
-  city: {
-    "Dallas-Fort Worth": "Dallas",
-  },
-};
 
 interface SearchIndexEntry {
   airport: Airport;
@@ -15,40 +9,56 @@ interface SearchIndexEntry {
   nameLower: string;
 }
 
-let _searchIndex: SearchIndexEntry[] | null = null;
+const airports: Airport[] = (rawAirports as Airport[]).map((a) => Object.freeze(a));
 
-const standardizeAirport = (airport?: Airport | null): Airport | null => {
-  if (airport && airport.city in airportFixes.city) {
-    airport.city = airportFixes.city[airport.city];
+const iataMap = new Map<string, Airport>();
+const cityMap = new Map<string, Airport[]>();
+const countryMap = new Map<string, Airport[]>();
+
+for (const airport of airports) {
+  iataMap.set(airport.iata.toUpperCase(), airport);
+
+  const cityLower = airport.city.trim().toLowerCase();
+  if (cityLower) {
+    let cityList = cityMap.get(cityLower);
+    if (!cityList) {
+      cityList = [];
+      cityMap.set(cityLower, cityList);
+    }
+    cityList.push(airport);
   }
-  return airport || null;
-};
+
+  const countryLower = airport.country.trim().toLowerCase();
+  if (countryLower) {
+    let countryList = countryMap.get(countryLower);
+    if (!countryList) {
+      countryList = [];
+      countryMap.set(countryLower, countryList);
+    }
+    countryList.push(airport);
+  }
+}
+
+for (const list of cityMap.values()) {
+  Object.freeze(list);
+}
+for (const list of countryMap.values()) {
+  Object.freeze(list);
+}
 
 export const getAirport = (iata: string): Airport | null => {
-  const airport = (airports as unknown as Airport[]).find(
-    (airport) => airport.iata === iata.toUpperCase()
-  );
-  return standardizeAirport(airport);
+  const key = iata?.trim().toUpperCase();
+  return key ? (iataMap.get(key) ?? null) : null;
 };
 
 export const getAirportsForCity = (city: string): Airport[] => {
-  return (airports as unknown as Airport[])
-    .filter((airport) => {
-      return (
-        airport.city.toLowerCase() === city.toLowerCase() && airport.iata // some airports don't have IATA codes, skip them
-      );
-    })
-    .map((airport) => standardizeAirport(airport) as Airport);
+  const key = city?.trim().toLowerCase();
+  return key ? (cityMap.get(key) ?? []) : [];
 };
 
 export const getAirportsForCountry = (country: string): Airport[] => {
-  return (airports as unknown as Airport[])
-    .filter((airport) => {
-      return (
-        airport.country.toLowerCase() === country.toLowerCase() && airport.iata // some airports don't have IATA codes, skip them
-      );
-    })
-    .map((airport) => standardizeAirport(airport) as Airport);
+  const key = country?.trim().toLowerCase();
+  return key ? (countryMap.get(key) ?? []) : [];
 };
 
 export const calcDistance = (airport1: Airport, airport2: Airport): number => {
@@ -63,18 +73,15 @@ export const calcDistance = (airport1: Airport, airport2: Airport): number => {
   );
 };
 
+let _searchIndex: SearchIndexEntry[] | null = null;
+
 const buildSearchIndex = (): SearchIndexEntry[] => {
-  return (airports as unknown as Airport[])
-    .filter((airport) => airport.iata)
-    .map((airport) => {
-      standardizeAirport(airport);
-      return {
-        airport,
-        iataLower: airport.iata.toLowerCase(),
-        cityLower: airport.city.toLowerCase(),
-        nameLower: airport.name.toLowerCase(),
-      };
-    });
+  return airports.map((airport) => ({
+    airport,
+    iataLower: airport.iata.toLowerCase(),
+    cityLower: airport.city.toLowerCase(),
+    nameLower: airport.name.toLowerCase(),
+  }));
 };
 
 const SCORE_EXACT_IATA = 0;

@@ -15,7 +15,7 @@ const getIatasForCountries = (countryString: string): Set<string> => {
     }
 
     const airports = getAirportsForCountry(country);
-    if (!airports) {
+    if (airports.length === 0) {
       console.error("no airports found for: " + country);
     }
     airports.forEach((airport) => airportIatas.add(airport.iata.toLowerCase()));
@@ -35,7 +35,7 @@ const getIatasForCities = (citiesString: string): Set<string> => {
     }
 
     const airports = getAirportsForCity(city);
-    if (!airports) {
+    if (airports.length === 0) {
       console.error("no airports found for: " + city);
     }
     airports.forEach((airport) => airportIatas.add(airport.iata.toLowerCase()));
@@ -44,20 +44,21 @@ const getIatasForCities = (citiesString: string): Set<string> => {
   return airportIatas;
 };
 
-const countryNameOverrides: Record<string, string> = {
+export const countryNameOverrides: Record<string, string> = {
   "Cocos Island": "Cocos (Keeling) Islands",
   "Republic of Korea": "South Korea",
   Macao: "Macau",
-  "Timor Lest": "East Timor",
+  "Timor Lest": "Timor-Leste",
   "Burkino Faso": "Burkina Faso",
-  "Congo (Democratic Republic of)": "Congo (Kinshasa)",
+  "Congo (Democratic Republic of)": "Democratic Republic of the Congo",
   "Guinea Bissau": "Guinea-Bissau",
-  "Ivory Coast": "Cote d'Ivoire",
+  "Ivory Coast": "Côte d'Ivoire",
   "Republic of Cameroon": "Cameroon",
-  "Sao Tome Principe": "Sao Tome and Principe",
+  "Sao Tome Principe": "São Tomé and Principe",
+  "São Tomé and Príncipe": "São Tomé and Principe",
 };
 
-const cityNameOverrides: Record<string, string> = {
+export const cityNameOverrides: Record<string, string> = {
   "Washington DC": "Washington",
 };
 

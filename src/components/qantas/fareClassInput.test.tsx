@@ -15,7 +15,6 @@ const syd: Airport = {
   name: "Sydney Airport",
   city: "Sydney",
   country: "Australia",
-  state: "NSW",
   latitude: -33.9461,
   longitude: 151.1772,
 };
@@ -25,7 +24,6 @@ const mel: Airport = {
   name: "Melbourne Airport",
   city: "Melbourne",
   country: "Australia",
-  state: "VIC",
   latitude: -37.6733,
   longitude: 144.8433,
 };
@@ -35,7 +33,6 @@ const lax: Airport = {
   name: "Los Angeles International Airport",
   city: "Los Angeles",
   country: "United States",
-  state: "CA",
   latitude: 33.9425,
   longitude: -118.4081,
 };
@@ -45,7 +42,6 @@ const akl: Airport = {
   name: "Auckland Airport",
   city: "Auckland",
   country: "New Zealand",
-  state: "AUK",
   latitude: -37.0081,
   longitude: 174.792,
 };
@@ -55,7 +51,6 @@ const wlg: Airport = {
   name: "Wellington International Airport",
   city: "Wellington",
   country: "New Zealand",
-  state: "WGN",
   latitude: -41.3272,
   longitude: 174.8053,
 };
@@ -65,7 +60,6 @@ const dps: Airport = {
   name: "Ngurah Rai International Airport",
   city: "Denpasar",
   country: "Indonesia",
-  state: "BAL",
   latitude: -8.7482,
   longitude: 115.1672,
 };
@@ -75,7 +69,6 @@ const hnd: Airport = {
   name: "Tokyo Haneda Airport",
   city: "Tokyo",
   country: "Japan",
-  state: "TK",
   latitude: 35.5533,
   longitude: 139.7811,
 };
@@ -85,7 +78,6 @@ const itm: Airport = {
   name: "Osaka Itami Airport",
   city: "Osaka",
   country: "Japan",
-  state: "OS",
   latitude: 34.7855,
   longitude: 135.4382,
 };
