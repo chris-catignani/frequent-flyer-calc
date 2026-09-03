@@ -33,12 +33,14 @@ export async function GET(req: NextRequest) {
       } catch {
         errorBody = { error: resp.statusText || "Upstream service error" };
       }
+      console.error(`Qantas API error (${resp.status}) for URL: ${url}`, errorBody);
       return NextResponse.json(errorBody, { status: resp.status });
     }
 
     const respJson = await resp.json();
     return NextResponse.json(respJson);
-  } catch {
+  } catch (err) {
+    console.error(`Qantas API fetch failed for URL: ${url}`, err);
     return NextResponse.json({ error: "Failed to fetch from Qantas API" }, { status: 502 });
   }
 }

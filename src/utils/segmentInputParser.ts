@@ -75,7 +75,8 @@ export const parseItaMatrixInput = (itaMatrixJson: string): ParseResult => {
 
   try {
     itaMatrixObj = JSON.parse(itaMatrixJson);
-  } catch {
+  } catch (err) {
+    console.log(err);
     const parsingError = "Invalid JSON format";
     return { segmentInputs, parsingError };
   }
@@ -109,7 +110,8 @@ export const parseItaMatrixInput = (itaMatrixJson: string): ParseResult => {
         });
       });
     });
-  } catch {
+  } catch (err) {
+    console.log(err);
     return { segmentInputs: [], parsingError: "Error parsing ITA Matrix itinerary" };
   }
 

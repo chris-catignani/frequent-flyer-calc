@@ -3,21 +3,22 @@ import { buildSegment } from "@/test/testUtils";
 
 describe("qantasAPIClient", () => {
   const originalFetch = global.fetch;
+  let consoleSpy: jest.SpyInstance;
 
   beforeEach(() => {
     jest.clearAllMocks();
+    consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
   });
 
   afterEach(() => {
     global.fetch = originalFetch;
+    consoleSpy.mockRestore();
     jest.restoreAllMocks();
   });
 
   const sampleSegment = buildSegment("qf", "Y", "SYD", "MEL");
 
   it("returns qantasData when matching reward entry is returned", async () => {
-    const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -100,9 +101,7 @@ describe("qantasAPIClient", () => {
     expect(result.error?.message).toBe("Network connection lost");
   });
 
-  it("returns error and does not console.log when no matching earn category is found", async () => {
-    const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-
+  it("returns error and logs when no matching earn category is found", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -123,12 +122,16 @@ describe("qantasAPIClient", () => {
 
     expect(result.error).toBeInstanceOf(Error);
     expect(result.error?.message).toBe("Failed to find a matching Qantas API result");
-    expect(consoleSpy).not.toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalledWith(
+      "Failed to find a matching Qantas API result",
+      sampleSegment,
+      "Bronze",
+      "economy",
+      expect.anything()
+    );
   });
 
-  it("handles errorMessage field in 200 response without console.log", async () => {
-    const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-
+  it("handles errorMessage field in 200 response and logs error", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -141,12 +144,10 @@ describe("qantasAPIClient", () => {
 
     expect(result.error).toBeInstanceOf(Error);
     expect(result.error?.message).toBe("Fare quote error");
-    expect(consoleSpy).not.toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalledWith("Qantas API returned an error: Fare quote error");
   });
 
-  it("handles error field in 200 response without console.log", async () => {
-    const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
-
+  it("handles error field in 200 response and logs error", async () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       status: 200,
@@ -159,6 +160,6 @@ describe("qantasAPIClient", () => {
 
     expect(result.error).toBeInstanceOf(Error);
     expect(result.error?.message).toBe("Proxy route error");
-    expect(consoleSpy).not.toHaveBeenCalled();
+    expect(consoleSpy).toHaveBeenCalledWith("Qantas API returned an error: Proxy route error");
   });
 });

@@ -68,7 +68,8 @@ describe("/api/qantas route", () => {
       expect(consoleSpy).not.toHaveBeenCalled();
     });
 
-    it("returns upstream status and error payload when upstream returns error JSON", async () => {
+    it("returns upstream status and error payload when upstream returns error JSON and logs URL", async () => {
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
       const mockErrorPayload = { errorMessage: "No routes found" };
 
       global.fetch = jest.fn().mockResolvedValue({
@@ -88,9 +89,17 @@ describe("/api/qantas route", () => {
       expect(res.status).toBe(404);
       const data = await res.json();
       expect(data).toEqual(mockErrorPayload);
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "Qantas API error (404) for URL: https://api.services.qantasloyalty.com"
+        ),
+        mockErrorPayload
+      );
+      consoleErrorSpy.mockRestore();
     });
 
-    it("returns upstream status and fallback error when upstream returns non-JSON error", async () => {
+    it("returns upstream status and fallback error when upstream returns non-JSON error and logs URL", async () => {
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
       global.fetch = jest.fn().mockResolvedValue({
         ok: false,
         status: 503,
@@ -111,10 +120,19 @@ describe("/api/qantas route", () => {
       expect(res.status).toBe(503);
       const data = await res.json();
       expect(data.error).toBe("Service Unavailable");
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "Qantas API error (503) for URL: https://api.services.qantasloyalty.com"
+        ),
+        { error: "Service Unavailable" }
+      );
+      consoleErrorSpy.mockRestore();
     });
 
-    it("returns 502 Bad Gateway when fetch throws network error", async () => {
-      global.fetch = jest.fn().mockRejectedValue(new Error("Connection refused"));
+    it("returns 502 Bad Gateway when fetch throws network error and logs URL", async () => {
+      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation(() => {});
+      const networkError = new Error("Connection refused");
+      global.fetch = jest.fn().mockRejectedValue(networkError);
 
       const req = createRequest({
         airline: "QF",
@@ -127,6 +145,13 @@ describe("/api/qantas route", () => {
       expect(res.status).toBe(502);
       const data = await res.json();
       expect(data.error).toBe("Failed to fetch from Qantas API");
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          "Qantas API fetch failed for URL: https://api.services.qantasloyalty.com"
+        ),
+        networkError
+      );
+      consoleErrorSpy.mockRestore();
     });
   });
 });

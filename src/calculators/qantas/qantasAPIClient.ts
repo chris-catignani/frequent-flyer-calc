@@ -57,13 +57,16 @@ export const fetchDataFromQantas = async (
       } catch {
         // fallback to default msg
       }
+      console.log(`Qantas API request failed with status ${qantasData.status}: ${msg}`);
       throw new Error(msg);
     }
 
     const qantasJson: QantasApiResponse = await qantasData.json();
 
     if (qantasJson.error || qantasJson.errorMessage) {
-      throw new Error(qantasJson.error || qantasJson.errorMessage);
+      const errorMsg = qantasJson.error || qantasJson.errorMessage;
+      console.log(`Qantas API returned an error: ${errorMsg}`);
+      throw new Error(errorMsg);
     }
 
     const result = qantasJson.rewards
@@ -73,6 +76,13 @@ export const fetchDataFromQantas = async (
       : undefined;
 
     if (!result) {
+      console.log(
+        "Failed to find a matching Qantas API result",
+        segment,
+        eliteStatus,
+        fareEarnCategory,
+        qantasJson
+      );
       retval.error = new Error("Failed to find a matching Qantas API result");
     } else {
       retval.qantasData = {

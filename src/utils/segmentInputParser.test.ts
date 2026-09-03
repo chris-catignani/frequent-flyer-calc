@@ -42,14 +42,14 @@ describe("segmentInputParser", () => {
       });
     });
 
-    it("returns error on invalid JSON and does not call console.log", () => {
+    it("returns error on invalid JSON and logs error", () => {
       const consoleSpy = jest.spyOn(console, "log").mockImplementation(() => {});
       const result = parseItaMatrixInput("not-valid-json{");
       expect(result).toEqual({
         segmentInputs: [],
         parsingError: "Invalid JSON format",
       });
-      expect(consoleSpy).not.toHaveBeenCalled();
+      expect(consoleSpy).toHaveBeenCalled();
       consoleSpy.mockRestore();
     });
 
