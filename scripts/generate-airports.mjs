@@ -15,7 +15,6 @@ const cityFixes = {
   "Tel Aviv": "Tel-aviv",
 };
 
-
 const typeHierarchy = {
   large_airport: 5,
   medium_airport: 4,
