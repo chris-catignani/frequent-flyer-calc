@@ -7,7 +7,7 @@ import {
 } from "@/calculators/qantas/rules";
 import { PARTNER_FARE_CLASSES } from "@/calculators/qantas/earnCategories/partnerEarnCategories";
 import { JAL_AIRLINES, PARTNER_AIRLINES } from "@/calculators/qantas/constants";
-import { Earnings } from "@/models/earnings";
+import type { Earnings } from "@/models/earnings";
 
 export const getPartnerRules = (): Record<string, Rule[]> => {
   const standardRules = [

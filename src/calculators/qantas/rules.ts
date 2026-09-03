@@ -1,6 +1,6 @@
 import { calcDistance } from "@/utils/airports";
 import { isInRegion } from "@/calculators/qantas/regions";
-import { Earnings } from "@/models/earnings";
+import { createEarnings, type Earnings } from "@/models/earnings";
 import { REGION_DISPLAY } from "@/calculators/qantas/constants";
 import type { Segment } from "@/models/segment";
 import type { Airport } from "@/types/airport";
@@ -342,9 +342,11 @@ export const parseEarningRates = (
   const retval: Record<string, Earnings> = {};
 
   fareClasses.forEach((fareClass, index) => {
-    retval[fareClass] = new Earnings(
-      parseInt(pointsPerFareclass[index]) || 0,
-      parseInt(creditsPerFareclass[index]) || 0
+    const airlinePoints = pointsPerFareclass[index];
+    const elitePoints = creditsPerFareclass[index];
+    retval[fareClass] = createEarnings(
+      parseInt(airlinePoints, 10) || 0,
+      parseInt(elitePoints, 10) || 0
     );
   });
 
