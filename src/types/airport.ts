@@ -5,8 +5,4 @@ export interface Airport {
   country: string;
   latitude: number;
   longitude: number;
-  state?: string;
-  elevation?: number;
-  icao?: string;
-  [key: string]: unknown;
 }

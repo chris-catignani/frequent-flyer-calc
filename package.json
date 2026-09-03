@@ -26,7 +26,6 @@
     "@mui/icons-material": "^7.3.6",
     "@mui/material": "^7.3.6",
     "@mui/material-nextjs": "^7.3.6",
-    "@nwpr/airport-codes": "^3.0.3",
     "@vercel/analytics": "^1.6.1",
     "great-circle": "^0.2.8",
     "next": "16.0.10",

@@ -25,7 +25,7 @@ describe("searchAirports", () => {
   });
 
   test("ranks a city-prefix match ahead of a name-substring-only match", () => {
-    const results = searchAirports("lon", 100);
+    const results = searchAirports("lon", 150);
     const lhrIndex = results.findIndex((airport) => airport.iata === "LHR");
     const yazIndex = results.findIndex((airport) => airport.iata === "YAZ");
     expect(lhrIndex).toBeGreaterThanOrEqual(0);

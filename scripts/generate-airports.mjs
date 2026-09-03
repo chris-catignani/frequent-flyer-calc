@@ -9,7 +9,12 @@ const COUNTRIES_CSV_URL =
 
 const cityFixes = {
   "Dallas-Fort Worth": "Dallas",
+  "Sydney (Mascot)": "Sydney",
+  "Muscat/Seeb": "Muscat",
+  "Gold Coast": "Coolangatta",
+  "Tel Aviv": "Tel-aviv",
 };
+
 
 const typeHierarchy = {
   large_airport: 5,

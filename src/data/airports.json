@@ -37202,7 +37202,7 @@
   {
     "iata": "MCT",
     "name": "Muscat International Airport",
-    "city": "Muscat/Seeb",
+    "city": "Muscat",
     "country": "Oman",
     "latitude": 23.600218,
     "longitude": 58.285268
@@ -45690,7 +45690,7 @@
   {
     "iata": "OOL",
     "name": "Gold Coast Airport",
-    "city": "Gold Coast",
+    "city": "Coolangatta",
     "country": "Australia",
     "latitude": -28.165962,
     "longitude": 153.506641
@@ -58018,7 +58018,7 @@
   {
     "iata": "SYD",
     "name": "Sydney Kingsford Smith International Airport",
-    "city": "Sydney (Mascot)",
+    "city": "Sydney",
     "country": "Australia",
     "latitude": -33.946098,
     "longitude": 151.177002
@@ -60338,7 +60338,7 @@
   {
     "iata": "TLV",
     "name": "Ben Gurion International Airport",
-    "city": "Tel Aviv",
+    "city": "Tel-aviv",
     "country": "Israel",
     "latitude": 32.011398,
     "longitude": 34.8867
