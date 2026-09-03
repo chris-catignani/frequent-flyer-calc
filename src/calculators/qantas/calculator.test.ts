@@ -13,7 +13,7 @@ describe("calculate - go path", () => {
           notes: "East Coast USA/Canada to West Coast USA/Canada",
           ruleName: "USA East Coast / Canada",
           ruleUrl:
-            "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-east-coast-usa-canada-and-",
+            "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-east-coast-usa-canada-and",
           airlinePoints: 3125,
           elitePoints: 100,
           airlinePointsBreakdown: {
@@ -42,7 +42,7 @@ describe("calculate - go path", () => {
           notes: "East Coast USA/Canada to West Coast USA/Canada",
           ruleName: "USA East Coast / Canada",
           ruleUrl:
-            "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-east-coast-usa-canada-and-",
+            "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-east-coast-usa-canada-and",
           airlinePoints: 3125,
           elitePoints: 100,
           airlinePointsBreakdown: {
@@ -58,7 +58,7 @@ describe("calculate - go path", () => {
           notes: "sydney to West Coast USA/Canada",
           ruleName: "Sydney, Melbourne, Brisbane, Gold Coast",
           ruleUrl:
-            "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-syd-mel-bne-ool-and-",
+            "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/partner-airline-earning-tables.html#between-sydney-melbourne-brisbane-gold-coast-and",
           airlinePoints: 13500,
           elitePoints: 180,
           airlinePointsBreakdown: {

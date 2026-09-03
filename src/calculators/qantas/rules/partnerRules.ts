@@ -129,7 +129,7 @@ const buildSydMelBneGoldCoastRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-syd-mel-bne-ool-and-";
+  const ruleUrl = _base_rule_url + "#between-sydney-melbourne-brisbane-gold-coast-and";
   return new GeographicalRule("Sydney, Melbourne, Brisbane, Gold Coast", ruleUrl, ruleConfig);
 };
 
@@ -163,7 +163,7 @@ const buildPerthRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-perth-and-";
+  const ruleUrl = _base_rule_url + "#between-perth-and";
   return new GeographicalRule("Perth", ruleUrl, ruleConfig);
 };
 
@@ -193,7 +193,7 @@ const buildAdelaideRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-adelaide-and-";
+  const ruleUrl = _base_rule_url + "#between-adelaide-and";
   return new GeographicalRule("Adelaide", ruleUrl, ruleConfig);
 };
 
@@ -212,7 +212,7 @@ const buildCairnsRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-cairns-and-";
+  const ruleUrl = _base_rule_url + "#between-cairns-and";
   return new GeographicalRule("Cairns", ruleUrl, ruleConfig);
 };
 
@@ -269,7 +269,7 @@ const buildWesternEuropeRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-western-europe-and-";
+  const ruleUrl = _base_rule_url + "#between-western-europe-and";
   return new GeographicalRule("Western Europe", ruleUrl, ruleConfig);
 };
 
@@ -318,7 +318,7 @@ const buildNorthernEuropeRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-northern-europe-and-";
+  const ruleUrl = _base_rule_url + "#between-northern-europe-and";
   return new GeographicalRule("Northern Europe", ruleUrl, ruleConfig);
 };
 
@@ -342,7 +342,7 @@ const buildSoutheastEuropeRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-southeast-europe-and-";
+  const ruleUrl = _base_rule_url + "#between-southeast-europe-and";
   return new GeographicalRule("Southeast Europe", ruleUrl, ruleConfig);
 };
 
@@ -390,7 +390,7 @@ const buildDubaiDohaRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-dubai-doha-and-";
+  const ruleUrl = _base_rule_url + "#between-dubai-doha-muscat-and";
   return new GeographicalRule("Dubai, Doha and Muscat", ruleUrl, ruleConfig);
 };
 
@@ -427,7 +427,7 @@ const buildUsaEastCoastUsaWestCoastRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-east-coast-usa-canada-and-";
+  const ruleUrl = _base_rule_url + "#between-east-coast-usa-canada-and";
   return new GeographicalRule("USA East Coast / Canada", ruleUrl, ruleConfig);
 };
 
@@ -450,7 +450,7 @@ const buildDallasRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-dallas-and-";
+  const ruleUrl = _base_rule_url + "#between-dallas-and";
   return new GeographicalRule("Dallas", ruleUrl, ruleConfig);
 };
 
@@ -483,7 +483,7 @@ const buildNewZealandRule = (): GeographicalRule => {
     },
   };
 
-  const ruleUrl = _base_rule_url + "#between-new-zealand-and-";
+  const ruleUrl = _base_rule_url + "#between-new-zealand-and";
   return new GeographicalRule("New Zealand", ruleUrl, ruleConfig);
 };
 
