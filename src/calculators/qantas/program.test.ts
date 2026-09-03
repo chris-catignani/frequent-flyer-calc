@@ -1,4 +1,5 @@
 import { qantasProgram } from "@/calculators/qantas";
+import { ALL_AIRLINES } from "@/constants/airlines";
 import { buildSegment } from "@/test/testUtils";
 
 describe("qantasProgram adapter", () => {
@@ -41,6 +42,11 @@ describe("qantasProgram adapter", () => {
     const qfOption = qantasProgram.airlineOptions.find((opt) => opt.iata === "qf");
     expect(qfOption?.airlineLabel).toBe("Qantas (qf)");
     expect(qfOption?.groupName).toBe("Qantas Group Airlines");
+
+    // All supported airlines should have a display name in ALL_AIRLINES
+    for (const airline of qantasProgram.supportedAirlines) {
+      expect(ALL_AIRLINES[airline]).toBeDefined();
+    }
   });
 
   it("executes calculations through the adapter", async () => {

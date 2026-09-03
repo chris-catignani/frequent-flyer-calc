@@ -7,14 +7,14 @@ import type { SavedCalculation } from "@/utils/recentCalculations";
 export interface RecentCalculationSelectionProps {
   recentCalculations: SavedCalculation[];
   onRecentCalculationClick: (idx: number) => void;
-  onRecentCalcutionDeleteClick: (idx: number) => void;
+  onRecentCalculationDeleteClick: (idx: number) => void;
   onClearAllClick: () => void;
 }
 
 export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProps> = ({
   recentCalculations,
   onRecentCalculationClick,
-  onRecentCalcutionDeleteClick,
+  onRecentCalculationDeleteClick,
   onClearAllClick,
 }) => {
   const [isOpen, setOpen] = useState(false);
@@ -35,7 +35,7 @@ export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProp
         <RecentCalculations
           recentCalculations={recentCalculations}
           onRecentCalculationClick={onRecentCalculationClick}
-          onRecentCalcutionDeleteClick={onRecentCalcutionDeleteClick}
+          onRecentCalculationDeleteClick={onRecentCalculationDeleteClick}
           onClearAllClick={onClearAllClick}
         />
       </Collapse>
@@ -46,14 +46,14 @@ export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProp
 export interface RecentCalculationsProps {
   recentCalculations: SavedCalculation[];
   onRecentCalculationClick: (idx: number) => void;
-  onRecentCalcutionDeleteClick: (idx: number) => void;
+  onRecentCalculationDeleteClick: (idx: number) => void;
   onClearAllClick: () => void;
 }
 
 export const RecentCalculations: React.FC<RecentCalculationsProps> = ({
   recentCalculations,
   onRecentCalculationClick,
-  onRecentCalcutionDeleteClick,
+  onRecentCalculationDeleteClick,
   onClearAllClick,
 }) => {
   if (!recentCalculations) {
@@ -76,7 +76,7 @@ export const RecentCalculations: React.FC<RecentCalculationsProps> = ({
         key={idx}
         label={buildChipLabel(recentCalculation)}
         onClick={() => onRecentCalculationClick(idx)}
-        onDelete={() => onRecentCalcutionDeleteClick(idx)}
+        onDelete={() => onRecentCalculationDeleteClick(idx)}
       />
     );
   });

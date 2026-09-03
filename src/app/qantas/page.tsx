@@ -312,7 +312,7 @@ export default function Qantas() {
                 <RecentCalculationSelection
                   recentCalculations={savedCalculations}
                   onRecentCalculationClick={loadRecentCalculation}
-                  onRecentCalcutionDeleteClick={deleteRecentCalculation}
+                  onRecentCalculationDeleteClick={deleteRecentCalculation}
                   onClearAllClick={clearAllRecentCalculations}
                 />
               </Box>

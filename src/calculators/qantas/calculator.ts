@@ -72,7 +72,7 @@ export const calculate = async (
         error: new Error(`Qantas does not support earning on ${segment.airline}`),
       });
       retval.containsErrors = true;
-      break;
+      continue;
     }
 
     try {

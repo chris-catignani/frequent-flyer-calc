@@ -359,7 +359,9 @@ const SegmentTableRow: React.FC<{
           <Collapse in={expandRow} timeout="auto" unmountOnExit>
             <Grid container m={2} direction="column" sx={{ wordBreak: "break-word" }}>
               <Grid>
-                <Typography>Airline: {ALL_AIRLINES[segment.airline]}</Typography>
+                <Typography>
+                  Airline: {ALL_AIRLINES[segment.airline] || segment.airline.toUpperCase()}
+                </Typography>
               </Grid>
               <Grid>
                 <Typography>Fare Class: {getFareClassDisplay(segment.fareClass)}</Typography>

@@ -4,6 +4,7 @@ import {
   GeographicalRule,
   parseEarningRates,
 } from "@/calculators/qantas/rules";
+import { isInRegion } from "@/calculators/qantas/regions";
 import { buildSegmentFromString } from "@/test/testUtils";
 import { Earnings } from "@/models/earnings";
 
@@ -355,7 +356,10 @@ describe("rules", () => {
     });
   });
 
-  // TODO test mixes of cities,  regions, countries
-
-  // TODO test error states: (1) no fare earning category for a given bucket (2)
+  describe("isInRegion", () => {
+    test("correctly includes airports in northernAfrica for Guinea-Bissau and Ivory Coast", () => {
+      expect(isInRegion("oxb", "northernAfrica")).toBe(true);
+      expect(isInRegion("abj", "northernAfrica")).toBe(true);
+    });
+  });
 });
