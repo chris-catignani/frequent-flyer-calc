@@ -1,6 +1,6 @@
 import posthog from "posthog-js";
 import { trackCalculationCompleted, trackQantasApiMismatch } from "@/utils/analytics";
-import { Segment } from "@/models/segment";
+import { createSegment, type Segment } from "@/models/segment";
 import type { Airport } from "@/types/airport";
 
 jest.mock("posthog-js", () => ({
@@ -14,7 +14,7 @@ describe("analytics utility", () => {
 
   describe("trackCalculationCompleted", () => {
     it("dispatches calculation_completed with normalized properties for a single segment", () => {
-      const segment = new Segment(
+      const segment = createSegment(
         "qf",
         "y",
         { iata: "SYD", city: "Sydney" } as Airport,
@@ -47,13 +47,13 @@ describe("analytics utility", () => {
     });
 
     it("handles multi-segment return itineraries and normalizes casing", () => {
-      const seg1 = new Segment(
+      const seg1 = createSegment(
         "qf",
         "j",
         { iata: "syd", city: "Sydney" } as Airport,
         { iata: "lax", city: "Los Angeles" } as Airport
       );
-      const seg2 = new Segment(
+      const seg2 = createSegment(
         "aa",
         "y",
         { iata: "lax", city: "Los Angeles" } as Airport,
@@ -121,7 +121,7 @@ describe("analytics utility", () => {
 
     it("truncates property strings exceeding 255 characters", () => {
       const longSegments = Array.from({ length: 60 }, (_, i) => ({
-        segment: new Segment(
+        segment: createSegment(
           "qf",
           "y",
           { iata: `S${String(i).padStart(2, "0")}`, city: "City A" } as Airport,
@@ -163,7 +163,7 @@ describe("analytics utility", () => {
 
   describe("trackQantasApiMismatch", () => {
     it("dispatches qantas_api_mismatch with uppercase segment details and numeric values", () => {
-      const segment = new Segment(
+      const segment = createSegment(
         "ca",
         "y",
         { iata: "pvg", city: "Shanghai" } as Airport,
@@ -196,7 +196,7 @@ describe("analytics utility", () => {
     });
 
     it("dispatches qantas_api_mismatch with qantas_error when Qantas API errors", () => {
-      const segment = new Segment(
+      const segment = createSegment(
         "ca",
         "y",
         { iata: "pvg", city: "Shanghai" } as Airport,
@@ -229,7 +229,7 @@ describe("analytics utility", () => {
     });
 
     it("passes through exact points and status credits values", () => {
-      const segment = new Segment(
+      const segment = createSegment(
         "qf",
         "y",
         { iata: "SYD" } as Airport,

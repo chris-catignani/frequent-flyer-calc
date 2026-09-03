@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Segment } from "@/models/segment";
-import { SegmentInput } from "@/models/segmentInput";
+import { createSegment, type Segment } from "@/models/segment";
+import { createSegmentInput, type SegmentInput } from "@/models/segmentInput";
 import { getAirport } from "@/utils/airports";
 import { createUrlQueryParams, parseUrlQueryParams } from "@/utils/segmentInputUrlParser";
 import {
@@ -72,7 +72,7 @@ export function useCalculator({
   );
   const [priceLessTaxes] = useState<number>(initialPriceLessTaxes);
   const [segmentInputs, setSegmentInputs] = useState<SegmentInput[]>([
-    new SegmentInput(
+    createSegmentInput(
       program.defaultAirline,
       program.defaultFareClass ?? "",
       "",
@@ -90,24 +90,25 @@ export function useCalculator({
   segmentInputsRef.current = segmentInputs;
 
   const setAllSegmentInputs = useCallback((theSegmentInputs: SegmentInput[]) => {
-    theSegmentInputs.forEach((segmentInput) => {
-      segmentInput.fromAirport = getAirport(segmentInput.fromAirportText);
-      segmentInput.toAirport = getAirport(segmentInput.toAirportText);
-    });
+    const enrichedSegmentInputs = theSegmentInputs.map((segmentInput) => ({
+      ...segmentInput,
+      fromAirport: getAirport(segmentInput.fromAirportText),
+      toAirport: getAirport(segmentInput.toAirportText),
+    }));
 
     const currentSegments = segmentInputsRef.current;
     let inputsChanged = false;
-    if (theSegmentInputs.length !== currentSegments.length) {
+    if (enrichedSegmentInputs.length !== currentSegments.length) {
       inputsChanged = true;
     } else {
-      for (let i = 0; i < theSegmentInputs.length; i++) {
+      for (let i = 0; i < enrichedSegmentInputs.length; i++) {
         for (const property of [
           "airline",
           "fromAirportText",
           "toAirportText",
           "fareClass",
         ] as const) {
-          if (theSegmentInputs[i][property] !== currentSegments[i][property]) {
+          if (enrichedSegmentInputs[i][property] !== currentSegments[i][property]) {
             inputsChanged = true;
             break;
           }
@@ -115,7 +116,7 @@ export function useCalculator({
       }
     }
 
-    setSegmentInputs(theSegmentInputs);
+    setSegmentInputs(enrichedSegmentInputs);
     if (inputsChanged) {
       setCalculationOutput(null);
     }
@@ -169,8 +170,8 @@ export function useCalculator({
       setCalculationOutput(null);
 
       try {
-        const segments = segmentInputs.map((segmentInput) => {
-          return new Segment(
+        const segments: Segment[] = segmentInputs.map((segmentInput) => {
+          return createSegment(
             segmentInput.airline,
             segmentInput.fareClass,
             segmentInput.fromAirport!,
@@ -182,7 +183,7 @@ export function useCalculator({
           // add the segments in reverse, with from/to airports flipped
           for (let i = segments.length - 1; i >= 0; i--) {
             const { fromAirport, toAirport } = segments[i];
-            segments.push(segments[i].clone({ fromAirport: toAirport, toAirport: fromAirport }));
+            segments.push({ ...segments[i], fromAirport: toAirport, toAirport: fromAirport });
           }
         }
 
@@ -313,13 +314,13 @@ export function useCalculator({
       previousSegment?.toAirport ??
       (nextFromAirportText.length === 3 ? getAirport(nextFromAirportText) : null);
 
-    const newSegment = new SegmentInput(
-      previousSegment?.airline ?? program.defaultAirline,
-      "",
-      nextFromAirportText,
-      ""
-    );
-    newSegment.fromAirport = nextFromAirport;
+    const newSegment = createSegmentInput({
+      airline: previousSegment?.airline ?? program.defaultAirline,
+      fareClass: "",
+      fromAirportText: nextFromAirportText,
+      toAirportText: "",
+      fromAirport: nextFromAirport,
+    });
 
     setSegmentInputs((prev) => [...prev, newSegment]);
     setCalculationOutput(null);
@@ -337,20 +338,24 @@ export function useCalculator({
   const updateSegment = useCallback((segmentInputIdx: number, segmentInput: SegmentInput) => {
     setSegmentInputs((prev) => {
       const oldSegmentInput = prev[segmentInputIdx];
-      if (oldSegmentInput && oldSegmentInput.fromAirportText !== segmentInput.fromAirportText) {
-        segmentInput.fromAirport =
-          segmentInput.fromAirportText?.length === 3
-            ? getAirport(segmentInput.fromAirportText)
-            : null;
-      }
-
-      if (oldSegmentInput && oldSegmentInput.toAirportText !== segmentInput.toAirportText) {
-        segmentInput.toAirport =
-          segmentInput.toAirportText?.length === 3 ? getAirport(segmentInput.toAirportText) : null;
-      }
+      const updated: SegmentInput = {
+        ...segmentInput,
+        fromAirport:
+          oldSegmentInput && oldSegmentInput.fromAirportText !== segmentInput.fromAirportText
+            ? segmentInput.fromAirportText?.length === 3
+              ? getAirport(segmentInput.fromAirportText)
+              : null
+            : segmentInput.fromAirport,
+        toAirport:
+          oldSegmentInput && oldSegmentInput.toAirportText !== segmentInput.toAirportText
+            ? segmentInput.toAirportText?.length === 3
+              ? getAirport(segmentInput.toAirportText)
+              : null
+            : segmentInput.toAirport,
+      };
 
       const newSegmentInputs = [...prev];
-      newSegmentInputs[segmentInputIdx] = segmentInput;
+      newSegmentInputs[segmentInputIdx] = updated;
       return newSegmentInputs;
     });
 

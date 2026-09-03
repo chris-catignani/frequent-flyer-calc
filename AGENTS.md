@@ -73,8 +73,9 @@ known divergent routes. Airline groupings/constants live in `src/constants/airli
   `recentCalculations.tsx`, `footer.tsx`, `fareClassInput.tsx`).
 - `src/components/form/` and `src/components/common/` hold cross-page input widgets: `src/components/form/segmentInput.tsx` (list/presentation),
   `autocomplete.tsx`, `advancedInput.tsx` (bulk entry). Validation logic lives in `src/utils/segmentValidation.ts` and airline dropdown helpers in `src/constants/airlines.ts`.
-- `src/models/` holds plain data classes (`Segment`, `Earnings`, `SegmentInput`)
-  — mutable JS classes with a `.clone({...})` pattern for partial updates, not immutable records.
+- `src/models/` holds plain immutable TypeScript interfaces (`Segment`, `Earnings`, `SegmentInput`)
+  with factory functions (`createSegment`, `createSegmentInput`, `createEarnings`) and functional
+  updates via native object spread (`{ ...segment, ...updates }`), not mutable classes.
 
 ### Analytics
 

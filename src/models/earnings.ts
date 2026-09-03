@@ -1,9 +1,9 @@
-export class Earnings {
-  airlinePoints: number;
-  elitePoints: number;
-
-  constructor(airlinePoints: number, elitePoints: number) {
-    this.airlinePoints = airlinePoints;
-    this.elitePoints = elitePoints;
-  }
+export interface Earnings {
+  readonly airlinePoints: number;
+  readonly elitePoints: number;
 }
+
+export const createEarnings = (airlinePoints: number, elitePoints: number): Earnings => ({
+  airlinePoints,
+  elitePoints,
+});

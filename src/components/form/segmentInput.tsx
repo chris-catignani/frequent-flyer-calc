@@ -11,7 +11,7 @@ import { Autocomplete, Box, Divider, Grid, IconButton, TextField, Typography } f
 import { GroupHeader, GroupItems } from "@/components/common/autocomplete";
 import { buildAirlineOptions } from "@/constants/airlines";
 import { searchAirports } from "@/utils/airports";
-import { SegmentInput } from "@/models/segmentInput";
+import type { SegmentInput } from "@/models/segmentInput";
 import type { Airport } from "@/types/airport";
 import type {
   AirlineOption,
@@ -211,7 +211,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
     segmentInputIdx,
     segmentInput,
     error: errors["fareClass"],
-    onChange: (val) => onChange(segmentInput.clone({ fareClass: val })),
+    onChange: (val) => onChange({ ...segmentInput, fareClass: val }),
   });
 
   return (
@@ -272,13 +272,13 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           error={errors["airline"]}
           airlineOptions={airlineOptions}
           onChange={(value) => {
-            const newSegmentInput = segmentInput.clone({ airline: value });
             const shouldClear =
               adapter?.shouldClearFareClassOnAirlineChange?.(segmentInput, value) ?? false;
-            if (shouldClear) {
-              newSegmentInput.fareClass = "";
-            }
-            onChange(newSegmentInput);
+            onChange({
+              ...segmentInput,
+              airline: value,
+              ...(shouldClear ? { fareClass: "" } : {}),
+            });
           }}
         />
       </Grid>
@@ -290,15 +290,13 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           value={segmentInput.fromAirportText}
           error={errors["fromAirportText"]}
           onChange={(value) => {
-            const newSegmentInput = segmentInput.clone({
-              fromAirportText: value,
-            });
             const shouldClear =
               adapter?.shouldClearFareClassOnAirportChange?.(segmentInput, "from", value) ?? false;
-            if (shouldClear) {
-              newSegmentInput.fareClass = "";
-            }
-            onChange(newSegmentInput);
+            onChange({
+              ...segmentInput,
+              fromAirportText: value,
+              ...(shouldClear ? { fareClass: "" } : {}),
+            });
           }}
         />
       </Grid>
@@ -310,15 +308,13 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           value={segmentInput.toAirportText}
           error={errors["toAirportText"]}
           onChange={(value) => {
-            const newSegmentInput = segmentInput.clone({
-              toAirportText: value,
-            });
             const shouldClear =
               adapter?.shouldClearFareClassOnAirportChange?.(segmentInput, "to", value) ?? false;
-            if (shouldClear) {
-              newSegmentInput.fareClass = "";
-            }
-            onChange(newSegmentInput);
+            onChange({
+              ...segmentInput,
+              toAirportText: value,
+              ...(shouldClear ? { fareClass: "" } : {}),
+            });
           }}
         />
       </Grid>
@@ -336,9 +332,10 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
               </span>
             }
             onChange={(event) => {
-              onChange(
-                segmentInput.clone({ fareClass: event.target.value?.trim()?.toLowerCase() })
-              );
+              onChange({
+                ...segmentInput,
+                fareClass: event.target.value?.trim()?.toLowerCase(),
+              });
             }}
             label='Fare Class (e.g. "y" or "i")'
             sx={{ width: "100%" }}

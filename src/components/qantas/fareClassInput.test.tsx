@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { SegmentInput } from "@/models/segmentInput";
+import { createSegmentInput } from "@/models/segmentInput";
 import type { Airport } from "@/types/airport";
 import {
   QantasFareClassInput,
@@ -85,9 +85,14 @@ const itm: Airport = {
 describe("fareClassInput components & adapter", () => {
   describe("QantasFareClassInput", () => {
     it("renders domestic options and booking class letters when both airports are Australia", () => {
-      const segmentInput = new SegmentInput("qf", "RedeDeal", "syd", "mel");
-      segmentInput.fromAirport = syd;
-      segmentInput.toAirport = mel;
+      const segmentInput = createSegmentInput({
+        airline: "qf",
+        fareClass: "RedeDeal",
+        fromAirportText: "syd",
+        toAirportText: "mel",
+        fromAirport: syd,
+        toAirport: mel,
+      });
       const onChange = jest.fn();
 
       render(
@@ -109,9 +114,14 @@ describe("fareClassInput components & adapter", () => {
     });
 
     it("renders international options and booking class letters when route is international", () => {
-      const segmentInput = new SegmentInput("qf", "EconomySaver", "syd", "lax");
-      segmentInput.fromAirport = syd;
-      segmentInput.toAirport = lax;
+      const segmentInput = createSegmentInput({
+        airline: "qf",
+        fareClass: "EconomySaver",
+        fromAirportText: "syd",
+        toAirportText: "lax",
+        fromAirport: syd,
+        toAirport: lax,
+      });
       const onChange = jest.fn();
 
       render(
@@ -128,7 +138,7 @@ describe("fareClassInput components & adapter", () => {
     });
 
     it("renders empty options if airports are not set", () => {
-      const segmentInput = new SegmentInput("qf", "", "", "");
+      const segmentInput = createSegmentInput("qf", "", "", "");
       const onChange = jest.fn();
 
       render(
@@ -144,9 +154,14 @@ describe("fareClassInput components & adapter", () => {
 
   describe("JetstarFareClassInput", () => {
     it("renders NZ domestic options when airline is jq and route is NZ domestic", () => {
-      const segmentInput = new SegmentInput("jq", "", "akl", "wlg");
-      segmentInput.fromAirport = akl;
-      segmentInput.toAirport = wlg;
+      const segmentInput = createSegmentInput({
+        airline: "jq",
+        fareClass: "",
+        fromAirportText: "akl",
+        toAirportText: "wlg",
+        fromAirport: akl,
+        toAirport: wlg,
+      });
       const onChange = jest.fn();
 
       render(
@@ -166,9 +181,14 @@ describe("fareClassInput components & adapter", () => {
     });
 
     it("renders AU domestic options when airline is jq and route is AU domestic", () => {
-      const segmentInput = new SegmentInput("jq", "", "syd", "mel");
-      segmentInput.fromAirport = syd;
-      segmentInput.toAirport = mel;
+      const segmentInput = createSegmentInput({
+        airline: "jq",
+        fareClass: "",
+        fromAirportText: "syd",
+        toAirportText: "mel",
+        fromAirport: syd,
+        toAirport: mel,
+      });
       const onChange = jest.fn();
 
       render(
@@ -190,9 +210,14 @@ describe("fareClassInput components & adapter", () => {
     });
 
     it("renders international options for Jetstar intl route or other Jetstar airlines (e.g. gk)", () => {
-      const segmentInput = new SegmentInput("jq", "", "syd", "dps");
-      segmentInput.fromAirport = syd;
-      segmentInput.toAirport = dps;
+      const segmentInput = createSegmentInput({
+        airline: "jq",
+        fareClass: "",
+        fromAirportText: "syd",
+        toAirportText: "dps",
+        fromAirport: syd,
+        toAirport: dps,
+      });
       const onChange = jest.fn();
 
       render(
@@ -213,9 +238,14 @@ describe("fareClassInput components & adapter", () => {
 
   describe("JALFareClassInput", () => {
     it("renders JAL domestic fare class options", () => {
-      const segmentInput = new SegmentInput("jl", "", "hnd", "itm");
-      segmentInput.fromAirport = hnd;
-      segmentInput.toAirport = itm;
+      const segmentInput = createSegmentInput({
+        airline: "jl",
+        fareClass: "",
+        fromAirportText: "hnd",
+        toAirportText: "itm",
+        fromAirport: hnd,
+        toAirport: itm,
+      });
       const onChange = jest.fn();
 
       render(
@@ -236,9 +266,14 @@ describe("fareClassInput components & adapter", () => {
   describe("qantasSegmentInputAdapter", () => {
     describe("renderFareClassInput", () => {
       it("renders QantasFareClassInput for qf", () => {
-        const segmentInput = new SegmentInput("qf", "", "syd", "mel");
-        segmentInput.fromAirport = syd;
-        segmentInput.toAirport = mel;
+        const segmentInput = createSegmentInput({
+          airline: "qf",
+          fareClass: "",
+          fromAirportText: "syd",
+          toAirportText: "mel",
+          fromAirport: syd,
+          toAirport: mel,
+        });
         const rendered = qantasSegmentInputAdapter.renderFareClassInput?.({
           segmentInputIdx: 0,
           segmentInput,
@@ -251,9 +286,14 @@ describe("fareClassInput components & adapter", () => {
 
       it("renders JetstarFareClassInput for jq and gk", () => {
         for (const airline of ["jq", "gk"]) {
-          const segmentInput = new SegmentInput(airline, "", "syd", "mel");
-          segmentInput.fromAirport = syd;
-          segmentInput.toAirport = mel;
+          const segmentInput = createSegmentInput({
+            airline,
+            fareClass: "",
+            fromAirportText: "syd",
+            toAirportText: "mel",
+            fromAirport: syd,
+            toAirport: mel,
+          });
           const rendered = qantasSegmentInputAdapter.renderFareClassInput?.({
             segmentInputIdx: 0,
             segmentInput,
@@ -264,9 +304,14 @@ describe("fareClassInput components & adapter", () => {
       });
 
       it("renders JALFareClassInput for jl/nu when both airports are Japan", () => {
-        const segmentInput = new SegmentInput("jl", "", "hnd", "itm");
-        segmentInput.fromAirport = hnd;
-        segmentInput.toAirport = itm;
+        const segmentInput = createSegmentInput({
+          airline: "jl",
+          fareClass: "",
+          fromAirportText: "hnd",
+          toAirportText: "itm",
+          fromAirport: hnd,
+          toAirport: itm,
+        });
         const rendered = qantasSegmentInputAdapter.renderFareClassInput?.({
           segmentInputIdx: 0,
           segmentInput,
@@ -276,9 +321,14 @@ describe("fareClassInput components & adapter", () => {
       });
 
       it("returns null for JAL when route is international", () => {
-        const segmentInput = new SegmentInput("jl", "", "hnd", "syd");
-        segmentInput.fromAirport = hnd;
-        segmentInput.toAirport = syd;
+        const segmentInput = createSegmentInput({
+          airline: "jl",
+          fareClass: "",
+          fromAirportText: "hnd",
+          toAirportText: "syd",
+          fromAirport: hnd,
+          toAirport: syd,
+        });
         const rendered = qantasSegmentInputAdapter.renderFareClassInput?.({
           segmentInputIdx: 0,
           segmentInput,
@@ -288,9 +338,14 @@ describe("fareClassInput components & adapter", () => {
       });
 
       it("returns null for other partner airlines", () => {
-        const segmentInput = new SegmentInput("aa", "", "lax", "syd");
-        segmentInput.fromAirport = lax;
-        segmentInput.toAirport = syd;
+        const segmentInput = createSegmentInput({
+          airline: "aa",
+          fareClass: "",
+          fromAirportText: "lax",
+          toAirportText: "syd",
+          fromAirport: lax,
+          toAirport: syd,
+        });
         const rendered = qantasSegmentInputAdapter.renderFareClassInput?.({
           segmentInputIdx: 0,
           segmentInput,
@@ -302,14 +357,14 @@ describe("fareClassInput components & adapter", () => {
 
     describe("shouldClearFareClassOnAirlineChange", () => {
       it("returns false if airline does not change", () => {
-        const seg = new SegmentInput("qf", "RedeDeal", "syd", "mel");
+        const seg = createSegmentInput("qf", "RedeDeal", "syd", "mel");
         expect(qantasSegmentInputAdapter.shouldClearFareClassOnAirlineChange?.(seg, "qf")).toBe(
           false
         );
       });
 
       it("returns true when switching between Qantas Group airlines or to/from Qantas Group", () => {
-        const qfSeg = new SegmentInput("qf", "RedeDeal", "syd", "mel");
+        const qfSeg = createSegmentInput("qf", "RedeDeal", "syd", "mel");
         expect(qantasSegmentInputAdapter.shouldClearFareClassOnAirlineChange?.(qfSeg, "jq")).toBe(
           true
         );
@@ -317,14 +372,14 @@ describe("fareClassInput components & adapter", () => {
           true
         );
 
-        const aaSeg = new SegmentInput("aa", "y", "lax", "syd");
+        const aaSeg = createSegmentInput("aa", "y", "lax", "syd");
         expect(qantasSegmentInputAdapter.shouldClearFareClassOnAirlineChange?.(aaSeg, "qf")).toBe(
           true
         );
       });
 
       it("returns true when switching between JAL airlines or to/from JAL", () => {
-        const jlSeg = new SegmentInput("jl", "Economy", "hnd", "itm");
+        const jlSeg = createSegmentInput("jl", "Economy", "hnd", "itm");
         expect(qantasSegmentInputAdapter.shouldClearFareClassOnAirlineChange?.(jlSeg, "nu")).toBe(
           true
         );
@@ -332,14 +387,14 @@ describe("fareClassInput components & adapter", () => {
           true
         );
 
-        const aaSeg = new SegmentInput("aa", "y", "lax", "syd");
+        const aaSeg = createSegmentInput("aa", "y", "lax", "syd");
         expect(qantasSegmentInputAdapter.shouldClearFareClassOnAirlineChange?.(aaSeg, "jl")).toBe(
           true
         );
       });
 
       it("returns false when switching between non-Qantas non-JAL partner airlines", () => {
-        const aaSeg = new SegmentInput("aa", "y", "lax", "syd");
+        const aaSeg = createSegmentInput("aa", "y", "lax", "syd");
         expect(qantasSegmentInputAdapter.shouldClearFareClassOnAirlineChange?.(aaSeg, "ba")).toBe(
           false
         );
@@ -348,7 +403,7 @@ describe("fareClassInput components & adapter", () => {
 
     describe("shouldClearFareClassOnAirportChange", () => {
       it("always returns true for JAL airlines regardless of input length", () => {
-        const jlSeg = new SegmentInput("jl", "Economy", "hnd", "itm");
+        const jlSeg = createSegmentInput("jl", "Economy", "hnd", "itm");
         expect(
           qantasSegmentInputAdapter.shouldClearFareClassOnAirportChange?.(jlSeg, "from", "h")
         ).toBe(true);
@@ -358,7 +413,7 @@ describe("fareClassInput components & adapter", () => {
       });
 
       it("returns true for Qantas Group only when newAirportText has length 3", () => {
-        const qfSeg = new SegmentInput("qf", "RedeDeal", "syd", "mel");
+        const qfSeg = createSegmentInput("qf", "RedeDeal", "syd", "mel");
         expect(
           qantasSegmentInputAdapter.shouldClearFareClassOnAirportChange?.(qfSeg, "from", "s")
         ).toBe(false);
@@ -374,7 +429,7 @@ describe("fareClassInput components & adapter", () => {
       });
 
       it("returns false for partner airlines even with 3-letter IATA", () => {
-        const aaSeg = new SegmentInput("aa", "y", "lax", "syd");
+        const aaSeg = createSegmentInput("aa", "y", "lax", "syd");
         expect(
           qantasSegmentInputAdapter.shouldClearFareClassOnAirportChange?.(aaSeg, "from", "syd")
         ).toBe(false);

@@ -1,35 +1,48 @@
 import type { Airport } from "@/types/airport";
 
-export interface SegmentProps {
-  airline?: string;
-  fareClass?: string;
-  fromAirport?: Airport | null;
-  toAirport?: Airport | null;
+export interface Segment {
+  readonly airline: string;
+  readonly fareClass: string;
+  readonly fromAirport: Airport;
+  readonly toAirport: Airport;
 }
 
-export class Segment {
+export interface CreateSegmentOptions {
   airline: string;
   fareClass: string;
   fromAirport: Airport;
   toAirport: Airport;
-
-  constructor(airline: string, fareClass: string, fromAirport: Airport, toAirport: Airport) {
-    this.airline = airline;
-    this.fareClass = fareClass;
-    this.fromAirport = fromAirport;
-    this.toAirport = toAirport;
-  }
-
-  toString(): string {
-    return `${this.airline} ${this.fareClass} ${this.fromAirport?.iata || ""} ${this.toAirport?.iata || ""}`;
-  }
-
-  clone({ airline, fareClass, fromAirport, toAirport }: SegmentProps): Segment {
-    return new Segment(
-      airline !== undefined ? airline : this.airline,
-      fareClass !== undefined ? fareClass : this.fareClass,
-      fromAirport !== undefined && fromAirport !== null ? fromAirport : this.fromAirport,
-      toAirport !== undefined && toAirport !== null ? toAirport : this.toAirport
-    );
-  }
 }
+
+export function createSegment(options: CreateSegmentOptions): Segment;
+export function createSegment(
+  airline: string,
+  fareClass: string,
+  fromAirport: Airport,
+  toAirport: Airport
+): Segment;
+export function createSegment(
+  airlineOrOptions: string | CreateSegmentOptions,
+  fareClass?: string,
+  fromAirport?: Airport,
+  toAirport?: Airport
+): Segment {
+  if (typeof airlineOrOptions === "object" && airlineOrOptions !== null) {
+    return {
+      airline: airlineOrOptions.airline,
+      fareClass: airlineOrOptions.fareClass,
+      fromAirport: airlineOrOptions.fromAirport,
+      toAirport: airlineOrOptions.toAirport,
+    };
+  }
+  return {
+    airline: airlineOrOptions,
+    fareClass: fareClass!,
+    fromAirport: fromAirport!,
+    toAirport: toAirport!,
+  };
+}
+
+export const segmentToString = (segment: Segment): string => {
+  return `${segment.airline} ${segment.fareClass} ${segment.fromAirport?.iata || ""} ${segment.toAirport?.iata || ""}`;
+};

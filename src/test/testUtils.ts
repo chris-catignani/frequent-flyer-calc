@@ -1,4 +1,4 @@
-import { Segment } from "@/models/segment";
+import { createSegment, type Segment } from "@/models/segment";
 import { getAirport } from "@/utils/airports";
 import type { Airport } from "@/types/airport";
 
@@ -8,7 +8,7 @@ export const buildSegment = (
   fromAirportIata: string,
   toAirportIata: string
 ): Segment => {
-  return new Segment(
+  return createSegment(
     airline,
     fareClass,
     getAirport(fromAirportIata) as Airport,

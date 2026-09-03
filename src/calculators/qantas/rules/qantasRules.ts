@@ -7,7 +7,7 @@ import {
   Rule,
 } from "@/calculators/qantas/rules";
 import { QANTAS_FARE_CLASSES } from "@/calculators/qantas/earnCategories/qantasEarnCategories";
-import { Earnings } from "@/models/earnings";
+import type { Earnings } from "@/models/earnings";
 
 const _base_rule_url =
   "https://www.qantas.com/au/en/frequent-flyer/earn-points/airline-earning-tables/qantas-and-jetstar-earning-tables.html";

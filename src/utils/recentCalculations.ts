@@ -1,4 +1,4 @@
-import { SegmentInput } from "@/models/segmentInput";
+import { createSegmentInput, type SegmentInput } from "@/models/segmentInput";
 
 export interface SavedCalculation {
   segmentInputs: SegmentInput[];
@@ -13,15 +13,14 @@ export const saveCalculation = (
   storageKey: string = "saved-calculations"
 ): SavedCalculation[] => {
   const calculationToSave: SavedCalculation = {
-    segmentInputs: segmentInputs.map(
-      (segmentInput) =>
-        new SegmentInput(
-          segmentInput.airline,
-          segmentInput.fareClass,
-          segmentInput.fromAirportText,
-          segmentInput.toAirportText,
-          segmentInput.uuid
-        )
+    segmentInputs: segmentInputs.map((segmentInput) =>
+      createSegmentInput(
+        segmentInput.airline,
+        segmentInput.fareClass,
+        segmentInput.fromAirportText,
+        segmentInput.toAirportText,
+        segmentInput.uuid
+      )
     ),
     tripType: theTripType,
     eliteStatus: theEliteStatus,
@@ -93,7 +92,7 @@ export const getSavedCalculations = (
     for (const segmentInput of item.segmentInputs) {
       if (segmentInput && typeof segmentInput === "object") {
         segmentInputs.push(
-          new SegmentInput(
+          createSegmentInput(
             typeof segmentInput.airline === "string" ? segmentInput.airline : "",
             typeof segmentInput.fareClass === "string" ? segmentInput.fareClass : "",
             typeof segmentInput.fromAirportText === "string" ? segmentInput.fromAirportText : "",
