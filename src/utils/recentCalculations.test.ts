@@ -5,7 +5,7 @@ import {
   saveCalculation,
   setSavedCalculations,
 } from "./recentCalculations";
-import { SegmentInput } from "@/models/segmentInput";
+import { createSegmentInput } from "@/models/segmentInput";
 
 describe("recentCalculations", () => {
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe("recentCalculations", () => {
   });
 
   it("saves and retrieves calculations with default storageKey", () => {
-    const segments = [new SegmentInput("qf", "RedeDeal", "SYD", "MEL")];
+    const segments = [createSegmentInput("qf", "RedeDeal", "SYD", "MEL")];
     const saved = saveCalculation(segments, "one way", "Bronze");
 
     expect(saved).toHaveLength(1);
@@ -33,7 +33,7 @@ describe("recentCalculations", () => {
 
   it("saves and retrieves calculations with custom storageKey", () => {
     const customKey = "saved-calculations-velocity";
-    const segments = [new SegmentInput("va", "Elevate", "SYD", "BNE")];
+    const segments = [createSegmentInput("va", "Elevate", "SYD", "BNE")];
     saveCalculation(segments, "return", "Gold", customKey);
 
     expect(getSavedCalculations()).toEqual([]);
@@ -44,7 +44,7 @@ describe("recentCalculations", () => {
   });
 
   it("sets saved calculations directly using setSavedCalculations", () => {
-    const segments = [new SegmentInput("qf", "Flex", "SYD", "MEL")];
+    const segments = [createSegmentInput("qf", "Flex", "SYD", "MEL")];
     setSavedCalculations([
       { segmentInputs: segments, tripType: "return", eliteStatus: "Platinum" },
     ]);
@@ -56,8 +56,8 @@ describe("recentCalculations", () => {
 
   it("deletes calculation at index", () => {
     const key = "saved-calculations";
-    const seg1 = [new SegmentInput("qf", "Flex", "SYD", "MEL")];
-    const seg2 = [new SegmentInput("qf", "Flex", "MEL", "BNE")];
+    const seg1 = [createSegmentInput("qf", "Flex", "SYD", "MEL")];
+    const seg2 = [createSegmentInput("qf", "Flex", "MEL", "BNE")];
     saveCalculation(seg1, "one way", "Bronze", key);
     saveCalculation(seg2, "one way", "Silver", key);
 
@@ -70,7 +70,7 @@ describe("recentCalculations", () => {
   });
 
   it("deletes all saved calculations", () => {
-    const seg = [new SegmentInput("qf", "Flex", "SYD", "MEL")];
+    const seg = [createSegmentInput("qf", "Flex", "SYD", "MEL")];
     saveCalculation(seg, "one way", "Bronze");
     expect(getSavedCalculations()).toHaveLength(1);
 
@@ -79,7 +79,7 @@ describe("recentCalculations", () => {
   });
 
   it("handles out of bounds index deletion gracefully", () => {
-    const seg = [new SegmentInput("qf", "Flex", "SYD", "MEL")];
+    const seg = [createSegmentInput("qf", "Flex", "SYD", "MEL")];
     saveCalculation(seg, "one way", "Bronze");
 
     const result = deleteSavedCalculationAtIdx(5);
@@ -151,7 +151,7 @@ describe("recentCalculations", () => {
         throw error;
       });
 
-      const segments = [new SegmentInput("qf", "Flex", "SYD", "MEL")];
+      const segments = [createSegmentInput("qf", "Flex", "SYD", "MEL")];
       expect(() => {
         const saved = saveCalculation(segments, "one way", "Bronze");
         expect(saved).toHaveLength(1);

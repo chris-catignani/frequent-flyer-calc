@@ -2,7 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import posthog from "posthog-js";
 import { useCalculator } from "./useCalculator";
 import type { FrequentFlyerProgram } from "@/types/program";
-import { SegmentInput } from "@/models/segmentInput";
+import { createSegmentInput } from "@/models/segmentInput";
 
 // Mock posthog-js
 jest.mock("posthog-js", () => ({
@@ -79,7 +79,7 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       act(() => {
@@ -112,7 +112,7 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       expect(result.current.segmentInputs[0].fromAirport).toBeDefined();
@@ -126,12 +126,12 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
         result.current.addSegment();
       });
 
       act(() => {
-        result.current.updateSegment(1, new SegmentInput("qf", "Flex", "MEL", "BNE"));
+        result.current.updateSegment(1, createSegmentInput("qf", "Flex", "MEL", "BNE"));
       });
 
       expect(result.current.segmentInputs[0].airline).toBe("tp");
@@ -149,8 +149,8 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       const newInputs = [
-        new SegmentInput("tp", "Economy", "SYD", "MEL"),
-        new SegmentInput("qf", "Flex", "MEL", "PER"),
+        createSegmentInput("tp", "Economy", "SYD", "MEL"),
+        createSegmentInput("qf", "Flex", "MEL", "PER"),
       ];
 
       act(() => {
@@ -183,7 +183,7 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       await act(async () => {
@@ -215,7 +215,7 @@ describe("useCalculator", () => {
 
       act(() => {
         result.current.setTripType("return");
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       await act(async () => {
@@ -243,7 +243,7 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       await act(async () => {
@@ -265,7 +265,7 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       await act(async () => {
@@ -286,7 +286,7 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       await act(async () => {
@@ -330,7 +330,7 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       // Start first calculation
@@ -379,7 +379,7 @@ describe("useCalculator", () => {
       const { result } = renderHook(() => useCalculator({ program: mockProgram }));
 
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
       });
 
       await act(async () => {
@@ -390,7 +390,7 @@ describe("useCalculator", () => {
 
       // Reset segment and load recent
       act(() => {
-        result.current.updateSegment(0, new SegmentInput("tp", "Economy", "BNE", "PER"));
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "BNE", "PER"));
       });
       expect(result.current.segmentInputs[0].fromAirportText).toBe("BNE");
 

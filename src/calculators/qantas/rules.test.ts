@@ -6,14 +6,14 @@ import {
 } from "@/calculators/qantas/rules";
 import { isInRegion } from "@/calculators/qantas/regions";
 import { buildSegmentFromString } from "@/test/testUtils";
-import { Earnings } from "@/models/earnings";
+import { createEarnings } from "@/models/earnings";
 
 describe("rules", () => {
   describe("parseEarningRates", () => {
     test("parses comma thousand separators", () => {
       expect(parseEarningRates("1,450\t2,025", "25\t50", ["discountEconomy", "economy"])).toEqual({
-        discountEconomy: new Earnings(1450, 25),
-        economy: new Earnings(2025, 50),
+        discountEconomy: createEarnings(1450, 25),
+        economy: createEarnings(2025, 50),
       });
     });
 
@@ -21,15 +21,15 @@ describe("rules", () => {
     // separator when copy-pasted (e.g. Darwin/Perth to Southeast Asia discountEconomy).
     test("parses period typos as thousand separators", () => {
       expect(parseEarningRates("1.450\t2,025", "25\t50", ["discountEconomy", "economy"])).toEqual({
-        discountEconomy: new Earnings(1450, 25),
-        economy: new Earnings(2025, 50),
+        discountEconomy: createEarnings(1450, 25),
+        economy: createEarnings(2025, 50),
       });
     });
 
     test('parses "-" as zero earnings', () => {
       expect(parseEarningRates("-\t2,025", "-\t50", ["discountEconomy", "economy"])).toEqual({
-        discountEconomy: new Earnings(0, 0),
-        economy: new Earnings(2025, 50),
+        discountEconomy: createEarnings(0, 0),
+        economy: createEarnings(2025, 50),
       });
     });
   });
@@ -57,12 +57,12 @@ describe("rules", () => {
       {
         minDistance: 0,
         maxDistance: 100,
-        earnings: { business: new Earnings(100, 10) },
+        earnings: { business: createEarnings(100, 10) },
       },
       {
         minDistance: 100,
         maxDistance: 200,
-        earnings: { business: new Earnings(200, 20) },
+        earnings: { business: createEarnings(200, 20) },
       },
     ];
     // eslint-disable-next-line
@@ -81,12 +81,12 @@ describe("rules", () => {
       {
         minDistance: 0,
         maxDistance: 100,
-        earnings: { business: new Earnings(100, 10) },
+        earnings: { business: createEarnings(100, 10) },
       },
       {
         minDistance: 100,
         maxDistance: 200,
-        earnings: { business: new Earnings(200, 20) },
+        earnings: { business: createEarnings(200, 20) },
       },
     ];
     // eslint-disable-next-line
@@ -99,11 +99,11 @@ describe("rules", () => {
         {
           minDistance: 0,
           maxDistance: 100,
-          earnings: { business: new Earnings(100, 10) },
+          earnings: { business: createEarnings(100, 10) },
         },
         {
           minDistance: 100,
-          earnings: { business: new Earnings(200, 20) },
+          earnings: { business: createEarnings(200, 20) },
         },
       ];
       const distanceRule = new DistanceRule("distance rule", "https://google.com", distanceBands);
@@ -123,8 +123,8 @@ describe("rules", () => {
         origin: { city: new Set(["dallas", "houston"]) },
         destination: {
           city: {
-            "san francisco": { business: new Earnings(100, 10) },
-            boston: { business: new Earnings(200, 20) },
+            "san francisco": { business: createEarnings(100, 10) },
+            boston: { business: createEarnings(200, 20) },
           },
         },
       });
@@ -202,8 +202,8 @@ describe("rules", () => {
         origin: { country: new Set(["united states", "canada"]) },
         destination: {
           country: {
-            "united kingdom": { business: new Earnings(300, 30) },
-            france: { business: new Earnings(400, 40) },
+            "united kingdom": { business: createEarnings(300, 30) },
+            france: { business: createEarnings(400, 40) },
           },
         },
       });
@@ -281,8 +281,8 @@ describe("rules", () => {
         origin: { region: new Set(["usaEastCoast", "northernEurope"]) },
         destination: {
           region: {
-            westernEurope: { business: new Earnings(500, 50) },
-            southeastAsia: { business: new Earnings(600, 60) },
+            westernEurope: { business: createEarnings(500, 50) },
+            southeastAsia: { business: createEarnings(600, 60) },
           },
         },
       });

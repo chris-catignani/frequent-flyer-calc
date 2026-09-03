@@ -8,28 +8,34 @@ import {
   buildAirlineOptions,
   type SegmentInputAdapter,
 } from "./segmentInput";
-import { SegmentInput } from "@/models/segmentInput";
+import { createSegmentInput } from "@/models/segmentInput";
 
 describe("SegmentInputList & SegmentInputAdapter", () => {
   const airlineOptions = buildAirlineOptions(["qf", "aa", "ba"], "Oneworld");
 
-  const defaultSegment = new SegmentInput("qf", "j", "syd", "mel", "test-uuid-1");
-  defaultSegment.fromAirport = {
-    iata: "syd",
-    name: "Sydney Airport",
-    city: "Sydney",
-    country: "Australia",
-    latitude: -33.946,
-    longitude: 151.177,
-  };
-  defaultSegment.toAirport = {
-    iata: "mel",
-    name: "Melbourne Airport",
-    city: "Melbourne",
-    country: "Australia",
-    latitude: -37.673,
-    longitude: 144.843,
-  };
+  const defaultSegment = createSegmentInput({
+    airline: "qf",
+    fareClass: "j",
+    fromAirportText: "syd",
+    toAirportText: "mel",
+    uuid: "test-uuid-1",
+    fromAirport: {
+      iata: "syd",
+      name: "Sydney Airport",
+      city: "Sydney",
+      country: "Australia",
+      latitude: -33.946,
+      longitude: 151.177,
+    },
+    toAirport: {
+      iata: "mel",
+      name: "Melbourne Airport",
+      city: "Melbourne",
+      country: "Australia",
+      latitude: -37.673,
+      longitude: 144.843,
+    },
+  });
 
   describe("Default rendering (without adapter)", () => {
     it("renders default free-text fare class input when no adapter is provided", () => {
@@ -283,7 +289,7 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
 
   describe("Validation", () => {
     it("validates base required fields without adapter", () => {
-      const emptySegment = new SegmentInput("", "", "", "", "test-uuid-2");
+      const emptySegment = createSegmentInput("", "", "", "", "test-uuid-2");
       const errors = validate([emptySegment]);
 
       expect(errors[0]).toEqual({
@@ -295,7 +301,7 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
     });
 
     it("validates invalid IATA codes", () => {
-      const invalidIataSegment = new SegmentInput("qf", "j", "xyz123", "abc999", "test-uuid-3");
+      const invalidIataSegment = createSegmentInput("qf", "j", "xyz123", "abc999", "test-uuid-3");
       const errors = validate([invalidIataSegment]);
 
       expect(errors[0]).toEqual({
@@ -314,7 +320,7 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
         },
       };
 
-      const segment = defaultSegment.clone({ fareClass: "invalid" });
+      const segment = { ...defaultSegment, fareClass: "invalid" };
       const errors = validate([segment], adapter);
 
       expect(errors[0]).toEqual({
@@ -359,7 +365,7 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
 
   describe("Responsive rendering & unique DOM elements", () => {
     it("renders single delete button and segment row with correct responsive test IDs", () => {
-      const secondSegment = new SegmentInput("qf", "j", "syd", "mel", "test-uuid-2");
+      const secondSegment = createSegmentInput("qf", "j", "syd", "mel", "test-uuid-2");
       render(
         <SegmentInputList
           segmentInputs={[defaultSegment, secondSegment]}
