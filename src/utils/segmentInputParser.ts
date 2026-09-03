@@ -1,5 +1,5 @@
 import { JETSTAR_AIRLINES, JETSTAR_LETTER_FARE_CLASSES } from "@/calculators/qantas/constants";
-import { SegmentInput } from "@/models/segmentInput";
+import { createSegmentInput, type SegmentInput } from "@/models/segmentInput";
 
 export interface ParseResult {
   segmentInputs: SegmentInput[];
@@ -32,7 +32,7 @@ export const parseEncodedTextItin = (
     const toAirportText = parts[2].toLowerCase();
     const fareClass = parseFareClass(airline, parts[3].toLowerCase());
 
-    segmentInputs.push(new SegmentInput(airline, fareClass, fromAirportText, toAirportText));
+    segmentInputs.push(createSegmentInput(airline, fareClass, fromAirportText, toAirportText));
   }
 
   return { segmentInputs, parsingError: undefined };
@@ -106,7 +106,9 @@ export const parseItaMatrixInput = (itaMatrixJson: string): ParseResult => {
           const fromAirportText = String(leg.origin?.code || "").toLowerCase();
           const toAirportText = String(leg.destination?.code || "").toLowerCase();
 
-          segmentInputs.push(new SegmentInput(airline, fareClass, fromAirportText, toAirportText));
+          segmentInputs.push(
+            createSegmentInput(airline, fareClass, fromAirportText, toAirportText)
+          );
         });
       });
     });

@@ -1,4 +1,4 @@
-import { SegmentInput } from "@/models/segmentInput";
+import { createSegmentInput, type SegmentInput } from "@/models/segmentInput";
 
 export interface ParsedUrlParams {
   eliteStatus: string | null;
@@ -65,7 +65,7 @@ const decodeSegmentInputs = (segmentInputsString: string | null): SegmentInput[]
   for (const segmentString of segmentInputsString.split("-")) {
     const segmentParts = segmentString.split("_");
     segmentInputs.push(
-      new SegmentInput(segmentParts[0], segmentParts[3], segmentParts[1], segmentParts[2])
+      createSegmentInput(segmentParts[0], segmentParts[3], segmentParts[1], segmentParts[2])
     );
   }
   return segmentInputs;
