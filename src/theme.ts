@@ -3,7 +3,14 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   typography: {
-    fontFamily: "var(--font-roboto)",
+    fontFamily: [
+      "Roboto",
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Arial",
+      "sans-serif",
+    ].join(","),
   },
 });
 
