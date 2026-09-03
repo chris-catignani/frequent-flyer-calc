@@ -462,6 +462,33 @@ describe("Test for non earning airline fare classes", () => {
   );
 });
 
+describe("Test for unsupported airlines", () => {
+  test("single unsupported airline returns per-segment error", async () => {
+    const segment = buildSegment("sq", "y", "sin", "syd");
+    const result = await calculate([segment]);
+    expect(result.containsErrors).toBe(true);
+    expect(result.segmentResults).toHaveLength(1);
+    expect(result.segmentResults[0].error).toEqual(
+      new Error("Qantas does not support earning on sq")
+    );
+  });
+
+  test("multi-segment calculation continues after unsupported airline segment", async () => {
+    const segment1 = buildSegment("sq", "y", "sin", "syd");
+    const segment2 = buildSegment("qf", "i", "syd", "mel");
+    const result = await calculate([segment1, segment2]);
+    expect(result.containsErrors).toBe(true);
+    expect(result.segmentResults).toHaveLength(2);
+    expect(result.segmentResults[0].error).toEqual(
+      new Error("Qantas does not support earning on sq")
+    );
+    expect(result.segmentResults[1].airlinePoints).toBe(1750);
+    expect(result.segmentResults[1].elitePoints).toBe(40);
+    expect(result.airlinePoints).toBe(1750);
+    expect(result.elitePoints).toBe(40);
+  });
+});
+
 describe("calculate - elite status levels", () => {
   test.each([
     ["qf e syd sin", "Bronze", 2600, 0 * 2600],

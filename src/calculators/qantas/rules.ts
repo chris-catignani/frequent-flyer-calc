@@ -277,7 +277,7 @@ export class GeographicalRule extends Rule {
         return REGION_DISPLAY[location.value] || location.value;
       } else {
         throw new Error(
-          `Cannot create calcluation notes for unknown type ${(location as GeographicalLocation).type}`
+          `Cannot create calculation notes for unknown type ${(location as GeographicalLocation).type}`
         );
       }
     };

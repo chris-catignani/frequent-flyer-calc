@@ -50,6 +50,7 @@ const STAR_ALLIANCE_AIRLINES: AirlineMap = {};
 const NON_ALLIANCE_AIRLINES: AirlineMap = {
   ly: "EL AL",
   ek: "Emirates",
+  nf: "Air Vanuatu",
   ...JETSTAR_AIRLINES,
   ...LATAM_AIRLINES,
   ws: "WestJet",

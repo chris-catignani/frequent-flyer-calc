@@ -157,7 +157,7 @@ export const JETSTAR_NEW_ZEALAND_FARE_CLASSES: Record<string, string> = {
 export const JETSTAR_DOMESTIC_FARE_CLASSES: Record<string, string> = {
   Starter: "n/a",
   StarterPlus: "n/a",
-  Buisness: "n/a",
+  Business: "n/a",
   More: "n/a",
   Flex: "economy",
   FlexPlus: "economy",

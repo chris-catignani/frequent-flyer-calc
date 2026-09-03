@@ -103,7 +103,7 @@ describe("getQantasEarnCategory", () => {
   test.each([
     ["Starter", "n/a"],
     ["StarterPlus", "n/a"],
-    ["Buisness", "n/a"],
+    ["Business", "n/a"],
 
     ["Flex", "economy"],
     ["FlexPlus", "economy"],
@@ -120,7 +120,7 @@ describe("getQantasEarnCategory", () => {
   test.each([
     ["Starter", "n/a"],
     ["StarterPlus", "n/a"],
-    ["Buisness", "n/a"],
+    ["Business", "n/a"],
 
     ["Flex", "economy"],
     ["FlexPlus", "economy"],

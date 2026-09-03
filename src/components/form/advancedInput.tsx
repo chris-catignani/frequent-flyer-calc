@@ -153,7 +153,7 @@ const FreeFormTextItinerary: React.FC<FreeFormTextItineraryProps> = ({
         <Typography>The itinerary format rules are:</Typography>
         <ul style={{ margin: 0 }}>
           <li>
-            <Typography>Each segment of the itinerary should be on it&apos;s on line</Typography>
+            <Typography>Each segment of the itinerary should be on its own line</Typography>
           </li>
           <li>
             <Typography>
