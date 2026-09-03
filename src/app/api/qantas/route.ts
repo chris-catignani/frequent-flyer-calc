@@ -2,19 +2,45 @@ import { type NextRequest, NextResponse } from "next/server";
 
 // Qantas API endpoint
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const airline = searchParams.get("airline") || "";
-  const fromIata = searchParams.get("fromIata") || "";
-  const toIata = searchParams.get("toIata") || "";
-  const eliteStatus = searchParams.get("eliteStatus") || "";
+  const searchParams = req.nextUrl.searchParams;
+  const airline = searchParams.get("airline")?.trim() || "";
+  const fromIata = searchParams.get("fromIata")?.trim() || "";
+  const toIata = searchParams.get("toIata")?.trim() || "";
+  const eliteStatus = searchParams.get("eliteStatus")?.trim() || "";
+
+  const missingParams: string[] = [];
+  if (!airline) missingParams.push("airline");
+  if (!fromIata) missingParams.push("fromIata");
+  if (!toIata) missingParams.push("toIata");
+  if (!eliteStatus) missingParams.push("eliteStatus");
+
+  if (missingParams.length > 0) {
+    return NextResponse.json(
+      { error: `Missing required query parameters: ${missingParams.join(", ")}` },
+      { status: 400 }
+    );
+  }
 
   const url = buildQantasUrl(airline, fromIata, toIata, eliteStatus);
 
-  console.log(`Calling qantas with url: ${url}`);
+  try {
+    const resp = await fetch(url);
 
-  const resp = await fetch(url);
-  const respJson = await resp.json();
-  return NextResponse.json(respJson);
+    if (!resp.ok) {
+      let errorBody: unknown;
+      try {
+        errorBody = await resp.json();
+      } catch {
+        errorBody = { error: resp.statusText || "Upstream service error" };
+      }
+      return NextResponse.json(errorBody, { status: resp.status });
+    }
+
+    const respJson = await resp.json();
+    return NextResponse.json(respJson);
+  } catch {
+    return NextResponse.json({ error: "Failed to fetch from Qantas API" }, { status: 502 });
+  }
 }
 
 // Build the request url, e.g.

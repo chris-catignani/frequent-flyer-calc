@@ -23,6 +23,7 @@ interface QantasRewardEntry {
 }
 
 interface QantasApiResponse {
+  error?: string;
   errorMessage?: string;
   rewards?: Record<string, QantasRewardEntry>;
 }
@@ -45,11 +46,24 @@ export const fetchDataFromQantas = async (
       }).toString();
 
     const qantasData = await fetch(url);
+
+    if (!qantasData.ok) {
+      let msg = `Qantas API request failed with status ${qantasData.status}`;
+      try {
+        const errJson: QantasApiResponse = await qantasData.json();
+        if (errJson.error || errJson.errorMessage) {
+          msg = errJson.error || errJson.errorMessage || msg;
+        }
+      } catch {
+        // fallback to default msg
+      }
+      throw new Error(msg);
+    }
+
     const qantasJson: QantasApiResponse = await qantasData.json();
 
-    if (qantasJson.errorMessage) {
-      console.log(`Qantas API returned an error: ${qantasJson.errorMessage}`);
-      throw new Error(`Qantas API returned an error: ${qantasJson.errorMessage}`);
+    if (qantasJson.error || qantasJson.errorMessage) {
+      throw new Error(qantasJson.error || qantasJson.errorMessage);
     }
 
     const result = qantasJson.rewards
@@ -59,13 +73,6 @@ export const fetchDataFromQantas = async (
       : undefined;
 
     if (!result) {
-      console.log(
-        "Failed to find a matching Qantas API result",
-        segment,
-        eliteStatus,
-        fareEarnCategory,
-        qantasJson
-      );
       retval.error = new Error("Failed to find a matching Qantas API result");
     } else {
       retval.qantasData = {

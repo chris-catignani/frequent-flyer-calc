@@ -6,18 +6,6 @@ export interface SavedCalculation {
   eliteStatus: string;
 }
 
-interface RawSavedCalculation {
-  segmentInputs: Array<{
-    airline: string;
-    fareClass: string;
-    fromAirportText: string;
-    toAirportText: string;
-    uuid?: string;
-  }>;
-  tripType: string;
-  eliteStatus: string;
-}
-
 export const saveCalculation = (
   segmentInputs: SegmentInput[],
   theTripType: string,
@@ -61,23 +49,73 @@ export const getSavedCalculations = (
   if (typeof window === "undefined") {
     return [];
   }
-  const savedCalculations: RawSavedCalculation[] = JSON.parse(
-    localStorage.getItem(storageKey) || "[]"
-  );
-  return savedCalculations.map((savedCalculation) => {
-    return {
-      segmentInputs: savedCalculation.segmentInputs.map((segmentInput) => {
-        return new SegmentInput(
-          segmentInput.airline,
-          segmentInput.fareClass,
-          segmentInput.fromAirportText,
-          segmentInput.toAirportText
+
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(storageKey);
+  } catch {
+    return [];
+  }
+
+  if (!raw) {
+    return [];
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {
+      // ignore storage errors
+    }
+    return [];
+  }
+
+  if (!Array.isArray(parsed)) {
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {
+      // ignore storage errors
+    }
+    return [];
+  }
+
+  const validCalculations: SavedCalculation[] = [];
+
+  for (const item of parsed) {
+    if (!item || typeof item !== "object" || !Array.isArray(item.segmentInputs)) {
+      continue;
+    }
+
+    const segmentInputs: SegmentInput[] = [];
+    for (const segmentInput of item.segmentInputs) {
+      if (segmentInput && typeof segmentInput === "object") {
+        segmentInputs.push(
+          new SegmentInput(
+            typeof segmentInput.airline === "string" ? segmentInput.airline : "",
+            typeof segmentInput.fareClass === "string" ? segmentInput.fareClass : "",
+            typeof segmentInput.fromAirportText === "string" ? segmentInput.fromAirportText : "",
+            typeof segmentInput.toAirportText === "string" ? segmentInput.toAirportText : "",
+            typeof segmentInput.uuid === "string" ? segmentInput.uuid : undefined
+          )
         );
-      }),
-      tripType: savedCalculation.tripType,
-      eliteStatus: savedCalculation.eliteStatus,
-    };
-  });
+      }
+    }
+
+    if (segmentInputs.length === 0) {
+      continue;
+    }
+
+    validCalculations.push({
+      segmentInputs,
+      tripType: typeof item.tripType === "string" ? item.tripType : "",
+      eliteStatus: typeof item.eliteStatus === "string" ? item.eliteStatus : "",
+    });
+  }
+
+  return validCalculations;
 };
 
 export const setSavedCalculations = (
@@ -87,32 +125,40 @@ export const setSavedCalculations = (
   if (typeof window === "undefined") {
     return;
   }
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify(
-      savedCalculations.map((savedCalculation) => {
-        return {
-          segmentInputs: savedCalculation.segmentInputs.map((segmentInput) => {
-            return {
-              airline: segmentInput.airline,
-              fareClass: segmentInput.fareClass,
-              fromAirportText: segmentInput.fromAirportText,
-              toAirportText: segmentInput.toAirportText,
-            };
-          }),
-          tripType: savedCalculation.tripType,
-          eliteStatus: savedCalculation.eliteStatus,
-        };
-      })
-    )
-  );
+  try {
+    localStorage.setItem(
+      storageKey,
+      JSON.stringify(
+        savedCalculations.map((savedCalculation) => {
+          return {
+            segmentInputs: savedCalculation.segmentInputs.map((segmentInput) => {
+              return {
+                airline: segmentInput.airline,
+                fareClass: segmentInput.fareClass,
+                fromAirportText: segmentInput.fromAirportText,
+                toAirportText: segmentInput.toAirportText,
+              };
+            }),
+            tripType: savedCalculation.tripType,
+            eliteStatus: savedCalculation.eliteStatus,
+          };
+        })
+      )
+    );
+  } catch {
+    // Handle QuotaExceededError or private browsing SecurityError gracefully
+  }
 };
 
 export const deleteAllSavedCalculations = (
   storageKey: string = "saved-calculations"
 ): SavedCalculation[] => {
   if (typeof window !== "undefined") {
-    localStorage.removeItem(storageKey);
+    try {
+      localStorage.removeItem(storageKey);
+    } catch {
+      // ignore
+    }
   }
   return [];
 };

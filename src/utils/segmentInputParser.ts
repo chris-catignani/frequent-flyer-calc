@@ -75,30 +75,43 @@ export const parseItaMatrixInput = (itaMatrixJson: string): ParseResult => {
 
   try {
     itaMatrixObj = JSON.parse(itaMatrixJson);
-  } catch (err) {
-    console.log(err);
+  } catch {
     const parsingError = "Invalid JSON format";
     return { segmentInputs, parsingError };
   }
 
-  if (!itaMatrixObj?.itinerary?.slices) {
+  if (
+    !Array.isArray(itaMatrixObj?.itinerary?.slices) ||
+    itaMatrixObj.itinerary.slices.length === 0
+  ) {
     const parsingError = "ITA Matrix JSON missing itinerary, or slices";
     return { segmentInputs, parsingError };
   }
 
-  itaMatrixObj.itinerary.slices.forEach((slice) => {
-    slice.segments.forEach((segment) => {
-      const airline = segment.carrier.code.toLowerCase();
-      const fareClass = parseFareClass(airline, segment.bookingInfos[0].bookingCode.toLowerCase());
+  try {
+    itaMatrixObj.itinerary.slices.forEach((slice) => {
+      if (!Array.isArray(slice?.segments)) return;
 
-      segment.legs.forEach((leg) => {
-        const fromAirportText = leg.origin.code.toLowerCase();
-        const toAirportText = leg.destination.code.toLowerCase();
+      slice.segments.forEach((segment) => {
+        if (!segment) return;
+        const airline = String(segment.carrier?.code || "").toLowerCase();
+        const rawFareClass = String(segment.bookingInfos?.[0]?.bookingCode || "").toLowerCase();
+        const fareClass = parseFareClass(airline, rawFareClass);
 
-        segmentInputs.push(new SegmentInput(airline, fareClass, fromAirportText, toAirportText));
+        if (!Array.isArray(segment.legs)) return;
+
+        segment.legs.forEach((leg) => {
+          if (!leg) return;
+          const fromAirportText = String(leg.origin?.code || "").toLowerCase();
+          const toAirportText = String(leg.destination?.code || "").toLowerCase();
+
+          segmentInputs.push(new SegmentInput(airline, fareClass, fromAirportText, toAirportText));
+        });
       });
     });
-  });
+  } catch {
+    return { segmentInputs: [], parsingError: "Error parsing ITA Matrix itinerary" };
+  }
 
   return { segmentInputs, parsingError: undefined };
 };

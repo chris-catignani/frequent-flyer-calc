@@ -85,4 +85,108 @@ describe("recentCalculations", () => {
     const result = deleteSavedCalculationAtIdx(5);
     expect(result).toHaveLength(1);
   });
+
+  describe("error handling and resilience", () => {
+    it("returns empty array and clears storage when corrupted JSON is in localStorage", () => {
+      localStorage.setItem("saved-calculations", "invalid-json{");
+      const result = getSavedCalculations();
+      expect(result).toEqual([]);
+      expect(localStorage.getItem("saved-calculations")).toBeNull();
+    });
+
+    it("returns empty array and clears storage when stored value is not an array", () => {
+      localStorage.setItem("saved-calculations", JSON.stringify({ notAnArray: true }));
+      expect(getSavedCalculations()).toEqual([]);
+      expect(localStorage.getItem("saved-calculations")).toBeNull();
+
+      localStorage.setItem("saved-calculations", "123");
+      expect(getSavedCalculations()).toEqual([]);
+      expect(localStorage.getItem("saved-calculations")).toBeNull();
+
+      localStorage.setItem("saved-calculations", "true");
+      expect(getSavedCalculations()).toEqual([]);
+      expect(localStorage.getItem("saved-calculations")).toBeNull();
+    });
+
+    it("filters out null, malformed, or empty segment entries and validates string types", () => {
+      const malformedData = [
+        null,
+        {},
+        { segmentInputs: [], tripType: "one way", eliteStatus: "Bronze" }, // empty segments should be skipped
+        { segmentInputs: "not an array", tripType: "one way", eliteStatus: "Bronze" },
+        {
+          // non-string properties should be converted safely to string without crashing
+          segmentInputs: [
+            { airline: 123, fareClass: {}, fromAirportText: null, toAirportText: false, uuid: 456 },
+          ],
+          tripType: "one way",
+          eliteStatus: "Bronze",
+        },
+        {
+          segmentInputs: [
+            { airline: "qf", fareClass: "Flex", fromAirportText: "SYD", toAirportText: "MEL" },
+          ],
+          tripType: "return",
+          eliteStatus: "Silver",
+        },
+      ];
+      localStorage.setItem("saved-calculations", JSON.stringify(malformedData));
+
+      const result = getSavedCalculations();
+      expect(result).toHaveLength(2);
+      expect(result[0].segmentInputs[0].airline).toBe("");
+      expect(result[0].segmentInputs[0].fareClass).toBe("");
+      expect(result[0].segmentInputs[0].fromAirportText).toBe("");
+      expect(result[0].segmentInputs[0].toAirportText).toBe("");
+      expect(typeof result[0].segmentInputs[0].uuid).toBe("string");
+
+      expect(result[1].eliteStatus).toBe("Silver");
+      expect(result[1].segmentInputs).toHaveLength(1);
+    });
+
+    it("handles QuotaExceededError on saveCalculation gracefully", () => {
+      const setItemSpy = jest.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+        const error = new Error("Quota exceeded");
+        error.name = "QuotaExceededError";
+        throw error;
+      });
+
+      const segments = [new SegmentInput("qf", "Flex", "SYD", "MEL")];
+      expect(() => {
+        const saved = saveCalculation(segments, "one way", "Bronze");
+        expect(saved).toHaveLength(1);
+        expect(saved[0].eliteStatus).toBe("Bronze");
+      }).not.toThrow();
+
+      setItemSpy.mockRestore();
+    });
+
+    it("handles localStorage.getItem throwing SecurityError gracefully", () => {
+      const getItemSpy = jest.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+        const error = new Error("Security error");
+        error.name = "SecurityError";
+        throw error;
+      });
+
+      expect(() => {
+        const result = getSavedCalculations();
+        expect(result).toEqual([]);
+      }).not.toThrow();
+
+      getItemSpy.mockRestore();
+    });
+
+    it("handles localStorage.removeItem throwing gracefully in deleteAllSavedCalculations", () => {
+      const removeItemSpy = jest.spyOn(Storage.prototype, "removeItem").mockImplementation(() => {
+        throw new Error("Access denied");
+      });
+
+      expect(() => {
+        const result = deleteAllSavedCalculations();
+        expect(result).toEqual([]);
+      }).not.toThrow();
+
+      removeItemSpy.mockRestore();
+    });
+  });
 });
