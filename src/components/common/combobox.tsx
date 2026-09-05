@@ -127,6 +127,13 @@ export function Combobox<T = ComboboxOption | string>({
     setIsOpen(false);
   };
 
+  useEffect(() => {
+    if (isOpen && highlightedIndex >= 0) {
+      const activeElement = document.getElementById(`${listboxId}-option-${highlightedIndex}`);
+      activeElement?.scrollIntoView?.({ block: "nearest" });
+    }
+  }, [isOpen, highlightedIndex, listboxId]);
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!isOpen) {
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
