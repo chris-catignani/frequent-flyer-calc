@@ -229,6 +229,70 @@ export function Combobox<T = ComboboxOption | string>({
             <ChevronDownIcon className="w-4 h-4" />
           </button>
         )}
+
+        {isOpen && flatOptionsList.length > 0 && (
+          <ul
+            id={listboxId}
+            role="listbox"
+            className="absolute left-0 top-full z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+          >
+            {groupedEntries
+              ? groupedEntries.map(([group, groupOpts]) => (
+                  <li key={group} role="presentation">
+                    <div className="sticky top-0 z-10 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
+                      {group}
+                    </div>
+                    <ul role="group" aria-label={group}>
+                      {groupOpts.map((opt) => {
+                        const optValue = getOptionValue(opt);
+                        const isSelected = optValue === value;
+                        const thisIdx = globalOptionIdx++;
+                        const isHighlighted = thisIdx === highlightedIndex;
+                        return (
+                          <li
+                            key={optValue}
+                            id={`${listboxId}-option-${thisIdx}`}
+                            role="option"
+                            aria-selected={isSelected}
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              handleSelect(opt);
+                            }}
+                            className={`cursor-pointer px-3 py-2 select-none hover:bg-slate-100 ${
+                              isHighlighted ? "bg-slate-100" : ""
+                            } ${isSelected ? "bg-primary/10 font-semibold text-primary" : "text-slate-800"}`}
+                          >
+                            {renderOption ? renderOption(opt) : getOptionLabel(opt)}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </li>
+                ))
+              : flatOptionsList.map((opt, idx) => {
+                  const optValue = getOptionValue(opt);
+                  const isSelected = optValue === value;
+                  const isHighlighted = idx === highlightedIndex;
+                  return (
+                    <li
+                      key={optValue}
+                      id={`${listboxId}-option-${idx}`}
+                      role="option"
+                      aria-selected={isSelected}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        handleSelect(opt);
+                      }}
+                      className={`cursor-pointer px-3 py-2 select-none ${
+                        isHighlighted ? "bg-slate-100" : ""
+                      } ${isSelected ? "bg-primary/10 font-semibold text-primary" : "text-slate-800"}`}
+                    >
+                      {renderOption ? renderOption(opt) : getOptionLabel(opt)}
+                    </li>
+                  );
+                })}
+          </ul>
+        )}
       </div>
       {errorTestId ? (
         <span data-testid={errorTestId} className="mt-1 min-h-[16px] text-xs text-red-600">
@@ -238,70 +302,6 @@ export function Combobox<T = ComboboxOption | string>({
         <span className="mt-1 min-h-[16px] text-xs text-red-600">{helperText}</span>
       ) : (
         <span className="mt-1 min-h-[16px] text-xs text-transparent"> </span>
-      )}
-
-      {isOpen && flatOptionsList.length > 0 && (
-        <ul
-          id={listboxId}
-          role="listbox"
-          className="absolute top-full z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-hidden"
-        >
-          {groupedEntries
-            ? groupedEntries.map(([group, groupOpts]) => (
-                <li key={group} role="presentation">
-                  <div className="sticky top-0 z-10 bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700">
-                    {group}
-                  </div>
-                  <ul role="group" aria-label={group}>
-                    {groupOpts.map((opt) => {
-                      const optValue = getOptionValue(opt);
-                      const isSelected = optValue === value;
-                      const thisIdx = globalOptionIdx++;
-                      const isHighlighted = thisIdx === highlightedIndex;
-                      return (
-                        <li
-                          key={optValue}
-                          id={`${listboxId}-option-${thisIdx}`}
-                          role="option"
-                          aria-selected={isSelected}
-                          onMouseDown={(e) => {
-                            e.preventDefault();
-                            handleSelect(opt);
-                          }}
-                          className={`cursor-pointer px-3 py-2 select-none hover:bg-slate-100 ${
-                            isHighlighted ? "bg-slate-100" : ""
-                          } ${isSelected ? "bg-primary/10 font-semibold text-primary" : "text-slate-800"}`}
-                        >
-                          {renderOption ? renderOption(opt) : getOptionLabel(opt)}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </li>
-              ))
-            : flatOptionsList.map((opt, idx) => {
-                const optValue = getOptionValue(opt);
-                const isSelected = optValue === value;
-                const isHighlighted = idx === highlightedIndex;
-                return (
-                  <li
-                    key={optValue}
-                    id={`${listboxId}-option-${idx}`}
-                    role="option"
-                    aria-selected={isSelected}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      handleSelect(opt);
-                    }}
-                    className={`cursor-pointer px-3 py-2 select-none ${
-                      isHighlighted ? "bg-slate-100" : ""
-                    } ${isSelected ? "bg-primary/10 font-semibold text-primary" : "text-slate-800"}`}
-                  >
-                    {renderOption ? renderOption(opt) : getOptionLabel(opt)}
-                  </li>
-                );
-              })}
-        </ul>
       )}
     </div>
   );
