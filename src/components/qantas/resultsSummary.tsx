@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Cancel, CheckCircle, Info } from "@mui/icons-material";
-import { Box, Dialog, DialogTitle, Grid, IconButton, Tooltip, Typography } from "@mui/material";
+import { Dialog } from "@/components/common/dialog";
+import { CheckCircleIcon, CancelIcon, InfoIcon } from "@/components/common/icons";
 import type { CalculationResult } from "@/types/calculator";
 import {
   isAirlinePointsMatch,
@@ -27,12 +27,15 @@ const MatchesQantasErrorDialog: React.FC<MatchesQantasErrorDialogProps> = ({
   error,
 }) => {
   return (
-    <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Qantas Calculator failed to calculate at least one segment</DialogTitle>
-      <Grid container direction="column" mx={2} mb={2}>
-        <Typography>{error.message}</Typography>
-        <Typography mt={2}>See the results below to see details by segment</Typography>
-      </Grid>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      title="Qantas Calculator failed to calculate at least one segment"
+    >
+      <div className="flex flex-col gap-2">
+        <p>{error.message}</p>
+        <p className="mt-2">See the results below to see details by segment</p>
+      </div>
     </Dialog>
   );
 };
@@ -54,15 +57,18 @@ const MatchesQantasMisMatchDialog: React.FC<MatchesQantasMisMatchDialogProps> = 
 }) => {
   const fieldLabel = field === "airlinePoints" ? "Qantas Points" : "Status Credits";
   return (
-    <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Qantas Calculator results do not match our results</DialogTitle>
-      <Grid container direction="column" mx={2} mb={2}>
-        <Typography>Our Results:</Typography>
-        <Typography>{fieldLabel + ": " + expectedValue}</Typography>
-        <Typography mt={2}>Qantas Calculator Results:</Typography>
-        <Typography>{fieldLabel + ": " + actualValue}</Typography>
-        <Typography mt={2}>See the results below to see details by segment</Typography>
-      </Grid>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      title="Qantas Calculator results do not match our results"
+    >
+      <div className="flex flex-col gap-1">
+        <p>Our Results:</p>
+        <p>{fieldLabel + ": " + expectedValue}</p>
+        <p className="mt-2">Qantas Calculator Results:</p>
+        <p>{fieldLabel + ": " + actualValue}</p>
+        <p className="mt-2">See the results below to see details by segment</p>
+      </div>
     </Dialog>
   );
 };
@@ -93,7 +99,7 @@ const MatchesQantasAPIIcon: React.FC<MatchesQantasAPIIconProps> = ({
   };
 
   if (!compareWithQantasCalc || isCalculating) {
-    return <></>;
+    return null;
   }
 
   let sumOfQantasAPICalc = 0;
@@ -127,37 +133,41 @@ const MatchesQantasAPIIcon: React.FC<MatchesQantasAPIIconProps> = ({
 
   if (qantasAPICalcError) {
     return (
-      <Box>
-        <IconButton
+      <div className="inline-flex items-center">
+        <button
+          type="button"
           onClick={handleClickOpen}
-          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
+          className="inline-flex items-center justify-center p-0 text-amber-500 hover:text-amber-600 focus:outline-hidden cursor-pointer"
           aria-label="View Qantas API calculation error details"
         >
-          <Info color="warning" />
-        </IconButton>
+          <InfoIcon className="w-5 h-5 text-amber-500" />
+        </button>
         <MatchesQantasErrorDialog open={open} onClose={handleClose} error={qantasAPICalcError} />
-      </Box>
+      </div>
     );
   } else if (isMatch) {
     return (
-      <Box>
-        <Tooltip title={matchTooltip}>
-          <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }} aria-label={matchTooltip}>
-            <CheckCircle color="success" />
-          </IconButton>
-        </Tooltip>
-      </Box>
+      <div className="inline-flex items-center" title={matchTooltip}>
+        <button
+          type="button"
+          className="inline-flex items-center justify-center p-0 text-emerald-600 focus:outline-hidden cursor-default"
+          aria-label={matchTooltip}
+        >
+          <CheckCircleIcon className="w-5 h-5 text-emerald-600" />
+        </button>
+      </div>
     );
   } else {
     return (
-      <Box>
-        <IconButton
+      <div className="inline-flex items-center">
+        <button
+          type="button"
           onClick={handleClickOpen}
-          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
+          className="inline-flex items-center justify-center p-0 text-red-600 hover:text-red-700 focus:outline-hidden cursor-pointer"
           aria-label="View Qantas API calculation mismatch details"
         >
-          <Cancel color="error" />
-        </IconButton>
+          <CancelIcon className="w-5 h-5 text-red-600" />
+        </button>
         <MatchesQantasMisMatchDialog
           open={open}
           onClose={handleClose}
@@ -165,7 +175,7 @@ const MatchesQantasAPIIcon: React.FC<MatchesQantasAPIIconProps> = ({
           expectedValue={expectedValue}
           actualValue={sumOfQantasAPICalc}
         />
-      </Box>
+      </div>
     );
   }
 };
@@ -182,10 +192,13 @@ const TotalAirlinePointsEarned: React.FC<TotalPointsEarnedProps> = ({
   isCalculating,
 }) => {
   return (
-    <Grid container justifyContent="center" alignItems="center" spacing={1} direction={"row"}>
-      <Typography variant="h5" data-testid="total-points-earned">
+    <div className="flex flex-row items-center justify-center gap-2">
+      <h3
+        className="text-xl sm:text-2xl font-semibold text-slate-800"
+        data-testid="total-points-earned"
+      >
         Qantas Points Earned: {calculationOutput.airlinePoints?.toLocaleString()}
-      </Typography>
+      </h3>
       <MatchesQantasAPIIcon
         calculationOutput={calculationOutput}
         compareWithQantasCalc={compareWithQantasCalc}
@@ -193,7 +206,7 @@ const TotalAirlinePointsEarned: React.FC<TotalPointsEarnedProps> = ({
         expectedValue={calculationOutput.airlinePoints}
         fieldToCheck={"airlinePoints"}
       />
-    </Grid>
+    </div>
   );
 };
 
@@ -203,10 +216,13 @@ const TotalElitePointsEarned: React.FC<TotalPointsEarnedProps> = ({
   isCalculating,
 }) => {
   return (
-    <Grid container justifyContent="center" alignItems="center" spacing={1} direction={"row"}>
-      <Typography variant="h5" data-testid="total-status-credits-earned">
+    <div className="flex flex-row items-center justify-center gap-2">
+      <h3
+        className="text-xl sm:text-2xl font-semibold text-slate-800"
+        data-testid="total-status-credits-earned"
+      >
         Status Credits Earned: {calculationOutput.elitePoints?.toLocaleString()}
-      </Typography>
+      </h3>
       <MatchesQantasAPIIcon
         calculationOutput={calculationOutput}
         compareWithQantasCalc={compareWithQantasCalc}
@@ -214,7 +230,7 @@ const TotalElitePointsEarned: React.FC<TotalPointsEarnedProps> = ({
         expectedValue={calculationOutput.elitePoints}
         fieldToCheck={"elitePoints"}
       />
-    </Grid>
+    </div>
   );
 };
 
@@ -224,11 +240,14 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   isCalculating,
 }) => {
   if (!calculationOutput) {
-    return <></>;
+    return null;
   }
 
   return (
-    <Box mt={5} data-testid="results-summary">
+    <div
+      className="mt-8 flex flex-col items-center justify-center gap-2"
+      data-testid="results-summary"
+    >
       <TotalAirlinePointsEarned
         calculationOutput={calculationOutput}
         compareWithQantasCalc={compareWithQantasCalc}
@@ -239,6 +258,6 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
         compareWithQantasCalc={compareWithQantasCalc}
         isCalculating={isCalculating}
       />
-    </Box>
+    </div>
   );
 };
