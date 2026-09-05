@@ -172,7 +172,12 @@ export function Combobox<T = ComboboxOption | string>({
       className={`relative flex flex-col ${className}`}
       data-testid={dataTestId}
     >
-      <label htmlFor={id} className="block text-sm font-medium text-slate-700 mb-1.5">
+      <label
+        htmlFor={id}
+        className={`block text-sm font-medium text-slate-700 mb-1.5 ${
+          !freeSolo ? "cursor-pointer" : ""
+        }`}
+      >
         {label}
       </label>
       <div className="relative">
@@ -228,9 +233,9 @@ export function Combobox<T = ComboboxOption | string>({
               setIsOpen(!isOpen);
               inputRef.current?.focus();
             }}
-            className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600 cursor-pointer"
           >
-            <ChevronDownIcon className="w-4 h-4" />
+            <ChevronDownIcon className="w-4 h-4 cursor-pointer" />
           </button>
         )}
 

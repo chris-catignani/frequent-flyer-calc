@@ -188,7 +188,7 @@ export const QantasCalculator: React.FC = () => {
 
   return (
     <div className="w-full min-w-0 mt-4">
-      <div className="w-full rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
+      <div className="w-full rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-sm">
         {/* Top row: Trip type toggle & Elite status */}
         <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 sm:gap-3 pb-0 sm:pb-3">
           <div className="flex justify-center sm:justify-start">
@@ -249,7 +249,7 @@ export const QantasCalculator: React.FC = () => {
           />
 
           {/* Action buttons and controls row */}
-          <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3 items-center">
+          <div className="mt-2 sm:mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 items-center">
             <div className="flex justify-start order-1">
               <button
                 type="button"
@@ -261,7 +261,7 @@ export const QantasCalculator: React.FC = () => {
               </button>
             </div>
 
-            <div className="col-span-2 sm:col-span-1 flex justify-center order-3 sm:order-2 mt-2 sm:mt-0">
+            <div className="col-span-2 sm:col-span-1 flex justify-center order-3 sm:order-2 mt-1 sm:mt-0">
               <button
                 type="button"
                 data-testid="calculate-button"

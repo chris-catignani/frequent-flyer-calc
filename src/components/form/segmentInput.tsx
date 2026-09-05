@@ -227,10 +227,10 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   return (
     <div
       data-testid={`segment-row-${segmentInputIdx}`}
-      className="grid grid-cols-12 sm:grid-cols-[repeat(22,minmax(0,1fr))] sm:grid-cols-22 gap-2 items-start"
+      className="grid grid-cols-12 sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_minmax(0,6fr)_auto] gap-2 items-start"
     >
       <div
-        className="col-span-8 sm:col-span-1 order-1 sm:order-1 flex items-center justify-start h-8 sm:h-[50px] sm:mt-[26px] gap-1"
+        className="col-span-8 sm:col-auto order-1 sm:order-1 flex items-center justify-start sm:justify-center h-8 sm:h-[50px] sm:mt-[26px] gap-1"
         {...dragHandleProps}
       >
         <ReorderSegmentInputButton
@@ -242,7 +242,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         </span>
       </div>
 
-      <div className="col-span-4 sm:col-span-1 order-2 sm:order-6 flex items-center justify-end h-8 sm:h-[50px] sm:mt-[26px]">
+      <div className="col-span-4 sm:col-auto order-2 sm:order-6 flex items-center justify-end sm:justify-center h-8 sm:h-[50px] sm:mt-[26px]">
         <RemoveSegmentInputButton
           segmentInputIdx={segmentInputIdx}
           showDeleteButton={showDeleteButton}
@@ -250,7 +250,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         />
       </div>
 
-      <div className="col-span-12 sm:col-span-6 order-3 sm:order-2">
+      <div className="col-span-12 sm:col-auto order-3 sm:order-2">
         <AirlineInput
           segmentInputIdx={segmentInputIdx}
           value={segmentInput.airline}
@@ -268,7 +268,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         />
       </div>
 
-      <div className="col-span-6 sm:col-span-4 order-4 sm:order-3">
+      <div className="col-span-6 sm:col-auto order-4 sm:order-3">
         <AirportInput
           dataTestId={`segment-from-${segmentInputIdx}`}
           errorTestId={`segment-error-from-${segmentInputIdx}`}
@@ -288,7 +288,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         />
       </div>
 
-      <div className="col-span-6 sm:col-span-4 order-5 sm:order-4">
+      <div className="col-span-6 sm:col-auto order-5 sm:order-4">
         <AirportInput
           dataTestId={`segment-to-${segmentInputIdx}`}
           errorTestId={`segment-error-to-${segmentInputIdx}`}
@@ -308,7 +308,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         />
       </div>
 
-      <div className="col-span-12 sm:col-span-6 order-6 sm:order-5">
+      <div className="col-span-12 sm:col-auto order-6 sm:order-5">
         {customFareClassInput != null ? (
           customFareClassInput
         ) : (
@@ -358,7 +358,7 @@ const ReorderSegmentInputButton: React.FC<{
       <button
         type="button"
         disabled
-        className="invisible p-0 text-slate-400"
+        className="invisible p-1 text-slate-400"
         aria-hidden="true"
         tabIndex={-1}
       >
@@ -369,7 +369,7 @@ const ReorderSegmentInputButton: React.FC<{
     return (
       <button
         type="button"
-        className="cursor-grab p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 active:cursor-grabbing focus:outline-hidden focus:ring-2 focus:ring-slate-200 transition-colors"
+        className="cursor-grab p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 active:cursor-grabbing focus:outline-hidden focus:ring-2 focus:ring-slate-200 transition-colors"
         aria-label={`Reorder segment ${segmentInputIdx + 1}`}
       >
         <DragHandleIcon className="w-5 h-5" />
@@ -388,7 +388,7 @@ const RemoveSegmentInputButton: React.FC<{
       <button
         type="button"
         disabled
-        className="invisible p-0 text-slate-400"
+        className="invisible p-1 text-slate-400"
         aria-hidden="true"
         tabIndex={-1}
       >
@@ -401,7 +401,7 @@ const RemoveSegmentInputButton: React.FC<{
         type="button"
         data-testid={`segment-delete-${segmentInputIdx}`}
         onClick={onDeleteClicked}
-        className="cursor-pointer p-1.5 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 focus:outline-hidden focus:ring-2 focus:ring-red-200 transition-colors"
+        className="cursor-pointer p-1 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 focus:outline-hidden focus:ring-2 focus:ring-red-200 transition-colors"
         aria-label={`Remove segment ${segmentInputIdx + 1}`}
       >
         <ClearIcon className="w-5 h-5" />
