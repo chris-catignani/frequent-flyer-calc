@@ -68,7 +68,7 @@ const CompareWithQantasAPISwitch: React.FC<{
         aria-label="Learn more about comparing with Qantas calculator"
         className="p-1 text-slate-400 hover:text-slate-600 rounded-full focus:outline-hidden focus:ring-2 focus:ring-primary cursor-pointer"
       >
-        <InfoIcon className="w-4 h-4 text-slate-500 hover:text-slate-700" />
+        <InfoIcon className="w-5 h-5 text-slate-500 hover:text-slate-700" />
       </button>
       <QantasApiDialog open={open} onClose={() => setOpen(false)} />
     </div>
@@ -190,7 +190,7 @@ export const QantasCalculator: React.FC = () => {
     <div className="w-full min-w-0 mt-4">
       <div className="w-full rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
         {/* Top row: Trip type toggle & Elite status */}
-        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pb-2 sm:pb-3">
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 sm:gap-3 pb-0 sm:pb-3">
           <div className="flex justify-center sm:justify-start">
             <div
               data-testid="trip-type-toggle"
@@ -237,7 +237,7 @@ export const QantasCalculator: React.FC = () => {
         </div>
 
         {/* Segments list and actions */}
-        <div className="pt-4">
+        <div className="pt-2 sm:pt-4">
           <SegmentInputList
             segmentInputs={segmentInputs}
             errors={inputErrors}

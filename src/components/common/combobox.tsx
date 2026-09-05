@@ -298,14 +298,13 @@ export function Combobox<T = ComboboxOption | string>({
           </ul>
         )}
       </div>
-      {errorTestId ? (
-        <span data-testid={errorTestId} className="mt-1 min-h-[16px] text-xs text-red-600">
-          {error ? error : " "}
+      {Boolean(errorTestId || helperText || error) && (
+        <span
+          data-testid={errorTestId}
+          className={`mt-1 min-h-[16px] text-xs ${error || helperText ? "text-red-600" : "text-transparent"}`}
+        >
+          {error ? error : helperText ? helperText : " "}
         </span>
-      ) : helperText ? (
-        <span className="mt-1 min-h-[16px] text-xs text-red-600">{helperText}</span>
-      ) : (
-        <span className="mt-1 min-h-[16px] text-xs text-transparent"> </span>
       )}
     </div>
   );

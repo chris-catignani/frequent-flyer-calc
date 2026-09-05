@@ -60,21 +60,21 @@ const SegmentTableHeader: React.FC<{ compareWithQantasCalc: boolean }> = ({
 }) => {
   return (
     <tr className="border-b border-slate-200 bg-slate-50 text-xs sm:text-sm font-semibold text-slate-600 uppercase tracking-wider">
-      <th scope="col" className="px-3.5 py-3.5 sm:px-4 text-left">
-        Segment Route
+      <th scope="col" className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-left">
+        <span className="hidden sm:inline">Segment </span>Route
       </th>
-      <th scope="col" className="px-3.5 py-3.5 sm:px-4 text-right whitespace-nowrap">
-        Qantas Points
+      <th scope="col" className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-right whitespace-nowrap">
+        <span className="hidden sm:inline">Qantas </span>Points
       </th>
-      <th scope="col" className="px-3.5 py-3.5 sm:px-4 text-right whitespace-nowrap">
-        Status Credits
+      <th scope="col" className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-right whitespace-nowrap">
+        <span className="hidden sm:inline">Status </span>Credits
       </th>
       {compareWithQantasCalc && (
-        <th scope="col" className="px-3.5 py-3.5 sm:px-4 text-right whitespace-nowrap">
-          Matches Qantas
+        <th scope="col" className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-right whitespace-nowrap">
+          <span className="hidden sm:inline">Matches </span>Qantas
         </th>
       )}
-      <th scope="col" aria-label="Details" className="px-1.5 py-3.5 sm:px-2 w-10" />
+      <th scope="col" aria-label="Details" className="px-1 py-2.5 sm:px-2 sm:py-3.5 w-8 sm:w-10" />
     </tr>
   );
 };
@@ -258,14 +258,14 @@ const SegmentTableRow: React.FC<{
         <th
           scope="row"
           data-testid={`segment-result-route-${segmentIdx}`}
-          className="px-3 py-3 sm:px-4 font-medium text-slate-900 whitespace-nowrap text-left"
+          className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base font-medium text-slate-900 whitespace-nowrap text-left"
         >
           {segment.fromAirport?.iata?.toLowerCase()} - {segment.toAirport?.iata?.toLowerCase()}
         </th>
-        <td colSpan={errorColSpan} className="px-3 py-3 sm:px-4 text-right">
+        <td colSpan={errorColSpan} className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-right">
           <div
             role="alert"
-            className="rounded-lg bg-red-50 border border-red-200 p-2 text-sm text-red-700 text-left"
+            className="rounded-lg bg-red-50 border border-red-200 p-2 text-xs sm:text-sm text-red-700 text-left"
           >
             {errorMsg}
           </div>
@@ -295,21 +295,21 @@ const SegmentTableRow: React.FC<{
           scope="row"
           data-testid={`segment-result-route-${segmentIdx}`}
           onClick={() => setExpandRow((prev) => !prev)}
-          className="px-3.5 py-3.5 sm:px-4 text-sm sm:text-base font-medium text-slate-900 whitespace-nowrap text-left"
+          className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base font-medium text-slate-900 whitespace-nowrap text-left"
         >
           {segment.fromAirport?.iata?.toLowerCase()} - {segment.toAirport?.iata?.toLowerCase()}
         </th>
         <td
           data-testid={`segment-result-points-${segmentIdx}`}
           onClick={() => setExpandRow((prev) => !prev)}
-          className="px-3.5 py-3.5 sm:px-4 text-sm sm:text-base text-right text-slate-700"
+          className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base text-right text-slate-700 whitespace-nowrap"
         >
           {segmentResult.airlinePoints?.toLocaleString()}
         </td>
         <td
           data-testid={`segment-result-status-credits-${segmentIdx}`}
           onClick={() => setExpandRow((prev) => !prev)}
-          className="px-3.5 py-3.5 sm:px-4 text-sm sm:text-base text-right text-slate-700"
+          className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base text-right text-slate-700 whitespace-nowrap"
         >
           {segmentResult.elitePoints?.toLocaleString()}
         </td>
@@ -322,7 +322,7 @@ const SegmentTableRow: React.FC<{
                 setOpenModal(true);
               }
             }}
-            className="px-3.5 py-3.5 sm:px-4 text-sm sm:text-base text-right"
+            className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base text-right"
           >
             <MatchesQantasSegmentIcon
               segmentResult={segmentResult}
@@ -332,7 +332,10 @@ const SegmentTableRow: React.FC<{
             />
           </td>
         )}
-        <td onClick={() => setExpandRow((prev) => !prev)} className="px-1 py-3 sm:px-2 text-right">
+        <td
+          onClick={() => setExpandRow((prev) => !prev)}
+          className="px-1 py-2.5 sm:px-2 sm:py-3.5 text-right w-8 sm:w-10"
+        >
           <button
             type="button"
             aria-expanded={expandRow}
