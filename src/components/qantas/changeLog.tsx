@@ -10,9 +10,9 @@ export const CHANGE_LOG: ChangeLogEntry[] = [
   {
     month: "September 2026",
     entries: [
+      "Major overhaul: refreshed modern design, faster load times, and an improved mobile experience.",
       "Added FAQ and earning rules guide.",
       "Improved official Qantas calculator comparison tolerance.",
-      "Major overhaul: refreshed modern design, faster load times, and an improved mobile experience.",
     ],
   },
   {
