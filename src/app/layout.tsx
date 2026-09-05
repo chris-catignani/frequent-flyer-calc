@@ -1,13 +1,9 @@
 import { Roboto } from "next/font/google";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
-import { ThemeProvider } from "@mui/material/styles";
 import { Analytics } from "@vercel/analytics/react";
 import { PostHogProvider } from "@/components/common/posthogProvider";
 import { StructuredData } from "@/components/common/structuredData";
 import type { Metadata } from "next";
 import React from "react";
-
-import theme from "@/theme";
 
 const roboto = Roboto({
   weight: ["300", "400", "500", "700"],
@@ -78,9 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <PostHogProvider>
           <Analytics />
-          <AppRouterCacheProvider>
-            <ThemeProvider theme={theme}>{children}</ThemeProvider>
-          </AppRouterCacheProvider>
+          {children}
         </PostHogProvider>
       </body>
     </html>
