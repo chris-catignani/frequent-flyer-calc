@@ -169,18 +169,20 @@ export function Combobox<T = ComboboxOption | string>({
   return (
     <div
       ref={containerRef}
-      className={`relative flex flex-col ${className}`}
+      className={`relative flex flex-col pt-1.5 ${className}`}
       data-testid={dataTestId}
     >
-      <label
-        htmlFor={id}
-        className={`block text-sm font-medium text-slate-700 mb-1.5 ${
-          !freeSolo ? "cursor-pointer" : ""
-        }`}
-      >
-        {label}
-      </label>
       <div className="relative">
+        {label && (
+          <label
+            htmlFor={id}
+            className={`absolute -top-2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
+              !freeSolo ? "cursor-pointer" : ""
+            } ${error ? "text-red-600" : isFocused ? "text-primary" : "text-slate-500"}`}
+          >
+            {label}
+          </label>
+        )}
         <input
           ref={inputRef}
           id={id}
@@ -219,9 +221,11 @@ export function Combobox<T = ComboboxOption | string>({
           onKeyDown={handleKeyDown}
           className={`w-full rounded-md border ${
             error
-              ? "border-red-500 focus:border-red-600 focus:ring-red-200"
-              : "border-slate-300 focus:border-primary focus:ring-primary/20"
-          } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs placeholder:text-slate-400 focus:outline-hidden focus:ring-2 ${
+              ? "border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500"
+              : isFocused
+                ? "border-primary ring-1 ring-primary"
+                : "border-slate-300 hover:border-slate-400"
+          } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs placeholder:text-slate-400 focus:outline-hidden ${
             !freeSolo ? "cursor-pointer" : ""
           }`}
         />
@@ -308,7 +312,7 @@ export function Combobox<T = ComboboxOption | string>({
       {Boolean(errorTestId || helperText || error) && (
         <span
           data-testid={errorTestId}
-          className={`mt-1 min-h-[16px] text-xs ${error || helperText ? "text-red-600" : "text-transparent"}`}
+          className={`mt-0.5 min-h-[16px] text-xs ${error || helperText ? "text-red-600" : "text-transparent"}`}
         >
           {error ? error : helperText ? helperText : " "}
         </span>

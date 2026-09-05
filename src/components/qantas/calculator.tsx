@@ -188,7 +188,7 @@ export const QantasCalculator: React.FC = () => {
 
   return (
     <div className="w-full min-w-0 mt-4">
-      <div className="w-full rounded-xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-sm">
+      <div className="w-full sm:rounded-xl border-0 sm:border border-slate-200 bg-transparent sm:bg-white p-0 sm:p-4 shadow-none sm:shadow-sm">
         {/* Top row: Trip type toggle & Elite status */}
         <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 sm:gap-3 pb-0 sm:pb-3">
           <div className="flex justify-center sm:justify-start">

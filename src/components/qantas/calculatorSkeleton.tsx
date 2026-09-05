@@ -6,7 +6,7 @@ export const CalculatorSkeleton: React.FC = () => {
       role="status"
       aria-busy="true"
       aria-label="Loading flight calculator"
-      className="w-full min-h-[340px] sm:min-h-[260px] rounded-lg border border-slate-200 bg-white p-4 shadow-md mt-4 animate-pulse"
+      className="w-full min-h-[340px] sm:min-h-[260px] sm:rounded-xl border-0 sm:border border-slate-200 bg-transparent sm:bg-white p-0 sm:p-4 shadow-none sm:shadow-sm mt-4 animate-pulse"
     >
       <span className="sr-only">Loading calculator...</span>
       {/* Top row: Trip type toggle & Elite status placeholders */}

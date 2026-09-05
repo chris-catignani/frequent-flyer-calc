@@ -157,7 +157,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
   if (!enableDrag) {
     return (
       <div>
-        {segmentInputIdx > 0 && <hr className="my-2.5 sm:my-1.5 border-slate-200 sm:invisible" />}
+        {segmentInputIdx > 0 && <hr className="my-1.5 border-slate-200 sm:hidden" />}
         <SegmentInputRow
           segmentInput={segmentInput}
           segmentInputIdx={segmentInputIdx}
@@ -176,7 +176,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
     <Draggable draggableId={segmentInput.uuid} index={segmentInputIdx} isDragDisabled={!enableDrag}>
       {(provided) => (
         <div {...provided.draggableProps} ref={provided.innerRef}>
-          {segmentInputIdx > 0 && <hr className="my-2.5 sm:my-1.5 border-slate-200 sm:invisible" />}
+          {segmentInputIdx > 0 && <hr className="my-1.5 border-slate-200 sm:hidden" />}
           <SegmentInputRow
             segmentInput={segmentInput}
             segmentInputIdx={segmentInputIdx}
@@ -230,7 +230,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       className="grid grid-cols-12 sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_minmax(0,6fr)_auto] gap-2 items-start"
     >
       <div
-        className="col-span-8 sm:col-auto order-1 sm:order-1 flex items-center justify-start sm:justify-center h-8 sm:h-[50px] sm:mt-[26px] gap-1"
+        className="col-span-8 sm:col-auto order-1 sm:order-1 flex items-center justify-start sm:justify-center h-8 sm:h-[50px] sm:mt-1.5 gap-1"
         {...dragHandleProps}
       >
         <ReorderSegmentInputButton
@@ -242,7 +242,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         </span>
       </div>
 
-      <div className="col-span-4 sm:col-auto order-2 sm:order-6 flex items-center justify-end sm:justify-center h-8 sm:h-[50px] sm:mt-[26px]">
+      <div className="col-span-4 sm:col-auto order-2 sm:order-6 flex items-center justify-end sm:justify-center h-8 sm:h-[50px] sm:mt-1.5">
         <RemoveSegmentInputButton
           segmentInputIdx={segmentInputIdx}
           showDeleteButton={showDeleteButton}
@@ -314,31 +314,39 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         ) : (
           <div
             data-testid={`segment-fare-class-${segmentInputIdx}`}
-            className="w-full flex flex-col"
+            className="w-full flex flex-col pt-1.5"
           >
-            <label
-              htmlFor={`fare-class-input-${segmentInputIdx}`}
-              className="block text-sm font-medium text-slate-700 mb-1.5"
-            >
-              Fare Class (e.g. &quot;y&quot; or &quot;i&quot;)
-            </label>
-            <input
-              id={`fare-class-input-${segmentInputIdx}`}
-              type="text"
-              value={segmentInput.fareClass}
-              onChange={(e) =>
-                onChange({
-                  ...segmentInput,
-                  fareClass: e.target.value?.trim()?.toLowerCase(),
-                })
-              }
-              className={`w-full rounded-md border ${
-                errors["fareClass"] ? "border-red-500" : "border-slate-300"
-              } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs focus:outline-hidden focus:ring-2 focus:ring-primary`}
-            />
+            <div className="relative group">
+              <label
+                htmlFor={`fare-class-input-${segmentInputIdx}`}
+                className={`absolute -top-2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
+                  errors["fareClass"]
+                    ? "text-red-600"
+                    : "text-slate-500 group-focus-within:text-primary"
+                }`}
+              >
+                Fare Class (e.g. &quot;y&quot; or &quot;i&quot;)
+              </label>
+              <input
+                id={`fare-class-input-${segmentInputIdx}`}
+                type="text"
+                value={segmentInput.fareClass}
+                onChange={(e) =>
+                  onChange({
+                    ...segmentInput,
+                    fareClass: e.target.value?.trim()?.toLowerCase(),
+                  })
+                }
+                className={`w-full rounded-md border ${
+                  errors["fareClass"]
+                    ? "border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500"
+                    : "border-slate-300 hover:border-slate-400 focus:border-primary focus:ring-1 focus:ring-primary"
+                } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs focus:outline-hidden`}
+              />
+            </div>
             <span
               data-testid={`segment-error-fare-class-${segmentInputIdx}`}
-              className="mt-1 min-h-[18px] text-xs text-red-600"
+              className="mt-0.5 min-h-[16px] text-xs text-red-600"
             >
               {errors["fareClass"] ? errors["fareClass"] : " "}
             </span>
