@@ -187,7 +187,7 @@ export const QantasCalculator: React.FC = () => {
   } = useCalculator({ program: qantasProgram });
 
   return (
-    <div className="w-full mt-4">
+    <div className="w-full min-w-0 max-w-full mt-4">
       <div className="w-full rounded-xl border border-slate-200 bg-white p-4 sm:p-6 shadow-sm">
         {/* Top row: Trip type toggle & Elite status */}
         <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pb-3 sm:pb-4 border-b border-slate-100">
@@ -303,7 +303,7 @@ export const QantasCalculator: React.FC = () => {
 
       {/* Calculation results */}
       {calculationOutput && (
-        <div className="mt-6 flex flex-col items-center w-full gap-4">
+        <div className="mt-6 flex flex-col items-center w-full min-w-0 max-w-full gap-4">
           <ResultsSummary
             calculationOutput={calculationOutput}
             compareWithQantasCalc={compareWithQantasCalc}

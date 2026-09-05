@@ -69,12 +69,13 @@ export function Combobox<T = ComboboxOption | string>({
   }, [options, value, getOptionValue]);
 
   useEffect(() => {
-    if (selectedOption != null) {
-      setInputValue(getOptionLabel(selectedOption));
-    } else if (freeSolo) {
+    if (freeSolo) {
       const formatted =
         !isFocused && formatDisplayValue ? formatDisplayValue(value || "") : value || "";
       setInputValue(formatted);
+    } else if (selectedOption != null) {
+      const label = getOptionLabel(selectedOption);
+      setInputValue(formatDisplayValue ? formatDisplayValue(label) : label);
     } else {
       setInputValue("");
     }
@@ -203,8 +204,8 @@ export function Combobox<T = ComboboxOption | string>({
           }}
           onBlur={() => {
             setIsFocused(false);
-            if (freeSolo && formatDisplayValue && value) {
-              setInputValue(formatDisplayValue(value));
+            if (freeSolo && formatDisplayValue) {
+              setInputValue(formatDisplayValue(inputValue || value || ""));
             }
             onBlur?.();
           }}

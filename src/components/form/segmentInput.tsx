@@ -467,12 +467,8 @@ const AirportInput: React.FC<AirportInputProps> = ({
       freeSolo
       filterOptions={false}
       formatDisplayValue={(val) => val.toUpperCase()}
-      getOptionValue={(airport) =>
-        typeof airport === "string" ? airport : airport.iata.toLowerCase()
-      }
-      getOptionLabel={(airport) =>
-        typeof airport === "string" ? airport : airport.iata.toLowerCase()
-      }
+      getOptionValue={(airport) => airport.iata.toLowerCase()}
+      getOptionLabel={(airport) => airport.iata.toUpperCase()}
       renderOption={(option) => {
         if (typeof option === "string") return option;
         return (

@@ -30,10 +30,10 @@ export const SegmentResults: React.FC<SegmentResultsProps> = ({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto mt-6">
+    <div className="flex flex-col items-center justify-center w-full min-w-0 max-w-full sm:max-w-2xl mx-auto mt-6">
       <div
         data-testid="segment-results-table"
-        className="w-full max-w-full overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-xs"
+        className="w-full min-w-0 max-w-full overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-xs"
       >
         <table className="w-full text-sm text-left">
           <thead>
@@ -74,9 +74,7 @@ const SegmentTableHeader: React.FC<{ compareWithQantasCalc: boolean }> = ({
           Matches Qantas
         </th>
       )}
-      <th scope="col" className="px-1 py-3 sm:px-2 w-10">
-        <span className="sr-only">Details</span>
-      </th>
+      <th scope="col" aria-label="Details" className="px-1 py-3 sm:px-2 w-10" />
     </tr>
   );
 };
