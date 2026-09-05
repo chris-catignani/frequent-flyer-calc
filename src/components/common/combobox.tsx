@@ -106,14 +106,14 @@ export function Combobox<T = ComboboxOption | string>({
       return { groupedEntries: null, flatOptionsList: filteredOptions };
     }
     const map = new Map<string, T[]>();
-    const flat: T[] = [];
     for (const opt of filteredOptions) {
       const g = groupBy(opt) || "";
       if (!map.has(g)) map.set(g, []);
       map.get(g)!.push(opt);
-      flat.push(opt);
     }
-    return { groupedEntries: Array.from(map.entries()), flatOptionsList: flat };
+    const groupedEntries = Array.from(map.entries());
+    const flat = groupedEntries.flatMap(([, items]) => items);
+    return { groupedEntries, flatOptionsList: flat };
   }, [filteredOptions, groupBy]);
 
   const handleSelect = (opt: T) => {
