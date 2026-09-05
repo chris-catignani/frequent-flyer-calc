@@ -12,7 +12,7 @@ export const CHANGE_LOG: ChangeLogEntry[] = [
     entries: [
       "Added FAQ and earning rules guide.",
       "Improved official Qantas calculator comparison tolerance.",
-      "Mobile UI and accessibility enhancements.",
+      "Major overhaul: refreshed modern design, faster load times, and an improved mobile experience.",
     ],
   },
   {
