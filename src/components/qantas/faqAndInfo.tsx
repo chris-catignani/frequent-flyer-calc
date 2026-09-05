@@ -98,7 +98,7 @@ export const FaqAndInfo: React.FC = () => {
           Frequently Asked Questions
         </Typography>
 
-        <Accordion defaultExpanded={false} slotProps={{ transition: { unmountOnExit: true } }}>
+        <Accordion slotProps={{ transition: { unmountOnExit: true } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             id="faq1-header"
