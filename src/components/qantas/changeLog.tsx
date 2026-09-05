@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Collapse, Stack, Typography } from "@mui/material";
+import React from "react";
 
 export interface ChangeLogEntry {
   month: string;
@@ -33,46 +31,30 @@ export const CHANGE_LOG: ChangeLogEntry[] = [
 ];
 
 export const ChangeLog: React.FC = () => {
-  const [isOpen, setOpen] = useState(false);
-
   return (
-    <Stack spacing={1}>
-      <Stack
-        direction="row"
-        spacing={1}
-        role="button"
-        tabIndex={0}
-        aria-expanded={isOpen}
-        onClick={() => setOpen(!isOpen)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setOpen(!isOpen);
-          }
-        }}
-        sx={{ cursor: "pointer", width: "fit-content" }}
-      >
-        <Typography>Recent Updates</Typography>
-        {isOpen ? <ExpandLess /> : <ExpandMore />}
-      </Stack>
-      <Collapse in={isOpen} timeout="auto" unmountOnExit>
-        <Stack spacing={1.5}>
+    <div className="w-full mt-8">
+      <details className="group">
+        <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:text-slate-900 select-none">
+          <span>Recent Updates</span>
+          <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
+            ▼
+          </span>
+        </summary>
+        <div className="mt-3 space-y-4">
           {CHANGE_LOG.map(({ month, entries }) => (
-            <Stack key={month} spacing={0.5}>
-              <Typography variant="subtitle2" component="span" fontWeight={600}>
+            <div key={month} className="space-y-1">
+              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                 {month}
-              </Typography>
-              <Stack component="ul" spacing={0.25} sx={{ m: 0, pl: 3 }}>
+              </span>
+              <ul className="list-disc pl-4 space-y-0.5 text-sm text-slate-600">
                 {entries.map((entry, idx) => (
-                  <Typography component="li" variant="body2" key={idx}>
-                    {entry}
-                  </Typography>
+                  <li key={idx}>{entry}</li>
                 ))}
-              </Stack>
-            </Stack>
+              </ul>
+            </div>
           ))}
-        </Stack>
-      </Collapse>
-    </Stack>
+        </div>
+      </details>
+    </div>
   );
 };
