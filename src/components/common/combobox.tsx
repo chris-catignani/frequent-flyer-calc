@@ -240,6 +240,9 @@ export function Combobox<T = ComboboxOption | string>({
           <button
             type="button"
             tabIndex={-1}
+            aria-label={label ? `Toggle ${label} options` : "Toggle options"}
+            aria-expanded={isOpen}
+            aria-haspopup="listbox"
             onClick={() => {
               setIsOpen(!isOpen);
               inputRef.current?.focus();

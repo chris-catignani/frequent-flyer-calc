@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 import React from "react";
 
 const roboto = Roboto({
-  weight: ["300", "400", "500", "700"],
+  weight: ["400", "500", "700"],
   subsets: ["latin"],
   display: "swap",
   variable: "--font-roboto",
