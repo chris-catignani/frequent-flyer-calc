@@ -55,7 +55,12 @@ async function main() {
 
   for (const row of parsedAirports) {
     const iata = row.iata_code?.trim().toUpperCase();
-    if (!iata || !/^[A-Z]{3}$/.test(iata) || row.type === "closed") {
+    if (
+      !iata ||
+      !/^[A-Z]{3}$/.test(iata) ||
+      row.type === "closed" ||
+      row.scheduled_service !== "yes"
+    ) {
       continue;
     }
 
@@ -74,7 +79,6 @@ async function main() {
 
     const candidate = {
       id: Number.parseInt(row.id, 10) || 0,
-      scheduled: row.scheduled_service === "yes" ? 1 : 0,
       typeRank: typeHierarchy[row.type] || 0,
       airport: {
         iata,
@@ -91,9 +95,7 @@ async function main() {
     } else {
       const existing = candidatesByIata.get(iata);
       let replace = false;
-      if (candidate.scheduled !== existing.scheduled) {
-        replace = candidate.scheduled > existing.scheduled;
-      } else if (candidate.typeRank !== existing.typeRank) {
+      if (candidate.typeRank !== existing.typeRank) {
         replace = candidate.typeRank > existing.typeRank;
       } else {
         replace = candidate.id < existing.id;
@@ -112,9 +114,11 @@ async function main() {
     .map((c) => c.airport)
     .sort((a, b) => a.iata.localeCompare(b.iata));
 
-  console.log(`Parsed ${airports.length} unique active IATA airports.`);
-  if (airports.length < 8000) {
-    throw new Error(`Sanity check failed: expected >= 8000 airports, got ${airports.length}`);
+  console.log(`Parsed ${airports.length} unique active commercial IATA airports.`);
+  if (airports.length < 3800 || airports.length > 5000) {
+    throw new Error(
+      `Sanity check failed: expected between 3800 and 5000 commercial airports, got ${airports.length}`
+    );
   }
 
   const outPath = path.resolve(process.cwd(), "src/data/airports.json");

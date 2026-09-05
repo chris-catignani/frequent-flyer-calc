@@ -11,7 +11,10 @@ test("airports.json invariants", () => {
   const airports = JSON.parse(raw);
 
   assert.ok(Array.isArray(airports), "airports must be an array");
-  assert.ok(airports.length >= 8000, `expected at least 8000 airports, got ${airports.length}`);
+  assert.ok(
+    airports.length >= 3800 && airports.length <= 5000,
+    `expected between 3800 and 5000 commercial airports, got ${airports.length}`
+  );
 
   const iataSet = new Set();
   let prevIata = "";
@@ -41,4 +44,34 @@ test("airports.json invariants", () => {
 
   const ber = airports.find((a) => a.iata === "BER");
   assert.ok(ber, "Must contain BER (Berlin Brandenburg)");
+
+  // Check major commercial hubs
+  assert.ok(
+    airports.find((a) => a.iata === "SYD"),
+    "Must contain SYD"
+  );
+  assert.ok(
+    airports.find((a) => a.iata === "MEL"),
+    "Must contain MEL"
+  );
+  assert.ok(
+    airports.find((a) => a.iata === "LHR"),
+    "Must contain LHR"
+  );
+  assert.ok(
+    airports.find((a) => a.iata === "JFK"),
+    "Must contain JFK"
+  );
+
+  // Negative checks: verify non-scheduled private cattle/sheep stations are pruned
+  assert.equal(
+    airports.find((a) => a.iata === "AYD"),
+    undefined,
+    "AYD (Alroy Downs) must be pruned"
+  );
+  assert.equal(
+    airports.find((a) => a.iata === "COB"),
+    undefined,
+    "COB (Coolibah) must be pruned"
+  );
 });
