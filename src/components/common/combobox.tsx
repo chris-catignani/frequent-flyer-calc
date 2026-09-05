@@ -176,7 +176,7 @@ export function Combobox<T = ComboboxOption | string>({
         {label && (
           <label
             htmlFor={id}
-            className={`absolute -top-2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
+            className={`absolute top-0 -translate-y-1/2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
               !freeSolo ? "cursor-pointer" : ""
             } ${error ? "text-red-600" : isFocused ? "text-primary" : "text-slate-500"}`}
           >

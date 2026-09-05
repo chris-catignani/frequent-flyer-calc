@@ -319,7 +319,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
             <div className="relative group">
               <label
                 htmlFor={`fare-class-input-${segmentInputIdx}`}
-                className={`absolute -top-2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
+                className={`absolute top-0 -translate-y-1/2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
                   errors["fareClass"]
                     ? "text-red-600"
                     : "text-slate-500 group-focus-within:text-primary"
