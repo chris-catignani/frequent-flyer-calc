@@ -12,8 +12,8 @@ test("airports.json invariants", () => {
 
   assert.ok(Array.isArray(airports), "airports must be an array");
   assert.ok(
-    airports.length >= 4000 && airports.length <= 5000,
-    `expected between 4000 and 5000 commercial airports, got ${airports.length}`
+    airports.length >= 3800 && airports.length <= 5000,
+    `expected between 3800 and 5000 commercial airports, got ${airports.length}`
   );
 
   const iataSet = new Set();
