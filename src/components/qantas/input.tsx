@@ -1,22 +1,24 @@
 import React from "react";
-import { Autocomplete, TextField } from "@mui/material";
+import { Combobox } from "@/components/common/combobox";
 
 export interface EliteStatusInputProps {
   eliteStatus: string;
   onChange: (value: string) => void;
 }
 
+const ELITE_STATUS_OPTIONS = ["Bronze", "Silver", "Gold", "Platinum", "Platinum One"];
+
 export const EliteStatusInput: React.FC<EliteStatusInputProps> = ({ eliteStatus, onChange }) => {
   return (
-    <Autocomplete
-      data-testid="elite-status-input"
-      disableClearable
-      value={eliteStatus}
-      options={["Bronze", "Silver", "Gold", "Platinum", "Platinum One"]}
-      sx={{ width: { xs: "100%", sm: 175 } }}
-      size="small"
-      onChange={(_event, value) => onChange(value || "")}
-      renderInput={(params) => <TextField {...params} label="Elite Status" />}
-    />
+    <div data-testid="elite-status-input" className="w-full sm:w-44">
+      <Combobox
+        label="Elite Status"
+        options={ELITE_STATUS_OPTIONS}
+        value={eliteStatus}
+        onChange={onChange}
+        getOptionLabel={(opt) => opt}
+        getOptionValue={(opt) => opt}
+      />
+    </div>
   );
 };
