@@ -17,6 +17,9 @@ const nextConfig = {
     ];
   },
   skipTrailingSlashRedirect: true,
+  experimental: {
+    optimizePackageImports: ["@mui/material", "@mui/icons-material"],
+  },
 };
 
 export default nextConfig;

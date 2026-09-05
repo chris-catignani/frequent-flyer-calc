@@ -31,7 +31,7 @@ export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProp
         <Typography>Recent Calculations</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </Stack>
-      <Collapse in={isOpen} timeout="auto">
+      <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <RecentCalculations
           recentCalculations={recentCalculations}
           onRecentCalculationClick={onRecentCalculationClick}

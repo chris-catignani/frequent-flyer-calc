@@ -55,7 +55,7 @@ export const ChangeLog: React.FC = () => {
         <Typography>Recent Updates</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </Stack>
-      <Collapse in={isOpen} timeout="auto">
+      <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <Stack spacing={1.5}>
           {CHANGE_LOG.map(({ month, entries }) => (
             <Stack key={month} spacing={0.5}>

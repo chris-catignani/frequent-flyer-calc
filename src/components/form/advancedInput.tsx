@@ -39,7 +39,7 @@ export const AdvancedInput: React.FC<AdvancedInputProps> = ({ setSegmentInputs }
         <Typography>Advanced Input</Typography>
         {isOpen ? <ExpandLess /> : <ExpandMore />}
       </Stack>
-      <Collapse in={isOpen} timeout="auto">
+      <Collapse in={isOpen} timeout="auto" unmountOnExit>
         <AdvancedInputSelection onApplyClicked={onApplyClicked} />
       </Collapse>
     </Stack>

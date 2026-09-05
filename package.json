@@ -60,6 +60,13 @@
     "*.{ts,tsx,js,jsx}": "eslint --cache"
   },
   "browserslist": [
-    "defaults and supports es6-module"
+    "Chrome >= 110",
+    "and_chr >= 110",
+    "Firefox >= 115",
+    "Safari >= 16.4",
+    "iOS >= 16.4",
+    "Edge >= 110",
+    "Samsung >= 20",
+    "not dead"
   ]
 }
