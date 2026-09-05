@@ -25,7 +25,7 @@ export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProp
         data-testid="recent-calculations-toggle"
         onClick={() => setOpen(!isOpen)}
         aria-expanded={isOpen}
-        className="flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900 cursor-pointer w-fit select-none"
+        className="flex items-center gap-1.5 text-sm sm:text-base font-medium text-slate-700 hover:text-slate-900 cursor-pointer w-fit select-none"
       >
         <span>Recent Calculations</span>
         {isOpen ? (
@@ -35,7 +35,7 @@ export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProp
         )}
       </button>
       {isOpen && (
-        <div className="mt-1">
+        <div className="mt-1.5">
           <RecentCalculations
             recentCalculations={recentCalculations}
             onRecentCalculationClick={onRecentCalculationClick}
@@ -86,7 +86,7 @@ export const RecentCalculations: React.FC<RecentCalculationsProps> = ({
             onRecentCalculationClick(idx);
           }
         }}
-        className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 pl-3 pr-1.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer select-none focus:outline-hidden focus:ring-2 focus:ring-primary"
+        className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 pl-3.5 pr-2 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer select-none focus:outline-hidden focus:ring-2 focus:ring-primary"
       >
         <span>{label}</span>
         <button
@@ -98,7 +98,7 @@ export const RecentCalculations: React.FC<RecentCalculationsProps> = ({
           }}
           className="rounded-full p-0.5 text-slate-400 hover:bg-slate-300 hover:text-slate-600 transition-colors focus:outline-hidden focus:ring-1 focus:ring-slate-500 cursor-pointer"
         >
-          <ClearIcon className="w-3.5 h-3.5" />
+          <ClearIcon className="w-4 h-4" />
         </button>
       </div>
     );
@@ -118,7 +118,7 @@ const ClearAllChip: React.FC<{ onClick: () => void }> = ({ onClick }) => {
       type="button"
       data-testid="recent-calculations-clear-all"
       onClick={onClick}
-      className="inline-flex items-center rounded-full bg-primary px-3 py-1 text-xs font-medium text-white hover:bg-primary-hover transition-colors cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-1"
+      className="inline-flex items-center rounded-full bg-primary px-3.5 py-1.5 text-sm font-medium text-white hover:bg-primary-hover transition-colors cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-1"
     >
       Clear All
     </button>

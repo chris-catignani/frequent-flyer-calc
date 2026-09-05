@@ -22,7 +22,7 @@ export const AdvancedInput: React.FC<AdvancedInputProps> = ({ setSegmentInputs }
         data-testid="advanced-input-toggle"
         onClick={() => setOpen(!isOpen)}
         aria-expanded={isOpen}
-        className="flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900 cursor-pointer w-fit select-none"
+        className="flex items-center gap-1.5 text-sm sm:text-base font-medium text-slate-700 hover:text-slate-900 cursor-pointer w-fit select-none"
       >
         <span>Advanced Input</span>
         {isOpen ? (
@@ -88,7 +88,7 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
           data-testid="advanced-input-text-accordion"
           onClick={() => handleAccordionToggle("text-itin")}
           aria-expanded={expanded === "text-itin"}
-          className="flex w-full items-center justify-between bg-slate-50 px-4 py-3 text-left text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+          className="flex w-full items-center justify-between bg-slate-50 px-4 py-3.5 text-left text-sm sm:text-base font-medium text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span>Free Form Text Itinerary</span>
           {expanded === "text-itin" ? (
@@ -104,12 +104,12 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
               textItinChanged={setTextItin}
               error={inputError["text-itin"]}
             />
-            <div className="mt-3 flex justify-end">
+            <div className="mt-3.5 flex justify-end">
               <button
                 type="button"
                 data-testid="advanced-input-text-apply-button"
                 onClick={applyTextItinInput}
-                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
+                className="rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
               >
                 Apply
               </button>
@@ -124,7 +124,7 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
           data-testid="advanced-input-ita-accordion"
           onClick={() => handleAccordionToggle("ita-matrix")}
           aria-expanded={expanded === "ita-matrix"}
-          className="flex w-full items-center justify-between bg-slate-50 px-4 py-3 text-left text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+          className="flex w-full items-center justify-between bg-slate-50 px-4 py-3.5 text-left text-sm sm:text-base font-medium text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <span>ITA Matrix Itinerary</span>
           {expanded === "ita-matrix" ? (
@@ -140,12 +140,12 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
               itaMatrixJsonChanged={setItaMatrixJson}
               error={inputError["ita-matrix"]}
             />
-            <div className="mt-3 flex justify-end">
+            <div className="mt-3.5 flex justify-end">
               <button
                 type="button"
                 data-testid="advanced-input-ita-apply-button"
                 onClick={applyItaMatrixInput}
-                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
+                className="rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
               >
                 Apply
               </button>

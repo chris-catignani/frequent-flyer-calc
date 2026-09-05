@@ -27,6 +27,7 @@ export interface ComboboxProps<T = ComboboxOption | string> {
   dataTestId?: string;
   errorTestId?: string;
   className?: string;
+  dropdownClassName?: string;
   onFocus?: () => void;
   onBlur?: () => void;
 }
@@ -52,6 +53,7 @@ export function Combobox<T = ComboboxOption | string>({
   dataTestId,
   errorTestId,
   className = "w-full",
+  dropdownClassName,
   onFocus,
   onBlur,
 }: ComboboxProps<T>) {
@@ -170,7 +172,7 @@ export function Combobox<T = ComboboxOption | string>({
       className={`relative flex flex-col ${className}`}
       data-testid={dataTestId}
     >
-      <label htmlFor={id} className="block text-xs font-medium text-slate-700 mb-1">
+      <label htmlFor={id} className="block text-sm font-medium text-slate-700 mb-1.5">
         {label}
       </label>
       <div className="relative">
@@ -214,7 +216,7 @@ export function Combobox<T = ComboboxOption | string>({
             error
               ? "border-red-500 focus:border-red-600 focus:ring-red-200"
               : "border-slate-300 focus:border-primary focus:ring-primary/20"
-          } bg-white px-3 py-2 text-sm text-slate-900 shadow-xs placeholder:text-slate-400 focus:outline-hidden focus:ring-2`}
+          } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs placeholder:text-slate-400 focus:outline-hidden focus:ring-2`}
         />
         {!freeSolo && (
           <button
@@ -224,7 +226,7 @@ export function Combobox<T = ComboboxOption | string>({
               setIsOpen(!isOpen);
               inputRef.current?.focus();
             }}
-            className="absolute inset-y-0 right-0 flex items-center pr-2 text-slate-400 hover:text-slate-600"
+            className="absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 hover:text-slate-600"
           >
             <ChevronDownIcon className="w-4 h-4" />
           </button>
@@ -234,7 +236,9 @@ export function Combobox<T = ComboboxOption | string>({
           <ul
             id={listboxId}
             role="listbox"
-            className="absolute left-0 top-full z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border border-slate-200 bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-hidden"
+            className={`absolute top-full z-50 mt-1 max-h-60 overflow-auto rounded-md border border-slate-200 bg-white py-1.5 text-sm shadow-lg ring-1 ring-black/5 focus:outline-hidden ${
+              dropdownClassName || "left-0 w-full min-w-full sm:min-w-[280px]"
+            }`}
           >
             {groupedEntries
               ? groupedEntries.map(([group, groupOpts]) => (

@@ -204,7 +204,7 @@ export const QantasCalculator: React.FC = () => {
                 aria-label="One way flight"
                 aria-pressed={tripType === "one way"}
                 onClick={() => setTripType("one way")}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
                   tripType === "one way"
                     ? "bg-white text-primary shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
@@ -218,7 +218,7 @@ export const QantasCalculator: React.FC = () => {
                 aria-label="Return flight"
                 aria-pressed={tripType === "return"}
                 onClick={() => setTripType("return")}
-                className={`px-3 py-1.5 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
                   tripType === "return"
                     ? "bg-white text-primary shadow-xs"
                     : "text-slate-600 hover:text-slate-900"
@@ -255,7 +255,7 @@ export const QantasCalculator: React.FC = () => {
                 type="button"
                 data-testid="add-segment-button"
                 onClick={addSegment}
-                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer transition-colors"
+                className="rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer transition-colors"
               >
                 Add Segment
               </button>
@@ -267,7 +267,7 @@ export const QantasCalculator: React.FC = () => {
                 data-testid="calculate-button"
                 onClick={calculate}
                 disabled={isCalculating}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-2.5 text-base font-semibold text-white shadow-md hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-9 py-3 text-base font-semibold text-white shadow-md hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-all"
               >
                 {isCalculating && <SpinnerIcon className="w-5 h-5 text-white animate-spin" />}
                 <span>Calculate</span>

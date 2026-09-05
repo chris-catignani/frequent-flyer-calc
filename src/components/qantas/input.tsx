@@ -18,6 +18,7 @@ export const EliteStatusInput: React.FC<EliteStatusInputProps> = ({ eliteStatus,
         onChange={onChange}
         getOptionLabel={(opt) => opt}
         getOptionValue={(opt) => opt}
+        dropdownClassName="w-full min-w-full sm:min-w-[200px] right-0 sm:right-0 sm:left-auto"
       />
     </div>
   );

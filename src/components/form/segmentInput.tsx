@@ -52,6 +52,7 @@ export const GenericFareClassInput: React.FC<GenericFareClassInputProps> = ({
       getOptionLabel={(opt) => displayLookup[opt] || opt}
       getOptionValue={(opt) => opt}
       groupBy={groupBy}
+      dropdownClassName="w-max min-w-full sm:min-w-[280px] max-w-[calc(100vw-2rem)] right-0 sm:right-auto sm:left-0"
       error={error}
     />
   );
@@ -273,6 +274,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           errorTestId={`segment-error-from-${segmentInputIdx}`}
           label="From (e.g. syd)"
           value={segmentInput.fromAirportText}
+          dropdownClassName="w-max min-w-full sm:min-w-[320px] max-w-[calc(100vw-2rem)] sm:max-w-[400px] left-0"
           error={errors["fromAirportText"]}
           onChange={(value) => {
             const shouldClear =
@@ -292,6 +294,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           errorTestId={`segment-error-to-${segmentInputIdx}`}
           label="To (e.g. mel)"
           value={segmentInput.toAirportText}
+          dropdownClassName="w-max min-w-full sm:min-w-[320px] max-w-[calc(100vw-2rem)] sm:max-w-[400px] right-0 sm:right-auto sm:left-0"
           error={errors["toAirportText"]}
           onChange={(value) => {
             const shouldClear =
@@ -315,7 +318,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
           >
             <label
               htmlFor={`fare-class-input-${segmentInputIdx}`}
-              className="block text-xs font-medium text-slate-700 mb-1"
+              className="block text-sm font-medium text-slate-700 mb-1.5"
             >
               Fare Class (e.g. &quot;y&quot; or &quot;i&quot;)
             </label>
@@ -331,11 +334,11 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
               }
               className={`w-full rounded-md border ${
                 errors["fareClass"] ? "border-red-500" : "border-slate-300"
-              } bg-white px-3 py-2 text-sm text-slate-900 shadow-xs focus:outline-hidden focus:ring-2 focus:ring-primary`}
+              } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs focus:outline-hidden focus:ring-2 focus:ring-primary`}
             />
             <span
               data-testid={`segment-error-fare-class-${segmentInputIdx}`}
-              className="mt-1 min-h-[16px] text-xs text-red-600"
+              className="mt-1 min-h-[18px] text-xs text-red-600"
             >
               {errors["fareClass"] ? errors["fareClass"] : " "}
             </span>
@@ -432,6 +435,7 @@ const AirlineInput: React.FC<AirlineInputProps> = ({
       getOptionValue={(airline) => airline.iata}
       getOptionLabel={(airline) => airline.airlineLabel}
       groupBy={(airline) => airline.groupName}
+      dropdownClassName="w-max min-w-full sm:min-w-[320px] max-w-[calc(100vw-2rem)] left-0"
       error={error}
       onChange={onChange}
     />
@@ -444,6 +448,7 @@ interface AirportInputProps {
   label: string;
   value: string;
   error?: string;
+  dropdownClassName?: string;
   onChange: (value: string) => void;
 }
 
@@ -453,6 +458,7 @@ const AirportInput: React.FC<AirportInputProps> = ({
   label,
   value,
   error,
+  dropdownClassName,
   onChange,
 }) => {
   const options = useMemo(() => searchAirports(value), [value]);
@@ -482,6 +488,7 @@ const AirportInput: React.FC<AirportInputProps> = ({
           </div>
         );
       }}
+      dropdownClassName={dropdownClassName}
       error={error}
       onChange={onChange}
     />
