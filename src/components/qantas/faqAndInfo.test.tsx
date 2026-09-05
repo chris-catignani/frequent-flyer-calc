@@ -35,4 +35,27 @@ describe("FaqAndInfo", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("What is a Status Run?")).toBeInTheDocument();
   });
+
+  it("renders subsections with proper h3 heading level", () => {
+    render(<FaqAndInfo />);
+
+    expect(
+      screen.getByRole("heading", { name: "Distance Bands & Minimums", level: 3 })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Elite Status Tier Multipliers", level: 3 })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Partner Airlines & Alliances", level: 3 })
+    ).toBeInTheDocument();
+  });
+
+  it("does not render duplicate ARIA content IDs for FAQ items", () => {
+    const { container } = render(<FaqAndInfo />);
+
+    for (let i = 1; i <= 7; i++) {
+      const elementsWithId = container.querySelectorAll(`#faq${i}-content`);
+      expect(elementsWithId.length).toBeLessThanOrEqual(1);
+    }
+  });
 });
