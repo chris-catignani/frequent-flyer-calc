@@ -385,4 +385,39 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
       expect(screen.getByText("Segment 2")).toBeInTheDocument();
     });
   });
+
+  describe("Drag-and-drop conditional wrapping", () => {
+    it("omits drag-and-drop droppable and draggable containers when 1 or fewer segments exist", () => {
+      const { container } = render(
+        <SegmentInputList
+          segmentInputs={[defaultSegment]}
+          errors={{}}
+          airlineOptions={airlineOptions}
+          onDeleteSegmentPressed={jest.fn()}
+          onSegmentInputChanged={jest.fn()}
+          onSegmentsReordered={jest.fn()}
+        />
+      );
+
+      expect(container.querySelector("[data-rfd-droppable-id]")).toBeNull();
+      expect(container.querySelector("[data-rfd-draggable-id]")).toBeNull();
+    });
+
+    it("wraps in drag-and-drop droppable and draggable containers when more than 1 segment exists", () => {
+      const secondSegment = createSegmentInput("qf", "j", "syd", "mel", "test-uuid-2");
+      const { container } = render(
+        <SegmentInputList
+          segmentInputs={[defaultSegment, secondSegment]}
+          errors={{}}
+          airlineOptions={airlineOptions}
+          onDeleteSegmentPressed={jest.fn()}
+          onSegmentInputChanged={jest.fn()}
+          onSegmentsReordered={jest.fn()}
+        />
+      );
+
+      expect(container.querySelector("[data-rfd-droppable-id]")).not.toBeNull();
+      expect(container.querySelectorAll("[data-rfd-draggable-id]")).toHaveLength(2);
+    });
+  });
 });

@@ -98,7 +98,7 @@ export const FaqAndInfo: React.FC = () => {
           Frequently Asked Questions
         </Typography>
 
-        <Accordion defaultExpanded={false}>
+        <Accordion slotProps={{ transition: { unmountOnExit: true } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             id="faq1-header"
@@ -118,7 +118,7 @@ export const FaqAndInfo: React.FC = () => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
+        <Accordion slotProps={{ transition: { unmountOnExit: true } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             id="faq2-header"
@@ -173,7 +173,7 @@ export const FaqAndInfo: React.FC = () => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
+        <Accordion slotProps={{ transition: { unmountOnExit: true } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             id="faq3-header"
@@ -193,7 +193,7 @@ export const FaqAndInfo: React.FC = () => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
+        <Accordion slotProps={{ transition: { unmountOnExit: true } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             id="faq4-header"
@@ -215,7 +215,7 @@ export const FaqAndInfo: React.FC = () => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
+        <Accordion slotProps={{ transition: { unmountOnExit: true } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             id="faq5-header"
@@ -234,7 +234,7 @@ export const FaqAndInfo: React.FC = () => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
+        <Accordion slotProps={{ transition: { unmountOnExit: true } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             id="faq6-header"
@@ -254,7 +254,7 @@ export const FaqAndInfo: React.FC = () => {
           </AccordionDetails>
         </Accordion>
 
-        <Accordion>
+        <Accordion slotProps={{ transition: { unmountOnExit: true } }}>
           <AccordionSummary
             expandIcon={<ExpandMore />}
             id="faq7-header"

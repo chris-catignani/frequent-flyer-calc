@@ -105,6 +105,27 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
     }
   };
 
+  if (segmentInputs.length <= 1) {
+    return (
+      <div>
+        {segmentInputs.map((segmentInput, segmentInputIdx) => (
+          <SegmentInputListItem
+            key={segmentInput.uuid}
+            segmentInput={segmentInput}
+            segmentInputIdx={segmentInputIdx}
+            showDeleteButton={false}
+            enableDrag={false}
+            errors={errors[segmentInputIdx] || {}}
+            airlineOptions={airlineOptions}
+            onDeleteSegmentPressed={onDeleteSegmentPressed}
+            onSegmentInputChanged={onSegmentInputChanged}
+            adapter={adapter}
+          />
+        ))}
+      </div>
+    );
+  }
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="segmentList">
@@ -155,6 +176,31 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
   onSegmentInputChanged,
   adapter,
 }) => {
+  if (!enableDrag) {
+    return (
+      <div>
+        {segmentInputIdx > 0 && (
+          <Divider
+            sx={{
+              my: { xs: 2.5, sm: 1.5 },
+              visibility: { sm: "hidden" },
+            }}
+          />
+        )}
+        <SegmentInputRow
+          segmentInput={segmentInput}
+          segmentInputIdx={segmentInputIdx}
+          errors={errors}
+          showDeleteButton={showDeleteButton}
+          airlineOptions={airlineOptions}
+          onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
+          onChange={(newSegmentInput) => onSegmentInputChanged(segmentInputIdx, newSegmentInput)}
+          adapter={adapter}
+        />
+      </div>
+    );
+  }
+
   return (
     <Draggable draggableId={segmentInput.uuid} index={segmentInputIdx} isDragDisabled={!enableDrag}>
       {(provided) => (
