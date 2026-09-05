@@ -83,6 +83,5 @@ PostHog (`posthog-js`, initialized in `src/components/common/posthogProvider.tsx
 
 ### Path aliases and styling
 
-`@/*` maps to `src/*` (see `tsconfig.json`). Styling is MUI (`@mui/material`) + Emotion with Roboto
-via `@fontsource/roboto`; `src/theme.ts` defines the MUI theme, wired up via `@mui/material-nextjs`
-in `src/app/layout.tsx`.
+`@/*` maps to `src/*` (see `tsconfig.json`). Styling is Tailwind CSS v4 with Roboto
+via Next.js `next/font/google` in `src/app/layout.tsx`.

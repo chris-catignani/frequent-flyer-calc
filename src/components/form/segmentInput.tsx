@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import {
   DragDropContext,
   Draggable,
@@ -6,13 +6,12 @@ import {
   type DraggableProvidedDragHandleProps,
   type DropResult,
 } from "@hello-pangea/dnd";
-import { Clear, DragHandle } from "@mui/icons-material";
-import { Autocomplete, Box, Divider, Grid, IconButton, TextField, Typography } from "@mui/material";
-import { GroupHeader, GroupItems } from "@/components/common/autocomplete";
+import { Combobox } from "@/components/common/combobox";
+import { ClearIcon, DragHandleIcon } from "@/components/common/icons";
 import { buildAirlineOptions } from "@/constants/airlines";
 import { searchAirports } from "@/utils/airports";
+import { validate } from "@/utils/segmentValidation";
 import type { SegmentInput } from "@/models/segmentInput";
-import type { Airport } from "@/types/airport";
 import type {
   AirlineOption,
   FareClassInputRenderProps,
@@ -21,6 +20,7 @@ import type {
 } from "@/types/segmentInput";
 
 export type { AirlineOption, FareClassInputRenderProps, SegmentErrors, SegmentInputAdapter };
+export { buildAirlineOptions, validate };
 
 export interface GenericFareClassInputProps {
   segmentInputIdx: number;
@@ -42,42 +42,21 @@ export const GenericFareClassInput: React.FC<GenericFareClassInputProps> = ({
   error,
 }) => {
   return (
-    <Autocomplete
-      data-testid={`segment-fare-class-${segmentInputIdx}`}
-      disableClearable
-      autoHighlight
-      autoSelect
+    <Combobox
+      dataTestId={`segment-fare-class-${segmentInputIdx}`}
+      errorTestId={`segment-error-fare-class-${segmentInputIdx}`}
+      label="Fare Class"
       options={options}
-      getOptionLabel={(option) => displayLookup[option] || option}
-      value={options.find((option) => option === value) || ""}
-      onChange={(_event, newValue) => onChange(newValue || "")}
+      value={value}
+      onChange={onChange}
+      getOptionLabel={(opt) => displayLookup[opt] || opt}
+      getOptionValue={(opt) => opt}
       groupBy={groupBy}
-      sx={{ width: "100%" }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          error={Boolean(error)}
-          helperText={
-            <span data-testid={`segment-error-fare-class-${segmentInputIdx}`}>
-              {error ? error : " "}
-            </span>
-          }
-          label="Fare Class"
-        />
-      )}
-      renderGroup={(params) => (
-        <li key={params.key}>
-          <GroupHeader>{params.group}</GroupHeader>
-          <GroupItems>{params.children}</GroupItems>
-        </li>
-      )}
+      dropdownClassName="w-max min-w-full sm:min-w-[280px] max-w-[calc(100vw-2rem)] right-0 sm:right-auto sm:left-0"
+      error={error}
     />
   );
 };
-
-import { validate } from "@/utils/segmentValidation";
-
-export { buildAirlineOptions, validate };
 
 export interface SegmentInputListProps {
   segmentInputs: SegmentInput[];
@@ -98,7 +77,6 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
   onSegmentsReordered,
   adapter,
 }) => {
-  // https://medium.com/@rekdhmer/how-to-drag-drop-like-trello-b21c4e821429
   const onDragEnd = (result: DropResult) => {
     if (result.destination && result.source.index !== result.destination.index) {
       onSegmentsReordered(result.source.index, result.destination.index);
@@ -179,14 +157,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
   if (!enableDrag) {
     return (
       <div>
-        {segmentInputIdx > 0 && (
-          <Divider
-            sx={{
-              my: { xs: 2.5, sm: 1.5 },
-              visibility: { sm: "hidden" },
-            }}
-          />
-        )}
+        {segmentInputIdx > 0 && <hr className="my-1.5 border-slate-200 sm:hidden" />}
         <SegmentInputRow
           segmentInput={segmentInput}
           segmentInputIdx={segmentInputIdx}
@@ -205,14 +176,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
     <Draggable draggableId={segmentInput.uuid} index={segmentInputIdx} isDragDisabled={!enableDrag}>
       {(provided) => (
         <div {...provided.draggableProps} ref={provided.innerRef}>
-          {segmentInputIdx > 0 && (
-            <Divider
-              sx={{
-                my: { xs: 2.5, sm: 1.5 },
-                visibility: { sm: "hidden" },
-              }}
-            />
-          )}
+          {segmentInputIdx > 0 && <hr className="my-1.5 border-slate-200 sm:hidden" />}
           <SegmentInputRow
             segmentInput={segmentInput}
             segmentInputIdx={segmentInputIdx}
@@ -261,58 +225,32 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   });
 
   return (
-    <Grid
+    <div
       data-testid={`segment-row-${segmentInputIdx}`}
-      container
-      spacing={1}
-      columns={{ xs: 12, sm: 22 }}
-      sx={{
-        justifyContent: "flex-start",
-        alignItems: "flex-start",
-      }}
+      className="grid grid-cols-12 sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_minmax(0,6fr)_auto] gap-2 items-start"
     >
-      <Grid
-        size={{ xs: 8, sm: 1 }}
-        order={{ xs: 1, sm: 1 }}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: { xs: "flex-start", sm: "center" },
-          height: { xs: "32px", sm: "56px" },
-          gap: 1,
-        }}
+      <div
+        className="col-span-8 sm:col-auto order-1 sm:order-1 flex items-center justify-start sm:justify-center h-8 sm:h-[50px] sm:mt-1.5 gap-1"
         {...dragHandleProps}
       >
         <ReorderSegmentInputButton
           showReorderButton={showDeleteButton}
           segmentInputIdx={segmentInputIdx}
         />
-        <Typography
-          variant="subtitle2"
-          component="span"
-          color="text.secondary"
-          sx={{ display: { xs: "inline", sm: "none" }, fontWeight: 500 }}
-        >
+        <span className="inline sm:hidden font-medium text-slate-500 text-sm">
           Segment {segmentInputIdx + 1}
-        </Typography>
-      </Grid>
-      <Grid
-        size={{ xs: 4, sm: 1 }}
-        order={{ xs: 2, sm: 6 }}
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: { xs: "flex-end", sm: "center" },
-          height: { xs: "32px", sm: "56px" },
-        }}
-      >
+        </span>
+      </div>
+
+      <div className="col-span-4 sm:col-auto order-2 sm:order-6 flex items-center justify-end sm:justify-center h-8 sm:h-[50px] sm:mt-1.5">
         <RemoveSegmentInputButton
           segmentInputIdx={segmentInputIdx}
           showDeleteButton={showDeleteButton}
           onDeleteClicked={onDeleteClicked}
         />
-      </Grid>
-      <Grid size={{ xs: 12, sm: 6 }} order={{ xs: 3, sm: 2 }}>
+      </div>
+
+      <div className="col-span-12 sm:col-auto order-3 sm:order-2">
         <AirlineInput
           segmentInputIdx={segmentInputIdx}
           value={segmentInput.airline}
@@ -328,13 +266,15 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
             });
           }}
         />
-      </Grid>
-      <Grid size={{ xs: 6, sm: 4 }} order={{ xs: 4, sm: 3 }}>
+      </div>
+
+      <div className="col-span-6 sm:col-auto order-4 sm:order-3">
         <AirportInput
           dataTestId={`segment-from-${segmentInputIdx}`}
           errorTestId={`segment-error-from-${segmentInputIdx}`}
-          label={"From (e.g. syd)"}
+          label="From (e.g. syd)"
           value={segmentInput.fromAirportText}
+          dropdownClassName="w-max min-w-full sm:min-w-[320px] max-w-[calc(100vw-2rem)] sm:max-w-[400px] left-0"
           error={errors["fromAirportText"]}
           onChange={(value) => {
             const shouldClear =
@@ -346,13 +286,15 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
             });
           }}
         />
-      </Grid>
-      <Grid size={{ xs: 6, sm: 4 }} order={{ xs: 5, sm: 4 }}>
+      </div>
+
+      <div className="col-span-6 sm:col-auto order-5 sm:order-4">
         <AirportInput
           dataTestId={`segment-to-${segmentInputIdx}`}
           errorTestId={`segment-error-to-${segmentInputIdx}`}
-          label={"To (e.g. mel)"}
+          label="To (e.g. mel)"
           value={segmentInput.toAirportText}
+          dropdownClassName="w-max min-w-full sm:min-w-[320px] max-w-[calc(100vw-2rem)] sm:max-w-[400px] right-0 sm:right-auto sm:left-0"
           error={errors["toAirportText"]}
           onChange={(value) => {
             const shouldClear =
@@ -364,32 +306,54 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
             });
           }}
         />
-      </Grid>
-      <Grid size={{ xs: 12, sm: 6 }} order={{ xs: 6, sm: 5 }}>
+      </div>
+
+      <div className="col-span-12 sm:col-auto order-6 sm:order-5">
         {customFareClassInput != null ? (
           customFareClassInput
         ) : (
-          <TextField
+          <div
             data-testid={`segment-fare-class-${segmentInputIdx}`}
-            value={segmentInput.fareClass}
-            error={Boolean(errors["fareClass"])}
-            helperText={
-              <span data-testid={`segment-error-fare-class-${segmentInputIdx}`}>
-                {errors["fareClass"] ? errors["fareClass"] : " "}
-              </span>
-            }
-            onChange={(event) => {
-              onChange({
-                ...segmentInput,
-                fareClass: event.target.value?.trim()?.toLowerCase(),
-              });
-            }}
-            label='Fare Class (e.g. "y" or "i")'
-            sx={{ width: "100%" }}
-          />
+            className="w-full flex flex-col pt-1.5"
+          >
+            <div className="relative group">
+              <label
+                htmlFor={`fare-class-input-${segmentInputIdx}`}
+                className={`absolute top-0 -translate-y-1/2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
+                  errors["fareClass"]
+                    ? "text-red-600"
+                    : "text-slate-500 group-focus-within:text-primary"
+                }`}
+              >
+                Fare Class (e.g. &quot;y&quot; or &quot;i&quot;)
+              </label>
+              <input
+                id={`fare-class-input-${segmentInputIdx}`}
+                type="text"
+                value={segmentInput.fareClass}
+                onChange={(e) =>
+                  onChange({
+                    ...segmentInput,
+                    fareClass: e.target.value?.trim()?.toLowerCase(),
+                  })
+                }
+                className={`w-full rounded-md border ${
+                  errors["fareClass"]
+                    ? "border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500"
+                    : "border-slate-300 hover:border-slate-400 focus:border-primary focus:ring-1 focus:ring-primary"
+                } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs focus:outline-hidden`}
+              />
+            </div>
+            <span
+              data-testid={`segment-error-fare-class-${segmentInputIdx}`}
+              className="mt-0.5 min-h-[16px] text-xs text-red-600"
+            >
+              {errors["fareClass"] ? errors["fareClass"] : " "}
+            </span>
+          </div>
         )}
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   );
 };
 
@@ -399,22 +363,25 @@ const ReorderSegmentInputButton: React.FC<{
 }> = ({ showReorderButton, segmentInputIdx }) => {
   if (!showReorderButton) {
     return (
-      // Dummy icon to maintain space for when we show icons
-      <IconButton disabled sx={{ visibility: "hidden", p: 0 }} aria-hidden="true">
-        <DragHandle />
-      </IconButton>
+      <button
+        type="button"
+        disabled
+        className="invisible p-1 text-slate-400"
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <DragHandleIcon className="w-5 h-5" />
+      </button>
     );
   } else {
     return (
-      <IconButton
-        sx={{
-          p: 0,
-          cursor: "grab",
-        }}
+      <button
+        type="button"
+        className="cursor-grab p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 active:cursor-grabbing focus:outline-hidden focus:ring-2 focus:ring-slate-200 transition-colors"
         aria-label={`Reorder segment ${segmentInputIdx + 1}`}
       >
-        <DragHandle />
-      </IconButton>
+        <DragHandleIcon className="w-5 h-5" />
+      </button>
     );
   }
 };
@@ -426,24 +393,27 @@ const RemoveSegmentInputButton: React.FC<{
 }> = ({ segmentInputIdx, showDeleteButton, onDeleteClicked }) => {
   if (!showDeleteButton) {
     return (
-      // Dummy icon to maintain space for when we show icons
-      <IconButton disabled sx={{ visibility: "hidden", p: 0 }} aria-hidden="true">
-        <Clear />
-      </IconButton>
+      <button
+        type="button"
+        disabled
+        className="invisible p-1 text-slate-400"
+        aria-hidden="true"
+        tabIndex={-1}
+      >
+        <ClearIcon className="w-5 h-5" />
+      </button>
     );
   } else {
     return (
-      <IconButton
+      <button
+        type="button"
         data-testid={`segment-delete-${segmentInputIdx}`}
-        sx={{
-          p: 0,
-          "&:hover": { backgroundColor: "inherit", boxShadow: "none" },
-        }}
         onClick={onDeleteClicked}
+        className="cursor-pointer p-1 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 focus:outline-hidden focus:ring-2 focus:ring-red-200 transition-colors"
         aria-label={`Remove segment ${segmentInputIdx + 1}`}
       >
-        <Clear />
-      </IconButton>
+        <ClearIcon className="w-5 h-5" />
+      </button>
     );
   }
 };
@@ -463,45 +433,19 @@ const AirlineInput: React.FC<AirlineInputProps> = ({
   airlineOptions,
   onChange,
 }) => {
-  const selectedOption =
-    airlineOptions.find((airline) => airline.iata === value) ?? airlineOptions[0];
-
   return (
-    <Autocomplete
-      data-testid={`segment-airline-${segmentInputIdx}`}
-      disableClearable
-      autoHighlight
-      autoSelect
+    <Combobox
+      dataTestId={`segment-airline-${segmentInputIdx}`}
+      errorTestId={`segment-error-airline-${segmentInputIdx}`}
+      label="Airline"
       options={airlineOptions}
-      getOptionLabel={(airline) =>
-        typeof airline === "string" ? airline : airline.airlineLabel || ""
-      }
-      value={selectedOption}
-      groupBy={(option) => option.groupName}
-      onChange={(_, newValue) => {
-        if (newValue && typeof newValue === "object") {
-          onChange(newValue.iata);
-        }
-      }}
-      sx={{ width: "100%" }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          error={Boolean(error)}
-          helperText={
-            <span data-testid={`segment-error-airline-${segmentInputIdx}`}>
-              {error ? error : " "}
-            </span>
-          }
-          label="Airline"
-        />
-      )}
-      renderGroup={(params) => (
-        <li key={params.key}>
-          <GroupHeader>{params.group}</GroupHeader>
-          <GroupItems>{params.children}</GroupItems>
-        </li>
-      )}
+      value={value}
+      getOptionValue={(airline) => airline.iata}
+      getOptionLabel={(airline) => airline.airlineLabel}
+      groupBy={(airline) => airline.groupName}
+      dropdownClassName="w-max min-w-full sm:min-w-[320px] max-w-[calc(100vw-2rem)] left-0"
+      error={error}
+      onChange={onChange}
     />
   );
 };
@@ -512,6 +456,7 @@ interface AirportInputProps {
   label: string;
   value: string;
   error?: string;
+  dropdownClassName?: string;
   onChange: (value: string) => void;
 }
 
@@ -521,72 +466,39 @@ const AirportInput: React.FC<AirportInputProps> = ({
   label,
   value,
   error,
+  dropdownClassName,
   onChange,
 }) => {
-  const [focused, setFocused] = useState(false);
-  const [justSelected, setJustSelected] = useState(false);
   const options = useMemo(() => searchAirports(value), [value]);
 
   return (
-    <Autocomplete
-      data-testid={dataTestId}
-      freeSolo
-      disableClearable
-      autoHighlight
+    <Combobox
+      dataTestId={dataTestId}
+      errorTestId={errorTestId}
+      label={label}
       options={options}
-      filterOptions={(presetOptions) => presetOptions}
-      inputValue={!focused || justSelected ? (value || "").toUpperCase() : value || ""}
-      onInputChange={(_event, newInputValue, reason) => {
-        if (reason === "input" || reason === "selectOption") {
-          setJustSelected(reason === "selectOption");
-          onChange(newInputValue.toLowerCase());
-        }
-      }}
-      onChange={(_event, newValue) => {
-        if (newValue && typeof newValue === "object") {
-          setJustSelected(true);
-          onChange((newValue as Airport).iata.toLowerCase());
-        }
-      }}
-      getOptionLabel={(option) =>
-        typeof option === "string" ? option : option.iata ? option.iata.toLowerCase() : ""
-      }
-      renderOption={(props, option) => {
-        const { key, ...optionProps } = props;
-        const airport = option as Airport;
+      value={value}
+      freeSolo
+      filterOptions={false}
+      formatDisplayValue={(val) => val.toUpperCase()}
+      getOptionValue={(airport) => airport.iata.toLowerCase()}
+      getOptionLabel={(airport) => airport.iata.toUpperCase()}
+      renderOption={(option) => {
+        if (typeof option === "string") return option;
         return (
-          <li key={key} {...optionProps} onMouseDown={(event) => event.preventDefault()}>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <Typography variant="body2" component="span">
-                {airport.iata?.toUpperCase()} — {airport.name}
-              </Typography>
-              <Typography variant="caption" component="span" color="text.secondary">
-                {airport.city}, {airport.country}
-              </Typography>
-            </Box>
-          </li>
+          <div className="flex flex-col">
+            <span className="font-semibold text-slate-800">
+              {option.iata.toUpperCase()} — {option.name}
+            </span>
+            <span className="text-xs text-slate-500">
+              {option.city}, {option.country}
+            </span>
+          </div>
         );
       }}
-      slotProps={{
-        popper: { placement: "bottom-start", style: { width: "fit-content" } },
-        paper: {
-          sx: { minWidth: { xs: 240, sm: 280 }, maxWidth: { xs: "calc(100vw - 32px)", sm: 400 } },
-        },
-      }}
-      sx={{ width: "100%" }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          error={Boolean(error)}
-          helperText={<span data-testid={errorTestId}>{error ? error : " "}</span>}
-          onFocus={() => {
-            setFocused(true);
-            setJustSelected(false);
-          }}
-          onBlur={() => setFocused(false)}
-        />
-      )}
+      dropdownClassName={dropdownClassName}
+      error={error}
+      onChange={onChange}
     />
   );
 };

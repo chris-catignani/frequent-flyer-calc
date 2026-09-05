@@ -230,7 +230,7 @@ describe("ResultsSummary", () => {
       screen.getByText("Qantas Calculator failed to calculate at least one segment")
     ).toBeInTheDocument();
 
-    const backdrop = document.querySelector(".MuiBackdrop-root");
+    const backdrop = screen.getByTestId("dialog-backdrop");
     expect(backdrop).toBeInTheDocument();
     fireEvent.click(backdrop!);
     await waitFor(() => {

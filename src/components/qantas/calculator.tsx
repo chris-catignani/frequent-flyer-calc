@@ -1,21 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Alert,
-  Box,
-  Button,
-  Dialog,
-  DialogTitle,
-  Grid,
-  IconButton,
-  Paper,
-  Switch,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/material";
-import { Info } from "@mui/icons-material";
 import { JAL_AIRLINES, JETSTAR_AIRLINES } from "@/calculators/qantas/constants";
 import { EliteStatusInput } from "@/components/qantas/input";
 import { RecentCalculationSelection } from "@/components/qantas/recentCalculations";
@@ -25,22 +10,19 @@ import { SegmentResults } from "@/components/qantas/segmentResults";
 import { qantasProgram } from "@/calculators/qantas";
 import { SegmentInputList } from "@/components/form/segmentInput";
 import { useCalculator } from "@/hooks/useCalculator";
+import { Dialog } from "@/components/common/dialog";
+import { CancelIcon, InfoIcon, SpinnerIcon } from "@/components/common/icons";
 import type { CalculationResult } from "@/types/calculator";
 
 const FLAG_ENABLE_QANTAS_API = true;
 
 const QantasApiDialog: React.FC<{ open: boolean; onClose: () => void }> = ({ open, onClose }) => {
   return (
-    <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Compare with Qantas</DialogTitle>
-      <Grid container direction="column" mx={2} mb={2}>
-        <Typography>
-          This enables us to compare our results with Qantas&apos;s website calculator results.
-        </Typography>
-        <Typography>
-          This makes an API call to Qantas&apos;s website, and as a result, can be slow.
-        </Typography>
-      </Grid>
+    <Dialog onClose={onClose} open={open} title="Compare with Qantas">
+      <div className="flex flex-col gap-2">
+        <p>This enables us to compare our results with Qantas&apos;s website calculator results.</p>
+        <p>This makes an API call to Qantas&apos;s website, and as a result, can be slow.</p>
+      </div>
     </Dialog>
   );
 };
@@ -52,47 +34,44 @@ const CompareWithQantasAPISwitch: React.FC<{
   const [open, setOpen] = useState(false);
 
   return (
-    <Grid
-      container
-      direction="row"
-      wrap="nowrap"
-      sx={{
-        alignItems: "center",
-        justifyContent: { xs: "center", sm: "flex-end" },
-        visibility: FLAG_ENABLE_QANTAS_API ? "" : "hidden",
-      }}
+    <div
+      className={`flex items-center justify-center sm:justify-end gap-2 ${
+        FLAG_ENABLE_QANTAS_API ? "" : "invisible"
+      }`}
     >
-      <Switch
+      <button
+        type="button"
+        role="switch"
         data-testid="compare-with-qantas-switch"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        disabled={!FLAG_ENABLE_QANTAS_API}
-        inputProps={{
-          "aria-label": "Compare with Qantas website calculator",
-          role: "switch",
-        }}
-        slotProps={{
-          input: {
-            "aria-label": "Compare with Qantas website calculator",
-            role: "switch",
-          },
-        }}
-      />
-      <Typography variant="body2" sx={{ lineHeight: 1.2 }}>
+        aria-label="Compare with Qantas website calculator"
+        aria-checked={checked}
+        onClick={() => onChange(!checked)}
+        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-hidden focus:ring-2 focus:ring-primary ${
+          checked ? "bg-primary" : "bg-slate-200"
+        }`}
+      >
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-xs ring-0 transition duration-200 ease-in-out ${
+            checked ? "translate-x-5" : "translate-x-0"
+          }`}
+        />
+      </button>
+      <span className="text-xs text-slate-700 leading-tight select-none">
         Compare With
         <br />
         Qantas&apos;s Calculator
-      </Typography>
-      <IconButton
-        size="small"
-        sx={{ py: 0 }}
+      </span>
+      <button
+        type="button"
         onClick={() => setOpen(true)}
         aria-label="Learn more about comparing with Qantas calculator"
+        className="p-1 text-slate-400 hover:text-slate-600 rounded-full focus:outline-hidden focus:ring-2 focus:ring-primary cursor-pointer"
       >
-        <Info fontSize="small" />
-      </IconButton>
+        <InfoIcon className="w-5 h-5 text-slate-500 hover:text-slate-700" />
+      </button>
       <QantasApiDialog open={open} onClose={() => setOpen(false)} />
-    </Grid>
+    </div>
   );
 };
 
@@ -100,13 +79,17 @@ const ErrorDisplay: React.FC<{ calculationOutput: CalculationResult | null }> = 
   calculationOutput,
 }) => {
   if (!calculationOutput || !calculationOutput.containsErrors) {
-    return <></>;
+    return null;
   }
 
   return (
-    <Alert variant="filled" severity="error">
-      There are errors in the calculation. See the details below.
-    </Alert>
+    <div
+      role="alert"
+      className="w-full max-w-2xl rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 shadow-xs flex items-center gap-3"
+    >
+      <CancelIcon className="w-5 h-5 text-red-600 shrink-0" />
+      <span>There are errors in the calculation. See the details below.</span>
+    </div>
   );
 };
 
@@ -114,7 +97,7 @@ const InfoDisplay: React.FC<{ calculationOutput: CalculationResult | null }> = (
   calculationOutput,
 }) => {
   if (!calculationOutput) {
-    return <></>;
+    return null;
   }
 
   const infoAlerts: React.ReactNode[] = [];
@@ -131,43 +114,52 @@ const InfoDisplay: React.FC<{ calculationOutput: CalculationResult | null }> = (
 
   if (jetstarResults.length !== 0) {
     infoAlerts.push(
-      <Alert severity="info" key="jetstart-alerts">
-        {jetstarDiscountEconomyResults.length > 0 && (
-          <>
-            <Typography>
+      <div
+        role="alert"
+        key="jetstar-alerts"
+        className="w-full max-w-2xl rounded-lg border border-sky-200 bg-sky-50 p-4 text-sm text-sky-800 shadow-xs flex items-start gap-3"
+      >
+        <InfoIcon className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
+        <div className="space-y-2">
+          {jetstarDiscountEconomyResults.length > 0 && (
+            <p>
               If you are travelling on a domestic Jetstar flight within New Zealand that connects to
               an international Jetstar flight, you will not earn Qantas Points or Status Credits
               unless you purchase an Economy Starter Plus, Flex, Flex Plus, Economy Starter Max or
               Business Max fare with Jetstar.
-            </Typography>
-            <br />
-          </>
-        )}
-        <Typography>
-          Qantas Points and Status Credits are not earned when travelling in the Economy Cabin on
-          flights with a Jetstar (JQ) or Jetstar Japan (GK) flight number as part of a Qantas
-          International fare or when a Jetstar flight voucher has been selected in lieu of Points
-          and Status Credits.
-        </Typography>
-      </Alert>
+            </p>
+          )}
+          <p>
+            Qantas Points and Status Credits are not earned when travelling in the Economy Cabin on
+            flights with a Jetstar (JQ) or Jetstar Japan (GK) flight number as part of a Qantas
+            International fare or when a Jetstar flight voucher has been selected in lieu of Points
+            and Status Credits.
+          </p>
+        </div>
+      </div>
     );
   }
 
   if (jalResults.length !== 0) {
     infoAlerts.push(
-      <Alert severity="info" key="jal-alerts">
-        <Typography>
+      <div
+        role="alert"
+        key="jal-alerts"
+        className="w-full max-w-2xl rounded-lg border border-sky-200 bg-sky-50 p-4 text-sm text-sky-800 shadow-xs flex items-start gap-3"
+      >
+        <InfoIcon className="w-5 h-5 text-sky-600 shrink-0 mt-0.5" />
+        <p>
           Japan Airlines flights within Japan are awarded points based on information provided by
           Japan Airlines. Qantas does not define the earning rules for these flights
-        </Typography>
-      </Alert>
+        </p>
+      </div>
     );
   }
 
   if (infoAlerts.length === 0) {
-    return <></>;
+    return null;
   }
-  return <>{infoAlerts}</>;
+  return <div className="w-full max-w-2xl flex flex-col gap-3">{infoAlerts}</div>;
 };
 
 export const QantasCalculator: React.FC = () => {
@@ -195,55 +187,57 @@ export const QantasCalculator: React.FC = () => {
   } = useCalculator({ program: qantasProgram });
 
   return (
-    <div className="w-full mt-4">
-      <Paper elevation={3}>
-        <Box
-          p={2}
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            justifyContent: "space-between",
-            alignItems: { xs: "stretch", sm: "center" },
-            gap: { xs: 2, sm: 0 },
-            pb: { xs: 0.5, sm: 2 },
-          }}
-        >
-          <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-start" } }}>
-            <ToggleButtonGroup
+    <div className="w-full min-w-0 mt-4">
+      <div className="w-full sm:rounded-xl border-0 sm:border border-slate-200 bg-transparent sm:bg-white p-0 sm:p-4 shadow-none sm:shadow-sm">
+        {/* Top row: Trip type toggle & Elite status */}
+        <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 sm:gap-3 pb-0 sm:pb-3">
+          <div className="flex justify-center sm:justify-start">
+            <div
               data-testid="trip-type-toggle"
-              color="primary"
-              size="small"
-              value={tripType}
-              exclusive
+              role="group"
               aria-label="Trip type selection"
-              onChange={(_event, value) => {
-                if (value) setTripType(value);
-              }}
+              className="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-100"
             >
-              <ToggleButton
+              <button
+                type="button"
                 data-testid="trip-type-oneway"
-                value="one way"
                 aria-label="One way flight"
+                aria-pressed={tripType === "one way"}
+                onClick={() => setTripType("one way")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
+                  tripType === "one way"
+                    ? "bg-white text-primary shadow-xs"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
               >
                 One Way
-              </ToggleButton>
-              <ToggleButton
+              </button>
+              <button
+                type="button"
                 data-testid="trip-type-return"
-                value="return"
                 aria-label="Return flight"
+                aria-pressed={tripType === "return"}
+                onClick={() => setTripType("return")}
+                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
+                  tripType === "return"
+                    ? "bg-white text-primary shadow-xs"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
               >
                 Return
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: { xs: "center", sm: "flex-end" } }}>
+              </button>
+            </div>
+          </div>
+          <div className="flex justify-center sm:justify-end">
             <EliteStatusInput
               eliteStatus={eliteStatus}
               onChange={(value) => setEliteStatus(value)}
             />
-          </Box>
-        </Box>
-        <Box p={2} sx={{ pt: { xs: 0.5, sm: 2 } }}>
+          </div>
+        </div>
+
+        {/* Segments list and actions */}
+        <div className="pt-2 sm:pt-4">
           <SegmentInputList
             segmentInputs={segmentInputs}
             errors={inputErrors}
@@ -254,75 +248,65 @@ export const QantasCalculator: React.FC = () => {
             onSegmentsReordered={reorderSegments}
           />
 
-          <Grid
-            container
-            columns={{ xs: 8, sm: 12 }}
-            spacing={1}
-            sx={{
-              mt: 2,
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <Grid size={{ xs: 4, sm: 4 }}>
-              <Button data-testid="add-segment-button" variant="contained" onClick={addSegment}>
-                Add Segment
-              </Button>
-            </Grid>
-            <Grid
-              container
-              size={{ xs: 8, sm: 4 }}
-              order={{ xs: 3, sm: 2 }}
-              sx={{
-                justifyContent: "center",
-                mt: { xs: 1, sm: 0 },
-              }}
-            >
-              <Button
-                data-testid="calculate-button"
-                variant="contained"
-                size="large"
-                onClick={calculate}
-                loading={isCalculating}
-                sx={{ borderRadius: "28px" }}
+          {/* Action buttons and controls row */}
+          <div className="mt-2 sm:mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 items-center">
+            <div className="flex justify-start order-1">
+              <button
+                type="button"
+                data-testid="add-segment-button"
+                onClick={addSegment}
+                className="rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer transition-colors"
               >
-                Calculate
-              </Button>
-            </Grid>
-            <Grid size={{ xs: 4, sm: 4 }} order={{ xs: 2, sm: 3 }}>
+                Add Segment
+              </button>
+            </div>
+
+            <div className="col-span-2 sm:col-span-1 flex justify-center order-3 sm:order-2 mt-1 sm:mt-0">
+              <button
+                type="button"
+                data-testid="calculate-button"
+                onClick={calculate}
+                disabled={isCalculating}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-9 py-3 text-base font-semibold text-white shadow-md hover:bg-primary-hover focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+              >
+                {isCalculating && <SpinnerIcon className="w-5 h-5 text-white animate-spin" />}
+                <span>Calculate</span>
+              </button>
+            </div>
+
+            <div className="flex justify-end order-2 sm:order-3">
               <CompareWithQantasAPISwitch
                 checked={compareWithQantasCalc}
                 onChange={setCompareWithQantasCalc}
               />
-            </Grid>
-          </Grid>
-        </Box>
+            </div>
+          </div>
+        </div>
+
+        {/* Saved calculations */}
         {savedCalculations && savedCalculations.length > 0 && (
-          <Box pt={0} pb={2} px={2}>
+          <div className="mt-6 sm:mt-8 pb-4">
             <RecentCalculationSelection
               recentCalculations={savedCalculations}
               onRecentCalculationClick={loadRecentCalculation}
               onRecentCalculationDeleteClick={deleteRecentCalculation}
               onClearAllClick={clearAllRecentCalculations}
             />
-          </Box>
+          </div>
         )}
-        <Box pt={0} pb={2} px={2}>
-          <AdvancedInput setSegmentInputs={setAllSegmentInputs} />
-        </Box>
-      </Paper>
 
-      {calculationOutput && (
-        <Box
-          mt={3}
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            width: "100%",
-            gap: 2,
-          }}
+        <div
+          className={
+            savedCalculations && savedCalculations.length > 0 ? "pt-0 pb-2" : "mt-6 sm:mt-8 pb-2"
+          }
         >
+          <AdvancedInput setSegmentInputs={setAllSegmentInputs} />
+        </div>
+      </div>
+
+      {/* Calculation results */}
+      {calculationOutput && (
+        <div className="mt-6 flex flex-col items-center w-full min-w-0 gap-4">
           <ResultsSummary
             calculationOutput={calculationOutput}
             compareWithQantasCalc={compareWithQantasCalc}
@@ -334,7 +318,7 @@ export const QantasCalculator: React.FC = () => {
             calculatedData={calculationOutput}
             compareWithQantasCalc={compareWithQantasCalc}
           />
-        </Box>
+        </div>
       )}
     </div>
   );

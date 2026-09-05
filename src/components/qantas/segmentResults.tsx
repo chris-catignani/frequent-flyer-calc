@@ -4,26 +4,17 @@ import {
   EARN_CATEGORY_URLS,
   QANTAS_FARE_CLASS_DISPLAY,
 } from "@/calculators/qantas/constants";
-import {
-  TableRow,
-  TableCell,
-  Grid,
-  Typography,
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  Alert,
-  Tooltip,
-  Collapse,
-} from "@mui/material";
-import { Cancel, CheckCircle, Info, KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import { ALL_AIRLINES } from "@/constants/airlines";
 import { isAirlinePointsMatch, isElitePointsMatch, isClosePointsMatch } from "@/utils/comparison";
 import type { CalculationResult, SegmentResult } from "@/types/calculator";
+import { Dialog } from "@/components/common/dialog";
+import {
+  CheckCircleIcon,
+  CancelIcon,
+  InfoIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@/components/common/icons";
 
 export interface SegmentResultsProps {
   calculatedData?: CalculationResult | null;
@@ -35,27 +26,20 @@ export const SegmentResults: React.FC<SegmentResultsProps> = ({
   compareWithQantasCalc,
 }) => {
   if (!calculatedData) {
-    return <></>;
+    return null;
   }
 
   return (
-    <Grid
-      container
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      width="100%"
-      maxWidth="sm"
-    >
-      <TableContainer
+    <div className="flex flex-col items-center justify-center w-full min-w-0 max-w-full sm:max-w-2xl mx-auto mt-6">
+      <div
         data-testid="segment-results-table"
-        sx={{ width: "100%", maxWidth: "100%", overflowX: "auto" }}
+        className="w-full min-w-0 max-w-full overflow-x-auto rounded-lg border border-slate-200 bg-white shadow-xs"
       >
-        <Table size="small">
-          <TableHead>
+        <table className="w-full text-sm text-left">
+          <thead>
             <SegmentTableHeader compareWithQantasCalc={compareWithQantasCalc} />
-          </TableHead>
-          <TableBody>
+          </thead>
+          <tbody className="divide-y divide-slate-200">
             {calculatedData.segmentResults.map((segmentResult, segmentIdx) => (
               <SegmentTableRow
                 key={segmentIdx}
@@ -64,10 +48,10 @@ export const SegmentResults: React.FC<SegmentResultsProps> = ({
                 compareWithQantasCalc={compareWithQantasCalc}
               />
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Grid>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 
@@ -75,21 +59,23 @@ const SegmentTableHeader: React.FC<{ compareWithQantasCalc: boolean }> = ({
   compareWithQantasCalc,
 }) => {
   return (
-    <TableRow>
-      <TableCell sx={{ px: { xs: 1, sm: 2 } }}>Segment Route</TableCell>
-      <TableCell align="right" sx={{ px: { xs: 1, sm: 2 }, whiteSpace: "nowrap" }}>
-        Qantas Points
-      </TableCell>
-      <TableCell align="right" sx={{ px: { xs: 1, sm: 2 }, whiteSpace: "nowrap" }}>
-        Status Credits
-      </TableCell>
+    <tr className="border-b border-slate-200 bg-slate-50 text-xs sm:text-sm font-semibold text-slate-600 uppercase tracking-wider">
+      <th scope="col" className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-left">
+        <span className="hidden sm:inline">Segment </span>Route
+      </th>
+      <th scope="col" className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-right whitespace-nowrap">
+        <span className="hidden sm:inline">Qantas </span>Points
+      </th>
+      <th scope="col" className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-right whitespace-nowrap">
+        <span className="hidden sm:inline">Status </span>Credits
+      </th>
       {compareWithQantasCalc && (
-        <TableCell align="right" sx={{ px: { xs: 1, sm: 2 }, whiteSpace: "nowrap" }}>
-          Matches Qantas
-        </TableCell>
+        <th scope="col" className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-right whitespace-nowrap">
+          <span className="hidden sm:inline">Matches </span>Qantas
+        </th>
       )}
-      <TableCell sx={{ px: { xs: 0.5, sm: 2 } }} />
-    </TableRow>
+      <th scope="col" aria-label="Details" className="px-1 py-2.5 sm:px-2 sm:py-3.5 w-8 sm:w-10" />
+    </tr>
   );
 };
 
@@ -111,20 +97,19 @@ const AirlinePointsBreakdownDialog: React.FC<{
   const { airlinePointsBreakdown: { basePoints, eliteBonus, minPoints, totalEarned } = {} } =
     segmentResult;
   return (
-    <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Points Calculation Breakdown</DialogTitle>
-      <Grid container direction="column" justifyContent="center" alignItems="center" pb={2}>
-        <Typography mb={3} sx={{ textDecoration: "underline" }}>
+    <Dialog open={open} onClose={onClose} title="Points Calculation Breakdown">
+      <div className="flex flex-col items-center justify-center pb-2 text-center text-slate-700">
+        <p className="mb-3 font-semibold underline text-slate-900">
           Total Points: {totalEarned?.toLocaleString()}
-        </Typography>
-        <Typography lineHeight={1}>Base Points: {basePoints?.toLocaleString()}</Typography>
-        <Typography lineHeight={1}>+</Typography>
-        <Typography lineHeight={1}>
+        </p>
+        <p className="leading-tight">Base Points: {basePoints?.toLocaleString()}</p>
+        <p className="leading-tight">+</p>
+        <p className="leading-tight">
           Elite Bonus: {eliteBonus?.airlinePoints?.toLocaleString() || "n/a"}
-        </Typography>
-        <Typography my={2}>- or -</Typography>
-        <Typography>Min Points: {minPoints?.toLocaleString() || "n/a"}</Typography>
-      </Grid>
+        </p>
+        <p className="my-2">- or -</p>
+        <p>Min Points: {minPoints?.toLocaleString() || "n/a"}</p>
+      </div>
     </Dialog>
   );
 };
@@ -132,7 +117,8 @@ const AirlinePointsBreakdownDialog: React.FC<{
 const AirlinePointsDisplay: React.FC<{ segmentResult: SegmentResult }> = ({ segmentResult }) => {
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setOpen(true);
   };
 
@@ -141,22 +127,22 @@ const AirlinePointsDisplay: React.FC<{ segmentResult: SegmentResult }> = ({ segm
   };
 
   return (
-    <Grid container justifyContent="flex-end">
-      <Typography>{segmentResult.airlinePoints?.toLocaleString()}</Typography>
-      <IconButton
-        size="small"
-        sx={{ py: 0 }}
+    <div className="inline-flex items-center justify-end gap-1">
+      <span>{segmentResult.airlinePoints?.toLocaleString()}</span>
+      <button
+        type="button"
+        className="inline-flex items-center justify-center p-0.5 rounded-sm text-sky-600 hover:text-sky-700 hover:bg-sky-50 focus:outline-hidden cursor-pointer"
         onClick={handleClickOpen}
         aria-label="View points calculation breakdown"
       >
-        <Info />
-      </IconButton>
+        <InfoIcon className="w-4 h-4" />
+      </button>
       <AirlinePointsBreakdownDialog
         open={open}
         onClose={handleClose}
         segmentResult={segmentResult}
       />
-    </Grid>
+    </div>
   );
 };
 
@@ -166,11 +152,10 @@ const MatchesQantasSegmentErrorDialog: React.FC<{
   error: Error | { message?: string };
 }> = ({ open, onClose, error }) => {
   return (
-    <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Qantas Calculator failed to calculate segment</DialogTitle>
-      <Grid container direction="column" mx={2} mb={2}>
-        <Typography>{error.message}</Typography>
-      </Grid>
+    <Dialog open={open} onClose={onClose} title="Qantas Calculator failed to calculate segment">
+      <div className="flex flex-col gap-2 text-slate-700">
+        <p>{error.message}</p>
+      </div>
     </Dialog>
   );
 };
@@ -181,20 +166,19 @@ const MatchesQantasSegmentMisMatchDialog: React.FC<{
   segmentResult: SegmentResult;
 }> = ({ open, onClose, segmentResult }) => {
   return (
-    <Dialog onClose={onClose} open={open}>
-      <DialogTitle>Qantas Calculator results do not match our results for this segment</DialogTitle>
-      <Grid container direction="column" mx={2} mb={2}>
-        <Typography>Our Results:</Typography>
-        <Typography>Qantas Points: {segmentResult.airlinePoints}</Typography>
-        <Typography>Status Credits: {segmentResult.elitePoints}</Typography>
-        <Typography mt={2}>Qantas Calculator Results:</Typography>
-        <Typography>
-          Qantas Points: {segmentResult.qantasAPIResults?.qantasData?.airlinePoints}
-        </Typography>
-        <Typography>
-          Status Credits: {segmentResult.qantasAPIResults?.qantasData?.elitePoints}
-        </Typography>
-      </Grid>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      title="Qantas Calculator results do not match our results for this segment"
+    >
+      <div className="flex flex-col gap-1 text-slate-700">
+        <p className="font-medium text-slate-900">Our Results:</p>
+        <p>Qantas Points: {segmentResult.airlinePoints}</p>
+        <p>Status Credits: {segmentResult.elitePoints}</p>
+        <p className="mt-2 font-medium text-slate-900">Qantas Calculator Results:</p>
+        <p>Qantas Points: {segmentResult.qantasAPIResults?.qantasData?.airlinePoints}</p>
+        <p>Status Credits: {segmentResult.qantasAPIResults?.qantasData?.elitePoints}</p>
+      </div>
     </Dialog>
   );
 };
@@ -206,7 +190,7 @@ const MatchesQantasSegmentIcon: React.FC<{
   matchesElitePoints: boolean;
 }> = ({ segmentResult, qantasAPIError, matchesAirlinePoints, matchesElitePoints }) => {
   if (!segmentResult.qantasAPIResults) {
-    return <></>;
+    return null;
   }
 
   const qantasAirlinePoints = segmentResult.qantasAPIResults?.qantasData?.airlinePoints;
@@ -222,33 +206,36 @@ const MatchesQantasSegmentIcon: React.FC<{
 
   if (qantasAPIError) {
     return (
-      <Tooltip title="Qantas Calculator Failed to Calculate">
-        <IconButton
-          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
-          aria-label="Qantas Calculator Failed to Calculate segment"
-        >
-          <Info color="warning" />
-        </IconButton>
-      </Tooltip>
+      <button
+        type="button"
+        title="Qantas Calculator Failed to Calculate"
+        className="inline-flex items-center justify-center p-0 text-amber-500 hover:text-amber-600 focus:outline-hidden cursor-pointer"
+        aria-label="Qantas Calculator Failed to Calculate segment"
+      >
+        <InfoIcon className="w-5 h-5 text-amber-500" />
+      </button>
     );
   } else if (matchesAirlinePoints && matchesElitePoints) {
     return (
-      <Tooltip title={matchTooltip}>
-        <IconButton sx={{ minHeight: 0, minWidth: 0, padding: 0 }} aria-label={matchTooltip}>
-          <CheckCircle color="success" />
-        </IconButton>
-      </Tooltip>
+      <button
+        type="button"
+        title={matchTooltip}
+        className="inline-flex items-center justify-center p-0 text-emerald-600 focus:outline-hidden cursor-pointer"
+        aria-label={matchTooltip}
+      >
+        <CheckCircleIcon className="w-5 h-5 text-emerald-600" />
+      </button>
     );
   } else {
     return (
-      <Tooltip title="Does not match Qantas Calculator">
-        <IconButton
-          sx={{ minHeight: 0, minWidth: 0, padding: 0 }}
-          aria-label="Does not match Qantas Calculator for this segment"
-        >
-          <Cancel color="error" />
-        </IconButton>
-      </Tooltip>
+      <button
+        type="button"
+        title="Does not match Qantas Calculator"
+        className="inline-flex items-center justify-center p-0 text-red-600 hover:text-red-700 focus:outline-hidden cursor-pointer"
+        aria-label="Does not match Qantas Calculator for this segment"
+      >
+        <CancelIcon className="w-5 h-5 text-red-600" />
+      </button>
     );
   }
 };
@@ -267,14 +254,23 @@ const SegmentTableRow: React.FC<{
     const errorColSpan = compareWithQantasCalc ? 4 : 3;
     const errorMsg = error instanceof Error ? error.message : String(error);
     return (
-      <TableRow data-testid={`segment-result-row-${segmentIdx}`}>
-        <TableCell component="th" scope="row" data-testid={`segment-result-route-${segmentIdx}`}>
+      <tr data-testid={`segment-result-row-${segmentIdx}`} className="border-b border-slate-200">
+        <th
+          scope="row"
+          data-testid={`segment-result-route-${segmentIdx}`}
+          className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base font-medium text-slate-900 whitespace-nowrap text-left"
+        >
           {segment.fromAirport?.iata?.toLowerCase()} - {segment.toAirport?.iata?.toLowerCase()}
-        </TableCell>
-        <TableCell align="right" colSpan={errorColSpan}>
-          <Alert severity="error">{errorMsg}</Alert>
-        </TableCell>
-      </TableRow>
+        </th>
+        <td colSpan={errorColSpan} className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-right">
+          <div
+            role="alert"
+            className="rounded-lg bg-red-50 border border-red-200 p-2 text-xs sm:text-sm text-red-700 text-left"
+          >
+            {errorMsg}
+          </div>
+        </td>
+      </tr>
     );
   }
 
@@ -291,43 +287,42 @@ const SegmentTableRow: React.FC<{
 
   return (
     <>
-      <TableRow sx={{ cursor: "pointer" }} data-testid={`segment-result-row-${segmentIdx}`}>
-        <TableCell
-          component="th"
+      <tr
+        className="hover:bg-slate-50 transition-colors cursor-pointer border-b border-slate-200"
+        data-testid={`segment-result-row-${segmentIdx}`}
+      >
+        <th
           scope="row"
           data-testid={`segment-result-route-${segmentIdx}`}
-          onClick={() => setExpandRow(!expandRow)}
-          sx={{ px: { xs: 1, sm: 2 }, whiteSpace: "nowrap" }}
+          onClick={() => setExpandRow((prev) => !prev)}
+          className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base font-medium text-slate-900 whitespace-nowrap text-left"
         >
           {segment.fromAirport?.iata?.toLowerCase()} - {segment.toAirport?.iata?.toLowerCase()}
-        </TableCell>
-        <TableCell
-          align="right"
+        </th>
+        <td
           data-testid={`segment-result-points-${segmentIdx}`}
-          onClick={() => setExpandRow(!expandRow)}
-          sx={{ px: { xs: 1, sm: 2 } }}
+          onClick={() => setExpandRow((prev) => !prev)}
+          className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base text-right text-slate-700 whitespace-nowrap"
         >
           {segmentResult.airlinePoints?.toLocaleString()}
-        </TableCell>
-        <TableCell
-          align="right"
+        </td>
+        <td
           data-testid={`segment-result-status-credits-${segmentIdx}`}
-          onClick={() => setExpandRow(!expandRow)}
-          sx={{ px: { xs: 1, sm: 2 } }}
+          onClick={() => setExpandRow((prev) => !prev)}
+          className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base text-right text-slate-700 whitespace-nowrap"
         >
           {segmentResult.elitePoints?.toLocaleString()}
-        </TableCell>
+        </td>
         {compareWithQantasCalc && (
-          <TableCell
-            align="right"
+          <td
             onClick={() => {
               if (matchesAirlinePoints && matchesElitePoints) {
-                setExpandRow(!expandRow);
+                setExpandRow((prev) => !prev);
               } else {
                 setOpenModal(true);
               }
             }}
-            sx={{ px: { xs: 1, sm: 2 } }}
+            className="px-2 py-2.5 sm:px-4 sm:py-3.5 text-xs sm:text-base text-right"
           >
             <MatchesQantasSegmentIcon
               segmentResult={segmentResult}
@@ -335,82 +330,94 @@ const SegmentTableRow: React.FC<{
               matchesAirlinePoints={matchesAirlinePoints}
               matchesElitePoints={matchesElitePoints}
             />
-          </TableCell>
+          </td>
         )}
-        <TableCell onClick={() => setExpandRow(!expandRow)} sx={{ px: { xs: 0.5, sm: 2 } }}>
-          <IconButton
-            size="small"
+        <td
+          onClick={() => setExpandRow((prev) => !prev)}
+          className="px-1 py-2.5 sm:px-2 sm:py-3.5 text-right w-8 sm:w-10"
+        >
+          <button
+            type="button"
             aria-expanded={expandRow}
             aria-label={
               expandRow
                 ? `Hide calculation breakdown for segment ${segmentIdx + 1}`
                 : `Show calculation breakdown for segment ${segmentIdx + 1}`
             }
+            onClick={(e) => {
+              e.stopPropagation();
+              setExpandRow((prev) => !prev);
+            }}
+            className="inline-flex items-center justify-center p-1 rounded-md text-slate-400 hover:text-slate-600 hover:bg-slate-100 focus:outline-hidden cursor-pointer"
           >
-            {expandRow ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-          </IconButton>
-        </TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell
-          style={{ paddingBottom: 0, paddingTop: 0 }}
-          colSpan={compareWithQantasCalc ? 5 : 4}
-        >
-          <Collapse in={expandRow} timeout="auto" unmountOnExit>
-            <Grid container m={2} direction="column" sx={{ wordBreak: "break-word" }}>
-              <Grid>
-                <Typography>
-                  Airline: {ALL_AIRLINES[segment.airline] || segment.airline.toUpperCase()}
-                </Typography>
-              </Grid>
-              <Grid>
-                <Typography>Fare Class: {getFareClassDisplay(segment.fareClass)}</Typography>
-              </Grid>
-              <Grid container direction="row" spacing={1}>
-                <Typography>Qantas Points:</Typography>
+            {expandRow ? (
+              <ChevronUpIcon className="w-5 h-5" />
+            ) : (
+              <ChevronDownIcon className="w-5 h-5" />
+            )}
+          </button>
+        </td>
+      </tr>
+      {expandRow && (
+        <tr className="bg-slate-50/50">
+          <td
+            colSpan={compareWithQantasCalc ? 5 : 4}
+            className="p-4 text-sm text-slate-700 break-words"
+          >
+            <div className="flex flex-col gap-2">
+              <p>Airline: {ALL_AIRLINES[segment.airline] || segment.airline.toUpperCase()}</p>
+              <p>Fare Class: {getFareClassDisplay(segment.fareClass)}</p>
+              <div className="flex items-center gap-1">
+                <p>Qantas Points:</p>
                 <AirlinePointsDisplay segmentResult={segmentResult} />
-              </Grid>
-              <Grid>
-                <Typography>
-                  Status Credits: {segmentResult.elitePoints?.toLocaleString()}
-                </Typography>
-              </Grid>
-              <Grid container direction="row" spacing={1}>
-                <Typography>Earn Category:</Typography>
-                <Typography>
-                  <a href={EARN_CATEGORY_URLS[segment.airline]} target="_blank" rel="noreferrer">
-                    {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory || ""]}
-                  </a>
-                </Typography>
-              </Grid>
-              <Grid container direction="row" spacing={1}>
-                <Typography>Earning Table:</Typography>
-                <Typography>
-                  <a href={segmentResult.ruleUrl} target="_blank" rel="noreferrer">
-                    {segmentResult.ruleName}
-                  </a>
-                </Typography>
-              </Grid>
-              <Grid>
-                <Typography>Calculation Notes: {segmentResult.notes}</Typography>
-              </Grid>
-            </Grid>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-      {qantasAPIError && (
-        <MatchesQantasSegmentErrorDialog
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-          error={qantasAPIError}
-        />
+              </div>
+              <p>Status Credits: {segmentResult.elitePoints?.toLocaleString()}</p>
+              <div className="flex items-center gap-1 flex-wrap">
+                <p>Earn Category:</p>
+                <a
+                  href={EARN_CATEGORY_URLS[segment.airline]}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  {EARN_CATEGORY_DISPLAY[segmentResult.fareEarnCategory || ""]}
+                </a>
+              </div>
+              <div className="flex items-center gap-1 flex-wrap">
+                <p>Earning Table:</p>
+                <a
+                  href={segmentResult.ruleUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-primary hover:underline"
+                >
+                  {segmentResult.ruleName}
+                </a>
+              </div>
+              <p>Calculation Notes: {segmentResult.notes}</p>
+            </div>
+          </td>
+        </tr>
       )}
-      {!qantasAPIError && (!matchesAirlinePoints || !matchesElitePoints) && (
-        <MatchesQantasSegmentMisMatchDialog
-          open={openModal}
-          onClose={() => setOpenModal(false)}
-          segmentResult={segmentResult}
-        />
+      {openModal && (
+        <tr>
+          <td colSpan={compareWithQantasCalc ? 5 : 4} className="p-0 border-0">
+            {qantasAPIError && (
+              <MatchesQantasSegmentErrorDialog
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                error={qantasAPIError}
+              />
+            )}
+            {!qantasAPIError && (!matchesAirlinePoints || !matchesElitePoints) && (
+              <MatchesQantasSegmentMisMatchDialog
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                segmentResult={segmentResult}
+              />
+            )}
+          </td>
+        </tr>
       )}
     </>
   );
