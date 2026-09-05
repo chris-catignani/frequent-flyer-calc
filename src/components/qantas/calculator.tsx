@@ -313,7 +313,16 @@ export const QantasCalculator: React.FC = () => {
       </Paper>
 
       {calculationOutput && (
-        <Box mt={3} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box
+          mt={3}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            width: "100%",
+            gap: 2,
+          }}
+        >
           <ResultsSummary
             calculationOutput={calculationOutput}
             compareWithQantasCalc={compareWithQantasCalc}

@@ -40,7 +40,7 @@ export const ChangeLog: React.FC = () => {
             ▼
           </span>
         </summary>
-        <div className="mt-3 pl-2 border-l-2 border-slate-200 space-y-4">
+        <div className="mt-3 space-y-4">
           {CHANGE_LOG.map(({ month, entries }) => (
             <div key={month} className="space-y-1">
               <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">

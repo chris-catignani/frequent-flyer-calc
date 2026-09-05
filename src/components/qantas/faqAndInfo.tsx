@@ -52,12 +52,9 @@ export const FaqAndInfo: React.FC = () => {
       <div className="mb-4">
         <h2 className="text-xl font-semibold text-slate-900 mb-3">Frequently Asked Questions</h2>
 
-        <div className="space-y-2">
+        <div className="rounded-lg border border-slate-200 bg-white shadow-sm divide-y divide-slate-200 overflow-hidden">
           {/* FAQ 1 */}
-          <details
-            id="faq1"
-            className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
+          <details id="faq1" className="group p-4">
             <summary
               id="faq1-header"
               aria-controls="faq1-content"
@@ -79,10 +76,7 @@ export const FaqAndInfo: React.FC = () => {
           </details>
 
           {/* FAQ 2 */}
-          <details
-            id="faq2"
-            className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
+          <details id="faq2" className="group p-4">
             <summary
               id="faq2-header"
               aria-controls="faq2-content"
@@ -136,10 +130,7 @@ export const FaqAndInfo: React.FC = () => {
           </details>
 
           {/* FAQ 3 */}
-          <details
-            id="faq3"
-            className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
+          <details id="faq3" className="group p-4">
             <summary
               id="faq3-header"
               aria-controls="faq3-content"
@@ -161,10 +152,7 @@ export const FaqAndInfo: React.FC = () => {
           </details>
 
           {/* FAQ 4 */}
-          <details
-            id="faq4"
-            className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
+          <details id="faq4" className="group p-4">
             <summary
               id="faq4-header"
               aria-controls="faq4-content"
@@ -188,10 +176,7 @@ export const FaqAndInfo: React.FC = () => {
           </details>
 
           {/* FAQ 5 */}
-          <details
-            id="faq5"
-            className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
+          <details id="faq5" className="group p-4">
             <summary
               id="faq5-header"
               aria-controls="faq5-content"
@@ -212,10 +197,7 @@ export const FaqAndInfo: React.FC = () => {
           </details>
 
           {/* FAQ 6 */}
-          <details
-            id="faq6"
-            className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
+          <details id="faq6" className="group p-4">
             <summary
               id="faq6-header"
               aria-controls="faq6-content"
@@ -237,10 +219,7 @@ export const FaqAndInfo: React.FC = () => {
           </details>
 
           {/* FAQ 7 */}
-          <details
-            id="faq7"
-            className="group rounded-lg border border-slate-200 bg-white p-4 shadow-sm"
-          >
+          <details id="faq7" className="group p-4">
             <summary
               id="faq7-header"
               aria-controls="faq7-content"
