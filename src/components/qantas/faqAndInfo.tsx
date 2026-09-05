@@ -42,7 +42,7 @@ export const FaqAndInfo: React.FC = () => {
               flexDirection: "column",
             }}
           >
-            <Typography variant="subtitle2" fontWeight={600} gutterBottom>
+            <Typography variant="subtitle2" component="h3" fontWeight={600} gutterBottom>
               Distance Bands &amp; Minimums
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -62,7 +62,7 @@ export const FaqAndInfo: React.FC = () => {
               flexDirection: "column",
             }}
           >
-            <Typography variant="subtitle2" fontWeight={600} gutterBottom>
+            <Typography variant="subtitle2" component="h3" fontWeight={600} gutterBottom>
               Elite Status Tier Multipliers
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -81,7 +81,7 @@ export const FaqAndInfo: React.FC = () => {
               flexDirection: "column",
             }}
           >
-            <Typography variant="subtitle2" fontWeight={600} gutterBottom>
+            <Typography variant="subtitle2" component="h3" fontWeight={600} gutterBottom>
               Partner Airlines &amp; Alliances
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -108,7 +108,7 @@ export const FaqAndInfo: React.FC = () => {
               How are Qantas Points and Status Credits calculated?
             </Typography>
           </AccordionSummary>
-          <AccordionDetails id="faq1-content">
+          <AccordionDetails>
             <Typography variant="body2" color="text.secondary">
               Points and Status Credits are calculated per segment based on the marketing airline
               (the flight number booked), fare class letter, route distance (using great-circle
@@ -128,7 +128,7 @@ export const FaqAndInfo: React.FC = () => {
               Where can I find official Qantas earning tables and fare classes?
             </Typography>
           </AccordionSummary>
-          <AccordionDetails id="faq2-content">
+          <AccordionDetails>
             <Typography variant="body2" color="text.secondary" paragraph>
               Official tables published by Qantas:
             </Typography>
@@ -183,7 +183,7 @@ export const FaqAndInfo: React.FC = () => {
               How do elite status tier bonuses work?
             </Typography>
           </AccordionSummary>
-          <AccordionDetails id="faq3-content">
+          <AccordionDetails>
             <Typography variant="body2" color="text.secondary">
               Silver (+50%), Gold (+75%), Platinum (+100%), and Platinum One (+100%) members receive
               bonus Qantas Points when travelling on eligible flights with a Qantas (QF), Jetstar
@@ -203,7 +203,7 @@ export const FaqAndInfo: React.FC = () => {
               Which partner airlines earn Status Credits?
             </Typography>
           </AccordionSummary>
-          <AccordionDetails id="faq4-content">
+          <AccordionDetails>
             <Typography variant="body2" color="text.secondary">
               Only <strong>oneworld alliance</strong> partner airlines earn Status Credits in
               addition to Qantas Points. These include American Airlines, British Airways, Cathay
@@ -225,7 +225,7 @@ export const FaqAndInfo: React.FC = () => {
               Do Jetstar flights earn Qantas Points and Status Credits?
             </Typography>
           </AccordionSummary>
-          <AccordionDetails id="faq5-content">
+          <AccordionDetails>
             <Typography variant="body2" color="text.secondary">
               Yes, provided you purchase an eligible fare bundle with Jetstar (Starter Plus, Flex,
               Flex Plus, Starter Max, or Business Max). Basic unbundled Economy Starter fares do not
@@ -244,7 +244,7 @@ export const FaqAndInfo: React.FC = () => {
               Why do some results differ slightly from the official Qantas calculator?
             </Typography>
           </AccordionSummary>
-          <AccordionDetails id="faq6-content">
+          <AccordionDetails>
             <Typography variant="body2" color="text.secondary">
               Small variations (typically 1–10 points) can occur due to subtle great-circle distance
               calculation differences or specific domestic codeshare rules. You can use our
@@ -264,7 +264,7 @@ export const FaqAndInfo: React.FC = () => {
               What is a Status Run?
             </Typography>
           </AccordionSummary>
-          <AccordionDetails id="faq7-content">
+          <AccordionDetails>
             <Typography variant="body2" color="text.secondary">
               A Status Run is an itinerary planned specifically to maximize Status Credits at the
               lowest cost per credit, helping frequent flyers reach or retain elite tiers (Silver,

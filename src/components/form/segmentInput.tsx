@@ -243,6 +243,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         />
         <Typography
           variant="subtitle2"
+          component="span"
           color="text.secondary"
           sx={{ display: { xs: "inline", sm: "none" }, fontWeight: 500 }}
         >

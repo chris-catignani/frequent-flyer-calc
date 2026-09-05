@@ -48,6 +48,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         capture_pageview: false, // Pageviews tracked manually with Next.js router
         capture_pageleave: true,
         person_profiles: "identified_only",
+        disable_session_recording: true,
+        disable_surveys: true,
       });
     }
   }, []);

@@ -4,6 +4,7 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
   typography: {
     fontFamily: [
+      "var(--font-roboto)",
       "Roboto",
       "-apple-system",
       "BlinkMacSystemFont",
@@ -11,6 +12,17 @@ const theme = createTheme({
       "Arial",
       "sans-serif",
     ].join(","),
+  },
+  components: {
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected, &.Mui-selected.MuiToggleButton-primary": {
+            color: "#1565c0",
+          },
+        },
+      },
+    },
   },
 });
 

@@ -71,7 +71,16 @@ const CompareWithQantasAPISwitch: React.FC<{
         checked={checked}
         onChange={(event) => onChange(event.target.checked)}
         disabled={!FLAG_ENABLE_QANTAS_API}
-        inputProps={{ "aria-label": "Compare with Qantas website calculator" }}
+        inputProps={{
+          "aria-label": "Compare with Qantas website calculator",
+          role: "switch",
+        }}
+        slotProps={{
+          input: {
+            "aria-label": "Compare with Qantas website calculator",
+            role: "switch",
+          },
+        }}
       />
       <Typography variant="body2" sx={{ lineHeight: 1.2 }}>
         Compare With
@@ -190,7 +199,7 @@ export default function Qantas() {
   } = useCalculator({ program: qantasProgram });
 
   return (
-    <Container maxWidth="md" sx={{ px: { xs: 2, sm: 3 } }}>
+    <Container component="main" maxWidth="md" sx={{ px: { xs: 2, sm: 3 } }}>
       <Box
         sx={{
           display: "flex",
