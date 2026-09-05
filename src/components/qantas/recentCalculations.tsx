@@ -1,7 +1,6 @@
 import React, { useState } from "react";
+import { ChevronDownIcon, ChevronUpIcon, ClearIcon } from "@/components/common/icons";
 import { buildRouteDisplayString } from "@/utils/routes";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Chip, Collapse, Grid, Stack, Typography } from "@mui/material";
 import type { SavedCalculation } from "@/utils/recentCalculations";
 
 export interface RecentCalculationSelectionProps {
@@ -20,26 +19,32 @@ export const RecentCalculationSelection: React.FC<RecentCalculationSelectionProp
   const [isOpen, setOpen] = useState(false);
 
   return (
-    <Stack spacing={1}>
-      <Stack
+    <div className="flex flex-col gap-2">
+      <button
+        type="button"
         data-testid="recent-calculations-toggle"
-        direction="row"
-        spacing={1}
         onClick={() => setOpen(!isOpen)}
-        sx={{ cursor: "pointer" }}
+        aria-expanded={isOpen}
+        className="flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900 cursor-pointer w-fit select-none"
       >
-        <Typography>Recent Calculations</Typography>
-        {isOpen ? <ExpandLess /> : <ExpandMore />}
-      </Stack>
-      <Collapse in={isOpen} timeout="auto" unmountOnExit>
-        <RecentCalculations
-          recentCalculations={recentCalculations}
-          onRecentCalculationClick={onRecentCalculationClick}
-          onRecentCalculationDeleteClick={onRecentCalculationDeleteClick}
-          onClearAllClick={onClearAllClick}
-        />
-      </Collapse>
-    </Stack>
+        <span>Recent Calculations</span>
+        {isOpen ? (
+          <ChevronUpIcon className="w-4 h-4 text-slate-500" />
+        ) : (
+          <ChevronDownIcon className="w-4 h-4 text-slate-500" />
+        )}
+      </button>
+      {isOpen && (
+        <div className="mt-1">
+          <RecentCalculations
+            recentCalculations={recentCalculations}
+            onRecentCalculationClick={onRecentCalculationClick}
+            onRecentCalculationDeleteClick={onRecentCalculationDeleteClick}
+            onClearAllClick={onClearAllClick}
+          />
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -56,47 +61,66 @@ export const RecentCalculations: React.FC<RecentCalculationsProps> = ({
   onRecentCalculationDeleteClick,
   onClearAllClick,
 }) => {
-  if (!recentCalculations) {
-    return <></>;
+  if (!recentCalculations || recentCalculations.length === 0) {
+    return null;
   }
 
   const buildChipLabel = (recentCalculation: SavedCalculation) => {
     const tripType = recentCalculation.tripType === "one way" ? "o/w" : "r/t";
-
     const routeDisplayString = buildRouteDisplayString(recentCalculation.segmentInputs);
-
     return `${tripType} ${recentCalculation.eliteStatus} ${routeDisplayString}`;
   };
 
   const calcChips = recentCalculations.map((recentCalculation, idx) => {
+    const label = buildChipLabel(recentCalculation);
     return (
-      <Chip
+      <div
+        role="button"
+        tabIndex={0}
         data-testid={`recent-calculation-chip-${idx}`}
-        size="small"
         key={idx}
-        label={buildChipLabel(recentCalculation)}
         onClick={() => onRecentCalculationClick(idx)}
-        onDelete={() => onRecentCalculationDeleteClick(idx)}
-      />
+        onKeyDown={(e) => {
+          if (e.target === e.currentTarget && (e.key === "Enter" || e.key === " ")) {
+            e.preventDefault();
+            onRecentCalculationClick(idx);
+          }
+        }}
+        className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 pl-3 pr-1.5 py-1 text-xs font-medium text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer select-none focus:outline-hidden focus:ring-2 focus:ring-primary"
+      >
+        <span>{label}</span>
+        <button
+          type="button"
+          aria-label={`Delete recent calculation ${label}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRecentCalculationDeleteClick(idx);
+          }}
+          className="rounded-full p-0.5 text-slate-400 hover:bg-slate-300 hover:text-slate-600 transition-colors focus:outline-hidden focus:ring-1 focus:ring-slate-500 cursor-pointer"
+        >
+          <ClearIcon className="w-3.5 h-3.5" />
+        </button>
+      </div>
     );
   });
 
   return (
-    <Grid container spacing={1}>
+    <div className="flex flex-wrap items-center gap-2">
       {calcChips}
       <ClearAllChip onClick={onClearAllClick} />
-    </Grid>
+    </div>
   );
 };
 
 const ClearAllChip: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   return (
-    <Chip
+    <button
+      type="button"
       data-testid="recent-calculations-clear-all"
-      size="small"
-      color="primary"
-      label={"Clear All"}
       onClick={onClick}
-    />
+      className="inline-flex items-center rounded-full bg-primary px-3 py-1 text-xs font-medium text-white hover:bg-primary-hover transition-colors cursor-pointer focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-1"
+    >
+      Clear All
+    </button>
   );
 };

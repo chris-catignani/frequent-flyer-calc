@@ -1,18 +1,6 @@
 import React, { useState } from "react";
+import { ChevronDownIcon, ChevronUpIcon } from "@/components/common/icons";
 import { parseEncodedTextItin, parseItaMatrixInput } from "@/utils/segmentInputParser";
-import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import {
-  Accordion,
-  AccordionActions,
-  AccordionDetails,
-  AccordionSummary,
-  Box,
-  Button,
-  Collapse,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
 import type { SegmentInput } from "@/models/segmentInput";
 
 export interface AdvancedInputProps {
@@ -28,21 +16,27 @@ export const AdvancedInput: React.FC<AdvancedInputProps> = ({ setSegmentInputs }
   };
 
   return (
-    <Stack spacing={1}>
-      <Stack
+    <div className="flex flex-col gap-2">
+      <button
+        type="button"
         data-testid="advanced-input-toggle"
-        direction="row"
-        spacing={1}
         onClick={() => setOpen(!isOpen)}
-        sx={{ cursor: "pointer" }}
+        aria-expanded={isOpen}
+        className="flex items-center gap-1 text-sm font-medium text-slate-700 hover:text-slate-900 cursor-pointer w-fit select-none"
       >
-        <Typography>Advanced Input</Typography>
-        {isOpen ? <ExpandLess /> : <ExpandMore />}
-      </Stack>
-      <Collapse in={isOpen} timeout="auto" unmountOnExit>
-        <AdvancedInputSelection onApplyClicked={onApplyClicked} />
-      </Collapse>
-    </Stack>
+        <span>Advanced Input</span>
+        {isOpen ? (
+          <ChevronUpIcon className="w-4 h-4 text-slate-500" />
+        ) : (
+          <ChevronDownIcon className="w-4 h-4 text-slate-500" />
+        )}
+      </button>
+      {isOpen && (
+        <div className="mt-1">
+          <AdvancedInputSelection onApplyClicked={onApplyClicked} />
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -56,10 +50,9 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
   const [textItin, setTextItin] = useState<string>("");
   const [itaMatrixJson, setItaMatrixJson] = useState<string>("");
 
-  const handleAccordionChange =
-    (accordionPanel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? accordionPanel : false);
-    };
+  const handleAccordionToggle = (accordionPanel: string) => {
+    setExpanded(expanded === accordionPanel ? false : accordionPanel);
+  };
 
   const applyTextItinInput = () => {
     const { segmentInputs, parsingError } = parseEncodedTextItin(textItin, "\n", " ");
@@ -88,50 +81,79 @@ const AdvancedInputSelection: React.FC<AdvancedInputSelectionProps> = ({ onApply
   };
 
   return (
-    <Box>
-      <Accordion
-        data-testid="advanced-input-text-accordion"
-        expanded={expanded === "text-itin"}
-        onChange={handleAccordionChange("text-itin")}
-      >
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography>Free Form Text Itinerary</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ pb: 0 }}>
-          <FreeFormTextItinerary
-            textItin={textItin}
-            textItinChanged={setTextItin}
-            error={inputError["text-itin"]}
-          />
-        </AccordionDetails>
-        <AccordionActions sx={{ pt: 0 }}>
-          <Button data-testid="advanced-input-text-apply-button" onClick={applyTextItinInput}>
-            Apply
-          </Button>
-        </AccordionActions>
-      </Accordion>
-      <Accordion
-        data-testid="advanced-input-ita-accordion"
-        expanded={expanded === "ita-matrix"}
-        onChange={handleAccordionChange("ita-matrix")}
-      >
-        <AccordionSummary expandIcon={<ExpandMore />}>
-          <Typography>ITA Matrix Itinerary</Typography>
-        </AccordionSummary>
-        <AccordionDetails sx={{ pb: 0 }}>
-          <ItaMatrixItinerary
-            itaMatrixJson={itaMatrixJson}
-            itaMatrixJsonChanged={setItaMatrixJson}
-            error={inputError["ita-matrix"]}
-          />
-        </AccordionDetails>
-        <AccordionActions sx={{ pt: 0 }}>
-          <Button data-testid="advanced-input-ita-apply-button" onClick={applyItaMatrixInput}>
-            Apply
-          </Button>
-        </AccordionActions>
-      </Accordion>
-    </Box>
+    <div className="flex flex-col gap-2">
+      <div className="rounded-lg border border-slate-200 overflow-hidden bg-white shadow-xs">
+        <button
+          type="button"
+          data-testid="advanced-input-text-accordion"
+          onClick={() => handleAccordionToggle("text-itin")}
+          aria-expanded={expanded === "text-itin"}
+          className="flex w-full items-center justify-between bg-slate-50 px-4 py-3 text-left text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+        >
+          <span>Free Form Text Itinerary</span>
+          {expanded === "text-itin" ? (
+            <ChevronUpIcon className="w-4 h-4 text-slate-500" />
+          ) : (
+            <ChevronDownIcon className="w-4 h-4 text-slate-500" />
+          )}
+        </button>
+        {expanded === "text-itin" && (
+          <div className="border-t border-slate-200 p-4">
+            <FreeFormTextItinerary
+              textItin={textItin}
+              textItinChanged={setTextItin}
+              error={inputError["text-itin"]}
+            />
+            <div className="mt-3 flex justify-end">
+              <button
+                type="button"
+                data-testid="advanced-input-text-apply-button"
+                onClick={applyTextItinInput}
+                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="rounded-lg border border-slate-200 overflow-hidden bg-white shadow-xs">
+        <button
+          type="button"
+          data-testid="advanced-input-ita-accordion"
+          onClick={() => handleAccordionToggle("ita-matrix")}
+          aria-expanded={expanded === "ita-matrix"}
+          className="flex w-full items-center justify-between bg-slate-50 px-4 py-3 text-left text-sm font-medium text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+        >
+          <span>ITA Matrix Itinerary</span>
+          {expanded === "ita-matrix" ? (
+            <ChevronUpIcon className="w-4 h-4 text-slate-500" />
+          ) : (
+            <ChevronDownIcon className="w-4 h-4 text-slate-500" />
+          )}
+        </button>
+        {expanded === "ita-matrix" && (
+          <div className="border-t border-slate-200 p-4">
+            <ItaMatrixItinerary
+              itaMatrixJson={itaMatrixJson}
+              itaMatrixJsonChanged={setItaMatrixJson}
+              error={inputError["ita-matrix"]}
+            />
+            <div className="mt-3 flex justify-end">
+              <button
+                type="button"
+                data-testid="advanced-input-ita-apply-button"
+                onClick={applyItaMatrixInput}
+                className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer"
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 
@@ -147,40 +169,34 @@ const FreeFormTextItinerary: React.FC<FreeFormTextItineraryProps> = ({
   error,
 }) => {
   return (
-    <Stack spacing={2}>
-      <Box>
-        <Typography>Type out an itinerary below, click apply followed by calculate.</Typography>
-        <Typography>The itinerary format rules are:</Typography>
-        <ul style={{ margin: 0 }}>
+    <div className="flex flex-col gap-3">
+      <div className="text-sm text-slate-600">
+        <p>Type out an itinerary below, click apply followed by calculate.</p>
+        <p className="mt-1">The itinerary format rules are:</p>
+        <ul className="list-disc pl-5 mt-1 space-y-1">
+          <li>Each segment of the itinerary should be on its own line</li>
           <li>
-            <Typography>Each segment of the itinerary should be on its own line</Typography>
-          </li>
-          <li>
-            <Typography>
-              Format a segment as: &lt;airline iata&gt; &lt;from airport iata&gt; &lt;to airport
-              iata&gt; &lt;fare class letter&gt;
-            </Typography>
-            <ul>
-              <li>
-                <Typography>For example: qf syd mel i</Typography>
-              </li>
+            Format a segment as: &lt;airline iata&gt; &lt;from airport iata&gt; &lt;to airport
+            iata&gt; &lt;fare class letter&gt;
+            <ul className="list-circle pl-5 mt-0.5">
+              <li>For example: qf syd mel i</li>
             </ul>
           </li>
         </ul>
-      </Box>
-      <TextField
-        data-testid="advanced-input-text-field"
-        fullWidth
-        multiline
-        maxRows={10}
-        label=""
-        placeholder="Text Itinerary here"
-        value={textItin}
-        error={Boolean(error)}
-        helperText={error ? error : " "}
-        onChange={(event) => textItinChanged(event.target.value)}
-      />
-    </Stack>
+      </div>
+      <div data-testid="advanced-input-text-field" className="w-full">
+        <textarea
+          rows={6}
+          placeholder="Text Itinerary here"
+          value={textItin}
+          onChange={(e) => textItinChanged(e.target.value)}
+          className={`w-full rounded-md border ${
+            error ? "border-red-500 focus:ring-red-500" : "border-slate-300 focus:ring-primary"
+          } p-3 text-sm text-slate-900 focus:outline-hidden focus:ring-2`}
+        />
+        {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
+      </div>
+    </div>
   );
 };
 
@@ -196,26 +212,26 @@ const ItaMatrixItinerary: React.FC<ItaMatrixItineraryProps> = ({
   error,
 }) => {
   return (
-    <Stack spacing={2}>
-      <Typography>
+    <div className="flex flex-col gap-3">
+      <p className="text-sm text-slate-600">
         Paste the ITA Matrix itinerary below to calculate the Qantas Points and Status Credits.
         <br />
-        On the &quot;Itinerary Details&quot; page, in the &quot;Share & Export&quot; section, select
-        &quot;Copy itinerary as JSON&quot; and paste the results below. Then click apply followed by
-        calculate.
-      </Typography>
-      <TextField
-        data-testid="advanced-input-ita-field"
-        fullWidth
-        multiline
-        maxRows={10}
-        label=""
-        placeholder="Paste ITA Matrix JSON here"
-        value={itaMatrixJson}
-        error={Boolean(error)}
-        helperText={error ? error : " "}
-        onChange={(event) => itaMatrixJsonChanged(event.target.value)}
-      />
-    </Stack>
+        On the &quot;Itinerary Details&quot; page, in the &quot;Share &amp; Export&quot; section,
+        select &quot;Copy itinerary as JSON&quot; and paste the results below. Then click apply
+        followed by calculate.
+      </p>
+      <div data-testid="advanced-input-ita-field" className="w-full">
+        <textarea
+          rows={6}
+          placeholder="Paste ITA Matrix JSON here"
+          value={itaMatrixJson}
+          onChange={(e) => itaMatrixJsonChanged(e.target.value)}
+          className={`w-full rounded-md border ${
+            error ? "border-red-500 focus:ring-red-500" : "border-slate-300 focus:ring-primary"
+          } p-3 text-sm text-slate-900 focus:outline-hidden focus:ring-2`}
+        />
+        {error && <p className="text-xs text-red-600 mt-1">{error}</p>}
+      </div>
+    </div>
   );
 };
