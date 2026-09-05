@@ -29,7 +29,7 @@ export const Footer: React.FC = () => {
         endorsed by Qantas Airways, Jetstar Airways, or any partner airlines.
       </p>
       <p className="inline-flex items-center justify-center flex-wrap gap-1">
-        Made with{" "}
+        Made with <span className="sr-only">love</span>
         <svg
           aria-hidden="true"
           focusable="false"

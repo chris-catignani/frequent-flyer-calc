@@ -36,7 +36,7 @@ export const ChangeLog: React.FC = () => {
       <details className="group">
         <summary className="cursor-pointer list-none [&::-webkit-details-marker]:hidden inline-flex items-center gap-1.5 text-sm font-medium text-slate-700 hover:text-slate-900 select-none">
           <span>Recent Updates</span>
-          <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">
+          <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
             ▼
           </span>
         </summary>

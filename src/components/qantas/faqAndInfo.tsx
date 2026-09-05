@@ -66,7 +66,7 @@ export const FaqAndInfo: React.FC = () => {
               <h3 className="text-sm font-semibold m-0 inline">
                 How are Qantas Points and Status Credits calculated?
               </h3>
-              <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">
+              <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
                 ▼
               </span>
             </summary>
@@ -91,7 +91,7 @@ export const FaqAndInfo: React.FC = () => {
               <h3 className="text-sm font-semibold m-0 inline">
                 Where can I find official Qantas earning tables and fare classes?
               </h3>
-              <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">
+              <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
                 ▼
               </span>
             </summary>
@@ -148,7 +148,7 @@ export const FaqAndInfo: React.FC = () => {
               <h3 className="text-sm font-semibold m-0 inline">
                 How do elite status tier bonuses work?
               </h3>
-              <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">
+              <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
                 ▼
               </span>
             </summary>
@@ -173,7 +173,7 @@ export const FaqAndInfo: React.FC = () => {
               <h3 className="text-sm font-semibold m-0 inline">
                 Which partner airlines earn Status Credits?
               </h3>
-              <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">
+              <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
                 ▼
               </span>
             </summary>
@@ -200,7 +200,7 @@ export const FaqAndInfo: React.FC = () => {
               <h3 className="text-sm font-semibold m-0 inline">
                 Do Jetstar flights earn Qantas Points and Status Credits?
               </h3>
-              <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">
+              <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
                 ▼
               </span>
             </summary>
@@ -224,7 +224,7 @@ export const FaqAndInfo: React.FC = () => {
               <h3 className="text-sm font-semibold m-0 inline">
                 Why do some results differ slightly from the official Qantas calculator?
               </h3>
-              <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">
+              <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
                 ▼
               </span>
             </summary>
@@ -247,7 +247,7 @@ export const FaqAndInfo: React.FC = () => {
               className="cursor-pointer list-none [&::-webkit-details-marker]:hidden flex justify-between items-center text-slate-900 font-semibold"
             >
               <h3 className="text-sm font-semibold m-0 inline">What is a Status Run?</h3>
-              <span className="text-xs text-slate-400 transition-transform group-open:rotate-180">
+              <span className="inline-block text-xs text-slate-400 transition-transform group-open:rotate-180">
                 ▼
               </span>
             </summary>
