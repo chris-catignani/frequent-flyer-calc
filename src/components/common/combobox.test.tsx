@@ -84,4 +84,31 @@ describe("Combobox Primitive", () => {
     const input = screen.getByRole("combobox", { name: /Airport/i });
     expect(input).toHaveValue("SYD");
   });
+
+  it("renders dropdown toggle button with an accessible name when not freeSolo", () => {
+    render(<Combobox label="Airport" options={options} value="" onChange={jest.fn()} />);
+
+    const toggleBtn = screen.getByRole("button", { name: /toggle airport options/i });
+    expect(toggleBtn).toBeInTheDocument();
+    expect(toggleBtn).toHaveAttribute("aria-haspopup", "listbox");
+    expect(toggleBtn).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("does not render dropdown toggle button when freeSolo is true", () => {
+    render(<Combobox label="Airport" options={options} value="" freeSolo onChange={jest.fn()} />);
+    expect(
+      screen.queryByRole("button", { name: /toggle airport options/i })
+    ).not.toBeInTheDocument();
+  });
+
+  it("toggles listbox and updates aria-expanded when clicking toggle button", () => {
+    render(<Combobox label="Airport" options={options} value="" onChange={jest.fn()} />);
+    const toggleBtn = screen.getByRole("button", { name: /toggle airport options/i });
+    expect(toggleBtn).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+
+    fireEvent.click(toggleBtn);
+    expect(toggleBtn).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("listbox")).toBeInTheDocument();
+  });
 });
