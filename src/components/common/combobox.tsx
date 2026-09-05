@@ -216,7 +216,9 @@ export function Combobox<T = ComboboxOption | string>({
             error
               ? "border-red-500 focus:border-red-600 focus:ring-red-200"
               : "border-slate-300 focus:border-primary focus:ring-primary/20"
-          } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs placeholder:text-slate-400 focus:outline-hidden focus:ring-2`}
+          } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs placeholder:text-slate-400 focus:outline-hidden focus:ring-2 ${
+            !freeSolo ? "cursor-pointer" : ""
+          }`}
         />
         {!freeSolo && (
           <button

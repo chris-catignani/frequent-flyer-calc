@@ -255,7 +255,7 @@ export const QantasCalculator: React.FC = () => {
                 type="button"
                 data-testid="add-segment-button"
                 onClick={addSegment}
-                className="rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer transition-colors"
+                className="rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer transition-colors"
               >
                 Add Segment
               </button>
@@ -267,7 +267,7 @@ export const QantasCalculator: React.FC = () => {
                 data-testid="calculate-button"
                 onClick={calculate}
                 disabled={isCalculating}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-9 py-3 text-base font-semibold text-white shadow-md hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-primary focus:ring-offset-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-all"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-9 py-3 text-base font-semibold text-white shadow-md hover:bg-primary-hover focus:outline-hidden focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed transition-all"
               >
                 {isCalculating && <SpinnerIcon className="w-5 h-5 text-white animate-spin" />}
                 <span>Calculate</span>
@@ -285,7 +285,7 @@ export const QantasCalculator: React.FC = () => {
 
         {/* Saved calculations */}
         {savedCalculations && savedCalculations.length > 0 && (
-          <div className="pt-0 pb-4 px-0">
+          <div className="mt-6 sm:mt-8 pb-4">
             <RecentCalculationSelection
               recentCalculations={savedCalculations}
               onRecentCalculationClick={loadRecentCalculation}
@@ -295,7 +295,11 @@ export const QantasCalculator: React.FC = () => {
           </div>
         )}
 
-        <div className="pt-0 pb-2 px-0">
+        <div
+          className={
+            savedCalculations && savedCalculations.length > 0 ? "pt-0 pb-2" : "mt-6 sm:mt-8 pb-2"
+          }
+        >
           <AdvancedInput setSegmentInputs={setAllSegmentInputs} />
         </div>
       </div>

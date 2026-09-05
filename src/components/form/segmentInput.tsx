@@ -230,7 +230,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       className="grid grid-cols-12 sm:grid-cols-[repeat(22,minmax(0,1fr))] sm:grid-cols-22 gap-2 items-start"
     >
       <div
-        className="col-span-8 sm:col-span-1 order-1 sm:order-1 flex items-center justify-start sm:justify-center h-8 sm:h-[50px] sm:mt-[26px] gap-1"
+        className="col-span-8 sm:col-span-1 order-1 sm:order-1 flex items-center justify-start h-8 sm:h-[50px] sm:mt-[26px] gap-1"
         {...dragHandleProps}
       >
         <ReorderSegmentInputButton
@@ -242,7 +242,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         </span>
       </div>
 
-      <div className="col-span-4 sm:col-span-1 order-2 sm:order-6 flex items-center justify-end sm:justify-center h-8 sm:h-[50px] sm:mt-[26px]">
+      <div className="col-span-4 sm:col-span-1 order-2 sm:order-6 flex items-center justify-end h-8 sm:h-[50px] sm:mt-[26px]">
         <RemoveSegmentInputButton
           segmentInputIdx={segmentInputIdx}
           showDeleteButton={showDeleteButton}
