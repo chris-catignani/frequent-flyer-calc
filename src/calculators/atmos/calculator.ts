@@ -156,21 +156,24 @@ const calculateBase = (segment: Segment, miles: number, options: AtmosOptions): 
   };
 };
 
-// Splits a ticket-level total across the segments in that pool, weighted by distance
+// Splits a ticket-level total across every flight on the ticket, weighted by distance. Flights
+// outside the pool (partner flights on a 001 ticket, which earn from the partner chart) forfeit
+// their share rather than handing it to the pooled flights.
 const distributePool = (
   bases: (BaseEarning | Error)[],
   pool: TicketPool,
   total: number,
   earnsAtmosPoints: boolean
 ) => {
-  const pooled = bases.filter(
-    (base): base is BaseEarning => !(base instanceof Error) && base.pool === pool
-  );
+  const ticketFlights = bases.filter((base): base is BaseEarning => !(base instanceof Error));
   const shares = allocateByWeight(
     total,
-    pooled.map((base) => base.miles)
+    ticketFlights.map((base) => base.miles)
   );
-  pooled.forEach((base, idx) => {
+  ticketFlights.forEach((base, idx) => {
+    if (base.pool !== pool) {
+      return;
+    }
     base.statusPoints = shares[idx];
     if (earnsAtmosPoints) {
       base.basePoints = shares[idx];
