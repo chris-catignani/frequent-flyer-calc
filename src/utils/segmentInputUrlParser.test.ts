@@ -40,4 +40,46 @@ describe("segmentInputUrlParser", () => {
     expect(parsed.tripType).toBeNull();
     expect(parsed.segmentInputs).toBeUndefined();
   });
+
+  describe("program options", () => {
+    const defaults = { earnMethod: "distance", fareUsd: 0, globalLocals: false };
+
+    it("writes each program option as its own query param", () => {
+      const params = createUrlQueryParams("Gold", [], "one way", {
+        earnMethod: "price",
+        fareUsd: 480.5,
+        globalLocals: true,
+      });
+      expect(params).toMatchObject({ earnMethod: "price", fareUsd: "480.5", globalLocals: "true" });
+    });
+
+    it("adds no extra params when there are no program options", () => {
+      expect(Object.keys(createUrlQueryParams("Gold", [], "one way")).sort()).toEqual([
+        "eliteStatus",
+        "segmentInputs",
+        "tripType",
+      ]);
+    });
+
+    it("parses only known keys and coerces values to the default's type", () => {
+      const searchParams = new URLSearchParams(
+        "earnMethod=price&fareUsd=480.5&globalLocals=true&bogus=1"
+      );
+      expect(parseUrlQueryParams(searchParams, defaults).programOptions).toEqual({
+        earnMethod: "price",
+        fareUsd: 480.5,
+        globalLocals: true,
+      });
+    });
+
+    it("drops values that don't match the default's type", () => {
+      const searchParams = new URLSearchParams("fareUsd=abc&globalLocals=yes");
+      expect(parseUrlQueryParams(searchParams, defaults).programOptions).toBeUndefined();
+    });
+
+    it("omits programOptions when the program has no defaults", () => {
+      const searchParams = new URLSearchParams("earnMethod=price");
+      expect(parseUrlQueryParams(searchParams)).not.toHaveProperty("programOptions");
+    });
+  });
 });
