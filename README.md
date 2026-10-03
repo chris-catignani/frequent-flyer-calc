@@ -27,7 +27,7 @@ The `/atmos` calculator estimates Atmos Rewards points and status points. It sup
 Assumptions this calculator makes:
 
 - Elite bonuses on partner-chart flights are calculated on the base points column.
-- Price-paid ticket totals are split across flights in proportion to distance.
+- Price-paid ticket totals are split across all flights on the ticket in proportion to distance. On American-issued (001) tickets, only the American flights' share earns price-paid points.
 - Guam, Puerto Rico and other US territories count as the United States for Global Locals.
 - Communities: Global Locals adds 10% status points on flights touching a non-US airport; Huakaʻi by Hawaiian adds 50% Atmos Points and status points on flights between the Hawaiian Islands. Club 49, Culinary Journeys, Active Escapes and Families On the Go can be selected but have no flight earning benefits.
 - On American-issued (001) tickets, flights not operated under an American flight number use the other partner earn chart.

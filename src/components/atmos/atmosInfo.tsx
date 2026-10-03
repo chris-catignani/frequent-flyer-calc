@@ -12,7 +12,11 @@ export const AtmosInfo: React.FC = () => {
       </p>
       <h3 className="font-medium text-slate-900">Assumptions this calculator makes</h3>
       <ul className="list-disc pl-5 space-y-1">
-        <li>Price-paid ticket totals are split across flights in proportion to distance.</li>
+        <li>
+          Price-paid ticket totals are split across all flights on the ticket in proportion to
+          distance. On American-issued (001) tickets, only the American flights&apos; share earns
+          price-paid points.
+        </li>
         <li>
           Guam, Puerto Rico and other US territories count as the United States for Global Locals.
         </li>

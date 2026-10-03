@@ -166,14 +166,25 @@ describe("Atmos calculator", () => {
       expect([result.airlinePoints, result.elitePoints]).toEqual([0, 1250]);
     });
 
-    it("gives the fare only to American flights on an American-issued ticket", async () => {
+    it("gives American flights only their distance share of the fare on an American-issued ticket", async () => {
       const result = await calculate(segs("aa _ lax jfk", "ba y jfk lhr"), "", {
         earnMethod: "price",
         ticketIssuer: "american",
         fareUsd: 1000,
       });
-      expect(result.segmentResults.map((r) => r.airlinePoints)).toEqual([5000, 1721]);
+      // LAX-JFK is 2,469 of the ticket's 5,911 miles; BA earns from the partner chart instead
+      expect(result.segmentResults.map((r) => r.airlinePoints)).toEqual([2088, 1721]);
+      expect(result.segmentResults.map((r) => r.elitePoints)).toEqual([2088, 1721]);
       expect(result.segmentResults[1].fareEarnCategory).toBe("economy");
+    });
+
+    it("gives every flight on an Alaska-issued ticket its share, partners included", async () => {
+      const result = await calculate(segs("as _ sea lax", "ba y lax lhr"), "", {
+        earnMethod: "price",
+        fareUsd: 1000,
+      });
+      expect(result.airlinePoints).toBe(5000);
+      expect(result.elitePoints).toBe(5000);
     });
   });
 
