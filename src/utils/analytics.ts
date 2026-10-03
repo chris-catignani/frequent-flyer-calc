@@ -10,6 +10,7 @@ export interface CalculationCompletedParams {
   containsErrors?: boolean;
   totalPoints?: number;
   totalStatusCredits?: number;
+  programId?: string;
 }
 
 export interface QantasApiMismatchParams {
@@ -53,6 +54,7 @@ export function trackCalculationCompleted({
   containsErrors = false,
   totalPoints = 0,
   totalStatusCredits = 0,
+  programId,
 }: CalculationCompletedParams = {}): void {
   const routes: string[] = [];
   const airportSet = new Set<string>();
@@ -75,6 +77,7 @@ export function trackCalculationCompleted({
   });
 
   safeTrack("calculation_completed", {
+    program_id: programId,
     route: routes.join(", ").slice(0, 255),
     airports: Array.from(airportSet).join(", ").slice(0, 255),
     airlines: Array.from(airlineSet).join(", ").slice(0, 255),

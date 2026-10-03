@@ -33,6 +33,8 @@ export interface UseCalculatorReturn {
   eliteStatus: string;
   tripType: string;
   compareWithProgramApi: boolean;
+  optionErrors: Record<string, string>;
+  programOptions: ProgramOptions;
   isCalculating: boolean;
   calculationOutput: CalculationResult | null;
   savedCalculations: SavedCalculation[];
@@ -41,6 +43,7 @@ export interface UseCalculatorReturn {
   setEliteStatus: (status: string) => void;
   setTripType: (tripType: string) => void;
   setCompareWithProgramApi: (enabled: boolean) => void;
+  setProgramOptions: (updates: Partial<ProgramOptions>) => void;
   addSegment: () => void;
   deleteSegment: (index: number) => void;
   updateSegment: (index: number, segment: SegmentInput) => void;
@@ -68,7 +71,10 @@ export function useCalculator({
   const [compareWithProgramApi, setCompareWithProgramApi] = useState<boolean>(
     initialCompareWithProgramApi
   );
-  const [priceLessTaxes] = useState<ProgramOptions>({});
+  const [programOptions, setProgramOptionsState] = useState<ProgramOptions>(
+    program.defaultOptions ?? {}
+  );
+  const [optionErrors, setOptionErrors] = useState<Record<string, string>>({});
   const [segmentInputs, setSegmentInputs] = useState<SegmentInput[]>([
     createSegmentInput(
       program.defaultAirline,
@@ -124,7 +130,8 @@ export function useCalculator({
     (
       urlEliteStatus?: string | null,
       urlTripType?: string | null,
-      urlSegmentInputs?: SegmentInput[]
+      urlSegmentInputs?: SegmentInput[],
+      urlProgramOptions?: ProgramOptions
     ) => {
       if (urlEliteStatus) {
         setEliteStatus(urlEliteStatus);
@@ -135,8 +142,15 @@ export function useCalculator({
       if (urlSegmentInputs) {
         setAllSegmentInputs(urlSegmentInputs);
       }
+      if (urlProgramOptions) {
+        setProgramOptionsState((prev) => {
+          const next = { ...(program.defaultOptions ?? {}), ...urlProgramOptions };
+          const keys = new Set([...Object.keys(prev), ...Object.keys(next)]);
+          return [...keys].every((key) => prev[key] === next[key]) ? prev : next;
+        });
+      }
     },
-    [setAllSegmentInputs]
+    [setAllSegmentInputs, program.defaultOptions]
   );
 
   // Hydrate from deep-link search params
@@ -145,10 +159,11 @@ export function useCalculator({
       eliteStatus: urlEliteStatus,
       tripType: urlTripType,
       segmentInputs: urlSegmentInputs,
-    } = parseUrlQueryParams(searchParams);
+      programOptions: urlProgramOptions,
+    } = parseUrlQueryParams(searchParams, program.defaultOptions);
 
-    setAllInputParams(urlEliteStatus, urlTripType, urlSegmentInputs);
-  }, [searchParams, setAllInputParams]);
+    setAllInputParams(urlEliteStatus, urlTripType, urlSegmentInputs, urlProgramOptions);
+  }, [searchParams, setAllInputParams, program.defaultOptions]);
 
   // Load saved calculations on mount
   useEffect(() => {
@@ -161,7 +176,7 @@ export function useCalculator({
       theEliteStatus: string,
       theTripType: string,
       theCompareWithProgramApi: boolean,
-      thePriceLessTaxes: ProgramOptions
+      theProgramOptions: ProgramOptions
     ) => {
       const currentCalcId = ++calcIdRef.current;
       setIsCalculating(true);
@@ -188,7 +203,7 @@ export function useCalculator({
         const calculationResult = await program.calculate(
           segments,
           theEliteStatus,
-          thePriceLessTaxes,
+          theProgramOptions,
           theCompareWithProgramApi
         );
 
@@ -201,6 +216,7 @@ export function useCalculator({
 
         // Track calculation completed event
         trackCalculationCompleted({
+          programId: program.id,
           segmentResults: calculationResult.segmentResults,
           tripType: theTripType,
           eliteStatus: theEliteStatus,
@@ -261,13 +277,19 @@ export function useCalculator({
           segmentInputs,
           theTripType,
           theEliteStatus,
-          effectiveStorageKey
+          effectiveStorageKey,
+          program.defaultOptions ? theProgramOptions : undefined
         );
         setSavedCalculations(updatedSavedCalculations);
 
         // Update URL query parameters
         const params = new URLSearchParams(searchParams ? searchParams.toString() : "");
-        const newParams = createUrlQueryParams(theEliteStatus, segmentInputs, theTripType);
+        const newParams = createUrlQueryParams(
+          theEliteStatus,
+          segmentInputs,
+          theTripType,
+          theProgramOptions
+        );
         Object.entries(newParams).forEach(([k, v]) => {
           params.set(k, v);
         });
@@ -287,22 +309,30 @@ export function useCalculator({
     [segmentInputs, program, effectiveStorageKey, searchParams]
   );
 
+  const isValidForCalculation = useCallback(
+    (theProgramOptions: ProgramOptions) =>
+      Object.keys(validate(segmentInputs, program.segmentInputAdapter, theProgramOptions))
+        .length === 0 &&
+      Object.keys(program.validateOptions?.(theProgramOptions) ?? {}).length === 0,
+    [segmentInputs, program]
+  );
+
   const calculate = useCallback(async () => {
-    const errors = validate(segmentInputs, program.segmentInputAdapter);
-    if (Object.keys(errors).length > 0) {
-      setInputErrors(errors);
-    } else {
-      setInputErrors({});
-      await doCalculation(eliteStatus, tripType, compareWithProgramApi, priceLessTaxes);
+    const errors = validate(segmentInputs, program.segmentInputAdapter, programOptions);
+    const newOptionErrors = program.validateOptions?.(programOptions) ?? {};
+    setInputErrors(errors);
+    setOptionErrors(newOptionErrors);
+    if (Object.keys(errors).length === 0 && Object.keys(newOptionErrors).length === 0) {
+      await doCalculation(eliteStatus, tripType, compareWithProgramApi, programOptions);
     }
   }, [
     segmentInputs,
-    program.segmentInputAdapter,
+    program,
     doCalculation,
     eliteStatus,
     tripType,
     compareWithProgramApi,
-    priceLessTaxes,
+    programOptions,
   ]);
 
   const addSegment = useCallback(() => {
@@ -374,63 +404,75 @@ export function useCalculator({
   const handleSetEliteStatus = useCallback(
     (newEliteStatus: string) => {
       setEliteStatus(newEliteStatus);
-      if (
-        calculationOutput &&
-        Object.keys(validate(segmentInputs, program.segmentInputAdapter)).length === 0
-      ) {
-        doCalculation(newEliteStatus, tripType, compareWithProgramApi, priceLessTaxes);
+      if (calculationOutput && isValidForCalculation(programOptions)) {
+        doCalculation(newEliteStatus, tripType, compareWithProgramApi, programOptions);
       }
     },
     [
       calculationOutput,
-      segmentInputs,
-      program.segmentInputAdapter,
+      isValidForCalculation,
       doCalculation,
       tripType,
       compareWithProgramApi,
-      priceLessTaxes,
+      programOptions,
     ]
   );
 
   const handleSetTripType = useCallback(
     (newTripType: string) => {
       setTripType(newTripType);
-      if (
-        calculationOutput &&
-        Object.keys(validate(segmentInputs, program.segmentInputAdapter)).length === 0
-      ) {
-        doCalculation(eliteStatus, newTripType, compareWithProgramApi, priceLessTaxes);
+      if (calculationOutput && isValidForCalculation(programOptions)) {
+        doCalculation(eliteStatus, newTripType, compareWithProgramApi, programOptions);
       }
     },
     [
       calculationOutput,
-      segmentInputs,
-      program.segmentInputAdapter,
+      isValidForCalculation,
       doCalculation,
       eliteStatus,
       compareWithProgramApi,
-      priceLessTaxes,
+      programOptions,
     ]
   );
 
   const handleSetCompareWithProgramApi = useCallback(
     (newCompare: boolean) => {
       setCompareWithProgramApi(newCompare);
-      if (
-        calculationOutput &&
-        Object.keys(validate(segmentInputs, program.segmentInputAdapter)).length === 0
-      ) {
-        doCalculation(eliteStatus, tripType, newCompare, priceLessTaxes);
+      if (calculationOutput && isValidForCalculation(programOptions)) {
+        doCalculation(eliteStatus, tripType, newCompare, programOptions);
+      }
+    },
+    [calculationOutput, isValidForCalculation, doCalculation, eliteStatus, tripType, programOptions]
+  );
+
+  const handleSetProgramOptions = useCallback(
+    (updates: Partial<ProgramOptions>) => {
+      const definedUpdates = Object.fromEntries(
+        Object.entries(updates).filter(([, value]) => value !== undefined)
+      ) as ProgramOptions;
+      const newProgramOptions = { ...programOptions, ...definedUpdates };
+      setProgramOptionsState(newProgramOptions);
+      setOptionErrors((prev) => {
+        const next = { ...prev };
+        Object.keys(definedUpdates).forEach((key) => delete next[key]);
+        return next;
+      });
+      if (calculationOutput) {
+        if (isValidForCalculation(newProgramOptions)) {
+          doCalculation(eliteStatus, tripType, compareWithProgramApi, newProgramOptions);
+        } else {
+          setCalculationOutput(null);
+        }
       }
     },
     [
+      programOptions,
       calculationOutput,
-      segmentInputs,
-      program.segmentInputAdapter,
+      isValidForCalculation,
       doCalculation,
       eliteStatus,
       tripType,
-      priceLessTaxes,
+      compareWithProgramApi,
     ]
   );
 
@@ -441,7 +483,8 @@ export function useCalculator({
         setAllInputParams(
           savedCalculation.eliteStatus,
           savedCalculation.tripType,
-          savedCalculation.segmentInputs
+          savedCalculation.segmentInputs,
+          savedCalculation.programOptions
         );
       }
     },
@@ -467,12 +510,15 @@ export function useCalculator({
     eliteStatus,
     tripType,
     compareWithProgramApi,
+    optionErrors,
+    programOptions,
     isCalculating,
     calculationOutput,
     savedCalculations,
     setEliteStatus: handleSetEliteStatus,
     setTripType: handleSetTripType,
     setCompareWithProgramApi: handleSetCompareWithProgramApi,
+    setProgramOptions: handleSetProgramOptions,
     addSegment,
     deleteSegment,
     updateSegment,

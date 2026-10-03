@@ -411,4 +411,77 @@ describe("useCalculator", () => {
       expect(result.current.savedCalculations).toHaveLength(0);
     });
   });
+
+  describe("program options", () => {
+    const programWithOptions: FrequentFlyerProgram = {
+      ...mockProgram,
+      defaultOptions: { earnMethod: "distance", fareUsd: 0 },
+      validateOptions: (options): Record<string, string> =>
+        options.earnMethod === "price" && Number(options.fareUsd) <= 0
+          ? { fareUsd: "Enter the fare paid" }
+          : {},
+    };
+
+    it("starts with the program's default options", () => {
+      const { result } = renderHook(() => useCalculator({ program: programWithOptions }));
+      expect(result.current.programOptions).toEqual({ earnMethod: "distance", fareUsd: 0 });
+    });
+
+    it("passes merged program options to calculate", async () => {
+      const { result } = renderHook(() => useCalculator({ program: programWithOptions }));
+      act(() => {
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.setProgramOptions({ fareUsd: 300 });
+      });
+      await act(async () => {
+        await result.current.calculate();
+      });
+      expect(mockProgram.calculate).toHaveBeenCalledWith(
+        expect.any(Array),
+        "Bronze",
+        { earnMethod: "distance", fareUsd: 300 },
+        false
+      );
+    });
+
+    it("blocks calculation and reports option errors when validateOptions fails", async () => {
+      const { result } = renderHook(() => useCalculator({ program: programWithOptions }));
+      act(() => {
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.setProgramOptions({ earnMethod: "price" });
+      });
+      await act(async () => {
+        await result.current.calculate();
+      });
+      expect(mockProgram.calculate).not.toHaveBeenCalled();
+      expect(result.current.optionErrors).toEqual({ fareUsd: "Enter the fare paid" });
+
+      act(() => {
+        result.current.setProgramOptions({ fareUsd: 100 });
+      });
+      expect(result.current.optionErrors).toEqual({});
+    });
+
+    it("hydrates program options from the URL", () => {
+      mockGet.mockImplementation(
+        (key: string) => ({ earnMethod: "price", fareUsd: "250" })[key] ?? null
+      );
+      const { result } = renderHook(() => useCalculator({ program: programWithOptions }));
+      expect(result.current.programOptions).toEqual({ earnMethod: "price", fareUsd: 250 });
+    });
+
+    it("sends program_id with calculation_completed", async () => {
+      const { result } = renderHook(() => useCalculator({ program: programWithOptions }));
+      act(() => {
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
+      });
+      await act(async () => {
+        await result.current.calculate();
+      });
+      expect(posthog.capture).toHaveBeenCalledWith(
+        "calculation_completed",
+        expect.objectContaining({ program_id: "test-program" })
+      );
+    });
+  });
 });
