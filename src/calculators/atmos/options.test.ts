@@ -4,11 +4,15 @@ import {
   toAtmosOptions,
   usesRevenueEarning,
   validateAtmosOptions,
-} from "@/calculators/alaska/options";
+} from "@/calculators/atmos/options";
 
 describe("toAtmosOptions", () => {
   it("fills defaults", () => {
     expect(toAtmosOptions({})).toEqual(DEFAULT_ATMOS_OPTIONS);
+  });
+
+  it("falls back to no community for unknown communities", () => {
+    expect(toAtmosOptions({ community: "bogus" }).community).toBe("none");
   });
 
   it("keeps valid values and replaces invalid ones with defaults", () => {
@@ -19,7 +23,7 @@ describe("toAtmosOptions", () => {
         ticketIssuer: "other",
         fareUsd: 250,
         pointsRedeemed: -5,
-        globalLocals: true,
+        community: "huakai",
       })
     ).toEqual({
       earnMethod: "price",
@@ -27,7 +31,7 @@ describe("toAtmosOptions", () => {
       ticketIssuer: "other",
       fareUsd: 250,
       pointsRedeemed: 0,
-      globalLocals: true,
+      community: "huakai",
     });
   });
 });

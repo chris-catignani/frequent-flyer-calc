@@ -3,12 +3,15 @@
 import React, { useState } from "react";
 import { Combobox } from "@/components/common/combobox";
 import { SegmentedToggle, type ToggleOption } from "@/components/common/segmentedToggle";
-import type {
-  AtmosOptions,
-  BookingType,
-  EarnMethod,
-  TicketIssuer,
-} from "@/calculators/alaska/options";
+import { COMMUNITY_DISPLAY } from "@/calculators/atmos/constants";
+import {
+  COMMUNITIES,
+  type AtmosOptions,
+  type BookingType,
+  type Community,
+  type EarnMethod,
+  type TicketIssuer,
+} from "@/calculators/atmos/options";
 
 const EARN_METHOD_OPTIONS: { value: EarnMethod; label: string }[] = [
   { value: "distance", label: "Distance traveled" },
@@ -127,26 +130,46 @@ export const BookingTypeToggle: React.FC<{
   );
 };
 
-export const GlobalLocalsCheckbox: React.FC<{
-  checked: boolean;
-  onChange: (globalLocals: boolean) => void;
-}> = ({ checked, onChange }) => {
+const NO_FLIGHT_BONUS_HINT = "No bonus on flight earnings";
+
+const COMMUNITY_HINTS: Record<Community, string> = {
+  none: "",
+  globalLocals: "+10% status points on flights that begin or end outside the United States",
+  huakai: "+50% Atmos Points and status points on flights between the Hawaiian Islands",
+  club49: NO_FLIGHT_BONUS_HINT,
+  culinaryJourneys: NO_FLIGHT_BONUS_HINT,
+  activeEscapes: NO_FLIGHT_BONUS_HINT,
+  familiesOnTheGo: NO_FLIGHT_BONUS_HINT,
+};
+
+export const CommunityInput: React.FC<{
+  value: Community;
+  onChange: (community: Community) => void;
+}> = ({ value, onChange }) => {
+  const hint = COMMUNITY_HINTS[value];
   return (
-    <label className="inline-flex items-start gap-2 text-sm text-slate-700 cursor-pointer">
-      <input
-        type="checkbox"
-        data-testid="global-locals-checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
-      />
-      <span>
-        Global Locals member
-        <span className="block text-xs text-slate-500">
-          +10% status points on flights that begin or end outside the United States
-        </span>
+    <div className="flex flex-col w-full sm:w-72">
+      <label htmlFor="community" className="mb-1 text-xs font-medium text-slate-600">
+        Atmos community
+      </label>
+      <select
+        id="community"
+        data-testid="community-select"
+        value={value}
+        aria-describedby={hint ? "community-hint" : undefined}
+        onChange={(e) => onChange(e.target.value as Community)}
+        className={FIELD_CLASS}
+      >
+        {COMMUNITIES.map((community) => (
+          <option key={community} value={community}>
+            {COMMUNITY_DISPLAY[community]}
+          </option>
+        ))}
+      </select>
+      <span id="community-hint" className="mt-0.5 min-h-[16px] text-xs text-slate-500">
+        {hint}
       </span>
-    </label>
+    </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import { allocateByWeight } from "@/calculators/alaska/allocate";
+import { allocateByWeight } from "@/calculators/atmos/allocate";
 import {
   ALASKA_GROUP_AIRLINES,
   ATMOS_ELITE_TIERS,
@@ -6,6 +6,8 @@ import {
   CHART_CATEGORY_DISPLAY,
   CHOOSE_HOW_YOU_EARN_URL,
   GLOBAL_LOCALS_BONUS,
+  HAWAII_AIRPORTS,
+  HUAKAI_BONUS,
   PARTNER_CHART,
   PARTNER_EARN_CHART_URL,
   POINTS_PER_DOLLAR,
@@ -14,13 +16,9 @@ import {
   STATUS_POINTS_EXCLUDED_PARTNERS,
   US_COUNTRIES,
   type ChartCategory,
-} from "@/calculators/alaska/constants";
-import {
-  toAtmosOptions,
-  usesRevenueEarning,
-  type AtmosOptions,
-} from "@/calculators/alaska/options";
-import { getPartnerCabin, type AtmosCabin } from "@/calculators/alaska/partnerCabins";
+} from "@/calculators/atmos/constants";
+import { toAtmosOptions, usesRevenueEarning, type AtmosOptions } from "@/calculators/atmos/options";
+import { getPartnerCabin, type AtmosCabin } from "@/calculators/atmos/partnerCabins";
 import type { Segment } from "@/models/segment";
 import type { CalculationResult } from "@/types/calculator";
 import type { ProgramOptions } from "@/types/program";
@@ -32,7 +30,7 @@ interface BaseEarning {
   miles: number;
   basePoints: number; // earns the elite bonus
   cabinBonus: number; // partner chart bonus column; does not earn the elite bonus
-  statusPoints: number; // before Global Locals
+  statusPoints: number; // before any community bonus
   ruleName: string;
   ruleUrl: string;
   notes: string;
@@ -46,6 +44,27 @@ export const getEliteBonusMultiple = (eliteStatus: string): number =>
 
 export const isOutsideUnitedStates = (segment: Segment): boolean =>
   !US_COUNTRIES.has(segment.fromAirport.country) || !US_COUNTRIES.has(segment.toAirport.country);
+
+export const isWithinHawaii = (segment: Segment): boolean =>
+  HAWAII_AIRPORTS.has(segment.fromAirport.iata) && HAWAII_AIRPORTS.has(segment.toAirport.iata);
+
+// Only Global Locals and Huakaʻi by Hawaiian change what a flight earns
+const calculateCommunityBonus = (
+  segment: Segment,
+  base: BaseEarning,
+  options: AtmosOptions
+): { airlinePoints: number; elitePoints: number } => {
+  if (options.community === "globalLocals" && isOutsideUnitedStates(segment)) {
+    return { airlinePoints: 0, elitePoints: Math.round(base.statusPoints * GLOBAL_LOCALS_BONUS) };
+  }
+  if (options.community === "huakai" && isWithinHawaii(segment)) {
+    return {
+      airlinePoints: Math.round(base.basePoints * HUAKAI_BONUS),
+      elitePoints: Math.round(base.statusPoints * HUAKAI_BONUS),
+    };
+  }
+  return { airlinePoints: 0, elitePoints: 0 };
+};
 
 const toChartCategory = (cabin: AtmosCabin, segment: Segment): ChartCategory => {
   if (cabin === "business" || cabin === "first") {
@@ -204,12 +223,10 @@ export const calculate = async (
     }
 
     const eliteBonus = Math.round(base.basePoints * eliteBonusMultiple);
-    const globalLocalsBonus =
-      options.globalLocals && isOutsideUnitedStates(segment)
-        ? Math.round(base.statusPoints * GLOBAL_LOCALS_BONUS)
-        : 0;
-    const airlinePoints = base.basePoints + base.cabinBonus + eliteBonus;
-    const elitePoints = base.statusPoints + globalLocalsBonus;
+    const communityBonus = calculateCommunityBonus(segment, base, options);
+    const airlinePoints =
+      base.basePoints + base.cabinBonus + eliteBonus + communityBonus.airlinePoints;
+    const elitePoints = base.statusPoints + communityBonus.elitePoints;
 
     retval.segmentResults.push({
       segment,
@@ -223,11 +240,12 @@ export const calculate = async (
         basePoints: base.basePoints,
         cabinBonus: base.cabinBonus,
         eliteBonus: { airlinePoints: eliteBonus },
+        communityBonus: communityBonus.airlinePoints,
         totalEarned: airlinePoints,
       },
       elitePointsBreakdown: {
         basePoints: base.statusPoints,
-        globalLocalsBonus,
+        communityBonus: communityBonus.elitePoints,
       },
     });
     retval.airlinePoints += airlinePoints;

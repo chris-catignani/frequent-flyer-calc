@@ -4,10 +4,10 @@ import "@testing-library/jest-dom";
 import {
   BookingTypeToggle,
   EarnMethodInput,
-  GlobalLocalsCheckbox,
+  CommunityInput,
   PricePaidOptions,
 } from "./ticketOptions";
-import { DEFAULT_ATMOS_OPTIONS } from "@/calculators/alaska/options";
+import { DEFAULT_ATMOS_OPTIONS } from "@/calculators/atmos/options";
 
 describe("EarnMethodInput", () => {
   it("shows the selected method and reports a new one", () => {
@@ -32,13 +32,28 @@ describe("BookingTypeToggle", () => {
   });
 });
 
-describe("GlobalLocalsCheckbox", () => {
-  it("reports changes", () => {
+describe("CommunityInput", () => {
+  it("lists every community and reports changes", () => {
     const onChange = jest.fn();
-    render(<GlobalLocalsCheckbox checked={false} onChange={onChange} />);
-    expect(screen.getByTestId("global-locals-checkbox")).not.toBeChecked();
-    fireEvent.click(screen.getByTestId("global-locals-checkbox"));
-    expect(onChange).toHaveBeenCalledWith(true);
+    render(<CommunityInput value="none" onChange={onChange} />);
+    const select = screen.getByTestId("community-select");
+    expect(select).toHaveValue("none");
+    expect(screen.getAllByRole("option").map((option) => option.textContent)).toEqual([
+      "None",
+      "Global Locals",
+      "Huakaʻi by Hawaiian",
+      "Club 49",
+      "Culinary Journeys",
+      "Active Escapes",
+      "Families On the Go",
+    ]);
+    fireEvent.change(select, { target: { value: "huakai" } });
+    expect(onChange).toHaveBeenCalledWith("huakai");
+  });
+
+  it("describes the selected community's earning benefit", () => {
+    render(<CommunityInput value="huakai" onChange={jest.fn()} />);
+    expect(screen.getByText(/flights between the Hawaiian Islands/)).toBeInTheDocument();
   });
 });
 

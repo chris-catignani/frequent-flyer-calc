@@ -3,7 +3,7 @@ import { clickCalculate, selectAirline, setAirport, setEarnMethod, setFareClass 
 
 test.describe("Atmos Rewards calculator", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/alaska");
+    await page.goto("/atmos");
   });
 
   test("distance: AS SEA-LAX earns 1 point per mile", async ({ page }) => {
@@ -44,7 +44,7 @@ test.describe("Atmos Rewards calculator", () => {
 
   test("deep link restores program options", async ({ page }) => {
     await page.goto(
-      "/alaska?eliteStatus=Gold&tripType=one%20way&segmentInputs=as_sea_lax_&earnMethod=price&fareUsd=500"
+      "/atmos?eliteStatus=Gold&tripType=one%20way&segmentInputs=as_sea_lax_&earnMethod=price&fareUsd=500"
     );
     await expect(page.getByTestId("earn-method-input").locator("input")).toHaveValue("Price paid");
     await expect(page.getByTestId("fare-usd-input")).toHaveValue("500");

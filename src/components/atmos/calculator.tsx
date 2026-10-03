@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import { alaskaProgram } from "@/calculators/alaska";
-import { toAtmosOptions } from "@/calculators/alaska/options";
-import { AtmosSegmentResults } from "@/components/alaska/segmentResults";
+import { atmosProgram } from "@/calculators/atmos";
+import { toAtmosOptions } from "@/calculators/atmos/options";
+import { AtmosSegmentResults } from "@/components/atmos/segmentResults";
 import {
   BookingTypeToggle,
+  CommunityInput,
   EarnMethodInput,
-  GlobalLocalsCheckbox,
   PricePaidOptions,
-} from "@/components/alaska/ticketOptions";
+} from "@/components/atmos/ticketOptions";
 import { RecentCalculationSelection } from "@/components/common/recentCalculations";
 import { SegmentedToggle, TRIP_TYPE_OPTIONS } from "@/components/common/segmentedToggle";
 import { CancelIcon, SpinnerIcon } from "@/components/common/icons";
@@ -18,9 +18,9 @@ import { EliteStatusInput } from "@/components/qantas/input";
 import { ResultsSummary } from "@/components/qantas/resultsSummary";
 import { useCalculator } from "@/hooks/useCalculator";
 
-const ELITE_STATUS_NAMES = alaskaProgram.eliteTiers.map((tier) => tier.name);
+const ELITE_STATUS_NAMES = atmosProgram.eliteTiers.map((tier) => tier.name);
 
-export const AlaskaCalculator: React.FC = () => {
+export const AtmosCalculator: React.FC = () => {
   const {
     segmentInputs,
     inputErrors,
@@ -42,7 +42,7 @@ export const AlaskaCalculator: React.FC = () => {
     loadRecentCalculation,
     deleteRecentCalculation,
     clearAllRecentCalculations,
-  } = useCalculator({ program: alaskaProgram });
+  } = useCalculator({ program: atmosProgram });
   const atmosOptions = toAtmosOptions(programOptions);
 
   return (
@@ -85,8 +85,8 @@ export const AlaskaCalculator: React.FC = () => {
           <SegmentInputList
             segmentInputs={segmentInputs}
             errors={inputErrors}
-            adapter={alaskaProgram.segmentInputAdapter}
-            airlineOptions={alaskaProgram.airlineOptions}
+            adapter={atmosProgram.segmentInputAdapter}
+            airlineOptions={atmosProgram.airlineOptions}
             programOptions={programOptions}
             onDeleteSegmentPressed={deleteSegment}
             onSegmentInputChanged={updateSegment}
@@ -94,9 +94,9 @@ export const AlaskaCalculator: React.FC = () => {
           />
 
           <div className="mt-1">
-            <GlobalLocalsCheckbox
-              checked={atmosOptions.globalLocals}
-              onChange={(globalLocals) => setProgramOptions({ globalLocals })}
+            <CommunityInput
+              value={atmosOptions.community}
+              onChange={(community) => setProgramOptions({ community })}
             />
           </div>
 
@@ -144,7 +144,7 @@ export const AlaskaCalculator: React.FC = () => {
             calculationOutput={calculationOutput}
             compareWithQantasCalc={false}
             isCalculating={isCalculating}
-            currencies={alaskaProgram.currencies}
+            currencies={atmosProgram.currencies}
           />
           {calculationOutput.containsErrors && (
             <div

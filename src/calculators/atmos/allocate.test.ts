@@ -1,4 +1,4 @@
-import { allocateByWeight } from "@/calculators/alaska/allocate";
+import { allocateByWeight } from "@/calculators/atmos/allocate";
 
 describe("allocateByWeight", () => {
   it("splits proportionally and sums exactly to the total", () => {

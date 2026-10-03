@@ -5,7 +5,7 @@ import { ProgramNav } from "./programNav";
 
 describe("ProgramNav", () => {
   it("shows the current program and hides the menu until opened", () => {
-    render(<ProgramNav current="/alaska" />);
+    render(<ProgramNav current="/atmos" />);
     const button = screen.getByTestId("program-nav-button");
     expect(button).toHaveTextContent("Atmos Rewards");
     expect(button).toHaveAttribute("aria-expanded", "false");
@@ -13,7 +13,7 @@ describe("ProgramNav", () => {
   });
 
   it("opens a menu linking to both calculators with the current one marked", () => {
-    render(<ProgramNav current="/alaska" />);
+    render(<ProgramNav current="/atmos" />);
     fireEvent.click(screen.getByTestId("program-nav-button"));
     expect(screen.getByTestId("program-nav-button")).toHaveAttribute("aria-expanded", "true");
     expect(screen.getByRole("link", { name: "Qantas" })).toHaveAttribute("href", "/qantas");

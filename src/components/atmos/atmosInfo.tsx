@@ -1,5 +1,5 @@
 import React from "react";
-import { CHOOSE_HOW_YOU_EARN_URL, PARTNER_EARN_CHART_URL } from "@/calculators/alaska/constants";
+import { CHOOSE_HOW_YOU_EARN_URL, PARTNER_EARN_CHART_URL } from "@/calculators/atmos/constants";
 
 export const AtmosInfo: React.FC = () => {
   return (
@@ -16,6 +16,11 @@ export const AtmosInfo: React.FC = () => {
         <li>Price-paid ticket totals are split across flights in proportion to distance.</li>
         <li>
           Guam, Puerto Rico and other US territories count as the United States for Global Locals.
+        </li>
+        <li>
+          The Huakaʻi by Hawaiian bonus is calculated on base points, before any elite or cabin
+          bonus. Club 49, Culinary Journeys, Active Escapes and Families On the Go have no flight
+          earning benefits.
         </li>
         <li>
           On American-issued (001) tickets, flights not operated under an American flight number use

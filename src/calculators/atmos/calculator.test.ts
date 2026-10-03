@@ -1,4 +1,4 @@
-import { calculate } from "@/calculators/alaska/calculator";
+import { calculate } from "@/calculators/atmos/calculator";
 import { buildSegmentFromString } from "@/test/testUtils";
 
 const segs = (...strings: string[]) => strings.map(buildSegmentFromString);
@@ -46,19 +46,19 @@ describe("Atmos calculator", () => {
     it("adds 10% status points to flights touching a non-US airport", async () => {
       const result = await calculate(segs("as _ sea nrt"), "", {
         earnMethod: "segments",
-        globalLocals: true,
+        community: "globalLocals",
       });
       expect([result.airlinePoints, result.elitePoints]).toEqual([500, 550]);
       expect(result.segmentResults[0].elitePointsBreakdown).toEqual({
         basePoints: 500,
-        globalLocalsBonus: 50,
+        communityBonus: 50,
       });
     });
 
     it("treats US territories such as Guam as the US", async () => {
       const result = await calculate(segs("as _ sea gum"), "", {
         earnMethod: "segments",
-        globalLocals: true,
+        community: "globalLocals",
       });
       expect(result.elitePoints).toBe(500);
     });
@@ -67,6 +67,67 @@ describe("Atmos calculator", () => {
       const result = await calculate(segs("as _ sea nrt"), "", { earnMethod: "segments" });
       expect(result.elitePoints).toBe(500);
     });
+  });
+
+  describe("Huakaʻi by Hawaiian", () => {
+    it("adds 50% Atmos Points and status points on flights between the Hawaiian Islands", async () => {
+      const result = await calculate(segs("ha _ hnl ogg"), "", {
+        earnMethod: "segments",
+        community: "huakai",
+      });
+      expect([result.airlinePoints, result.elitePoints]).toEqual([750, 750]);
+      expect(result.segmentResults[0].airlinePointsBreakdown?.communityBonus).toBe(250);
+      expect(result.segmentResults[0].elitePointsBreakdown?.communityBonus).toBe(250);
+    });
+
+    it("calculates the bonus on base points, alongside the elite bonus", async () => {
+      const result = await calculate(segs("ha _ hnl lih"), "Gold", {
+        earnMethod: "distance",
+        community: "huakai",
+      });
+      const miles = result.segmentResults[0].airlinePointsBreakdown!.basePoints!;
+      expect(result.airlinePoints).toBe(miles + Math.round(miles * 0.5) * 2);
+      expect(result.elitePoints).toBe(miles + Math.round(miles * 0.5));
+    });
+
+    it("applies to price paid earning", async () => {
+      const result = await calculate(segs("ha _ hnl koa"), "", {
+        earnMethod: "price",
+        fareUsd: 100,
+        community: "huakai",
+      });
+      expect([result.airlinePoints, result.elitePoints]).toEqual([750, 750]);
+    });
+
+    it("adds only status points on award tickets", async () => {
+      const result = await calculate(segs("ha _ hnl ito"), "", {
+        earnMethod: "segments",
+        bookingType: "award",
+        community: "huakai",
+      });
+      expect([result.airlinePoints, result.elitePoints]).toEqual([0, 750]);
+    });
+
+    it("does nothing on flights to or from the mainland", async () => {
+      const result = await calculate(segs("ha _ hnl lax"), "", {
+        earnMethod: "segments",
+        community: "huakai",
+      });
+      expect([result.airlinePoints, result.elitePoints]).toEqual([500, 500]);
+    });
+  });
+
+  describe("communities without earning benefits", () => {
+    it.each(["club49", "culinaryJourneys", "activeEscapes", "familiesOnTheGo"])(
+      "%s earns the same as no community",
+      async (community) => {
+        const result = await calculate(segs("as _ sea nrt", "ha _ hnl ogg"), "", {
+          earnMethod: "segments",
+          community,
+        });
+        expect([result.airlinePoints, result.elitePoints]).toEqual([1000, 1000]);
+      }
+    );
   });
 
   describe("price paid — revenue earning", () => {
@@ -134,6 +195,7 @@ describe("Atmos calculator", () => {
         basePoints: 3442,
         cabinBonus: 5163,
         eliteBonus: { airlinePoints: 3442 },
+        communityBonus: 0,
         totalEarned: 12047,
       });
       expect(result.elitePoints).toBe(8605);

@@ -1,3 +1,4 @@
+import type { Community } from "@/calculators/atmos/options";
 import type { EliteTier } from "@/types/program";
 
 export const CHOOSE_HOW_YOU_EARN_URL =
@@ -57,6 +58,16 @@ export const US_COUNTRIES = new Set([
   "American Samoa",
 ]);
 
+export const COMMUNITY_DISPLAY: Record<Community, string> = {
+  none: "None",
+  globalLocals: "Global Locals",
+  huakai: "Huakaʻi by Hawaiian",
+  club49: "Club 49",
+  culinaryJourneys: "Culinary Journeys",
+  activeEscapes: "Active Escapes",
+  familiesOnTheGo: "Families On the Go",
+};
+
 export type ChartCategory =
   | "internationalBusinessFirst"
   | "domesticBusinessFirst"
@@ -84,7 +95,24 @@ export const CHART_CATEGORY_DISPLAY: Record<ChartCategory, string> = {
 export const POINTS_PER_DOLLAR = 5;
 export const POINTS_PER_SEGMENT = 500;
 export const REDEEMED_POINTS_PER_STATUS_POINT = 20;
+// Community bonuses: https://www.alaskaair.com/atmosrewards/content/benefits/2026-updates/communities
 export const GLOBAL_LOCALS_BONUS = 0.1;
+export const HUAKAI_BONUS = 0.5;
+
+// Huakaʻi by Hawaiian earns its bonus on flights between these airports
+export const HAWAII_AIRPORTS = new Set([
+  "HNL",
+  "HNM",
+  "ITO",
+  "JHM",
+  "KOA",
+  "LIH",
+  "LNY",
+  "LUP",
+  "MKK",
+  "MUE",
+  "OGG",
+]);
 
 // Partner flights booked on these airlines' own sites earn no status points
 export const STATUS_POINTS_EXCLUDED_PARTNERS = new Set(["jx", "pr"]);
