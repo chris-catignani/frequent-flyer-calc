@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { JAL_AIRLINES, JETSTAR_AIRLINES } from "@/calculators/qantas/constants";
 import { EliteStatusInput } from "@/components/qantas/input";
-import { RecentCalculationSelection } from "@/components/qantas/recentCalculations";
+import { RecentCalculationSelection } from "@/components/common/recentCalculations";
+import { SegmentedToggle, TRIP_TYPE_OPTIONS } from "@/components/common/segmentedToggle";
 import { AdvancedInput } from "@/components/form/advancedInput";
 import { ResultsSummary } from "@/components/qantas/resultsSummary";
 import { SegmentResults } from "@/components/qantas/segmentResults";
@@ -192,41 +193,13 @@ export const QantasCalculator: React.FC = () => {
         {/* Top row: Trip type toggle & Elite status */}
         <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 sm:gap-3 pb-0 sm:pb-3">
           <div className="flex justify-center sm:justify-start">
-            <div
-              data-testid="trip-type-toggle"
-              role="group"
-              aria-label="Trip type selection"
-              className="inline-flex rounded-lg border border-slate-200 p-0.5 bg-slate-100"
-            >
-              <button
-                type="button"
-                data-testid="trip-type-oneway"
-                aria-label="One way flight"
-                aria-pressed={tripType === "one way"}
-                onClick={() => setTripType("one way")}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
-                  tripType === "one way"
-                    ? "bg-white text-primary shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                One Way
-              </button>
-              <button
-                type="button"
-                data-testid="trip-type-return"
-                aria-label="Return flight"
-                aria-pressed={tripType === "return"}
-                onClick={() => setTripType("return")}
-                className={`px-4 py-2 text-sm font-medium rounded-md transition-colors cursor-pointer ${
-                  tripType === "return"
-                    ? "bg-white text-primary shadow-xs"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                Return
-              </button>
-            </div>
+            <SegmentedToggle
+              testId="trip-type-toggle"
+              ariaLabel="Trip type selection"
+              options={TRIP_TYPE_OPTIONS}
+              value={tripType}
+              onChange={setTripType}
+            />
           </div>
           <div className="flex justify-center sm:justify-end">
             <EliteStatusInput
@@ -311,6 +284,7 @@ export const QantasCalculator: React.FC = () => {
             calculationOutput={calculationOutput}
             compareWithQantasCalc={compareWithQantasCalc}
             isCalculating={isCalculating}
+            currencies={qantasProgram.currencies}
           />
           <ErrorDisplay calculationOutput={calculationOutput} />
           <InfoDisplay calculationOutput={calculationOutput} />
