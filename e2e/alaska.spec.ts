@@ -55,6 +55,7 @@ test.describe("Atmos Rewards calculator", () => {
   });
 
   test("navigates between calculators", async ({ page }) => {
+    await page.getByTestId("program-nav-button").click();
     await page.getByRole("link", { name: "Qantas" }).click();
     await expect(page).toHaveURL(/\/qantas/);
   });

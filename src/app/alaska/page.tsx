@@ -8,7 +8,9 @@ export default function Alaska() {
   return (
     <main className="max-w-4xl mx-auto px-4 sm:px-6 my-4 w-full min-w-0 flex flex-col items-center gap-2">
       <header className="w-full text-center my-2">
-        <ProgramNav current="/alaska" />
+        <div className="flex justify-end mb-1">
+          <ProgramNav current="/alaska" />
+        </div>
         <h1 className="text-2xl sm:text-3xl font-normal tracking-tight text-slate-900">
           Atmos Rewards Points and Status Points Calculator
         </h1>
