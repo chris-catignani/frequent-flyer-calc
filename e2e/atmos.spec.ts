@@ -30,7 +30,8 @@ test.describe("Atmos Rewards calculator", () => {
 
   test("price paid: other partner uses the fare-class cabin chart", async ({ page }) => {
     await setEarnMethod(page, "Price paid");
-    await page.getByTestId("ticket-issuer-select").selectOption("other");
+    await page.getByTestId("ticket-issuer-input").locator("input").click();
+    await page.getByRole("option", { name: "Another partner", exact: true }).click();
     await expect(page.getByTestId("fare-usd-input")).not.toBeVisible();
     await selectAirline(page, 0, "Qatar Airways", "Qatar Airways (qr)");
     await setAirport(page, "from", 0, "doh");

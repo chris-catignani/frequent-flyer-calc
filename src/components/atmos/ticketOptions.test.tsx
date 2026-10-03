@@ -36,8 +36,10 @@ describe("CommunityInput", () => {
   it("lists every community and reports changes", () => {
     const onChange = jest.fn();
     render(<CommunityInput value="none" onChange={onChange} />);
-    const select = screen.getByTestId("community-select");
-    expect(select).toHaveValue("none");
+    const input = within(screen.getByTestId("community-input")).getByRole("combobox");
+    expect(input).toHaveValue("None");
+
+    fireEvent.focus(input);
     expect(screen.getAllByRole("option").map((option) => option.textContent)).toEqual([
       "None",
       "Global Locals",
@@ -47,7 +49,7 @@ describe("CommunityInput", () => {
       "Active Escapes",
       "Families On the Go",
     ]);
-    fireEvent.change(select, { target: { value: "huakai" } });
+    fireEvent.mouseDown(screen.getByRole("option", { name: "Huakaʻi by Hawaiian" }));
     expect(onChange).toHaveBeenCalledWith("huakai");
   });
 
@@ -73,7 +75,7 @@ describe("PricePaidOptions", () => {
         onChange={jest.fn()}
       />
     );
-    expect(screen.getByTestId("ticket-issuer-select")).toBeInTheDocument();
+    expect(screen.getByTestId("ticket-issuer-input")).toBeInTheDocument();
     expect(screen.getByTestId("fare-usd-input")).toBeInTheDocument();
     expect(screen.getByTestId("fare-usd-input-error")).toHaveTextContent("Enter the fare paid");
 
@@ -84,7 +86,7 @@ describe("PricePaidOptions", () => {
         onChange={jest.fn()}
       />
     );
-    expect(screen.queryByTestId("ticket-issuer-select")).toBeNull();
+    expect(screen.queryByTestId("ticket-issuer-input")).toBeNull();
     expect(screen.getByTestId("points-redeemed-input")).toBeInTheDocument();
   });
 
@@ -96,7 +98,7 @@ describe("PricePaidOptions", () => {
         onChange={jest.fn()}
       />
     );
-    expect(screen.getByTestId("ticket-issuer-select")).toBeInTheDocument();
+    expect(screen.getByTestId("ticket-issuer-input")).toBeInTheDocument();
     expect(screen.queryByTestId("fare-usd-input")).toBeNull();
   });
 
@@ -111,7 +113,9 @@ describe("PricePaidOptions", () => {
     );
     fireEvent.change(screen.getByTestId("fare-usd-input"), { target: { value: "480.5" } });
     expect(onChange).toHaveBeenCalledWith({ fareUsd: 480.5 });
-    fireEvent.change(screen.getByTestId("ticket-issuer-select"), { target: { value: "other" } });
+    const issuer = within(screen.getByTestId("ticket-issuer-input")).getByRole("combobox");
+    fireEvent.focus(issuer);
+    fireEvent.mouseDown(screen.getByRole("option", { name: "Another partner" }));
     expect(onChange).toHaveBeenCalledWith({ ticketIssuer: "other" });
   });
 });

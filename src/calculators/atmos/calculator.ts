@@ -125,7 +125,7 @@ const calculateBase = (segment: Segment, miles: number, options: AtmosOptions): 
 
   if (ALASKA_GROUP_AIRLINES.has(segment.airline)) {
     throw new Error(
-      "Alaska and Hawaiian flights on a partner-issued ticket aren't supported. Choose Alaska/Hawaiian (027) as the ticket issuer."
+      "Alaska and Hawaiian flights on a partner-issued ticket aren't supported. Choose Alaska (027) as the ticket issuer."
     );
   }
 

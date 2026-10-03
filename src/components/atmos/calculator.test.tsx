@@ -21,7 +21,7 @@ describe("AtmosCalculator", () => {
     expect(screen.getByTestId("earn-method-input")).toBeInTheDocument();
     expect(screen.getByTestId("booking-type-cash")).toBeInTheDocument();
     expect(screen.getByTestId("elite-status-input")).toBeInTheDocument();
-    expect(screen.getByTestId("community-select")).toBeInTheDocument();
+    expect(screen.getByTestId("community-input")).toBeInTheDocument();
     expect(screen.queryByTestId("segment-fare-class-0")).toBeNull();
   });
 

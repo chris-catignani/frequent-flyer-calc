@@ -63,10 +63,6 @@ export const AtmosCalculator: React.FC = () => {
             />
           </div>
           <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-2.5 sm:gap-3">
-            <EarnMethodInput
-              value={atmosOptions.earnMethod}
-              onChange={(earnMethod) => setProgramOptions({ earnMethod })}
-            />
             <EliteStatusInput
               eliteStatus={eliteStatus}
               options={ELITE_STATUS_NAMES}
@@ -75,11 +71,24 @@ export const AtmosCalculator: React.FC = () => {
           </div>
         </div>
 
-        <PricePaidOptions
-          options={atmosOptions}
-          errors={optionErrors}
-          onChange={setProgramOptions}
-        />
+        <section
+          aria-label="Earning options"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3 sm:pt-1 items-start"
+        >
+          <EarnMethodInput
+            value={atmosOptions.earnMethod}
+            onChange={(earnMethod) => setProgramOptions({ earnMethod })}
+          />
+          <CommunityInput
+            value={atmosOptions.community}
+            onChange={(community) => setProgramOptions({ community })}
+          />
+          <PricePaidOptions
+            options={atmosOptions}
+            errors={optionErrors}
+            onChange={setProgramOptions}
+          />
+        </section>
 
         <div className="pt-2 sm:pt-4">
           <SegmentInputList
@@ -92,13 +101,6 @@ export const AtmosCalculator: React.FC = () => {
             onSegmentInputChanged={updateSegment}
             onSegmentsReordered={reorderSegments}
           />
-
-          <div className="mt-1">
-            <CommunityInput
-              value={atmosOptions.community}
-              onChange={(community) => setProgramOptions({ community })}
-            />
-          </div>
 
           <div className="mt-2 sm:mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 items-center">
             <div className="flex justify-start">
