@@ -18,12 +18,11 @@ import type { SegmentErrors } from "@/types/segmentInput";
 import { trackCalculationCompleted, trackQantasApiMismatch } from "@/utils/analytics";
 import { isAirlinePointsMatch, isElitePointsMatch } from "@/utils/comparison";
 import type { CalculationResult } from "@/types/calculator";
-import type { FrequentFlyerProgram } from "@/types/program";
+import type { FrequentFlyerProgram, ProgramOptions } from "@/types/program";
 
 export interface UseCalculatorOptions {
   program: FrequentFlyerProgram;
   initialCompareWithProgramApi?: boolean;
-  initialPriceLessTaxes?: number;
   storageKey?: string;
 }
 
@@ -56,7 +55,6 @@ export interface UseCalculatorReturn {
 export function useCalculator({
   program,
   initialCompareWithProgramApi = false,
-  initialPriceLessTaxes = 0.0,
   storageKey,
 }: UseCalculatorOptions): UseCalculatorReturn {
   const searchParams = useSearchParams();
@@ -70,7 +68,7 @@ export function useCalculator({
   const [compareWithProgramApi, setCompareWithProgramApi] = useState<boolean>(
     initialCompareWithProgramApi
   );
-  const [priceLessTaxes] = useState<number>(initialPriceLessTaxes);
+  const [priceLessTaxes] = useState<ProgramOptions>({});
   const [segmentInputs, setSegmentInputs] = useState<SegmentInput[]>([
     createSegmentInput(
       program.defaultAirline,
@@ -163,7 +161,7 @@ export function useCalculator({
       theEliteStatus: string,
       theTripType: string,
       theCompareWithProgramApi: boolean,
-      thePriceLessTaxes: number
+      thePriceLessTaxes: ProgramOptions
     ) => {
       const currentCalcId = ++calcIdRef.current;
       setIsCalculating(true);

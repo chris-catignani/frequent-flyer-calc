@@ -234,7 +234,7 @@ describe("useCalculator", () => {
           }),
         ]),
         "Bronze",
-        0.0,
+        {},
         false
       );
     });
@@ -258,7 +258,7 @@ describe("useCalculator", () => {
 
       expect(result.current.eliteStatus).toBe("Gold");
       expect(mockProgram.calculate).toHaveBeenCalledTimes(2);
-      expect(mockProgram.calculate).toHaveBeenLastCalledWith(expect.any(Array), "Gold", 0.0, false);
+      expect(mockProgram.calculate).toHaveBeenLastCalledWith(expect.any(Array), "Gold", {}, false);
     });
 
     it("dynamically recalculates when tripType changes after successful calculation", async () => {
@@ -301,12 +301,7 @@ describe("useCalculator", () => {
 
       expect(result.current.compareWithProgramApi).toBe(true);
       expect(mockProgram.calculate).toHaveBeenCalledTimes(2);
-      expect(mockProgram.calculate).toHaveBeenLastCalledWith(
-        expect.any(Array),
-        "Bronze",
-        0.0,
-        true
-      );
+      expect(mockProgram.calculate).toHaveBeenLastCalledWith(expect.any(Array), "Bronze", {}, true);
     });
 
     it("discards stale out-of-order calculation responses", async () => {
