@@ -4,10 +4,10 @@ import "@testing-library/jest-dom";
 import {
   BookingTypeToggle,
   EarnMethodInput,
-  GlobalLocalsCheckbox,
+  CommunityInput,
   PricePaidOptions,
 } from "./ticketOptions";
-import { DEFAULT_ATMOS_OPTIONS } from "@/calculators/alaska/options";
+import { DEFAULT_ATMOS_OPTIONS } from "@/calculators/atmos/options";
 
 describe("EarnMethodInput", () => {
   it("shows the selected method and reports a new one", () => {
@@ -32,13 +32,30 @@ describe("BookingTypeToggle", () => {
   });
 });
 
-describe("GlobalLocalsCheckbox", () => {
-  it("reports changes", () => {
+describe("CommunityInput", () => {
+  it("lists every community and reports changes", () => {
     const onChange = jest.fn();
-    render(<GlobalLocalsCheckbox checked={false} onChange={onChange} />);
-    expect(screen.getByTestId("global-locals-checkbox")).not.toBeChecked();
-    fireEvent.click(screen.getByTestId("global-locals-checkbox"));
-    expect(onChange).toHaveBeenCalledWith(true);
+    render(<CommunityInput value="none" onChange={onChange} />);
+    const input = within(screen.getByTestId("community-input")).getByRole("combobox");
+    expect(input).toHaveValue("None");
+
+    fireEvent.focus(input);
+    expect(screen.getAllByRole("option").map((option) => option.textContent)).toEqual([
+      "None",
+      "Global Locals",
+      "Huakaʻi by Hawaiian",
+      "Club 49",
+      "Culinary Journeys",
+      "Active Escapes",
+      "Families On the Go",
+    ]);
+    fireEvent.mouseDown(screen.getByRole("option", { name: "Huakaʻi by Hawaiian" }));
+    expect(onChange).toHaveBeenCalledWith("huakai");
+  });
+
+  it("describes the selected community's earning benefit", () => {
+    render(<CommunityInput value="huakai" onChange={jest.fn()} />);
+    expect(screen.getByText(/flights between the Hawaiian Islands/)).toBeInTheDocument();
   });
 });
 
@@ -58,7 +75,7 @@ describe("PricePaidOptions", () => {
         onChange={jest.fn()}
       />
     );
-    expect(screen.getByTestId("ticket-issuer-select")).toBeInTheDocument();
+    expect(screen.getByTestId("ticket-issuer-input")).toBeInTheDocument();
     expect(screen.getByTestId("fare-usd-input")).toBeInTheDocument();
     expect(screen.getByTestId("fare-usd-input-error")).toHaveTextContent("Enter the fare paid");
 
@@ -69,7 +86,7 @@ describe("PricePaidOptions", () => {
         onChange={jest.fn()}
       />
     );
-    expect(screen.queryByTestId("ticket-issuer-select")).toBeNull();
+    expect(screen.queryByTestId("ticket-issuer-input")).toBeNull();
     expect(screen.getByTestId("points-redeemed-input")).toBeInTheDocument();
   });
 
@@ -81,7 +98,7 @@ describe("PricePaidOptions", () => {
         onChange={jest.fn()}
       />
     );
-    expect(screen.getByTestId("ticket-issuer-select")).toBeInTheDocument();
+    expect(screen.getByTestId("ticket-issuer-input")).toBeInTheDocument();
     expect(screen.queryByTestId("fare-usd-input")).toBeNull();
   });
 
@@ -96,7 +113,9 @@ describe("PricePaidOptions", () => {
     );
     fireEvent.change(screen.getByTestId("fare-usd-input"), { target: { value: "480.5" } });
     expect(onChange).toHaveBeenCalledWith({ fareUsd: 480.5 });
-    fireEvent.change(screen.getByTestId("ticket-issuer-select"), { target: { value: "other" } });
+    const issuer = within(screen.getByTestId("ticket-issuer-input")).getByRole("combobox");
+    fireEvent.focus(issuer);
+    fireEvent.mouseDown(screen.getByRole("option", { name: "Another partner" }));
     expect(onChange).toHaveBeenCalledWith({ ticketIssuer: "other" });
   });
 });

@@ -8,12 +8,12 @@ const description =
 export const metadata: Metadata = {
   title,
   description,
-  alternates: { canonical: "/alaska" },
-  openGraph: { url: "/alaska", title, description },
+  alternates: { canonical: "/atmos" },
+  openGraph: { url: "/atmos", title, description },
   twitter: { title, description },
 };
 
-export default function AlaskaLayout({ children }: { children: React.ReactNode }) {
+export default function AtmosLayout({ children }: { children: React.ReactNode }) {
   /* Suspense because useSearchParams runs on startup */
   return <Suspense>{children}</Suspense>;
 }

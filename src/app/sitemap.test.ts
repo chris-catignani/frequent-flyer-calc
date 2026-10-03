@@ -12,7 +12,7 @@ describe("sitemap", () => {
     process.env = originalEnv;
   });
 
-  it("should return the /qantas and /alaska routes with default base URL", () => {
+  it("should return the /qantas and /atmos routes with default base URL", () => {
     delete process.env.NEXT_PUBLIC_SITE_URL;
     delete process.env.VERCEL_PROJECT_PRODUCTION_URL;
 
@@ -21,7 +21,7 @@ describe("sitemap", () => {
     expect(result[0].url).toBe("https://frequent-flyer-calc.vercel.app/qantas");
     expect(result[0].priority).toBe(1.0);
     expect(result[0].changeFrequency).toBe("weekly");
-    expect(result[1].url).toBe("https://frequent-flyer-calc.vercel.app/alaska");
+    expect(result[1].url).toBe("https://frequent-flyer-calc.vercel.app/atmos");
     expect(result[1].priority).toBe(0.9);
   });
 

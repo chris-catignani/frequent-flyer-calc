@@ -21,6 +21,7 @@ export interface AirlinePointsBreakdown {
   basePoints?: number;
   cabinBonus?: number;
   eliteBonus?: EliteBonus;
+  communityBonus?: number;
   minPoints?: number;
   totalEarned?: number;
 }
@@ -57,7 +58,7 @@ export interface SegmentResult {
   airlinePointsBreakdown?: AirlinePointsBreakdown;
   elitePointsBreakdown?: {
     basePoints: number;
-    globalLocalsBonus: number;
+    communityBonus: number;
   };
   qantasAPIResults?: QantasApiResults;
   error?: Error | unknown;

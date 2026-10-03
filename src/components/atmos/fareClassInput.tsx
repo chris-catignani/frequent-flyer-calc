@@ -1,10 +1,10 @@
 import React from "react";
-import { requiresFareClass, toAtmosOptions } from "@/calculators/alaska/options";
-import { CABIN_DISPLAY, getPartnerFareClasses } from "@/calculators/alaska/partnerCabins";
+import { requiresFareClass, toAtmosOptions } from "@/calculators/atmos/options";
+import { CABIN_DISPLAY, getPartnerFareClasses } from "@/calculators/atmos/partnerCabins";
 import { GenericFareClassInput } from "@/components/form/segmentInput";
 import type { SegmentInputAdapter } from "@/types/segmentInput";
 
-export const alaskaSegmentInputAdapter: SegmentInputAdapter = {
+export const atmosSegmentInputAdapter: SegmentInputAdapter = {
   isFareClassRequired: (segmentInput, programOptions) =>
     requiresFareClass(segmentInput.airline, toAtmosOptions(programOptions)),
   shouldClearFareClassOnAirlineChange: (segmentInput, newAirline) =>

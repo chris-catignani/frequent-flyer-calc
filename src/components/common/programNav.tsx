@@ -6,7 +6,7 @@ import { ChevronDownIcon } from "@/components/common/icons";
 
 const PROGRAMS = [
   { href: "/qantas", label: "Qantas" },
-  { href: "/alaska", label: "Atmos Rewards" },
+  { href: "/atmos", label: "Atmos Rewards" },
 ] as const;
 
 export const ProgramNav: React.FC<{ current: (typeof PROGRAMS)[number]["href"] }> = ({

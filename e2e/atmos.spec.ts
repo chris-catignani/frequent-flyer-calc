@@ -3,7 +3,7 @@ import { clickCalculate, selectAirline, setAirport, setEarnMethod, setFareClass 
 
 test.describe("Atmos Rewards calculator", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/alaska");
+    await page.goto("/atmos");
   });
 
   test("distance: AS SEA-LAX earns 1 point per mile", async ({ page }) => {
@@ -30,7 +30,8 @@ test.describe("Atmos Rewards calculator", () => {
 
   test("price paid: other partner uses the fare-class cabin chart", async ({ page }) => {
     await setEarnMethod(page, "Price paid");
-    await page.getByTestId("ticket-issuer-select").selectOption("other");
+    await page.getByTestId("ticket-issuer-input").locator("input").click();
+    await page.getByRole("option", { name: "Another partner", exact: true }).click();
     await expect(page.getByTestId("fare-usd-input")).not.toBeVisible();
     await selectAirline(page, 0, "Qatar Airways", "Qatar Airways (qr)");
     await setAirport(page, "from", 0, "doh");
@@ -44,7 +45,7 @@ test.describe("Atmos Rewards calculator", () => {
 
   test("deep link restores program options", async ({ page }) => {
     await page.goto(
-      "/alaska?eliteStatus=Gold&tripType=one%20way&segmentInputs=as_sea_lax_&earnMethod=price&fareUsd=500"
+      "/atmos?eliteStatus=Gold&tripType=one%20way&segmentInputs=as_sea_lax_&earnMethod=price&fareUsd=500"
     );
     await expect(page.getByTestId("earn-method-input").locator("input")).toHaveValue("Price paid");
     await expect(page.getByTestId("fare-usd-input")).toHaveValue("500");

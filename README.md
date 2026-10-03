@@ -18,7 +18,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 ## Atmos Rewards (Alaska Airlines / Hawaiian Airlines)
 
-The `/alaska` calculator estimates Atmos Rewards points and status points. It supports three earning methods:
+The `/atmos` calculator estimates Atmos Rewards points and status points. It supports three earning methods:
 
 - **Distance**: points based on miles flown.
 - **Price Paid**: points per dollar spent, depending on the ticket issuer (Alaska 027, American 001, or another partner airline), with partner tickets using the fare-class cabin chart.
@@ -29,6 +29,7 @@ Assumptions this calculator makes:
 - Elite bonuses on partner-chart flights are calculated on the base points column.
 - Price-paid ticket totals are split across flights in proportion to distance.
 - Guam, Puerto Rico and other US territories count as the United States for Global Locals.
+- Communities: Global Locals adds 10% status points on flights touching a non-US airport; Huakaʻi by Hawaiian adds 50% Atmos Points and status points on flights between the Hawaiian Islands. Club 49, Culinary Journeys, Active Escapes and Families On the Go can be selected but have no flight earning benefits.
 - On American-issued (001) tickets, flights not operated under an American flight number use the other partner earn chart.
 
 Sources:

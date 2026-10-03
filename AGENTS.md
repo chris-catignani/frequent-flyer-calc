@@ -1,6 +1,6 @@
 ## What this is
 
-A Next.js (App Router) app that calculates frequent flyer points/status credit earnings for a given flight itinerary. It has two calculators: `/qantas` (Qantas Frequent Flyer) and `/alaska` (Atmos Rewards for Alaska and Hawaiian). `/` still redirects to `/qantas`.
+A Next.js (App Router) app that calculates frequent flyer points/status credit earnings for a given flight itinerary. It has two calculators: `/qantas` (Qantas Frequent Flyer) and `/atmos` (Atmos Rewards for Alaska and Hawaiian). `/` still redirects to `/qantas`.
 
 ## Commands
 
@@ -69,7 +69,7 @@ Each calculator is a `FrequentFlyerProgram` (`src/types/program.ts`). Program-sp
 
 ### Atmos Rewards pipeline
 
-The engine lives in `src/calculators/alaska/`: `options.ts`, `constants.ts`, `partnerCabins.ts`, `allocate.ts` and `calculator.ts`. It has three earning methods (distance, price paid, segments); Price Paid depends on the ticket issuer (027/001/other). The partner fare class table in `partnerCabins.ts` is a verbatim copy of Alaska's chart. Rounding rules, the elite bonus being calculated on base points, Global Locals, and US territories counting as the US are documented in the code and tests. Tests to extend: `calculator.test.ts`, `partnerCabins.test.ts` and `options.test.ts`.
+The engine lives in `src/calculators/atmos/`: `options.ts`, `constants.ts`, `partnerCabins.ts`, `allocate.ts` and `calculator.ts`. It has three earning methods (distance, price paid, segments); Price Paid depends on the ticket issuer (027/001/other). The partner fare class table in `partnerCabins.ts` is a verbatim copy of Alaska's chart. Rounding rules, the elite bonus being calculated on base points, communities (one per member; only Global Locals and Huakaʻi by Hawaiian change earnings), and US territories counting as the US are documented in the code and tests. Tests to extend: `calculator.test.ts`, `partnerCabins.test.ts` and `options.test.ts`.
 
 ### Page/component structure
 

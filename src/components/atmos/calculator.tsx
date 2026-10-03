@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import { alaskaProgram } from "@/calculators/alaska";
-import { toAtmosOptions } from "@/calculators/alaska/options";
-import { AtmosSegmentResults } from "@/components/alaska/segmentResults";
+import { atmosProgram } from "@/calculators/atmos";
+import { toAtmosOptions } from "@/calculators/atmos/options";
+import { AtmosSegmentResults } from "@/components/atmos/segmentResults";
 import {
   BookingTypeToggle,
+  CommunityInput,
   EarnMethodInput,
-  GlobalLocalsCheckbox,
   PricePaidOptions,
-} from "@/components/alaska/ticketOptions";
+} from "@/components/atmos/ticketOptions";
 import { RecentCalculationSelection } from "@/components/common/recentCalculations";
 import { SegmentedToggle, TRIP_TYPE_OPTIONS } from "@/components/common/segmentedToggle";
 import { CancelIcon, SpinnerIcon } from "@/components/common/icons";
@@ -18,9 +18,9 @@ import { EliteStatusInput } from "@/components/qantas/input";
 import { ResultsSummary } from "@/components/qantas/resultsSummary";
 import { useCalculator } from "@/hooks/useCalculator";
 
-const ELITE_STATUS_NAMES = alaskaProgram.eliteTiers.map((tier) => tier.name);
+const ELITE_STATUS_NAMES = atmosProgram.eliteTiers.map((tier) => tier.name);
 
-export const AlaskaCalculator: React.FC = () => {
+export const AtmosCalculator: React.FC = () => {
   const {
     segmentInputs,
     inputErrors,
@@ -42,7 +42,7 @@ export const AlaskaCalculator: React.FC = () => {
     loadRecentCalculation,
     deleteRecentCalculation,
     clearAllRecentCalculations,
-  } = useCalculator({ program: alaskaProgram });
+  } = useCalculator({ program: atmosProgram });
   const atmosOptions = toAtmosOptions(programOptions);
 
   return (
@@ -63,10 +63,6 @@ export const AlaskaCalculator: React.FC = () => {
             />
           </div>
           <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-2.5 sm:gap-3">
-            <EarnMethodInput
-              value={atmosOptions.earnMethod}
-              onChange={(earnMethod) => setProgramOptions({ earnMethod })}
-            />
             <EliteStatusInput
               eliteStatus={eliteStatus}
               options={ELITE_STATUS_NAMES}
@@ -75,30 +71,36 @@ export const AlaskaCalculator: React.FC = () => {
           </div>
         </div>
 
-        <PricePaidOptions
-          options={atmosOptions}
-          errors={optionErrors}
-          onChange={setProgramOptions}
-        />
+        <section
+          aria-label="Earning options"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3 sm:pt-1 items-start"
+        >
+          <EarnMethodInput
+            value={atmosOptions.earnMethod}
+            onChange={(earnMethod) => setProgramOptions({ earnMethod })}
+          />
+          <CommunityInput
+            value={atmosOptions.community}
+            onChange={(community) => setProgramOptions({ community })}
+          />
+          <PricePaidOptions
+            options={atmosOptions}
+            errors={optionErrors}
+            onChange={setProgramOptions}
+          />
+        </section>
 
         <div className="pt-2 sm:pt-4">
           <SegmentInputList
             segmentInputs={segmentInputs}
             errors={inputErrors}
-            adapter={alaskaProgram.segmentInputAdapter}
-            airlineOptions={alaskaProgram.airlineOptions}
+            adapter={atmosProgram.segmentInputAdapter}
+            airlineOptions={atmosProgram.airlineOptions}
             programOptions={programOptions}
             onDeleteSegmentPressed={deleteSegment}
             onSegmentInputChanged={updateSegment}
             onSegmentsReordered={reorderSegments}
           />
-
-          <div className="mt-1">
-            <GlobalLocalsCheckbox
-              checked={atmosOptions.globalLocals}
-              onChange={(globalLocals) => setProgramOptions({ globalLocals })}
-            />
-          </div>
 
           <div className="mt-2 sm:mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 items-center">
             <div className="flex justify-start">
@@ -144,7 +146,7 @@ export const AlaskaCalculator: React.FC = () => {
             calculationOutput={calculationOutput}
             compareWithQantasCalc={false}
             isCalculating={isCalculating}
-            currencies={alaskaProgram.currencies}
+            currencies={atmosProgram.currencies}
           />
           {calculationOutput.containsErrors && (
             <div

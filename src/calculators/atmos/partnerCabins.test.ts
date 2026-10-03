@@ -2,7 +2,7 @@ import {
   getPartnerCabin,
   getPartnerFareClasses,
   parsePartnerCabinTable,
-} from "@/calculators/alaska/partnerCabins";
+} from "@/calculators/atmos/partnerCabins";
 
 describe("partner cabin table", () => {
   it("maps letter fare classes case-insensitively", () => {

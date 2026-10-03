@@ -3,12 +3,15 @@
 import React, { useState } from "react";
 import { Combobox } from "@/components/common/combobox";
 import { SegmentedToggle, type ToggleOption } from "@/components/common/segmentedToggle";
-import type {
-  AtmosOptions,
-  BookingType,
-  EarnMethod,
-  TicketIssuer,
-} from "@/calculators/alaska/options";
+import { COMMUNITY_DISPLAY } from "@/calculators/atmos/constants";
+import {
+  COMMUNITIES,
+  type AtmosOptions,
+  type BookingType,
+  type Community,
+  type EarnMethod,
+  type TicketIssuer,
+} from "@/calculators/atmos/options";
 
 const EARN_METHOD_OPTIONS: { value: EarnMethod; label: string }[] = [
   { value: "distance", label: "Distance traveled" },
@@ -22,13 +25,13 @@ const BOOKING_TYPE_OPTIONS: ToggleOption<BookingType>[] = [
 ];
 
 const ISSUER_OPTIONS: { value: TicketIssuer; label: string }[] = [
-  { value: "alaska", label: "Alaska / Hawaiian (027)" },
-  { value: "american", label: "American Airlines (001)" },
-  { value: "other", label: "Another partner airline" },
+  { value: "alaska", label: "Alaska (027)" },
+  { value: "american", label: "American (001)" },
+  { value: "other", label: "Another partner" },
 ];
 
 const FIELD_CLASS =
-  "w-full rounded-md border border-slate-300 hover:border-slate-400 focus:border-primary focus:ring-1 focus:ring-primary bg-white px-3.5 py-2.5 text-base text-slate-900 shadow-xs focus:outline-hidden";
+  "w-full rounded-md border border-slate-300 hover:border-slate-400 focus:border-primary focus:ring-1 focus:ring-primary bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs focus:outline-hidden";
 
 interface NumberFieldProps {
   id: string;
@@ -60,8 +63,11 @@ const NumberField: React.FC<NumberFieldProps> = ({
   }
 
   return (
-    <div className="flex flex-col">
-      <label htmlFor={id} className="mb-1 text-xs font-medium text-slate-600">
+    <div className="relative flex flex-col pt-1.5">
+      <label
+        htmlFor={id}
+        className="absolute top-1.5 -translate-y-1/2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none text-slate-500"
+      >
         {label}
       </label>
       <input
@@ -98,7 +104,7 @@ export const EarnMethodInput: React.FC<{
   onChange: (earnMethod: EarnMethod) => void;
 }> = ({ value, onChange }) => {
   return (
-    <div data-testid="earn-method-input" className="w-full sm:w-48">
+    <div data-testid="earn-method-input" className="w-full">
       <Combobox
         label="Earn By"
         options={EARN_METHOD_OPTIONS}
@@ -106,7 +112,7 @@ export const EarnMethodInput: React.FC<{
         onChange={(earnMethod) => onChange(earnMethod as EarnMethod)}
         getOptionLabel={(opt) => opt.label}
         getOptionValue={(opt) => opt.value}
-        dropdownClassName="w-full min-w-full sm:min-w-[200px] right-0 sm:right-0 sm:left-auto"
+        dropdownClassName="left-0 w-full min-w-full sm:min-w-[200px]"
       />
     </div>
   );
@@ -127,26 +133,37 @@ export const BookingTypeToggle: React.FC<{
   );
 };
 
-export const GlobalLocalsCheckbox: React.FC<{
-  checked: boolean;
-  onChange: (globalLocals: boolean) => void;
-}> = ({ checked, onChange }) => {
+const NO_FLIGHT_BONUS_HINT = "No bonus on flight earnings";
+
+const COMMUNITY_HINTS: Record<Community, string> = {
+  none: "",
+  globalLocals: "+10% status points on flights that begin or end outside the United States",
+  huakai: "+50% Atmos Points and status points on flights between the Hawaiian Islands",
+  club49: NO_FLIGHT_BONUS_HINT,
+  culinaryJourneys: NO_FLIGHT_BONUS_HINT,
+  activeEscapes: NO_FLIGHT_BONUS_HINT,
+  familiesOnTheGo: NO_FLIGHT_BONUS_HINT,
+};
+
+export const CommunityInput: React.FC<{
+  value: Community;
+  onChange: (community: Community) => void;
+}> = ({ value, onChange }) => {
   return (
-    <label className="inline-flex items-start gap-2 text-sm text-slate-700 cursor-pointer">
-      <input
-        type="checkbox"
-        data-testid="global-locals-checkbox"
-        checked={checked}
-        onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+    <div data-testid="community-input" className="w-full">
+      <Combobox
+        label="Atmos Community"
+        options={[...COMMUNITIES]}
+        value={value}
+        onChange={(community) => onChange(community as Community)}
+        getOptionLabel={(community) => COMMUNITY_DISPLAY[community]}
+        getOptionValue={(community) => community}
+        dropdownClassName="left-0 w-full min-w-full sm:min-w-[220px]"
       />
-      <span>
-        Global Locals member
-        <span className="block text-xs text-slate-500">
-          +10% status points on flights that begin or end outside the United States
-        </span>
-      </span>
-    </label>
+      {COMMUNITY_HINTS[value] && (
+        <span className="mt-0.5 block text-xs text-slate-500">{COMMUNITY_HINTS[value]}</span>
+      )}
+    </div>
   );
 };
 
@@ -156,7 +173,7 @@ export interface PricePaidOptionsProps {
   onChange: (updates: Partial<AtmosOptions>) => void;
 }
 
-/** Issuer and fare / points-redeemed fields; only rendered for the price-paid earning method */
+/** Issuer and fare / points-redeemed fields, laid out by the parent grid; only rendered for the price-paid earning method */
 export const PricePaidOptions: React.FC<PricePaidOptionsProps> = ({
   options,
   errors,
@@ -168,30 +185,20 @@ export const PricePaidOptions: React.FC<PricePaidOptionsProps> = ({
   const isCash = options.bookingType === "cash";
 
   return (
-    <section
-      aria-label="Ticket details"
-      className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 sm:pt-0 sm:pb-3"
-    >
+    <>
       {isCash && (
-        <div className="flex flex-col">
-          <label htmlFor="ticket-issuer" className="mb-1 text-xs font-medium text-slate-600">
-            Ticket issued by
-          </label>
-          <select
-            id="ticket-issuer"
-            data-testid="ticket-issuer-select"
+        <div data-testid="ticket-issuer-input" className="w-full">
+          <Combobox
+            label="Ticket issued by"
+            options={ISSUER_OPTIONS}
             value={options.ticketIssuer}
-            onChange={(e) => onChange({ ticketIssuer: e.target.value as TicketIssuer })}
-            className={FIELD_CLASS}
-          >
-            {ISSUER_OPTIONS.map((issuer) => (
-              <option key={issuer.value} value={issuer.value}>
-                {issuer.label}
-              </option>
-            ))}
-          </select>
-          <span className="mt-0.5 text-xs text-slate-500">
-            Ticket numbers starting 027 are Alaska/Hawaiian; 001 is American.
+            onChange={(ticketIssuer) => onChange({ ticketIssuer: ticketIssuer as TicketIssuer })}
+            getOptionLabel={(opt) => opt.label}
+            getOptionValue={(opt) => opt.value}
+            dropdownClassName="left-0 w-full min-w-full sm:min-w-[240px]"
+          />
+          <span className="mt-0.5 block text-xs text-slate-500">
+            Ticket numbers starting 027 are Alaska or Hawaiian; 001 is American.
           </span>
         </div>
       )}
@@ -220,6 +227,6 @@ export const PricePaidOptions: React.FC<PricePaidOptionsProps> = ({
           onChange={(pointsRedeemed) => onChange({ pointsRedeemed })}
         />
       )}
-    </section>
+    </>
   );
 };

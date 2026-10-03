@@ -1,13 +1,23 @@
-import { ALASKA_GROUP_AIRLINES } from "@/calculators/alaska/constants";
+import { ALASKA_GROUP_AIRLINES } from "@/calculators/atmos/constants";
 import type { ProgramOptions } from "@/types/program";
 
 export const EARN_METHODS = ["distance", "price", "segments"] as const;
 export const BOOKING_TYPES = ["cash", "award"] as const;
 export const TICKET_ISSUERS = ["alaska", "american", "other"] as const;
+export const COMMUNITIES = [
+  "none",
+  "globalLocals",
+  "huakai",
+  "club49",
+  "culinaryJourneys",
+  "activeEscapes",
+  "familiesOnTheGo",
+] as const;
 
 export type EarnMethod = (typeof EARN_METHODS)[number];
 export type BookingType = (typeof BOOKING_TYPES)[number];
 export type TicketIssuer = (typeof TICKET_ISSUERS)[number];
+export type Community = (typeof COMMUNITIES)[number];
 
 // A type alias (not an interface) so it is assignable to ProgramOptions
 export type AtmosOptions = {
@@ -16,7 +26,7 @@ export type AtmosOptions = {
   ticketIssuer: TicketIssuer;
   fareUsd: number;
   pointsRedeemed: number;
-  globalLocals: boolean;
+  community: Community;
 };
 
 export const DEFAULT_ATMOS_OPTIONS: AtmosOptions = {
@@ -25,7 +35,7 @@ export const DEFAULT_ATMOS_OPTIONS: AtmosOptions = {
   ticketIssuer: "alaska",
   fareUsd: 0,
   pointsRedeemed: 0,
-  globalLocals: false,
+  community: "none",
 };
 
 const pick = <T extends string>(value: unknown, allowed: readonly T[], fallback: T): T =>
@@ -42,7 +52,7 @@ export const toAtmosOptions = (options: ProgramOptions = {}): AtmosOptions => ({
   ticketIssuer: pick(options.ticketIssuer, TICKET_ISSUERS, DEFAULT_ATMOS_OPTIONS.ticketIssuer),
   fareUsd: nonNegative(options.fareUsd),
   pointsRedeemed: nonNegative(options.pointsRedeemed),
-  globalLocals: options.globalLocals === true,
+  community: pick(options.community, COMMUNITIES, DEFAULT_ATMOS_OPTIONS.community),
 });
 
 export const validateAtmosOptions = (programOptions: ProgramOptions): Record<string, string> => {

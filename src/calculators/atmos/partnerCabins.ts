@@ -1,4 +1,4 @@
-import { PARTNER_AIRLINE_CODES } from "@/calculators/alaska/constants";
+import { PARTNER_AIRLINE_CODES } from "@/calculators/atmos/constants";
 
 export type AtmosCabin = "discountEconomy" | "economy" | "premiumEconomy" | "business" | "first";
 

@@ -11,8 +11,10 @@ const breakdownText = (segmentResult: SegmentResult): string => {
   if (points?.cabinBonus) parts.push(`cabin bonus ${points.cabinBonus.toLocaleString()}`);
   if (points?.eliteBonus?.airlinePoints)
     parts.push(`elite bonus ${points.eliteBonus.airlinePoints.toLocaleString()}`);
-  const statusText = status?.globalLocalsBonus
-    ? ` · Status: ${status.basePoints.toLocaleString()} + Global Locals ${status.globalLocalsBonus.toLocaleString()}`
+  if (points?.communityBonus)
+    parts.push(`community bonus ${points.communityBonus.toLocaleString()}`);
+  const statusText = status?.communityBonus
+    ? ` · Status: ${status.basePoints.toLocaleString()} + community bonus ${status.communityBonus.toLocaleString()}`
     : "";
   return `${parts.join(" + ")}${statusText}`;
 };
