@@ -54,6 +54,16 @@ const NON_ALLIANCE_AIRLINES: AirlineMap = {
   ...JETSTAR_AIRLINES,
   ...LATAM_AIRLINES,
   ws: "WestJet",
+  ha: "Hawaiian Airlines",
+  ei: "Aer Lingus",
+  tn: "Air Tahiti Nui",
+  de: "Condor",
+  hu: "Hainan Airlines",
+  fi: "Icelandair",
+  ke: "Korean Air",
+  pr: "Philippine Airlines",
+  pd: "Porter Airlines",
+  jx: "STARLUX Airlines",
 };
 
 export const ALL_AIRLINES: AirlineMap = {
