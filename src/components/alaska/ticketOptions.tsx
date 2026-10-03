@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Combobox } from "@/components/common/combobox";
 import { SegmentedToggle, type ToggleOption } from "@/components/common/segmentedToggle";
 import type {
   AtmosOptions,
@@ -9,10 +10,10 @@ import type {
   TicketIssuer,
 } from "@/calculators/alaska/options";
 
-const EARN_METHOD_OPTIONS: ToggleOption<EarnMethod>[] = [
-  { value: "distance", label: "Distance" },
-  { value: "price", label: "Price Paid" },
-  { value: "segments", label: "Segments" },
+const EARN_METHOD_OPTIONS: { value: EarnMethod; label: string }[] = [
+  { value: "distance", label: "Distance traveled" },
+  { value: "price", label: "Price paid" },
+  { value: "segments", label: "Segments flown" },
 ];
 
 const BOOKING_TYPE_OPTIONS: ToggleOption<BookingType>[] = [
@@ -92,101 +93,133 @@ const NumberField: React.FC<NumberFieldProps> = ({
   );
 };
 
-export interface TicketOptionsProps {
+export const EarnMethodInput: React.FC<{
+  value: EarnMethod;
+  onChange: (earnMethod: EarnMethod) => void;
+}> = ({ value, onChange }) => {
+  return (
+    <div data-testid="earn-method-input" className="w-full sm:w-48">
+      <Combobox
+        label="Earn By"
+        options={EARN_METHOD_OPTIONS}
+        value={value}
+        onChange={(earnMethod) => onChange(earnMethod as EarnMethod)}
+        getOptionLabel={(opt) => opt.label}
+        getOptionValue={(opt) => opt.value}
+        dropdownClassName="w-full min-w-full sm:min-w-[200px] right-0 sm:right-0 sm:left-auto"
+      />
+    </div>
+  );
+};
+
+export const BookingTypeToggle: React.FC<{
+  value: BookingType;
+  onChange: (bookingType: BookingType) => void;
+}> = ({ value, onChange }) => {
+  return (
+    <SegmentedToggle
+      ariaLabel="Booking type"
+      testIdPrefix="booking-type"
+      options={BOOKING_TYPE_OPTIONS}
+      value={value}
+      onChange={onChange}
+    />
+  );
+};
+
+export const GlobalLocalsCheckbox: React.FC<{
+  checked: boolean;
+  onChange: (globalLocals: boolean) => void;
+}> = ({ checked, onChange }) => {
+  return (
+    <label className="inline-flex items-start gap-2 text-sm text-slate-700 cursor-pointer">
+      <input
+        type="checkbox"
+        data-testid="global-locals-checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+      />
+      <span>
+        Global Locals member
+        <span className="block text-xs text-slate-500">
+          +10% status points on flights that begin or end outside the United States
+        </span>
+      </span>
+    </label>
+  );
+};
+
+export interface PricePaidOptionsProps {
   options: AtmosOptions;
   errors: Record<string, string>;
   onChange: (updates: Partial<AtmosOptions>) => void;
 }
 
-export const TicketOptions: React.FC<TicketOptionsProps> = ({ options, errors, onChange }) => {
-  const isPrice = options.earnMethod === "price";
+/** Issuer and fare / points-redeemed fields; only rendered for the price-paid earning method */
+export const PricePaidOptions: React.FC<PricePaidOptionsProps> = ({
+  options,
+  errors,
+  onChange,
+}) => {
+  if (options.earnMethod !== "price") {
+    return null;
+  }
   const isCash = options.bookingType === "cash";
 
   return (
-    <section aria-label="Ticket details" className="flex flex-col gap-3 pt-3 sm:pt-0 sm:pb-3">
-      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 items-center sm:items-start">
-        <SegmentedToggle
-          ariaLabel="Earning method"
-          testIdPrefix="earn-method"
-          options={EARN_METHOD_OPTIONS}
-          value={options.earnMethod}
-          onChange={(earnMethod) => onChange({ earnMethod })}
-        />
-        <SegmentedToggle
-          ariaLabel="Booking type"
-          testIdPrefix="booking-type"
-          options={BOOKING_TYPE_OPTIONS}
-          value={options.bookingType}
-          onChange={(bookingType) => onChange({ bookingType })}
-        />
-      </div>
-
-      {isPrice && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {isCash && (
-            <div className="flex flex-col">
-              <label htmlFor="ticket-issuer" className="mb-1 text-xs font-medium text-slate-600">
-                Ticket issued by
-              </label>
-              <select
-                id="ticket-issuer"
-                data-testid="ticket-issuer-select"
-                value={options.ticketIssuer}
-                onChange={(e) => onChange({ ticketIssuer: e.target.value as TicketIssuer })}
-                className={FIELD_CLASS}
-              >
-                {ISSUER_OPTIONS.map((issuer) => (
-                  <option key={issuer.value} value={issuer.value}>
-                    {issuer.label}
-                  </option>
-                ))}
-              </select>
-              <span className="mt-0.5 text-xs text-slate-500">
-                Ticket numbers starting 027 are Alaska/Hawaiian; 001 is American.
-              </span>
-            </div>
-          )}
-          {isCash && options.ticketIssuer === "other" ? null : isCash ? (
-            <NumberField
-              key="fare-usd-input"
-              id="fare-usd-input"
-              label="Fare paid (USD)"
-              hint="Excluding taxes and fees, including carrier surcharges"
-              value={options.fareUsd}
-              error={errors.fareUsd}
-              step="0.01"
-              onChange={(fareUsd) => onChange({ fareUsd })}
-            />
-          ) : (
-            <NumberField
-              key="points-redeemed-input"
-              id="points-redeemed-input"
-              label="Points redeemed"
-              hint="1 status point for every 20 points redeemed"
-              value={options.pointsRedeemed}
-              error={errors.pointsRedeemed}
-              step="1"
-              onChange={(pointsRedeemed) => onChange({ pointsRedeemed })}
-            />
-          )}
+    <section
+      aria-label="Ticket details"
+      className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 sm:pt-0 sm:pb-3"
+    >
+      {isCash && (
+        <div className="flex flex-col">
+          <label htmlFor="ticket-issuer" className="mb-1 text-xs font-medium text-slate-600">
+            Ticket issued by
+          </label>
+          <select
+            id="ticket-issuer"
+            data-testid="ticket-issuer-select"
+            value={options.ticketIssuer}
+            onChange={(e) => onChange({ ticketIssuer: e.target.value as TicketIssuer })}
+            className={FIELD_CLASS}
+          >
+            {ISSUER_OPTIONS.map((issuer) => (
+              <option key={issuer.value} value={issuer.value}>
+                {issuer.label}
+              </option>
+            ))}
+          </select>
+          <span className="mt-0.5 text-xs text-slate-500">
+            Ticket numbers starting 027 are Alaska/Hawaiian; 001 is American.
+          </span>
         </div>
       )}
-
-      <label className="inline-flex items-start gap-2 text-sm text-slate-700 cursor-pointer">
-        <input
-          type="checkbox"
-          data-testid="global-locals-checkbox"
-          checked={options.globalLocals}
-          onChange={(e) => onChange({ globalLocals: e.target.checked })}
-          className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
+      {isCash ? (
+        options.ticketIssuer !== "other" && (
+          <NumberField
+            key="fare-usd-input"
+            id="fare-usd-input"
+            label="Fare paid (USD)"
+            hint="Excluding taxes and fees, including carrier surcharges"
+            value={options.fareUsd}
+            error={errors.fareUsd}
+            step="0.01"
+            onChange={(fareUsd) => onChange({ fareUsd })}
+          />
+        )
+      ) : (
+        <NumberField
+          key="points-redeemed-input"
+          id="points-redeemed-input"
+          label="Points redeemed"
+          hint="1 status point for every 20 points redeemed"
+          value={options.pointsRedeemed}
+          error={errors.pointsRedeemed}
+          step="1"
+          onChange={(pointsRedeemed) => onChange({ pointsRedeemed })}
         />
-        <span>
-          Global Locals member
-          <span className="block text-xs text-slate-500">
-            +10% status points on flights that begin or end outside the United States
-          </span>
-        </span>
-      </label>
+      )}
     </section>
   );
 };

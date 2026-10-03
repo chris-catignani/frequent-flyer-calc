@@ -457,7 +457,7 @@ describe("isFareClassRequired", () => {
     });
   });
 
-  it("hides the fare class field when it isn't required", () => {
+  it("drops the fare class column when no segment needs one", () => {
     render(
       <SegmentInputList
         segmentInputs={[segment]}
@@ -471,6 +471,27 @@ describe("isFareClassRequired", () => {
       />
     );
     expect(screen.queryByTestId("segment-fare-class-0")).toBeNull();
+    expect(screen.queryByTestId("segment-fare-class-not-required-0")).toBeNull();
+  });
+
+  it("keeps the column for every row when any segment needs a fare class", () => {
+    const perAirlineAdapter: SegmentInputAdapter = {
+      isFareClassRequired: (s) => s.airline === "qr",
+    };
+    const partnerSegment = { ...segment, airline: "qr", uuid: "fare-class-required-uuid-2" };
+    render(
+      <SegmentInputList
+        segmentInputs={[segment, partnerSegment]}
+        errors={{}}
+        airlineOptions={buildAirlineOptions(["aa"], "Oneworld")}
+        onDeleteSegmentPressed={jest.fn()}
+        onSegmentInputChanged={jest.fn()}
+        onSegmentsReordered={jest.fn()}
+        adapter={perAirlineAdapter}
+        programOptions={{}}
+      />
+    );
     expect(screen.getByTestId("segment-fare-class-not-required-0")).toBeInTheDocument();
+    expect(screen.getByTestId("segment-fare-class-1")).toBeInTheDocument();
   });
 });

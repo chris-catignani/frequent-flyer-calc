@@ -4,7 +4,12 @@ import React from "react";
 import { alaskaProgram } from "@/calculators/alaska";
 import { toAtmosOptions } from "@/calculators/alaska/options";
 import { AtmosSegmentResults } from "@/components/alaska/segmentResults";
-import { TicketOptions } from "@/components/alaska/ticketOptions";
+import {
+  BookingTypeToggle,
+  EarnMethodInput,
+  GlobalLocalsCheckbox,
+  PricePaidOptions,
+} from "@/components/alaska/ticketOptions";
 import { RecentCalculationSelection } from "@/components/common/recentCalculations";
 import { SegmentedToggle, TRIP_TYPE_OPTIONS } from "@/components/common/segmentedToggle";
 import { CancelIcon, SpinnerIcon } from "@/components/common/icons";
@@ -38,12 +43,13 @@ export const AlaskaCalculator: React.FC = () => {
     deleteRecentCalculation,
     clearAllRecentCalculations,
   } = useCalculator({ program: alaskaProgram });
+  const atmosOptions = toAtmosOptions(programOptions);
 
   return (
     <div className="w-full min-w-0 mt-4">
       <div className="w-full sm:rounded-xl border-0 sm:border border-slate-200 bg-transparent sm:bg-white p-0 sm:p-4 shadow-none sm:shadow-sm">
         <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-2.5 sm:gap-3 pb-0 sm:pb-3">
-          <div className="flex justify-center sm:justify-start">
+          <div className="flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-3">
             <SegmentedToggle
               testId="trip-type-toggle"
               ariaLabel="Trip type selection"
@@ -51,8 +57,16 @@ export const AlaskaCalculator: React.FC = () => {
               value={tripType}
               onChange={setTripType}
             />
+            <BookingTypeToggle
+              value={atmosOptions.bookingType}
+              onChange={(bookingType) => setProgramOptions({ bookingType })}
+            />
           </div>
-          <div className="flex justify-center sm:justify-end">
+          <div className="flex flex-col sm:flex-row justify-center sm:justify-end gap-2.5 sm:gap-3">
+            <EarnMethodInput
+              value={atmosOptions.earnMethod}
+              onChange={(earnMethod) => setProgramOptions({ earnMethod })}
+            />
             <EliteStatusInput
               eliteStatus={eliteStatus}
               options={ELITE_STATUS_NAMES}
@@ -61,8 +75,8 @@ export const AlaskaCalculator: React.FC = () => {
           </div>
         </div>
 
-        <TicketOptions
-          options={toAtmosOptions(programOptions)}
+        <PricePaidOptions
+          options={atmosOptions}
           errors={optionErrors}
           onChange={setProgramOptions}
         />
@@ -78,6 +92,13 @@ export const AlaskaCalculator: React.FC = () => {
             onSegmentInputChanged={updateSegment}
             onSegmentsReordered={reorderSegments}
           />
+
+          <div className="mt-1">
+            <GlobalLocalsCheckbox
+              checked={atmosOptions.globalLocals}
+              onChange={(globalLocals) => setProgramOptions({ globalLocals })}
+            />
+          </div>
 
           <div className="mt-2 sm:mt-3 grid grid-cols-2 sm:grid-cols-3 gap-3 items-center">
             <div className="flex justify-start">

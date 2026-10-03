@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { clickCalculate, selectAirline, setAirport, setFareClass } from "./helpers";
+import { clickCalculate, selectAirline, setAirport, setEarnMethod, setFareClass } from "./helpers";
 
 test.describe("Atmos Rewards calculator", () => {
   test.beforeEach(async ({ page }) => {
@@ -18,7 +18,7 @@ test.describe("Atmos Rewards calculator", () => {
   });
 
   test("price paid: Alaska-issued ticket earns 5 points per dollar", async ({ page }) => {
-    await page.getByTestId("earn-method-price").click();
+    await setEarnMethod(page, "Price paid");
     await page.getByTestId("fare-usd-input").fill("500");
     await setAirport(page, "from", 0, "sea");
     await setAirport(page, "to", 0, "lax");
@@ -29,7 +29,7 @@ test.describe("Atmos Rewards calculator", () => {
   });
 
   test("price paid: other partner uses the fare-class cabin chart", async ({ page }) => {
-    await page.getByTestId("earn-method-price").click();
+    await setEarnMethod(page, "Price paid");
     await page.getByTestId("ticket-issuer-select").selectOption("other");
     await expect(page.getByTestId("fare-usd-input")).not.toBeVisible();
     await selectAirline(page, 0, "Qatar Airways", "Qatar Airways (qr)");
@@ -46,7 +46,7 @@ test.describe("Atmos Rewards calculator", () => {
     await page.goto(
       "/alaska?eliteStatus=Gold&tripType=one%20way&segmentInputs=as_sea_lax_&earnMethod=price&fareUsd=500"
     );
-    await expect(page.getByTestId("earn-method-price")).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByTestId("earn-method-input").locator("input")).toHaveValue("Price paid");
     await expect(page.getByTestId("fare-usd-input")).toHaveValue("500");
     await clickCalculate(page);
 
