@@ -12,6 +12,7 @@ import { buildAirlineOptions } from "@/constants/airlines";
 import { searchAirports } from "@/utils/airports";
 import { validate } from "@/utils/segmentValidation";
 import type { SegmentInput } from "@/models/segmentInput";
+import type { ProgramOptions } from "@/types/program";
 import type {
   AirlineOption,
   FareClassInputRenderProps,
@@ -66,6 +67,7 @@ export interface SegmentInputListProps {
   onSegmentInputChanged: (idx: number, segmentInput: SegmentInput) => void;
   onSegmentsReordered: (sourceIdx: number, destIdx: number) => void;
   adapter?: SegmentInputAdapter;
+  programOptions?: ProgramOptions;
 }
 
 export const SegmentInputList: React.FC<SegmentInputListProps> = ({
@@ -76,6 +78,7 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
   onSegmentInputChanged,
   onSegmentsReordered,
   adapter,
+  programOptions,
 }) => {
   const onDragEnd = (result: DropResult) => {
     if (result.destination && result.source.index !== result.destination.index) {
@@ -98,6 +101,7 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
             onDeleteSegmentPressed={onDeleteSegmentPressed}
             onSegmentInputChanged={onSegmentInputChanged}
             adapter={adapter}
+            programOptions={programOptions}
           />
         ))}
       </div>
@@ -121,6 +125,7 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
                 onDeleteSegmentPressed={onDeleteSegmentPressed}
                 onSegmentInputChanged={onSegmentInputChanged}
                 adapter={adapter}
+                programOptions={programOptions}
               />
             ))}
             {provided.placeholder}
@@ -141,6 +146,7 @@ interface SegmentInputListItemProps {
   onDeleteSegmentPressed: (idx: number) => void;
   onSegmentInputChanged: (idx: number, segmentInput: SegmentInput) => void;
   adapter?: SegmentInputAdapter;
+  programOptions?: ProgramOptions;
 }
 
 const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
@@ -153,6 +159,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
   onDeleteSegmentPressed,
   onSegmentInputChanged,
   adapter,
+  programOptions,
 }) => {
   if (!enableDrag) {
     return (
@@ -167,6 +174,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
           onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
           onChange={(newSegmentInput) => onSegmentInputChanged(segmentInputIdx, newSegmentInput)}
           adapter={adapter}
+          programOptions={programOptions}
         />
       </div>
     );
@@ -187,6 +195,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
             onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
             onChange={(newSegmentInput) => onSegmentInputChanged(segmentInputIdx, newSegmentInput)}
             adapter={adapter}
+            programOptions={programOptions}
           />
         </div>
       )}
@@ -204,6 +213,7 @@ interface SegmentInputRowProps {
   onChange: (segmentInput: SegmentInput) => void;
   onDeleteClicked: () => void;
   adapter?: SegmentInputAdapter;
+  programOptions?: ProgramOptions;
 }
 
 const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
@@ -216,6 +226,7 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   onChange,
   onDeleteClicked,
   adapter,
+  programOptions,
 }) => {
   const customFareClassInput = adapter?.renderFareClassInput?.({
     segmentInputIdx,
@@ -223,6 +234,8 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
     error: errors["fareClass"],
     onChange: (val) => onChange({ ...segmentInput, fareClass: val }),
   });
+  const fareClassRequired =
+    adapter?.isFareClassRequired?.(segmentInput, programOptions ?? {}) ?? true;
 
   return (
     <div
@@ -309,7 +322,12 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
       </div>
 
       <div className="col-span-12 sm:col-auto order-6 sm:order-5">
-        {customFareClassInput != null ? (
+        {!fareClassRequired ? (
+          <div
+            data-testid={`segment-fare-class-not-required-${segmentInputIdx}`}
+            aria-hidden="true"
+          />
+        ) : customFareClassInput != null ? (
           customFareClassInput
         ) : (
           <div

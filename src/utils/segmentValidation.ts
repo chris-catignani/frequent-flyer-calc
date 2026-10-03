@@ -1,9 +1,11 @@
 import type { SegmentInput } from "@/models/segmentInput";
+import type { ProgramOptions } from "@/types/program";
 import type { SegmentErrors, SegmentInputAdapter } from "@/types/segmentInput";
 
 export const validate = (
   segmentInputs: SegmentInput[],
-  adapter?: SegmentInputAdapter
+  adapter?: SegmentInputAdapter,
+  programOptions: ProgramOptions = {}
 ): SegmentErrors => {
   const errors: SegmentErrors = {};
 
@@ -24,7 +26,8 @@ export const validate = (
     if (!segmentInput.toAirportText) {
       addError(idx, "toAirportText", "Required");
     }
-    if (!segmentInput.fareClass) {
+    const fareClassRequired = adapter?.isFareClassRequired?.(segmentInput, programOptions) ?? true;
+    if (fareClassRequired && !segmentInput.fareClass) {
       addError(idx, "fareClass", "Required");
     }
 
@@ -36,7 +39,7 @@ export const validate = (
     }
 
     if (adapter?.validateSegment) {
-      const customErrors = adapter.validateSegment(segmentInput, idx);
+      const customErrors = adapter.validateSegment(segmentInput, idx, programOptions);
       if (customErrors) {
         Object.entries(customErrors).forEach(([fieldName, err]) => {
           addError(idx, fieldName, err);

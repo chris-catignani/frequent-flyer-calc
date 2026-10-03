@@ -421,3 +421,56 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
     });
   });
 });
+
+describe("isFareClassRequired", () => {
+  const adapter: SegmentInputAdapter = {
+    isFareClassRequired: (_segment, programOptions) => programOptions.earnMethod === "price",
+  };
+  const segment = createSegmentInput({
+    airline: "as",
+    fareClass: "",
+    fromAirportText: "sea",
+    toAirportText: "lax",
+    uuid: "fare-class-required-uuid",
+    fromAirport: {
+      iata: "SEA",
+      name: "Seattle",
+      city: "Seattle",
+      country: "United States",
+      latitude: 47.45,
+      longitude: -122.31,
+    },
+    toAirport: {
+      iata: "LAX",
+      name: "Los Angeles",
+      city: "Los Angeles",
+      country: "United States",
+      latitude: 33.94,
+      longitude: -118.41,
+    },
+  });
+
+  it("skips the fare class check when the adapter says it isn't required", () => {
+    expect(validate([segment], adapter, { earnMethod: "distance" })).toEqual({});
+    expect(validate([segment], adapter, { earnMethod: "price" })).toEqual({
+      0: { fareClass: "Required" },
+    });
+  });
+
+  it("hides the fare class field when it isn't required", () => {
+    render(
+      <SegmentInputList
+        segmentInputs={[segment]}
+        errors={{}}
+        airlineOptions={buildAirlineOptions(["aa"], "Oneworld")}
+        onDeleteSegmentPressed={jest.fn()}
+        onSegmentInputChanged={jest.fn()}
+        onSegmentsReordered={jest.fn()}
+        adapter={adapter}
+        programOptions={{ earnMethod: "distance" }}
+      />
+    );
+    expect(screen.queryByTestId("segment-fare-class-0")).toBeNull();
+    expect(screen.getByTestId("segment-fare-class-not-required-0")).toBeInTheDocument();
+  });
+});
