@@ -1,25 +1,35 @@
 import { createSegmentInput, type SegmentInput } from "@/models/segmentInput";
+import type { ProgramOptions } from "@/types/program";
 
 export interface ParsedUrlParams {
   eliteStatus: string | null;
   tripType: string | null;
   segmentInputs?: SegmentInput[];
+  programOptions?: ProgramOptions;
 }
+
+type SearchParamsLike = { get: (key: string) => string | null };
 
 export const createUrlQueryParams = (
   eliteStatus: string,
   segmentInputs: SegmentInput[],
-  tripType: string
-): { eliteStatus: string; tripType: string; segmentInputs: string } => {
-  return {
+  tripType: string,
+  programOptions: ProgramOptions = {}
+): Record<string, string> => {
+  const params: Record<string, string> = {
     eliteStatus,
     tripType,
     segmentInputs: encodeSegmentInputs(segmentInputs),
   };
+  Object.entries(programOptions).forEach(([key, value]) => {
+    params[key] = String(value);
+  });
+  return params;
 };
 
 export const parseUrlQueryParams = (
-  searchParams?: { get: (key: string) => string | null } | null
+  searchParams?: SearchParamsLike | null,
+  defaultOptions?: ProgramOptions
 ): ParsedUrlParams => {
   if (!searchParams) {
     return {
@@ -32,12 +42,46 @@ export const parseUrlQueryParams = (
   const eliteStatus = searchParams.get("eliteStatus");
   const tripType = searchParams.get("tripType");
   const segmentInputs = decodeSegmentInputs(searchParams.get("segmentInputs"));
+  const programOptions = decodeProgramOptions(searchParams, defaultOptions);
 
   return {
     eliteStatus,
     tripType,
     segmentInputs,
+    ...(programOptions ? { programOptions } : {}),
   };
+};
+
+// Only keys the program declares are read, and each value is coerced to its default's type
+const decodeProgramOptions = (
+  searchParams: SearchParamsLike,
+  defaultOptions?: ProgramOptions
+): ProgramOptions | undefined => {
+  if (!defaultOptions) {
+    return undefined;
+  }
+
+  const decoded: ProgramOptions = {};
+  for (const [key, defaultValue] of Object.entries(defaultOptions)) {
+    const raw = searchParams.get(key);
+    if (raw === null) {
+      continue;
+    }
+    if (typeof defaultValue === "number") {
+      const parsed = Number(raw);
+      if (raw.trim() !== "" && Number.isFinite(parsed)) {
+        decoded[key] = parsed;
+      }
+    } else if (typeof defaultValue === "boolean") {
+      if (raw === "true" || raw === "false") {
+        decoded[key] = raw === "true";
+      }
+    } else {
+      decoded[key] = raw;
+    }
+  }
+
+  return Object.keys(decoded).length > 0 ? decoded : undefined;
 };
 
 const encodeSegmentInputs = (segmentInputs: SegmentInput[]): string => {

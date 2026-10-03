@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog } from "@/components/common/dialog";
 import { CheckCircleIcon, CancelIcon, InfoIcon } from "@/components/common/icons";
+import type { ProgramCurrencies } from "@/types/program";
 import type { CalculationResult } from "@/types/calculator";
 import {
   isAirlinePointsMatch,
@@ -13,6 +14,7 @@ export interface ResultsSummaryProps {
   calculationOutput?: CalculationResult | null;
   compareWithQantasCalc: boolean;
   isCalculating: boolean;
+  currencies: ProgramCurrencies;
 }
 
 interface MatchesQantasErrorDialogProps {
@@ -184,12 +186,14 @@ interface TotalPointsEarnedProps {
   calculationOutput: CalculationResult;
   compareWithQantasCalc: boolean;
   isCalculating: boolean;
+  currencies: ProgramCurrencies;
 }
 
 const TotalAirlinePointsEarned: React.FC<TotalPointsEarnedProps> = ({
   calculationOutput,
   compareWithQantasCalc,
   isCalculating,
+  currencies,
 }) => {
   return (
     <div className="flex flex-row items-center justify-center gap-2">
@@ -197,7 +201,7 @@ const TotalAirlinePointsEarned: React.FC<TotalPointsEarnedProps> = ({
         className="text-xl sm:text-2xl font-semibold text-slate-800"
         data-testid="total-points-earned"
       >
-        Qantas Points Earned: {calculationOutput.airlinePoints?.toLocaleString()}
+        {currencies.airlinePoints.name} Earned: {calculationOutput.airlinePoints?.toLocaleString()}
       </h3>
       <MatchesQantasAPIIcon
         calculationOutput={calculationOutput}
@@ -214,6 +218,7 @@ const TotalElitePointsEarned: React.FC<TotalPointsEarnedProps> = ({
   calculationOutput,
   compareWithQantasCalc,
   isCalculating,
+  currencies,
 }) => {
   return (
     <div className="flex flex-row items-center justify-center gap-2">
@@ -221,7 +226,7 @@ const TotalElitePointsEarned: React.FC<TotalPointsEarnedProps> = ({
         className="text-xl sm:text-2xl font-semibold text-slate-800"
         data-testid="total-status-credits-earned"
       >
-        Status Credits Earned: {calculationOutput.elitePoints?.toLocaleString()}
+        {currencies.elitePoints.name} Earned: {calculationOutput.elitePoints?.toLocaleString()}
       </h3>
       <MatchesQantasAPIIcon
         calculationOutput={calculationOutput}
@@ -238,6 +243,7 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   calculationOutput,
   compareWithQantasCalc,
   isCalculating,
+  currencies,
 }) => {
   if (!calculationOutput) {
     return null;
@@ -252,11 +258,13 @@ export const ResultsSummary: React.FC<ResultsSummaryProps> = ({
         calculationOutput={calculationOutput}
         compareWithQantasCalc={compareWithQantasCalc}
         isCalculating={isCalculating}
+        currencies={currencies}
       />
       <TotalElitePointsEarned
         calculationOutput={calculationOutput}
         compareWithQantasCalc={compareWithQantasCalc}
         isCalculating={isCalculating}
+        currencies={currencies}
       />
     </div>
   );

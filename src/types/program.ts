@@ -24,6 +24,11 @@ export interface CalculationOptions {
   [key: string]: unknown;
 }
 
+export type ProgramOptionValue = string | number | boolean;
+
+/** Program-specific ticket/member options, e.g. Atmos Rewards' earning method. Flat so they fit in URLs. */
+export type ProgramOptions = Record<string, ProgramOptionValue>;
+
 export interface FrequentFlyerProgram {
   /** Unique program identifier (e.g. "qantas", "velocity", "ba") */
   id: string;
@@ -45,11 +50,15 @@ export interface FrequentFlyerProgram {
   airlineOptions: AirlineOption[];
   /** Optional UI adapter for custom fare class inputs and route clearing */
   segmentInputAdapter?: SegmentInputAdapter;
+  /** Program-specific options and their defaults. Omit when the program has none. */
+  defaultOptions?: ProgramOptions;
+  /** Validates program options before calculating; returns field -> error message */
+  validateOptions?: (options: ProgramOptions) => Record<string, string>;
   /** Calculation engine executing earning rules */
   calculate: (
     segments: Segment[],
     eliteStatus?: string,
-    priceLessTaxes?: number,
+    programOptions?: ProgramOptions,
     options?: CalculationOptions | boolean
   ) => Promise<CalculationResult>;
 }

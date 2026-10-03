@@ -1,16 +1,19 @@
 import { createSegmentInput, type SegmentInput } from "@/models/segmentInput";
+import type { ProgramOptions } from "@/types/program";
 
 export interface SavedCalculation {
   segmentInputs: SegmentInput[];
   tripType: string;
   eliteStatus: string;
+  programOptions?: ProgramOptions;
 }
 
 export const saveCalculation = (
   segmentInputs: SegmentInput[],
   theTripType: string,
   theEliteStatus: string,
-  storageKey: string = "saved-calculations"
+  storageKey: string = "saved-calculations",
+  programOptions?: ProgramOptions
 ): SavedCalculation[] => {
   const calculationToSave: SavedCalculation = {
     segmentInputs: segmentInputs.map((segmentInput) =>
@@ -24,6 +27,7 @@ export const saveCalculation = (
     ),
     tripType: theTripType,
     eliteStatus: theEliteStatus,
+    ...(programOptions ? { programOptions } : {}),
   };
 
   // get the current saved calculations and remove and matching calc's so we don't create duplicates
@@ -107,10 +111,12 @@ export const getSavedCalculations = (
       continue;
     }
 
+    const programOptions = parseStoredProgramOptions(item.programOptions);
     validCalculations.push({
       segmentInputs,
       tripType: typeof item.tripType === "string" ? item.tripType : "",
       eliteStatus: typeof item.eliteStatus === "string" ? item.eliteStatus : "",
+      ...(programOptions ? { programOptions } : {}),
     });
   }
 
@@ -140,6 +146,9 @@ export const setSavedCalculations = (
             }),
             tripType: savedCalculation.tripType,
             eliteStatus: savedCalculation.eliteStatus,
+            ...(savedCalculation.programOptions
+              ? { programOptions: savedCalculation.programOptions }
+              : {}),
           };
         })
       )
@@ -179,6 +188,10 @@ export const deleteSavedCalculationAtIdx = (
 };
 
 const isEqualSavedCalculations = (calc1: SavedCalculation, calc2: SavedCalculation): boolean => {
+  if (JSON.stringify(calc1.programOptions ?? {}) !== JSON.stringify(calc2.programOptions ?? {})) {
+    return false;
+  }
+
   if (calc1.eliteStatus !== calc2.eliteStatus || calc1.tripType !== calc2.tripType) {
     return false;
   }
@@ -202,4 +215,21 @@ const isEqualSavedCalculations = (calc1: SavedCalculation, calc2: SavedCalculati
     JSON.stringify(getSegmentInputDataToCompare(calc1.segmentInputs)) ===
     JSON.stringify(getSegmentInputDataToCompare(calc2.segmentInputs))
   );
+};
+
+const parseStoredProgramOptions = (value: unknown): ProgramOptions | undefined => {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return undefined;
+  }
+  const options: ProgramOptions = {};
+  for (const [key, optionValue] of Object.entries(value as Record<string, unknown>)) {
+    if (
+      typeof optionValue === "string" ||
+      typeof optionValue === "number" ||
+      typeof optionValue === "boolean"
+    ) {
+      options[key] = optionValue;
+    }
+  }
+  return Object.keys(options).length > 0 ? options : undefined;
 };

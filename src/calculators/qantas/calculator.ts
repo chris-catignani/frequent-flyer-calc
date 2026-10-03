@@ -15,7 +15,7 @@ import type {
   EliteBonus,
   QantasApiResults,
 } from "@/types/calculator";
-import type { CalculationOptions } from "@/types/program";
+import type { CalculationOptions, ProgramOptions } from "@/types/program";
 import type { Rule } from "@/calculators/qantas/rules";
 
 const partnerRules = getPartnerRules(); // this is a map of airlineCode -> rules[]
@@ -47,7 +47,7 @@ export const eliteStatusBonusMultiples: Record<string, number> = {
 export const calculate = async (
   segments: Segment[],
   eliteStatus: string = "",
-  priceLessTaxes: number = 0, // eslint-disable-line @typescript-eslint/no-unused-vars
+  programOptions: ProgramOptions = {}, // eslint-disable-line @typescript-eslint/no-unused-vars
   compareWithQantasCalcOrOptions: CalculationOptions | boolean = false
 ): Promise<CalculationResult> => {
   const compareWithQantasCalc =

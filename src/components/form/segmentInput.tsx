@@ -12,6 +12,7 @@ import { buildAirlineOptions } from "@/constants/airlines";
 import { searchAirports } from "@/utils/airports";
 import { validate } from "@/utils/segmentValidation";
 import type { SegmentInput } from "@/models/segmentInput";
+import type { ProgramOptions } from "@/types/program";
 import type {
   AirlineOption,
   FareClassInputRenderProps,
@@ -66,6 +67,7 @@ export interface SegmentInputListProps {
   onSegmentInputChanged: (idx: number, segmentInput: SegmentInput) => void;
   onSegmentsReordered: (sourceIdx: number, destIdx: number) => void;
   adapter?: SegmentInputAdapter;
+  programOptions?: ProgramOptions;
 }
 
 export const SegmentInputList: React.FC<SegmentInputListProps> = ({
@@ -76,7 +78,14 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
   onSegmentInputChanged,
   onSegmentsReordered,
   adapter,
+  programOptions,
 }) => {
+  // Drop the fare class column when no segment needs one; keep it for every row otherwise so
+  // the columns stay aligned
+  const showFareClassColumn = segmentInputs.some(
+    (segmentInput) => adapter?.isFareClassRequired?.(segmentInput, programOptions ?? {}) ?? true
+  );
+
   const onDragEnd = (result: DropResult) => {
     if (result.destination && result.source.index !== result.destination.index) {
       onSegmentsReordered(result.source.index, result.destination.index);
@@ -98,6 +107,8 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
             onDeleteSegmentPressed={onDeleteSegmentPressed}
             onSegmentInputChanged={onSegmentInputChanged}
             adapter={adapter}
+            programOptions={programOptions}
+            showFareClassColumn={showFareClassColumn}
           />
         ))}
       </div>
@@ -121,6 +132,8 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
                 onDeleteSegmentPressed={onDeleteSegmentPressed}
                 onSegmentInputChanged={onSegmentInputChanged}
                 adapter={adapter}
+                programOptions={programOptions}
+                showFareClassColumn={showFareClassColumn}
               />
             ))}
             {provided.placeholder}
@@ -141,6 +154,8 @@ interface SegmentInputListItemProps {
   onDeleteSegmentPressed: (idx: number) => void;
   onSegmentInputChanged: (idx: number, segmentInput: SegmentInput) => void;
   adapter?: SegmentInputAdapter;
+  programOptions?: ProgramOptions;
+  showFareClassColumn: boolean;
 }
 
 const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
@@ -153,6 +168,8 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
   onDeleteSegmentPressed,
   onSegmentInputChanged,
   adapter,
+  programOptions,
+  showFareClassColumn,
 }) => {
   if (!enableDrag) {
     return (
@@ -167,6 +184,8 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
           onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
           onChange={(newSegmentInput) => onSegmentInputChanged(segmentInputIdx, newSegmentInput)}
           adapter={adapter}
+          programOptions={programOptions}
+          showFareClassColumn={showFareClassColumn}
         />
       </div>
     );
@@ -187,6 +206,8 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
             onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
             onChange={(newSegmentInput) => onSegmentInputChanged(segmentInputIdx, newSegmentInput)}
             adapter={adapter}
+            programOptions={programOptions}
+            showFareClassColumn={showFareClassColumn}
           />
         </div>
       )}
@@ -204,6 +225,8 @@ interface SegmentInputRowProps {
   onChange: (segmentInput: SegmentInput) => void;
   onDeleteClicked: () => void;
   adapter?: SegmentInputAdapter;
+  programOptions?: ProgramOptions;
+  showFareClassColumn: boolean;
 }
 
 const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
@@ -216,6 +239,8 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   onChange,
   onDeleteClicked,
   adapter,
+  programOptions,
+  showFareClassColumn,
 }) => {
   const customFareClassInput = adapter?.renderFareClassInput?.({
     segmentInputIdx,
@@ -223,11 +248,17 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
     error: errors["fareClass"],
     onChange: (val) => onChange({ ...segmentInput, fareClass: val }),
   });
+  const fareClassRequired =
+    adapter?.isFareClassRequired?.(segmentInput, programOptions ?? {}) ?? true;
 
   return (
     <div
       data-testid={`segment-row-${segmentInputIdx}`}
-      className="grid grid-cols-12 sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_minmax(0,6fr)_auto] gap-2 items-start"
+      className={`grid grid-cols-12 gap-2 items-start ${
+        showFareClassColumn
+          ? "sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_minmax(0,6fr)_auto]"
+          : "sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_auto]"
+      }`}
     >
       <div
         className="col-span-8 sm:col-auto order-1 sm:order-1 flex items-center justify-start sm:justify-center h-8 sm:h-[50px] sm:mt-1.5 gap-1"
@@ -308,51 +339,58 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
         />
       </div>
 
-      <div className="col-span-12 sm:col-auto order-6 sm:order-5">
-        {customFareClassInput != null ? (
-          customFareClassInput
-        ) : (
-          <div
-            data-testid={`segment-fare-class-${segmentInputIdx}`}
-            className="w-full flex flex-col pt-1.5"
-          >
-            <div className="relative group">
-              <label
-                htmlFor={`fare-class-input-${segmentInputIdx}`}
-                className={`absolute top-0 -translate-y-1/2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
-                  errors["fareClass"]
-                    ? "text-red-600"
-                    : "text-slate-500 group-focus-within:text-primary"
-                }`}
-              >
-                Fare Class (e.g. &quot;y&quot; or &quot;i&quot;)
-              </label>
-              <input
-                id={`fare-class-input-${segmentInputIdx}`}
-                type="text"
-                value={segmentInput.fareClass}
-                onChange={(e) =>
-                  onChange({
-                    ...segmentInput,
-                    fareClass: e.target.value?.trim()?.toLowerCase(),
-                  })
-                }
-                className={`w-full rounded-md border ${
-                  errors["fareClass"]
-                    ? "border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500"
-                    : "border-slate-300 hover:border-slate-400 focus:border-primary focus:ring-1 focus:ring-primary"
-                } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs focus:outline-hidden`}
-              />
-            </div>
-            <span
-              data-testid={`segment-error-fare-class-${segmentInputIdx}`}
-              className="mt-0.5 min-h-[16px] text-xs text-red-600"
+      {showFareClassColumn && (
+        <div className="col-span-12 sm:col-auto order-6 sm:order-5">
+          {!fareClassRequired ? (
+            <div
+              data-testid={`segment-fare-class-not-required-${segmentInputIdx}`}
+              aria-hidden="true"
+            />
+          ) : customFareClassInput != null ? (
+            customFareClassInput
+          ) : (
+            <div
+              data-testid={`segment-fare-class-${segmentInputIdx}`}
+              className="w-full flex flex-col pt-1.5"
             >
-              {errors["fareClass"] ? errors["fareClass"] : " "}
-            </span>
-          </div>
-        )}
-      </div>
+              <div className="relative group">
+                <label
+                  htmlFor={`fare-class-input-${segmentInputIdx}`}
+                  className={`absolute top-0 -translate-y-1/2 left-2.5 z-10 px-1 text-xs font-medium bg-white leading-none transition-colors select-none ${
+                    errors["fareClass"]
+                      ? "text-red-600"
+                      : "text-slate-500 group-focus-within:text-primary"
+                  }`}
+                >
+                  Fare Class (e.g. &quot;y&quot; or &quot;i&quot;)
+                </label>
+                <input
+                  id={`fare-class-input-${segmentInputIdx}`}
+                  type="text"
+                  value={segmentInput.fareClass}
+                  onChange={(e) =>
+                    onChange({
+                      ...segmentInput,
+                      fareClass: e.target.value?.trim()?.toLowerCase(),
+                    })
+                  }
+                  className={`w-full rounded-md border ${
+                    errors["fareClass"]
+                      ? "border-red-500 focus:border-red-600 focus:ring-1 focus:ring-red-500"
+                      : "border-slate-300 hover:border-slate-400 focus:border-primary focus:ring-1 focus:ring-primary"
+                  } bg-white px-3.5 py-3 text-base text-slate-900 shadow-xs focus:outline-hidden`}
+                />
+              </div>
+              <span
+                data-testid={`segment-error-fare-class-${segmentInputIdx}`}
+                className="mt-0.5 min-h-[16px] text-xs text-red-600"
+              >
+                {errors["fareClass"] ? errors["fareClass"] : " "}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

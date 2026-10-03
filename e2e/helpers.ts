@@ -50,3 +50,10 @@ export async function setEliteStatus(page: Page, status: string) {
 export async function clickCalculate(page: Page) {
   await page.getByTestId("calculate-button").click();
 }
+
+export async function setEarnMethod(page: Page, method: string) {
+  const container = page.getByTestId("earn-method-input");
+  const input = container.locator("input");
+  await input.click();
+  await page.getByRole("option", { name: method, exact: true }).click();
+}

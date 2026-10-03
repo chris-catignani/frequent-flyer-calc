@@ -1,6 +1,6 @@
 ## What this is
 
-A Next.js (App Router) app that calculates Qantas Frequent Flyer points/status credit earnings for a given flight itinerary. `/qantas` is the (only) live route; `/` redirects to it.
+A Next.js (App Router) app that calculates frequent flyer points/status credit earnings for a given flight itinerary. It has two calculators: `/qantas` (Qantas Frequent Flyer) and `/alaska` (Atmos Rewards for Alaska and Hawaiian). `/` still redirects to `/qantas`.
 
 ## Commands
 
@@ -22,7 +22,7 @@ A husky pre-commit hook runs `prettier --write` and `eslint --cache` on staged f
 
 ### Calculation pipeline
 
-`calculate(segments, eliteStatus, priceLessTaxes)` (`src/calculators/qantas/calculator.ts`)
+`calculate(segments, eliteStatus, programOptions)` (`src/calculators/qantas/calculator.ts`)
 is the calculation entry point, called directly from `src/app/qantas/page.tsx`. It takes an array of
 `Segment` (one flight leg: airline, fare class, from/to airport) and returns
 `{ segmentResults, containsErrors, elitePoints, airlinePoints }`, recording a per-segment error for
@@ -63,6 +63,14 @@ known divergent routes. Airline groupings/constants live in `src/constants/airli
 `src/calculators/qantas/constants.ts` (Qantas-specific: fare class tables per sub-fleet, `JAL_AIRLINES`,
 `JETSTAR_AIRLINES`, `PARTNER_AIRLINES`, region display names).
 
+### Programs and program options
+
+Each calculator is a `FrequentFlyerProgram` (`src/types/program.ts`). Program-specific inputs are a flat `ProgramOptions` record with `defaultOptions`/`validateOptions`. `useCalculator` round-trips them through the URL and recent calculations.
+
+### Atmos Rewards pipeline
+
+The engine lives in `src/calculators/alaska/`: `options.ts`, `constants.ts`, `partnerCabins.ts`, `allocate.ts` and `calculator.ts`. It has three earning methods (distance, price paid, segments); Price Paid depends on the ticket issuer (027/001/other). The partner fare class table in `partnerCabins.ts` is a verbatim copy of Alaska's chart. Rounding rules, the elite bonus being calculated on base points, Global Locals, and US territories counting as the US are documented in the code and tests. Tests to extend: `calculator.test.ts`, `partnerCabins.test.ts` and `options.test.ts`.
+
 ### Page/component structure
 
 - `src/app/qantas/page.tsx` is the main calculator UI (client component), owning all form state
@@ -70,7 +78,8 @@ known divergent routes. Airline groupings/constants live in `src/constants/airli
   (`src/utils/segmentInputUrlParser.ts`) for deep-linking, hydrated via `useSearchParams`. Recent
   calculations persist client-side via `src/utils/recentCalculations.ts` (localStorage). `src/components/qantas/`
   holds page-specific pieces (`input.tsx`, `resultsSummary.tsx`, `segmentResults.tsx`,
-  `recentCalculations.tsx`, `footer.tsx`, `fareClassInput.tsx`).
+  `footer.tsx`, `fareClassInput.tsx`); the shared `recentCalculations.tsx` and
+  `calculatorSkeleton.tsx` live in `src/components/common/`.
 - `src/components/form/` and `src/components/common/` hold cross-page input widgets: `src/components/form/segmentInput.tsx` (list/presentation),
   `autocomplete.tsx`, `advancedInput.tsx` (bulk entry). Validation logic lives in `src/utils/segmentValidation.ts` and airline dropdown helpers in `src/constants/airlines.ts`.
 - `src/models/` holds plain immutable TypeScript interfaces (`Segment`, `Earnings`, `SegmentInput`)

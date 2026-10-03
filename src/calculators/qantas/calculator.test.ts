@@ -261,7 +261,7 @@ describe("calculate - qantas rules", () => {
   ])(
     `Testing routing %s. Should earn %s qantas points and %s status credit for Domestic Australia`,
     async (segmentString, expectedAirlinePoints, expectedElitePoints) => {
-      const results = await calculate([buildSegmentFromString(segmentString)], "", 0.0, false);
+      const results = await calculate([buildSegmentFromString(segmentString)], "", {}, false);
       expect(results.containsErrors).toBe(false);
       expect(results.airlinePoints).toBe(expectedAirlinePoints);
       expect(results.elitePoints).toBe(expectedElitePoints);
@@ -514,7 +514,7 @@ describe("calculate - elite status levels", () => {
       const results = await calculate(
         [buildSegmentFromString(segmentString)],
         eliteStatus,
-        0.0,
+        {},
         false
       );
       expect(results.containsErrors).toBe(false);

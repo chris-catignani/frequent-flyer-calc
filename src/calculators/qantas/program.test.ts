@@ -61,9 +61,14 @@ describe("qantasProgram adapter", () => {
 
   it("supports options object and elite bonuses in calculate", async () => {
     const segment = buildSegment("qf", "e", "syd", "sin");
-    const result = await qantasProgram.calculate([segment], "Silver", 0, {
-      compareWithProgramApi: false,
-    });
+    const result = await qantasProgram.calculate(
+      [segment],
+      "Silver",
+      {},
+      {
+        compareWithProgramApi: false,
+      }
+    );
 
     expect(result.containsErrors).toBe(false);
     expect(result.airlinePoints).toBe(3900); // 2600 base + 50% bonus = 3900

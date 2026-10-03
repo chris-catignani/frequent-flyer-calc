@@ -421,3 +421,77 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
     });
   });
 });
+
+describe("isFareClassRequired", () => {
+  const adapter: SegmentInputAdapter = {
+    isFareClassRequired: (_segment, programOptions) => programOptions.earnMethod === "price",
+  };
+  const segment = createSegmentInput({
+    airline: "as",
+    fareClass: "",
+    fromAirportText: "sea",
+    toAirportText: "lax",
+    uuid: "fare-class-required-uuid",
+    fromAirport: {
+      iata: "SEA",
+      name: "Seattle",
+      city: "Seattle",
+      country: "United States",
+      latitude: 47.45,
+      longitude: -122.31,
+    },
+    toAirport: {
+      iata: "LAX",
+      name: "Los Angeles",
+      city: "Los Angeles",
+      country: "United States",
+      latitude: 33.94,
+      longitude: -118.41,
+    },
+  });
+
+  it("skips the fare class check when the adapter says it isn't required", () => {
+    expect(validate([segment], adapter, { earnMethod: "distance" })).toEqual({});
+    expect(validate([segment], adapter, { earnMethod: "price" })).toEqual({
+      0: { fareClass: "Required" },
+    });
+  });
+
+  it("drops the fare class column when no segment needs one", () => {
+    render(
+      <SegmentInputList
+        segmentInputs={[segment]}
+        errors={{}}
+        airlineOptions={buildAirlineOptions(["aa"], "Oneworld")}
+        onDeleteSegmentPressed={jest.fn()}
+        onSegmentInputChanged={jest.fn()}
+        onSegmentsReordered={jest.fn()}
+        adapter={adapter}
+        programOptions={{ earnMethod: "distance" }}
+      />
+    );
+    expect(screen.queryByTestId("segment-fare-class-0")).toBeNull();
+    expect(screen.queryByTestId("segment-fare-class-not-required-0")).toBeNull();
+  });
+
+  it("keeps the column for every row when any segment needs a fare class", () => {
+    const perAirlineAdapter: SegmentInputAdapter = {
+      isFareClassRequired: (s) => s.airline === "qr",
+    };
+    const partnerSegment = { ...segment, airline: "qr", uuid: "fare-class-required-uuid-2" };
+    render(
+      <SegmentInputList
+        segmentInputs={[segment, partnerSegment]}
+        errors={{}}
+        airlineOptions={buildAirlineOptions(["aa"], "Oneworld")}
+        onDeleteSegmentPressed={jest.fn()}
+        onSegmentInputChanged={jest.fn()}
+        onSegmentsReordered={jest.fn()}
+        adapter={perAirlineAdapter}
+        programOptions={{}}
+      />
+    );
+    expect(screen.getByTestId("segment-fare-class-not-required-0")).toBeInTheDocument();
+    expect(screen.getByTestId("segment-fare-class-1")).toBeInTheDocument();
+  });
+});

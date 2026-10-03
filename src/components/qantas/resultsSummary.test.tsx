@@ -2,6 +2,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { ResultsSummary } from "./resultsSummary";
+import { qantasCurrencies } from "@/calculators/qantas";
 import { buildSegment } from "@/test/testUtils";
 import type { CalculationResult } from "@/types/calculator";
 
@@ -12,6 +13,7 @@ describe("ResultsSummary", () => {
         calculationOutput={null}
         compareWithQantasCalc={false}
         isCalculating={false}
+        currencies={qantasCurrencies}
       />
     );
     expect(container).toBeEmptyDOMElement();
@@ -30,6 +32,7 @@ describe("ResultsSummary", () => {
         calculationOutput={mockOutput}
         compareWithQantasCalc={false}
         isCalculating={false}
+        currencies={qantasCurrencies}
       />
     );
 
@@ -68,6 +71,7 @@ describe("ResultsSummary", () => {
         calculationOutput={mockOutput}
         compareWithQantasCalc={true}
         isCalculating={false}
+        currencies={qantasCurrencies}
       />
     );
 
@@ -101,6 +105,7 @@ describe("ResultsSummary", () => {
         calculationOutput={mockOutput}
         compareWithQantasCalc={true}
         isCalculating={false}
+        currencies={qantasCurrencies}
       />
     );
 
@@ -138,6 +143,7 @@ describe("ResultsSummary", () => {
         calculationOutput={mockOutput}
         compareWithQantasCalc={true}
         isCalculating={false}
+        currencies={qantasCurrencies}
       />
     );
 
@@ -174,6 +180,7 @@ describe("ResultsSummary", () => {
         calculationOutput={mockOutput}
         compareWithQantasCalc={true}
         isCalculating={false}
+        currencies={qantasCurrencies}
       />
     );
 
@@ -189,6 +196,7 @@ describe("ResultsSummary", () => {
         calculationOutput={{ ...mockOutput }}
         compareWithQantasCalc={true}
         isCalculating={false}
+        currencies={qantasCurrencies}
       />
     );
 
@@ -221,6 +229,7 @@ describe("ResultsSummary", () => {
         calculationOutput={mockOutput}
         compareWithQantasCalc={true}
         isCalculating={false}
+        currencies={qantasCurrencies}
       />
     );
 
@@ -238,5 +247,30 @@ describe("ResultsSummary", () => {
         screen.queryByText("Qantas Calculator failed to calculate at least one segment")
       ).not.toBeInTheDocument();
     });
+  });
+
+  it("labels totals with the program's currency names", () => {
+    render(
+      <ResultsSummary
+        calculationOutput={{
+          segmentResults: [],
+          containsErrors: false,
+          airlinePoints: 1200,
+          elitePoints: 900,
+        }}
+        compareWithQantasCalc={false}
+        isCalculating={false}
+        currencies={{
+          airlinePoints: { name: "Atmos Points", shortName: "Points" },
+          elitePoints: { name: "Status Points", shortName: "Status Points" },
+        }}
+      />
+    );
+    expect(screen.getByTestId("total-points-earned")).toHaveTextContent(
+      "Atmos Points Earned: 1,200"
+    );
+    expect(screen.getByTestId("total-status-credits-earned")).toHaveTextContent(
+      "Status Points Earned: 900"
+    );
   });
 });

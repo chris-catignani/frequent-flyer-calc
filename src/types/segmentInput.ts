@@ -1,5 +1,6 @@
 import type React from "react";
 import type { SegmentInput } from "@/models/segmentInput";
+import type { ProgramOptions } from "@/types/program";
 
 export interface FareClassInputRenderProps {
   segmentInputIdx: number;
@@ -16,7 +17,13 @@ export interface SegmentInputAdapter {
     field: "from" | "to",
     newAirportText: string
   ) => boolean;
-  validateSegment?: (segment: SegmentInput, idx: number) => Record<string, string> | undefined;
+  /** Whether the fare class must be entered for this segment. Defaults to true. */
+  isFareClassRequired?: (segment: SegmentInput, programOptions: ProgramOptions) => boolean;
+  validateSegment?: (
+    segment: SegmentInput,
+    idx: number,
+    programOptions?: ProgramOptions
+  ) => Record<string, string> | undefined;
 }
 
 export interface AirlineOption {

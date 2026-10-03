@@ -189,4 +189,46 @@ describe("recentCalculations", () => {
       removeItemSpy.mockRestore();
     });
   });
+
+  describe("saved program options", () => {
+    const storageKey = "saved-calculations-test-options";
+    const segmentInputs = [createSegmentInput("as", "", "SEA", "LAX")];
+
+    beforeEach(() => localStorage.clear());
+
+    it("round-trips programOptions", () => {
+      saveCalculation(segmentInputs, "one way", "Gold", storageKey, {
+        earnMethod: "price",
+        fareUsd: 300,
+      });
+      expect(getSavedCalculations(storageKey)[0].programOptions).toEqual({
+        earnMethod: "price",
+        fareUsd: 300,
+      });
+    });
+
+    it("loads legacy entries that have no programOptions", () => {
+      localStorage.setItem(
+        storageKey,
+        JSON.stringify([
+          {
+            segmentInputs: [
+              { airline: "qf", fareClass: "y", fromAirportText: "SYD", toAirportText: "MEL" },
+            ],
+            tripType: "one way",
+            eliteStatus: "Bronze",
+          },
+        ])
+      );
+      const [calculation] = getSavedCalculations(storageKey);
+      expect(calculation.eliteStatus).toBe("Bronze");
+      expect(calculation).not.toHaveProperty("programOptions");
+    });
+
+    it("treats calculations with different options as distinct entries", () => {
+      saveCalculation(segmentInputs, "one way", "Gold", storageKey, { earnMethod: "price" });
+      saveCalculation(segmentInputs, "one way", "Gold", storageKey, { earnMethod: "distance" });
+      expect(getSavedCalculations(storageKey)).toHaveLength(2);
+    });
+  });
 });
