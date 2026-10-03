@@ -22,7 +22,7 @@ A husky pre-commit hook runs `prettier --write` and `eslint --cache` on staged f
 
 ### Calculation pipeline
 
-`calculate(segments, eliteStatus, priceLessTaxes)` (`src/calculators/qantas/calculator.ts`)
+`calculate(segments, eliteStatus, programOptions)` (`src/calculators/qantas/calculator.ts`)
 is the calculation entry point, called directly from `src/app/qantas/page.tsx`. It takes an array of
 `Segment` (one flight leg: airline, fare class, from/to airport) and returns
 `{ segmentResults, containsErrors, elitePoints, airlinePoints }`, recording a per-segment error for
@@ -78,7 +78,8 @@ The engine lives in `src/calculators/alaska/`: `options.ts`, `constants.ts`, `pa
   (`src/utils/segmentInputUrlParser.ts`) for deep-linking, hydrated via `useSearchParams`. Recent
   calculations persist client-side via `src/utils/recentCalculations.ts` (localStorage). `src/components/qantas/`
   holds page-specific pieces (`input.tsx`, `resultsSummary.tsx`, `segmentResults.tsx`,
-  `recentCalculations.tsx`, `footer.tsx`, `fareClassInput.tsx`).
+  `footer.tsx`, `fareClassInput.tsx`); the shared `recentCalculations.tsx` and
+  `calculatorSkeleton.tsx` live in `src/components/common/`.
 - `src/components/form/` and `src/components/common/` hold cross-page input widgets: `src/components/form/segmentInput.tsx` (list/presentation),
   `autocomplete.tsx`, `advancedInput.tsx` (bulk entry). Validation logic lives in `src/utils/segmentValidation.ts` and airline dropdown helpers in `src/constants/airlines.ts`.
 - `src/models/` holds plain immutable TypeScript interfaces (`Segment`, `Earnings`, `SegmentInput`)

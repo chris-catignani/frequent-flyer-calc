@@ -50,7 +50,8 @@ export const validateAtmosOptions = (programOptions: ProgramOptions): Record<str
   if (options.earnMethod !== "price") {
     return {};
   }
-  if (options.bookingType === "cash" && options.fareUsd <= 0) {
+  // Partner-issued tickets earn from the partner chart, so the fare has no effect
+  if (options.bookingType === "cash" && options.ticketIssuer !== "other" && options.fareUsd <= 0) {
     return { fareUsd: "Enter the fare paid" };
   }
   if (options.bookingType === "award" && options.pointsRedeemed <= 0) {

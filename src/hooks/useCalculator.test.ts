@@ -470,6 +470,46 @@ describe("useCalculator", () => {
       expect(result.current.programOptions).toEqual({ earnMethod: "price", fareUsd: 250 });
     });
 
+    it("clears stale results when loading a recent calculation with different options", async () => {
+      const { result } = renderHook(() => useCalculator({ program: programWithOptions }));
+      act(() => {
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.setProgramOptions({ fareUsd: 300 });
+      });
+      await act(async () => {
+        await result.current.calculate();
+      });
+      await act(async () => {
+        result.current.setProgramOptions({ fareUsd: 500 });
+      });
+      expect(result.current.calculationOutput).not.toBeNull();
+
+      // the recalculation saved a newer entry (500) at index 0; the original (300) is at 1
+      act(() => {
+        result.current.loadRecentCalculation(1);
+      });
+      expect(result.current.programOptions).toEqual({ earnMethod: "distance", fareUsd: 300 });
+      expect(result.current.calculationOutput).toBeNull();
+      expect(result.current.optionErrors).toEqual({});
+    });
+
+    it("keeps results when re-hydrating identical inputs", async () => {
+      const { result } = renderHook(() => useCalculator({ program: programWithOptions }));
+      act(() => {
+        result.current.updateSegment(0, createSegmentInput("tp", "Economy", "SYD", "MEL"));
+        result.current.setProgramOptions({ fareUsd: 300 });
+      });
+      await act(async () => {
+        await result.current.calculate();
+      });
+      expect(result.current.calculationOutput).not.toBeNull();
+
+      act(() => {
+        result.current.loadRecentCalculation(0);
+      });
+      expect(result.current.calculationOutput).not.toBeNull();
+    });
+
     it("sends program_id with calculation_completed", async () => {
       const { result } = renderHook(() => useCalculator({ program: programWithOptions }));
       act(() => {

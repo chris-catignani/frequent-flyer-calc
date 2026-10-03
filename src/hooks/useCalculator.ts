@@ -92,6 +92,12 @@ export function useCalculator({
   const calcIdRef = useRef<number>(0);
   const segmentInputsRef = useRef<SegmentInput[]>(segmentInputs);
   segmentInputsRef.current = segmentInputs;
+  const eliteStatusRef = useRef<string>(eliteStatus);
+  eliteStatusRef.current = eliteStatus;
+  const tripTypeRef = useRef<string>(tripType);
+  tripTypeRef.current = tripType;
+  const programOptionsRef = useRef<ProgramOptions>(programOptions);
+  programOptionsRef.current = programOptions;
 
   const setAllSegmentInputs = useCallback((theSegmentInputs: SegmentInput[]) => {
     const enrichedSegmentInputs = theSegmentInputs.map((segmentInput) => ({
@@ -133,21 +139,30 @@ export function useCalculator({
       urlSegmentInputs?: SegmentInput[],
       urlProgramOptions?: ProgramOptions
     ) => {
+      let othersChanged = false;
       if (urlEliteStatus) {
+        othersChanged ||= urlEliteStatus !== eliteStatusRef.current;
         setEliteStatus(urlEliteStatus);
       }
       if (urlTripType) {
+        othersChanged ||= urlTripType !== tripTypeRef.current;
         setTripType(urlTripType);
       }
       if (urlSegmentInputs) {
         setAllSegmentInputs(urlSegmentInputs);
       }
       if (urlProgramOptions) {
-        setProgramOptionsState((prev) => {
-          const next = { ...(program.defaultOptions ?? {}), ...urlProgramOptions };
-          const keys = new Set([...Object.keys(prev), ...Object.keys(next)]);
-          return [...keys].every((key) => prev[key] === next[key]) ? prev : next;
-        });
+        const prev = programOptionsRef.current;
+        const next = { ...(program.defaultOptions ?? {}), ...urlProgramOptions };
+        const keys = new Set([...Object.keys(prev), ...Object.keys(next)]);
+        if (![...keys].every((key) => prev[key] === next[key])) {
+          othersChanged = true;
+          setProgramOptionsState(next);
+        }
+      }
+      if (othersChanged) {
+        setCalculationOutput(null);
+        setOptionErrors({});
       }
     },
     [setAllSegmentInputs, program.defaultOptions]

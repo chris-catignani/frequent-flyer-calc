@@ -146,8 +146,9 @@ export const TicketOptions: React.FC<TicketOptionsProps> = ({ options, errors, o
               </span>
             </div>
           )}
-          {isCash ? (
+          {isCash && options.ticketIssuer === "other" ? null : isCash ? (
             <NumberField
+              key="fare-usd-input"
               id="fare-usd-input"
               label="Fare paid (USD)"
               hint="Excluding taxes and fees, including carrier surcharges"
@@ -158,6 +159,7 @@ export const TicketOptions: React.FC<TicketOptionsProps> = ({ options, errors, o
             />
           ) : (
             <NumberField
+              key="points-redeemed-input"
               id="points-redeemed-input"
               label="Points redeemed"
               hint="1 status point for every 20 points redeemed"

@@ -39,6 +39,25 @@ describe("validateAtmosOptions", () => {
     });
   });
 
+  it("does not require a fare for partner-issued tickets", () => {
+    expect(
+      validateAtmosOptions({
+        earnMethod: "price",
+        bookingType: "cash",
+        ticketIssuer: "other",
+        fareUsd: 0,
+      })
+    ).toEqual({});
+    expect(
+      validateAtmosOptions({
+        earnMethod: "price",
+        bookingType: "cash",
+        ticketIssuer: "american",
+        fareUsd: 0,
+      })
+    ).toEqual({ fareUsd: "Enter the fare paid" });
+  });
+
   it("requires points redeemed for price + award", () => {
     expect(
       validateAtmosOptions({ earnMethod: "price", bookingType: "award", pointsRedeemed: 0 })

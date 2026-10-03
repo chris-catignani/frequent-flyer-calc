@@ -36,6 +36,18 @@ describe("TicketOptions", () => {
     expect(screen.getByTestId("points-redeemed-input")).toBeInTheDocument();
   });
 
+  it("hides the fare field for partner-issued tickets", () => {
+    render(
+      <TicketOptions
+        options={{ ...DEFAULT_ATMOS_OPTIONS, earnMethod: "price", ticketIssuer: "other" }}
+        errors={{}}
+        onChange={jest.fn()}
+      />
+    );
+    expect(screen.getByTestId("ticket-issuer-select")).toBeInTheDocument();
+    expect(screen.queryByTestId("fare-usd-input")).toBeNull();
+  });
+
   it("reports changes", () => {
     const onChange = jest.fn();
     render(
