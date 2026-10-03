@@ -73,7 +73,7 @@ export const AtmosCalculator: React.FC = () => {
 
         <section
           aria-label="Earning options"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3 sm:pt-1 items-start"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3 pb-3 sm:pt-1 items-start"
         >
           <EarnMethodInput
             value={atmosOptions.earnMethod}
