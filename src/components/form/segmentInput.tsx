@@ -100,8 +100,7 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
             key={segmentInput.uuid}
             segmentInput={segmentInput}
             segmentInputIdx={segmentInputIdx}
-            showDeleteButton={false}
-            enableDrag={false}
+            showRowControls={false}
             errors={errors[segmentInputIdx] || {}}
             airlineOptions={airlineOptions}
             onDeleteSegmentPressed={onDeleteSegmentPressed}
@@ -125,8 +124,7 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
                 key={segmentInput.uuid}
                 segmentInput={segmentInput}
                 segmentInputIdx={segmentInputIdx}
-                showDeleteButton={segmentInputs.length > 1}
-                enableDrag={segmentInputs.length > 1}
+                showRowControls
                 errors={errors[segmentInputIdx] || {}}
                 airlineOptions={airlineOptions}
                 onDeleteSegmentPressed={onDeleteSegmentPressed}
@@ -147,8 +145,7 @@ export const SegmentInputList: React.FC<SegmentInputListProps> = ({
 interface SegmentInputListItemProps {
   segmentInput: SegmentInput;
   segmentInputIdx: number;
-  showDeleteButton: boolean;
-  enableDrag: boolean;
+  showRowControls: boolean;
   errors: Record<string, string>;
   airlineOptions: AirlineOption[];
   onDeleteSegmentPressed: (idx: number) => void;
@@ -161,8 +158,7 @@ interface SegmentInputListItemProps {
 const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
   segmentInput,
   segmentInputIdx,
-  showDeleteButton,
-  enableDrag,
+  showRowControls,
   errors,
   airlineOptions,
   onDeleteSegmentPressed,
@@ -171,7 +167,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
   programOptions,
   showFareClassColumn,
 }) => {
-  if (!enableDrag) {
+  if (!showRowControls) {
     return (
       <div>
         {segmentInputIdx > 0 && <hr className="my-1.5 border-slate-200 sm:hidden" />}
@@ -179,7 +175,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
           segmentInput={segmentInput}
           segmentInputIdx={segmentInputIdx}
           errors={errors}
-          showDeleteButton={showDeleteButton}
+          showRowControls={showRowControls}
           airlineOptions={airlineOptions}
           onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
           onChange={(newSegmentInput) => onSegmentInputChanged(segmentInputIdx, newSegmentInput)}
@@ -192,7 +188,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
   }
 
   return (
-    <Draggable draggableId={segmentInput.uuid} index={segmentInputIdx} isDragDisabled={!enableDrag}>
+    <Draggable draggableId={segmentInput.uuid} index={segmentInputIdx}>
       {(provided) => (
         <div {...provided.draggableProps} ref={provided.innerRef}>
           {segmentInputIdx > 0 && <hr className="my-1.5 border-slate-200 sm:hidden" />}
@@ -201,7 +197,7 @@ const SegmentInputListItem: React.FC<SegmentInputListItemProps> = ({
             segmentInputIdx={segmentInputIdx}
             errors={errors}
             dragHandleProps={provided.dragHandleProps}
-            showDeleteButton={showDeleteButton}
+            showRowControls={showRowControls}
             airlineOptions={airlineOptions}
             onDeleteClicked={() => onDeleteSegmentPressed(segmentInputIdx)}
             onChange={(newSegmentInput) => onSegmentInputChanged(segmentInputIdx, newSegmentInput)}
@@ -220,7 +216,7 @@ interface SegmentInputRowProps {
   segmentInputIdx: number;
   errors: Record<string, string>;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
-  showDeleteButton: boolean;
+  showRowControls: boolean;
   airlineOptions: AirlineOption[];
   onChange: (segmentInput: SegmentInput) => void;
   onDeleteClicked: () => void;
@@ -229,12 +225,25 @@ interface SegmentInputRowProps {
   showFareClassColumn: boolean;
 }
 
+// A lone segment can't be reordered or removed, so it drops the handle and delete columns and lines
+// up with the controls above it. Class names are spelled out in full so Tailwind can find them.
+const segmentGridColumns = (showRowControls: boolean, showFareClassColumn: boolean): string => {
+  if (showRowControls) {
+    return showFareClassColumn
+      ? "sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_minmax(0,6fr)_auto]"
+      : "sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_auto]";
+  }
+  return showFareClassColumn
+    ? "sm:grid-cols-[minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_minmax(0,6fr)]"
+    : "sm:grid-cols-[minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)]";
+};
+
 const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   segmentInput,
   segmentInputIdx,
   errors,
   dragHandleProps,
-  showDeleteButton,
+  showRowControls,
   airlineOptions,
   onChange,
   onDeleteClicked,
@@ -254,32 +263,31 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   return (
     <div
       data-testid={`segment-row-${segmentInputIdx}`}
-      className={`grid grid-cols-12 gap-2 items-start ${
+      className={`grid grid-cols-12 gap-2 items-start ${segmentGridColumns(
+        showRowControls,
         showFareClassColumn
-          ? "sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_minmax(0,6fr)_auto]"
-          : "sm:grid-cols-[auto_minmax(0,6fr)_minmax(0,4fr)_minmax(0,4fr)_auto]"
-      }`}
+      )}`}
     >
-      <div
-        className="col-span-8 sm:col-auto order-1 sm:order-1 flex items-center justify-start sm:justify-center h-8 sm:h-[50px] sm:mt-1.5 gap-1"
-        {...dragHandleProps}
-      >
-        <ReorderSegmentInputButton
-          showReorderButton={showDeleteButton}
-          segmentInputIdx={segmentInputIdx}
-        />
-        <span className="inline sm:hidden font-medium text-slate-500 text-sm">
-          Segment {segmentInputIdx + 1}
-        </span>
-      </div>
+      {showRowControls && (
+        <>
+          <div
+            className="col-span-8 sm:col-auto order-1 sm:order-1 flex items-center justify-start sm:justify-center h-8 sm:h-[50px] sm:mt-1.5 gap-1"
+            {...dragHandleProps}
+          >
+            <ReorderSegmentInputButton segmentInputIdx={segmentInputIdx} />
+            <span className="inline sm:hidden font-medium text-slate-500 text-sm">
+              Segment {segmentInputIdx + 1}
+            </span>
+          </div>
 
-      <div className="col-span-4 sm:col-auto order-2 sm:order-6 flex items-center justify-end sm:justify-center h-8 sm:h-[50px] sm:mt-1.5">
-        <RemoveSegmentInputButton
-          segmentInputIdx={segmentInputIdx}
-          showDeleteButton={showDeleteButton}
-          onDeleteClicked={onDeleteClicked}
-        />
-      </div>
+          <div className="col-span-4 sm:col-auto order-2 sm:order-6 flex items-center justify-end sm:justify-center h-8 sm:h-[50px] sm:mt-1.5">
+            <RemoveSegmentInputButton
+              segmentInputIdx={segmentInputIdx}
+              onDeleteClicked={onDeleteClicked}
+            />
+          </div>
+        </>
+      )}
 
       <div className="col-span-12 sm:col-auto order-3 sm:order-2">
         <AirlineInput
@@ -395,66 +403,30 @@ const SegmentInputRow: React.FC<SegmentInputRowProps> = ({
   );
 };
 
-const ReorderSegmentInputButton: React.FC<{
-  showReorderButton: boolean;
-  segmentInputIdx: number;
-}> = ({ showReorderButton, segmentInputIdx }) => {
-  if (!showReorderButton) {
-    return (
-      <button
-        type="button"
-        disabled
-        className="invisible p-1 text-slate-400"
-        aria-hidden="true"
-        tabIndex={-1}
-      >
-        <DragHandleIcon className="w-5 h-5" />
-      </button>
-    );
-  } else {
-    return (
-      <button
-        type="button"
-        className="cursor-grab p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 active:cursor-grabbing focus:outline-hidden focus:ring-2 focus:ring-slate-200 transition-colors"
-        aria-label={`Reorder segment ${segmentInputIdx + 1}`}
-      >
-        <DragHandleIcon className="w-5 h-5" />
-      </button>
-    );
-  }
-};
+const ReorderSegmentInputButton: React.FC<{ segmentInputIdx: number }> = ({ segmentInputIdx }) => (
+  <button
+    type="button"
+    className="cursor-grab p-1 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-100 active:cursor-grabbing focus:outline-hidden focus:ring-2 focus:ring-slate-200 transition-colors"
+    aria-label={`Reorder segment ${segmentInputIdx + 1}`}
+  >
+    <DragHandleIcon className="w-5 h-5" />
+  </button>
+);
 
 const RemoveSegmentInputButton: React.FC<{
   segmentInputIdx: number;
-  showDeleteButton: boolean;
   onDeleteClicked: () => void;
-}> = ({ segmentInputIdx, showDeleteButton, onDeleteClicked }) => {
-  if (!showDeleteButton) {
-    return (
-      <button
-        type="button"
-        disabled
-        className="invisible p-1 text-slate-400"
-        aria-hidden="true"
-        tabIndex={-1}
-      >
-        <ClearIcon className="w-5 h-5" />
-      </button>
-    );
-  } else {
-    return (
-      <button
-        type="button"
-        data-testid={`segment-delete-${segmentInputIdx}`}
-        onClick={onDeleteClicked}
-        className="cursor-pointer p-1 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 focus:outline-hidden focus:ring-2 focus:ring-red-200 transition-colors"
-        aria-label={`Remove segment ${segmentInputIdx + 1}`}
-      >
-        <ClearIcon className="w-5 h-5" />
-      </button>
-    );
-  }
-};
+}> = ({ segmentInputIdx, onDeleteClicked }) => (
+  <button
+    type="button"
+    data-testid={`segment-delete-${segmentInputIdx}`}
+    onClick={onDeleteClicked}
+    className="cursor-pointer p-1 rounded-full text-slate-400 hover:text-red-600 hover:bg-red-50 focus:outline-hidden focus:ring-2 focus:ring-red-200 transition-colors"
+    aria-label={`Remove segment ${segmentInputIdx + 1}`}
+  >
+    <ClearIcon className="w-5 h-5" />
+  </button>
+);
 
 interface AirlineInputProps {
   segmentInputIdx: number;

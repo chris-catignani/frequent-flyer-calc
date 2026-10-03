@@ -386,6 +386,23 @@ describe("SegmentInputList & SegmentInputAdapter", () => {
     });
   });
 
+  it("hides the segment header, reorder handle and delete button for a single segment", () => {
+    render(
+      <SegmentInputList
+        segmentInputs={[defaultSegment]}
+        errors={{}}
+        airlineOptions={airlineOptions}
+        onDeleteSegmentPressed={jest.fn()}
+        onSegmentInputChanged={jest.fn()}
+        onSegmentsReordered={jest.fn()}
+      />
+    );
+
+    expect(screen.queryByText("Segment 1")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Reorder segment 1" })).toBeNull();
+    expect(screen.queryByTestId("segment-delete-0")).toBeNull();
+  });
+
   describe("Drag-and-drop conditional wrapping", () => {
     it("omits drag-and-drop droppable and draggable containers when 1 or fewer segments exist", () => {
       const { container } = render(

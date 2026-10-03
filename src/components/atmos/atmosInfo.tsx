@@ -12,15 +12,9 @@ export const AtmosInfo: React.FC = () => {
       </p>
       <h3 className="font-medium text-slate-900">Assumptions this calculator makes</h3>
       <ul className="list-disc pl-5 space-y-1">
-        <li>Elite bonuses on partner-chart flights are calculated on the base points column.</li>
         <li>Price-paid ticket totals are split across flights in proportion to distance.</li>
         <li>
           Guam, Puerto Rico and other US territories count as the United States for Global Locals.
-        </li>
-        <li>
-          The Huakaʻi by Hawaiian bonus is calculated on base points, before any elite or cabin
-          bonus. Club 49, Culinary Journeys, Active Escapes and Families On the Go have no flight
-          earning benefits.
         </li>
         <li>
           On American-issued (001) tickets, flights not operated under an American flight number use
